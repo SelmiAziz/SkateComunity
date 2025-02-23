@@ -6,12 +6,12 @@ import java.io.IOException;
 
 public class AccessView {
     //Un disastro
-    SceneManager sceneManager = SceneManager.getSingletonInstance();
+    SceneManager sceneManager = SceneManager.getInstance();
 
     @FXML
     public void goToRegistrationPage (){
         try {
-            SceneManager.getSingletonInstance().loadScene("RegisterView.fxml");
+            SceneManager.getInstance().loadScene("RegisterView.fxml");
         } catch (IOException e) {
             e.printStackTrace(); // O mostra un alert all'utente
         }
@@ -21,4 +21,6 @@ public class AccessView {
     public void goLogin()throws IOException {
         sceneManager.loadScene("LoginView.fxml");
     }
+
+
 }

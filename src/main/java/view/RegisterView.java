@@ -11,7 +11,7 @@ import utils.SceneManager;
 import java.io.IOException;
 
 public class RegisterView {
-    private final SceneManager sceneManager = SceneManager.getSingletonInstance();
+    private final SceneManager sceneManager = SceneManager.getInstance();
 
 
     @FXML private TextField usernameField;

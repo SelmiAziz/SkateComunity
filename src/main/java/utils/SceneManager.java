@@ -8,21 +8,26 @@ import java.io.IOException;
 
 public class SceneManager {
     private Stage stage;
-    private static SceneManager instanceSceneManager;
+    private static SceneManager instance;
 
     private SceneManager() {} // Costruttore privato
 
-    public static SceneManager getSingletonInstance() {
-        if (instanceSceneManager == null) {
-            instanceSceneManager = new SceneManager();
+    //I didn't make it synchronized
+    public synchronized static SceneManager getInstance() {
+        if (instance == null) {
+            instance = new SceneManager();
         }
-        return instanceSceneManager;
+        return instance;
     }
 
     public void setStage(Stage stage) {
         if (this.stage == null) { // Assegna lo stage solo se non è già impostato
             this.stage = stage;
         }
+    }
+
+    public Stage getStage(){
+        return this.stage;
     }
 
     public void loadScene(String fxmlPath) throws IOException {

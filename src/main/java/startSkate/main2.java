@@ -7,8 +7,8 @@ import utils.SceneManager;
 
 import java.io.IOException;
 
-public class mainApp extends Application {
 
+public class main2 extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         SceneManager sceneManager = SceneManager.getInstance();

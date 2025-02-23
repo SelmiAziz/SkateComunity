@@ -5,13 +5,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import model.User;
 import utils.SceneManager;
+import utils.SessionManager;
 
 import javax.imageio.IIOException;
 import java.io.IOException;
 
 public class LoginView {
-    private final SceneManager sceneManager = SceneManager.getSingletonInstance();
+    private final SceneManager sceneManager = SceneManager.getInstance();
     private LoginController loginController = new LoginController();
 
     @FXML private TextField usernameField;
@@ -36,6 +38,10 @@ public class LoginView {
         String username = usernameField.getText();
         String password = passwordField.getText();
         ToggleGroup group = btnUser.getToggleGroup();
+        boolean b = false;
+        User user = new User(username, password);
+        SessionManager sessionManager = SessionManager.getInstance();
+        sessionManager.login(user);
 
         ToggleButton selected = (ToggleButton) btnUser.getToggleGroup().getSelectedToggle();
 
@@ -50,8 +56,10 @@ public class LoginView {
 
         if(selected == btnUser){
             System.out.println("Hai scelt lo user");
+            b = true;
         }else if(selected == btnManager){
             System.out.println("Hai scelto il manager");
+            b = false;
         }else{
             System.out.println("Non hai scelto nessuno!!!");
         }
@@ -59,8 +67,12 @@ public class LoginView {
 
         boolean success = loginController.logUser(username, password);
         if (success){
-            System.out.println("È andata bene ");
-            sceneManager.loadScene("UserHomePageView.fxml");
+            if(b){
+                sceneManager.loadScene("UserHomePageView.fxml");
+            }else{
+                sceneManager.loadScene("ManagerHomePageView.fxml");
+            }
+
         }else{
             System.out.println("Non è andata bene");
         }

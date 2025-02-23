@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserEventsPageView">
+   <top>
+      <AnchorPane prefHeight="116.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="1044.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="50.0" prefWidth="119.0" style="-fx-background-color: #949494;" text="Log Out" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <DropShadow height="6.17" radius="3.2675" width="8.9" />
+               </effect>
+            </Button>
+            <Label layoutX="50.0" layoutY="40.0" onMouseClicked="#goToHomePage" prefHeight="35.0" prefWidth="90.0" text="Home" textFill="#1abc9c">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="150.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="248.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Learn" textFill="#1abc9c">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="332.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Auction" textFill="#1abc9c">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="436.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Quiz" textFill="#1abc9c">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
+   <left>
+      <AnchorPane prefHeight="664.0" prefWidth="550.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="36.0" layoutY="60.0" text="Nome evento:" /> <!-- Spostato più in basso -->
+            <Label fx:id="eventNameLabel" layoutX="174.0" layoutY="60.0" />
+
+            <Label layoutX="36.0" layoutY="98.0" text="Descrizione evento:" /> <!-- Spostato più in basso -->
+            <Label fx:id="eventDescriptionLabel" layoutX="174.0" layoutY="98.0" prefHeight="18.0" prefWidth="354.0" wrapText="true" />
+
+            <Label layoutX="35.0" layoutY="137.0" text="Coins richiesti:" /> <!-- Spostato più in basso -->
+            <Label fx:id="eventCoinsLabel" layoutX="174.0" layoutY="137.0" />
+
+            <Label layoutX="36.0" layoutY="172.0" text="Posti disponibili:" /> <!-- Spostato più in basso -->
+            <Label fx:id="eventSeatsLabel" layoutX="178.0" layoutY="172.0" />
+
+            <Button layoutX="35.0" layoutY="239.0" onMouseClicked="#submitRegistrationEvent" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0" />
+               </effect></Button> <!-- Spostato più in basso -->
+         </children>
+      </AnchorPane>
+   </left>
+   <right>
+      <AnchorPane prefHeight="720.0" prefWidth="665.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="36.0" layoutY="20.0" text="Filtra per nazionalità e data:" />
+            <HBox layoutX="36.0" layoutY="50.0" spacing="10">
+               <children>
+                  <TextField fx:id="nationalitySearch" prefWidth="200.0" promptText="Inserisci nazionalità" />
+                  <TextField fx:id="dateSearch" prefWidth="150.0" promptText="Inserisci data (YYYY-MM-DD)" />
+               </children>
+            </HBox>
+            <TableView fx:id="eventTable" layoutX="36.0" layoutY="100.0" onMouseClicked="#onEventSelected" prefHeight="362.0" prefWidth="509.0">
+               <columns>
+                  <TableColumn fx:id="colTitolo" prefWidth="145.0" text="Name" />
+                  <TableColumn fx:id="colDescrizione" prefWidth="255.0" text="Descrizione" />
+                  <TableColumn fx:id="colData" prefWidth="108.0" text="Data" />
+               </columns>
+            </TableView>
+            <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="334.0" layoutY="470.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/logo.png" />
+               </image>
+            </ImageView>
+            <Button layoutX="473.0" layoutY="50.0" onMouseClicked="#searchEvents" prefHeight="26.0" prefWidth="66.0" style="-fx-background-color: #1ABC9C;" text="Cerca" textFill="WHITE">
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0" />
+               </effect></Button>
+         </children>
+      </AnchorPane>
+   </right>
+   <bottom>
+      <AnchorPane prefHeight="20.0" prefWidth="1200.0" style="-fx-background-color: #1ABC9C;" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>

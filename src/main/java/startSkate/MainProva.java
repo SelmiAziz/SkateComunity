@@ -10,6 +10,6 @@ public class MainProva
         // Esegui operazioni sul database
         db.selectAllUsers();
         //db.insertUser("Aziz", "password123");
-        db.selectAllUsers();
+        //db.selectAllUsers();
     }
 }
