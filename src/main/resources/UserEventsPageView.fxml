@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserEventsPageView">
@@ -50,6 +51,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
+            <Line endX="17.0" layoutX="203.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
          </children>
       </AnchorPane>
    </top>

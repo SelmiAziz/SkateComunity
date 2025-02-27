@@ -1,6 +1,5 @@
 package view;
 
-import Dao.EventDemoDao;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Event;
 import utils.SceneManager;
-import utils.SessionManager;
+import login.SessionManager;
 
 import java.io.IOException;
 
@@ -20,8 +19,8 @@ public class UserHomePageView {
     public void goToEvents() throws IOException {
         // Crea un nuovo evento
 
-        Event newEvent = new Event("skateGo", "Divertiti", "17/04",20, "Olanda",110);
-        Event secondEvent = new Event("Brosku", "vai", "15/03", 10, "Messico",40);
+        Event newEvent = new Event("skateGo", "Divertiti", "17/04",20, "Olanda",110, "mattia");
+        Event secondEvent = new Event("Brosku", "vai", "15/03", 10, "Messico",40, "francesco");
         SceneManager sceneManager = SceneManager.getInstance();
 
         // Ottieni l'istanza del repository e aggiungi l'event
@@ -47,7 +46,7 @@ public class UserHomePageView {
     }
 
     public void logOut() throws IOException {
-        SessionManager.getInstance().logout();
+        SessionManager.getInstance().terminateSession();
         SceneManager.getInstance().loadScene("AccessView.fxml");
     }
 

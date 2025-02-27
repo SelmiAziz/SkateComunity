@@ -1,24 +1,22 @@
 package controls;
 
+import Dao.AccountDao;
+import Dao.Factories.DaoAccountFactory;
+import beans.RegisterAccountBean;
+import login.Account;
 import utils.DbsConnector;
 
 public class RegisterController {
-    private final DbsConnector db = DbsConnector.getInstance();
+    private AccountDao accountDao = DaoAccountFactory.getInstance().createAccountDao();
 
-    public boolean registerUser(String username, String password){
-        if(username.length() < 3 || password.length() < 3){
-            System.out.println("Errore");
-            return false;
+    //you should change this with registerUserBean e usare al suo interno anche account
+    public void registerUser(RegisterAccountBean registerAccountBean){
+        if (accountDao.getAccountByUsername(registerAccountBean.getUsername()) != null){
+            System.out.println("Sei già registrato controlla meglio");
+            return;
         }
-
-        try{
-            db.insertUser(username, password);
-            return true;
-        } catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        Account account = new Account(registerAccountBean.getUsername(),registerAccountBean.getPassword(), registerAccountBean.getAccountType());
+        accountDao.addAccount(account);
     }
-
 
 }

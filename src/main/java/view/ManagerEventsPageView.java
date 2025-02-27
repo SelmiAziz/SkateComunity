@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Event;
 import utils.SceneManager;
-import utils.SessionManager;
+import login.SessionManager;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -92,7 +92,7 @@ public class ManagerEventsPageView {
         populateCountryChoiceBox();
     }
     public void logOut() throws IOException {
-        SessionManager.getInstance().logout();
+        SessionManager.getInstance().terminateSession();
         SceneManager.getInstance().loadScene("AccessView.fxml");
     }
     @FXML
@@ -116,7 +116,7 @@ public class ManagerEventsPageView {
             return;
         }
 
-        Event newEvent = new Event(name, description, date, coins, country, maxRegistrations);
+        Event newEvent = new Event(name, description, date, coins, country, maxRegistrations, "marci");
 
 
 

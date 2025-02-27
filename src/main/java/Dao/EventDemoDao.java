@@ -11,7 +11,7 @@ public class EventDemoDao implements EventDao {
     private List<Event> events;
 
     public EventDemoDao(){
-        events = new ArrayList<>();
+        this.events = new ArrayList<>();
     }
 
     public synchronized static EventDemoDao getInstance(){
@@ -30,7 +30,7 @@ public class EventDemoDao implements EventDao {
     }
 
     public Event getEventByName(String name){
-        return new Event("a","d","s",30,"o",10);
+        return new Event("a","d","s",30,"o",10, "calro");
     }
     public void addEvent(Event event){
         events.add(event);

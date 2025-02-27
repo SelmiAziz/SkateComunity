@@ -5,11 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import model.User;
+import login.*;
+import login.Account;
+import model.Costumer;
 import utils.SceneManager;
-import utils.SessionManager;
 
-import javax.imageio.IIOException;
 import java.io.IOException;
 
 public class LoginView {
@@ -39,9 +39,9 @@ public class LoginView {
         String password = passwordField.getText();
         ToggleGroup group = btnUser.getToggleGroup();
         boolean b = false;
-        User user = new User(username, password);
+        Costumer user = new Costumer("giuseppe", "maamm", new Account("marco", "luca", AccountType.USER));
         SessionManager sessionManager = SessionManager.getInstance();
-        sessionManager.login(user);
+        sessionManager.createSession( new Session(new Account("marco", "pirata", AccountType.USER)));
 
         ToggleButton selected = (ToggleButton) btnUser.getToggleGroup().getSelectedToggle();
 
@@ -79,21 +79,16 @@ public class LoginView {
     }
 
     public void handleBtnUser(){
-        System.out.println("Hello User");
         if (btnUser.isSelected()) {
-            // Se btnUser è selezionato, applica lo stile e resetta l'altro
             btnUser.setStyle("-fx-background-color:  #1ABC9C;");
             btnManager.setStyle("-fx-background-color: lightgray;");
         } else {
-            // Se deselezionato (anche se, con ToggleGroup, questo avviene quando l'altro viene selezionato)
             btnUser.setStyle("-fx-background-color: lightgray;");
         }
     }
 
     public void handleBtnManager(){
-        System.out.println("Hello manager");
         if (btnManager.isSelected()) {
-            // Se btnManager è selezionato, applica lo stile e resetta l'altro
             btnManager.setStyle("-fx-background-color:  #1ABC9C;");
             btnUser.setStyle("-fx-background-color: lightgray;");
         } else {

@@ -1,14 +1,13 @@
 package view;
 
 import Dao.EventDao;
-import Dao.EventDemoDao;
 import Dao.Factories.DaoFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Event;
-import model.User;
+import model.Costumer;
 import utils.SceneManager;
-import utils.SessionManager;
+import login.SessionManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -121,13 +120,11 @@ public class UserEventsPageView {
 
     public void goToHomePage() throws IOException {
         SessionManager sessionManager = SessionManager.getInstance();
-        User user = sessionManager.getLoggedUser();
-        System.out.println("Hello " + user.getName());
         SceneManager.getInstance().loadScene("UserHomePageView.fxml");
     }
 
     public void logOut() throws IOException {
-        SessionManager.getInstance().logout();
+        SessionManager.getInstance().terminateSession();
         SceneManager.getInstance().loadScene("AccessView.fxml");
     }
 }

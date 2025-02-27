@@ -21,8 +21,8 @@ public class mainDao extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Crea un nuovo evento
-        Event newEvent = new Event("skateGo", "Divertiti", "17/04",10,"Germany",100);
-        Event secondEvent = new Event("Brosku", "vai", "15/03",20,"Albania",200);
+        Event newEvent = new Event("skateGo", "Divertiti", "17/04",10,"Germany",100, "marci");
+        Event secondEvent = new Event("Brosku", "vai", "15/03",20,"Albania",200, "francesci");
 
         // Ottieni l'istanza del repository e aggiungi l'evento
         EventDemoDao myRepo = EventDemoDao.getInstance();
