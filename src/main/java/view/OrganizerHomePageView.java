@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Event;
 import utils.SceneManager;
-import login.SessionManager;
+import utils.SessionManager;
 
 import java.io.IOException;
 

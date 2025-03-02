@@ -1,13 +1,12 @@
 package view;
 
 import Dao.EventDao;
-import Dao.Factories.DaoFactory;
+import Dao.EventDemoDao;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Event;
-import model.Costumer;
 import utils.SceneManager;
-import login.SessionManager;
+import utils.SessionManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,6 +45,9 @@ public class UserEventsPageView {
     private Label eventSeatsLabel;
 
     @FXML
+    private Label coinsLabel;
+
+    @FXML
     private Label eventMaxRegistrationsLabel;
 
 
@@ -64,10 +66,9 @@ public class UserEventsPageView {
     }
 
     public void loadEvents() {
-        DaoFactory myFactory = DaoFactory.getInstance();
-        EventDao repo = myFactory.createEventDao();
+        EventDao repo = new EventDemoDao();
 
-
+        coinsLabel.setText("120");
         // Pulisci la lista esistente
         eventTable.getItems().clear();
 
@@ -80,8 +81,7 @@ public class UserEventsPageView {
         String nationality = nationalitySearch.getText();
         String date = dateSearch.getText();
 
-        DaoFactory myFactory = DaoFactory.getInstance();
-        EventDao repo = myFactory.createEventDao();
+        EventDao repo = new EventDemoDao();
         List<Event> filteredEvents = repo.getAllEvents().stream()
                 .filter(event -> (nationality.isEmpty() || event.getCountry().equalsIgnoreCase(nationality)) &&
                         (date.isEmpty() || event.getDate().equalsIgnoreCase(date)))
@@ -120,7 +120,7 @@ public class UserEventsPageView {
 
     public void goToHomePage() throws IOException {
         SessionManager sessionManager = SessionManager.getInstance();
-        SceneManager.getInstance().loadScene("UserHomePageView.fxml");
+        SceneManager.getInstance().loadScene("CostumerHomePageView.fxml");
     }
 
     public void logOut() throws IOException {

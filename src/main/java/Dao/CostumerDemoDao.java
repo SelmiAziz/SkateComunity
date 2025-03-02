@@ -5,7 +5,7 @@ import model.Costumer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDemoDao  implements UserDao{
+public class UserDemoDao  implements CostumerDao {
     private static UserDemoDao instance;
     private List<Costumer> userList;
     private AccountDao accountDao;
@@ -30,10 +30,11 @@ public class UserDemoDao  implements UserDao{
         this.userList.add(user);
     }
 
-    //attento sta roba non mi piace
     public Costumer getUserByUsername(String username){
         for(Costumer user:userList){
-
+            if(user.getAccount().getUsername().equals(username)){
+                return user;
+          }
         }
         return null;
     }

@@ -2,14 +2,13 @@ package view;
 
 import Dao.EventDao;
 import Dao.EventDemoDao;
-import Dao.Factories.DaoFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Event;
 import utils.SceneManager;
-import login.SessionManager;
+import utils.SessionManager;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -66,7 +65,7 @@ public class ManagerEventsPageView {
     }
 
     public void goToHomePage() throws IOException {
-        SceneManager.getInstance().loadScene("ManagerHomePageView.fxml");
+        SceneManager.getInstance().loadScene("OrganizerHomePageView.fxml");
     }
 
     public void loadEvents(){
@@ -120,8 +119,7 @@ public class ManagerEventsPageView {
 
 
 
-        DaoFactory myFactory = DaoFactory.getInstance();
-        EventDao repo = myFactory.createEventDao();
+        EventDao repo = new  EventDemoDao();
         repo.addEvent(newEvent);
 
         eventTable.getItems().add(newEvent);
