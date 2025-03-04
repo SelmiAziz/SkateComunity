@@ -1,4 +1,4 @@
-package login;
+package utils;
 
 public class SessionManager {
     private static SessionManager instance;

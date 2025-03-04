@@ -4,20 +4,20 @@ public class Account {
     private String username;
     private String password;
     private AccountType accountType;
-    private Integer coins;
+    private int coinsNumber;
 
     public Account(String username, String password, AccountType accountType){
         this.username = username;
         this.password = password;
         this.accountType = accountType;
-        this.coins = 0;
+        this.coinsNumber = 0;
     }
 
-    public Account(String username, String password, AccountType accountType, Integer coins){
+    public Account(String username, String password, AccountType accountType, int coinsNumber){
         this.username = username;
         this.password = password;
         this.accountType = accountType;
-        this.coins = coins;
+        this.coinsNumber = coinsNumber;
     }
 
     public String getUsername(){
@@ -30,5 +30,13 @@ public class Account {
 
     public AccountType getAccountType(){
         return this.accountType;
+    }
+
+    public int getCoins(){
+        return this.coinsNumber;
+    }
+
+    public void pay(int coinsRequired){
+        this.coinsNumber -= coinsRequired;
     }
 }

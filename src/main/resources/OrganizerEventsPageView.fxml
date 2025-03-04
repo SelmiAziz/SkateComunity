@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ManagerEventsPageView">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.OrganizerEventsPageView">
    <top>
       <AnchorPane prefHeight="95.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
@@ -44,6 +44,26 @@
                </font>
             </Label>
             <Line endX="18.0" layoutX="203.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
+            <ImageView fitHeight="65.0" fitWidth="72.0" layoutX="934.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/coins.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="coinsLabel" layoutX="906.0" layoutY="44.0" prefHeight="32.0" prefWidth="55.0" text="100" textAlignment="RIGHT" textFill="#1abc9c">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="829.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/account.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="usernameLabel" layoutX="758.0" layoutY="45.0" prefHeight="31.0" prefWidth="107.0" text="Selmi15" textFill="#1abc9c">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </top>
@@ -66,15 +86,20 @@
                </effect></ChoiceBox>
 
             <Label layoutX="20" layoutY="300" text="Required Coins:" />
-            <TextField fx:id="coinAmountField" layoutX="150" layoutY="300" prefWidth="180" />
+            <TextField fx:id="coinsAmountField" layoutX="150" layoutY="300" prefWidth="180" />
 
             <Label layoutX="20.0" layoutY="357.0" text="Max Registrations:" />
             <TextField fx:id="maxRegistrationsField" layoutX="150.0" layoutY="353.0" prefWidth="180" />
 
-            <Button fx:id="createEventButton" layoutX="150" layoutY="450" prefWidth="180" text="Create Event" textFill="#282828" onMouseClicked="#createEvent">
+            <Button fx:id="createEventButton" layoutX="150" layoutY="450" onMouseClicked="#createEvent" prefWidth="180" text="Create Event" textFill="#282828">
                <effect>
                   <DropShadow height="4.0" radius="1.5" width="4.0" />
                </effect></Button>
+            <Label fx:id="errorLabel" layoutX="20.0" layoutY="541.0" prefHeight="22.0" prefWidth="322.0" textFill="#208672">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </left>
@@ -86,13 +111,13 @@
          <children>
             <TableView fx:id="eventTable" layoutX="24.0" layoutY="37.0" prefHeight="376.0" prefWidth="803.0">
                <columns>
-                  <TableColumn fx:id="colTitolo" prefWidth="84.0" text="Name" />
-                  <TableColumn fx:id="colDescrizione" prefWidth="276.0" text="Description" />
-                  <TableColumn fx:id="colData" prefWidth="69.0" text="Date" />
-                  <TableColumn fx:id="colPaese" prefWidth="105.0" text="Country" />
-                  <TableColumn fx:id="colMonete" prefWidth="57.0" text="Coins" />
-                  <TableColumn fx:id="colIscrizioniAttuali" prefWidth="109.0" text="Current regist" />
-                  <TableColumn fx:id="colIscrizioniMassime" prefWidth="100" text="Max regist." />
+                  <TableColumn fx:id="colName" prefWidth="84.0" text="Name" />
+                  <TableColumn fx:id="colDescription" prefWidth="276.0" text="Description" />
+                  <TableColumn fx:id="colDate" prefWidth="69.0" text="Date" />
+                  <TableColumn fx:id="colCountry" prefWidth="105.0" text="Country" />
+                  <TableColumn fx:id="colCoinsRequired" prefWidth="57.0" text="Coins" />
+                  <TableColumn fx:id="colCurrentRegistrations" prefWidth="109.0" text="Current regist" />
+                  <TableColumn fx:id="colMaxRegistrations" prefWidth="100" text="Max regist." />
                </columns>
             </TableView>
             <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="600.0" layoutY="435.0" pickOnBounds="true" preserveRatio="true">

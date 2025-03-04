@@ -12,9 +12,9 @@ public class Event {
     private final Integer maxRegistrations;
     private Integer currentRegistrations;
     private List<Costumer> participants;
-    private String manager;
+    private  Organizer organizer;
 
-    public Event(String name, String description,String date, Integer coins, String country, Integer maxRegistrations, String manager ){
+    public Event(String name, String description,String date, String country, int coins, Integer maxRegistrations){
         this.name = name;
         this.description = description;
         this.date = date;
@@ -23,7 +23,10 @@ public class Event {
         this.currentRegistrations = 0;
         this.maxRegistrations = maxRegistrations;
         this.participants = new ArrayList<>();
-        this.manager = manager;
+    }
+
+    public void setOrganizer(Organizer organizer){
+        this.organizer = organizer;
     }
 
     public  String getName(){
@@ -59,5 +62,12 @@ public class Event {
         return this.currentRegistrations;
     }
 
+    public List<Costumer>  getParticipants(){
+        return this.participants;
+    }
+
+    public void addParticipant(Costumer costumer){
+        this.participants.add(costumer);
+    }
 
 }

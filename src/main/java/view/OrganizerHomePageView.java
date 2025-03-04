@@ -5,52 +5,49 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import model.Event;
 import utils.SceneManager;
-import utils.SessionManager;
 
+import java.awt.*;
 import java.io.IOException;
 
-public class ManagerHomePageView {
+public class OrganizerHomePageView {
 
     private Stage stage;
-
-
+    SceneManager sceneManager = SceneManager.getInstance();
+    @FXML private Label errorLabel;
 
     @FXML
-    public void goToEvents() throws IOException {
-        // Crea un nuovo evento
+    public void goToEvents() {
 
-        Event newEvent = new Event("skateGo", "Divertiti", "17/04", 20, "Franciia",80, "luca");
-        Event secondEvent = new Event("Brosku", "vai", "15/03", 15, "Svizzera",90, "sebastiano");
-        SceneManager sceneManager = SceneManager.getInstance();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/OrganizerEventsPageView.fxml"));
 
-        // Ottieni l'istanza del repository e aggiungi l'evento
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText(e.getMessage());
+        }
 
+        OrganizerEventsPageView organizerEventsPageView = loader.getController();
 
-        // Carica il file FXML per la vista
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManagerEventsPageView.fxml"));
-
-        // Carica l'FXML e ottieni il root
-        Parent root = loader.load();
-
-        // Ottieni il controller dalla vista
-        ManagerEventsPageView managerEventsPageView = loader.getController();
-
-        // Imposta la scena con il root e la dimensione desiderata
         Scene scene = new Scene(root, 1200, 800);
         stage = SceneManager.getInstance().getStage();
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
-
-        // Esegui loadEvents() dopo che la scena è stata completamente visualizzata
-        Platform.runLater(() -> managerEventsPageView.loadEvents());
+        Platform.runLater(() -> organizerEventsPageView.loadEvents());
     }
 
-    public void logOut() throws IOException {
-        SessionManager.getInstance().terminateSession();
-        SceneManager.getInstance().loadScene("AccessView.fxml");
+    public void logOut()  {
+        //here you have to call the controller to logOut
+        try {
+            sceneManager.loadScene("AccessView.fxml");
+        }catch(IOException e){
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText(e.getMessage());
+        }
     }
 }

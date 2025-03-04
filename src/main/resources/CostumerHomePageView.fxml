@@ -20,7 +20,7 @@
                   <Image url="@images/img2.png" />
                </image>
             </ImageView>
-            <Button layoutX="1044.0" layoutY="29.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="119.0" style="-fx-background-color: #949494;" text="Log Out" textFill="WHITE" onMouseClicked="#logOut">
+            <Button layoutX="1044.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="50.0" prefWidth="119.0" style="-fx-background-color: #949494;" text="Log Out" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -43,7 +43,6 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="889.0" layoutY="37.0" prefHeight="27.0" prefWidth="108.0" />
             <Line endX="13.0" layoutX="102.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
             <Label layoutX="332.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Auction" textFill="#1abc9c">
                <font>
@@ -53,6 +52,26 @@
             <Label layoutX="436.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Quiz" textFill="#1abc9c">
                <font>
                   <Font size="24.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="829.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/account.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="usernameLabel" layoutX="758.0" layoutY="45.0" prefHeight="31.0" prefWidth="107.0" text="Selmi15" textFill="#1abc9c">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="65.0" fitWidth="72.0" layoutX="934.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/coins.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="coinsLabel" layoutX="906.0" layoutY="44.0" prefHeight="32.0" prefWidth="55.0" text="100" textAlignment="RIGHT" textFill="#1abc9c">
+               <font>
+                  <Font size="21.0" />
                </font>
             </Label>
          </children>

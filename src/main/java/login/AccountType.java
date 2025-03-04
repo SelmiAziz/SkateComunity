@@ -1,6 +1,6 @@
 package login;
 
 public enum AccountType {
-    USER,
+    COSTUMER,
     ORGANIZER
 }

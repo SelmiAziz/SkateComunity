@@ -11,7 +11,7 @@ public class AccessView {
     @FXML
     public void goToRegistrationPage (){
         try {
-            SceneManager.getInstance().loadScene("RegisterView.fxml");
+            sceneManager.loadScene("RegisterView.fxml");
         } catch (IOException e) {
             e.printStackTrace(); // O mostra un alert all'utente
         }

@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserEventsPageView">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CostumerEventsPageView">
    <top>
       <AnchorPane prefHeight="116.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
@@ -52,6 +52,26 @@
                </font>
             </Label>
             <Line endX="17.0" layoutX="203.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="829.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/account.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="usernameLabel" layoutX="758.0" layoutY="45.0" prefHeight="31.0" prefWidth="107.0" text="Selmi15" textFill="#1abc9c">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="65.0" fitWidth="72.0" layoutX="934.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/coins.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="coinsLabel" layoutX="906.0" layoutY="44.0" prefHeight="32.0" prefWidth="55.0" text="100" textAlignment="RIGHT" textFill="#1abc9c">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </top>
@@ -87,14 +107,7 @@
                   <TextField fx:id="dateSearch" prefWidth="150.0" promptText="Inserisci data (YYYY-MM-DD)" />
                </children>
             </HBox>
-            <TableView fx:id="eventTable" layoutX="36.0" layoutY="100.0" onMouseClicked="#onEventSelected" prefHeight="362.0" prefWidth="509.0">
-               <columns>
-                  <TableColumn fx:id="colTitolo" prefWidth="145.0" text="Name" />
-                  <TableColumn fx:id="colDescrizione" prefWidth="255.0" text="Descrizione" />
-                  <TableColumn fx:id="colData" prefWidth="108.0" text="Data" />
-               </columns>
-            </TableView>
-            <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="334.0" layoutY="470.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="400.0" layoutY="414.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/logo.png" />
                </image>
@@ -103,6 +116,13 @@
                <effect>
                   <DropShadow height="5.0" radius="2.0" width="5.0" />
                </effect></Button>
+            <TableView fx:id="eventTable" layoutX="36.0" layoutY="104.0" onMouseClicked="#onEventSelected" prefHeight="326.0" prefWidth="509.0">
+               <columns>
+                  <TableColumn fx:id="colTitolo" prefWidth="145.0" text="Name" />
+                  <TableColumn fx:id="colDescrizione" prefWidth="255.0" text="Descrizione" />
+                  <TableColumn fx:id="colData" prefWidth="108.0" text="Data" />
+               </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </right>

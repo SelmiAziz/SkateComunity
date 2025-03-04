@@ -5,35 +5,35 @@ import model.Costumer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDemoDao  implements CostumerDao {
-    private static UserDemoDao instance;
-    private List<Costumer> userList;
+public class CostumerDemoDao implements CostumerDao {
+    private static CostumerDemoDao instance;
+    private List<Costumer>  costumerList;
     private AccountDao accountDao;
 
-    public UserDemoDao() {
-        this.userList = new ArrayList<>();
+    public CostumerDemoDao() {
+        this.costumerList = new ArrayList<>();
 
     }
 
-    public synchronized static UserDemoDao getInstance() {
+    public synchronized static CostumerDemoDao getInstance() {
         if (instance == null) {
-            instance = new UserDemoDao();
+            instance = new CostumerDemoDao();
         }
         return instance;
     }
 
     public List<Costumer> getAllUsers(){
-        return this.userList;
+        return this.costumerList;
     }
 
-    public void addUser(Costumer user){
-        this.userList.add(user);
+    public void addCostumer(Costumer costumer){
+        this.costumerList.add(costumer);
     }
 
     public Costumer getUserByUsername(String username){
-        for(Costumer user:userList){
-            if(user.getAccount().getUsername().equals(username)){
-                return user;
+        for(Costumer costumer:costumerList){
+            if(costumer.getAccount().getUsername().equals(username)){
+                return costumer;
           }
         }
         return null;

@@ -8,10 +8,10 @@ import java.util.List;
 
 public class EventDemoDao implements EventDao {
     private static EventDemoDao instance;
-    private List<Event> events;
+    private List<Event> eventList;
 
     public EventDemoDao(){
-        this.events = new ArrayList<>();
+        this.eventList = new ArrayList<>();
     }
 
     public synchronized static EventDemoDao getInstance(){
@@ -22,7 +22,7 @@ public class EventDemoDao implements EventDao {
     }
 
     public List<Event> getEventsByDateAndCountry() {
-        return events;
+        return eventList;
     }
 
     public void removeEventByName(String name){
@@ -30,21 +30,21 @@ public class EventDemoDao implements EventDao {
     }
 
     public Event getEventByName(String name){
-        return new Event("a","d","s",30,"o",10, "calro");
+        return null;
     }
     public void addEvent(Event event){
-        events.add(event);
+        eventList.add(event);
     }
 
     public List<Event> getAllEvents(){
-        return events;
+        return eventList;
     }
 
     public void printAllEvents() {
-        if (events.isEmpty()) {
+        if (eventList.isEmpty()) {
             System.out.println("Non ci sono eventi disponibili.");
         } else {
-            for (Event event : events) {
+            for (Event event : eventList) {
                 System.out.println("Titolo: " + event.getName());
                 System.out.println("Descrizione: " + event.getDescription());
                 System.out.println("Data: " + event.getDate());

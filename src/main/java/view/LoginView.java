@@ -1,13 +1,15 @@
 package view;
 
+import beans.LogUserBean;
 import controls.LoginController;
+import exceptions.EmptyFieldException;
+import exceptions.NoUserTypeSelectedException;
+import exceptions.UserNotFoundException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import login.*;
-import login.Account;
-import model.Costumer;
+import login.AccountType;
 import utils.SceneManager;
 
 import java.io.IOException;
@@ -18,81 +20,82 @@ public class LoginView {
 
     @FXML private TextField usernameField;
     @FXML private TextField passwordField;
+    @FXML private Label errorLabel;
+    @FXML private ToggleButton btnCostumer;
+    @FXML private ToggleButton btnOrganizer;
 
-    @FXML private ToggleGroup toggleGruppo;
-    @FXML private ToggleButton btnUser;
-    @FXML private ToggleButton btnManager;
-
-    @FXML
-    public void goBack() throws IOException {
-        sceneManager.loadScene("AccessView.fxml");
+    public void validateLogin(String username, String password, ToggleButton selected) throws EmptyFieldException, NoUserTypeSelectedException {
+        if (username.isEmpty() || password.isEmpty()) {
+            throw new EmptyFieldException("Username e password devono essere compilati!");
+        }
+        if (selected == null) {
+            throw new NoUserTypeSelectedException("Bisogna selezionare un tipo di utente");
+        }
     }
 
     @FXML
-    public void goRegistration() throws IOException{
-        sceneManager.loadScene("RegisterView.fxml");
-    }
-
-    @FXML
-    public void submitLogin() throws IOException {
+    public void submitLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        ToggleGroup group = btnUser.getToggleGroup();
-        boolean b = false;
-        Costumer user = new Costumer("giuseppe", "maamm", new Account("marco", "luca", AccountType.USER));
-        SessionManager sessionManager = SessionManager.getInstance();
-        sessionManager.createSession( new Session(new Account("marco", "pirata", AccountType.USER)));
+        ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();
 
-        ToggleButton selected = (ToggleButton) btnUser.getToggleGroup().getSelectedToggle();
+        try {
+            validateLogin(username, password, selected);
+            AccountType accountType = (selected == btnCostumer) ? AccountType.COSTUMER : AccountType.ORGANIZER;
+            loginController.logUser(new LogUserBean(username, password, accountType));
 
-        if(username.length() < 4 || password.length() < 4){
-            System.out.println("Erore nella lunghezza dei vari campi");
-        }
-
-        if (username.isEmpty() || password.isEmpty()){
-            System.out.println("Errore empty");
-            return;
-        }
-
-        if(selected == btnUser){
-            System.out.println("Hai scelt lo user");
-            b = true;
-        }else if(selected == btnManager){
-            System.out.println("Hai scelto il manager");
-            b = false;
-        }else{
-            System.out.println("Non hai scelto nessuno!!!");
-        }
-
-
-        boolean success = loginController.logUser(username, password);
-        if (success){
-            if(b){
-                sceneManager.loadScene("UserHomePageView.fxml");
-            }else{
-                sceneManager.loadScene("ManagerHomePageView.fxml");
+            try {
+                if (accountType == AccountType.COSTUMER) {
+                    sceneManager.loadScene("CostumerHomePageView.fxml");
+                } else {
+                    sceneManager.loadScene("OrganizerHomePageView.fxml");
+                }
+            } catch (IOException e) {
+                System.err.println("Errore di I/O: " + e.getMessage());
+                errorLabel.setText("Errore di sistema. Riprova più tardi.");
             }
-
-        }else{
-            System.out.println("Non è andata bene");
+        } catch (EmptyFieldException | NoUserTypeSelectedException | UserNotFoundException e) {
+            errorLabel.setText(e.getMessage());
         }
     }
 
-    public void handleBtnUser(){
-        if (btnUser.isSelected()) {
-            btnUser.setStyle("-fx-background-color:  #1ABC9C;");
-            btnManager.setStyle("-fx-background-color: lightgray;");
+    @FXML
+    public void handleBtnCostumer() {
+        if (btnCostumer.isSelected()) {
+            btnCostumer.setStyle("-fx-background-color:  #1ABC9C;");
+            btnOrganizer.setStyle("-fx-background-color: lightgray;");
         } else {
-            btnUser.setStyle("-fx-background-color: lightgray;");
+            btnCostumer.setStyle("-fx-background-color: lightgray;");
         }
     }
 
-    public void handleBtnManager(){
-        if (btnManager.isSelected()) {
-            btnManager.setStyle("-fx-background-color:  #1ABC9C;");
-            btnUser.setStyle("-fx-background-color: lightgray;");
+    @FXML
+    public void handleBtnOrganizer() {
+        if (btnOrganizer.isSelected()) {
+            btnOrganizer.setStyle("-fx-background-color:  #1ABC9C;");
+            btnCostumer.setStyle("-fx-background-color: lightgray;");
         } else {
-            btnManager.setStyle("-fx-background-color: lightgray;");
+            btnOrganizer.setStyle("-fx-background-color: lightgray;");
+        }
+    }
+
+    @FXML
+    public void goBack() {
+        try {
+            sceneManager.loadScene("AccessView.fxml");
+        } catch (IOException e) {
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText("Errore di sistema. Riprova più tardi.");
+        }
+    }
+
+    @FXML
+    public void goRegistration() {
+        try {
+            sceneManager.loadScene("RegisterView.fxml");
+        } catch (IOException e) {
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText("Errore di sistema. Riprova più tardi.");
         }
     }
 }

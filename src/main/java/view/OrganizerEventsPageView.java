@@ -1,12 +1,16 @@
 package view;
 
-import Dao.EventDao;
-import Dao.EventDemoDao;
+
+import beans.EventBean;
+import controls.CreateEventController;
+import exceptions.EmptyFieldException;
+import exceptions.EventAlreadyExistsException;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import model.Event;
+import utils.AccountInfoSession;
 import utils.SceneManager;
 import utils.SessionManager;
 
@@ -14,117 +18,123 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class ManagerEventsPageView {
-    @FXML
-    private TextField eventNameField;
+public class OrganizerEventsPageView {
+    @FXML private TextField eventNameField;
+    @FXML private DatePicker eventDatePicker;
+    @FXML private TextArea eventDescriptionArea;
+    @FXML private TextField coinsAmountField;
+    @FXML private TextField maxRegistrationsField;
+    @FXML private TableView<EventBean> eventTable;
+    @FXML private TableColumn<EventBean, String> colName;
+    @FXML private TableColumn<EventBean, String> colDescription;
+    @FXML private TableColumn<EventBean, String> colDate;
+    @FXML private TableColumn<EventBean, String> colCountry;
+    @FXML private TableColumn<EventBean, String> colCoinsRequired;
+    @FXML private TableColumn<EventBean, String> colMaxRegistrations;
+    @FXML private TableColumn<EventBean, String> colCurrentRegistrations;
+    @FXML private ChoiceBox<String> countryChoiceBox;
+    @FXML private Label coinsLabel;
+    @FXML private Label errorLabel;
 
-    @FXML
-    private DatePicker eventDatePicker;
+    private final CreateEventController createEventController = new CreateEventController();
 
-    @FXML
-    private TextArea eventDescriptionArea;
-
-    @FXML
-    private TextField coinAmountField;
-
-    @FXML
-    private TextField maxRegistrationsField;
-
-    @FXML
-    private TableView<Event> eventTable;
-
-    @FXML
-    private TableColumn<Event, String> colTitolo;
-
-    @FXML
-    private TableColumn<Event, String> colDescrizione;
-
-    @FXML
-    private TableColumn<Event, Integer> colMonete;
-
-    @FXML
-    private TableColumn<Event, String> colPaese;
-
-    @FXML
-    private TableColumn<Event, String> colData;
-
-    @FXML
-    private TableColumn<Event, Integer> colIscrizioniAttuali;
-
-    @FXML
-    private TableColumn<Event, Integer> colIscrizioniMassime;
-
-    @FXML
-    private ChoiceBox<String> countryChoiceBox;
-
-    private void populateCountryChoiceBox() {
-        List<String> countries = Arrays.asList("Italy", "France", "Germany", "USA", "UK", "Spain", "Canada", "Japan");
-        ObservableList<String> countryList = FXCollections.observableArrayList(countries);
-        countryChoiceBox.setItems(countryList);
-        countryChoiceBox.setValue("Italy"); // Imposta un valore di default
-    }
-
-    public void goToHomePage() throws IOException {
-        SceneManager.getInstance().loadScene("OrganizerHomePageView.fxml");
-    }
-
-    public void loadEvents(){
-        EventDemoDao myRepo = EventDemoDao.getInstance();
-
-        // Pulisci la lista esistente
-        eventTable.getItems().clear();
-
-        // Aggiungi gli eventi al TableView
-        eventTable.getItems().addAll(myRepo.getAllEvents());
+    //I still haven't found a way to deal with the changing in the number of coins of an account
+    //ATTENZIONE !!!
+    public void updateCoinsInWindow(){
+        this.coinsLabel.setText(""+ AccountInfoSession.getInstance().getAccountInfo().getCoinsNumber());
     }
 
     @FXML
     public void initialize() {
-        // Imposta il cellValueFactory per ogni colonna
-        colTitolo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
-        colDescrizione.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDescription()));
-        colData.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDate()));
-        colMonete.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getCoins()).asObject());
-        colPaese.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCountry()));
-        colIscrizioniAttuali.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getCurrentRegistrations()).asObject());
-        colIscrizioniMassime.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getMaxRegistrations()).asObject());
+        colName.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getName()));
+
+        colDescription.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getDescription()));
+
+        colDate.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getDate()));
+
+        colCountry.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCountry()));
+
+        colCoinsRequired.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getCoins())));
+
+        colCurrentRegistrations.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getCurrentRegistrations())));
+
+        colMaxRegistrations.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getMaxRegistrations())));
+
         populateCountryChoiceBox();
     }
-    public void logOut() throws IOException {
-        SessionManager.getInstance().terminateSession();
-        SceneManager.getInstance().loadScene("AccessView.fxml");
+
+    private void validateFields(String name, String description, String date, String country) throws EmptyFieldException{
+        if (name.isEmpty() || description.isEmpty() || date.isEmpty() || country.isEmpty()) {
+            throw new EmptyFieldException("I campi per la creazione dell'evento devono essere tutti compilati!!!");
+        }
     }
+
+
     @FXML
     private void createEvent() {
         String name = eventNameField.getText();
         String description = eventDescriptionArea.getText();
         String date = eventDatePicker.getValue() != null ? eventDatePicker.getValue().toString() : "";
         String country = countryChoiceBox.getValue();
-        int coins, maxRegistrations;
+        int coinsRequired , maxRegistrations;
 
-        try {
-            coins = Integer.parseInt(coinAmountField.getText());
+        try{
+            validateFields(name, description,date,country);
+            coinsRequired = Integer.parseInt(coinsAmountField.getText());
             maxRegistrations = Integer.parseInt(maxRegistrationsField.getText());
+            createEventController.createEvent(new EventBean(name,description,date,country,coinsRequired,maxRegistrations));
+            loadEvents();
         } catch (NumberFormatException e) {
-            System.out.println("Invalid number format");
-            return;
+            System.err.println("Invalid number format");
+            errorLabel.setText(e.getMessage());
+        }catch(EventAlreadyExistsException e){
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText(e.getMessage());
+        }catch(EmptyFieldException e){
+            System.err.println(e.getMessage());
+            errorLabel.setText(e.getMessage());
         }
 
-        if (name.isEmpty() || description.isEmpty() || date.isEmpty() || country.isEmpty()) {
-            System.out.println("All fields must be filled");
-            return;
+
+    }
+
+    public void loadEvents(){
+        eventTable.getItems().clear();
+        eventTable.getItems().addAll(createEventController.showAllEvents());
+    }
+
+
+    public void logOut()  {
+        SessionManager.getInstance().terminateSession();
+        try {
+            SceneManager.getInstance().loadScene("AccessView.fxml");
+        }catch (IOException e){
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText(e.getMessage());
         }
+    }
 
-        Event newEvent = new Event(name, description, date, coins, country, maxRegistrations, "marci");
-
-
-
-        EventDao repo = new  EventDemoDao();
-        repo.addEvent(newEvent);
-
-        eventTable.getItems().add(newEvent);
-
-
+    public void goToHomePage()  {
+        try {
+            SceneManager.getInstance().loadScene("OrganizerHomePageView.fxml");
+        }catch (IOException e){
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText(e.getMessage());
+        }
+    }
+    private void populateCountryChoiceBox() {
+        //maybe here you can use an enumeration
+        List<String> countries = Arrays.asList("Italy", "France", "Germany", "USA", "UK", "Spain", "Canada", "Japan");
+        ObservableList<String> countryList = FXCollections.observableArrayList(countries);
+        countryChoiceBox.setItems(countryList);
+        countryChoiceBox.setValue("Italy");
     }
 
 
