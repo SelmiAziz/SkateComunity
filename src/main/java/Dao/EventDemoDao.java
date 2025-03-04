@@ -30,6 +30,11 @@ public class EventDemoDao implements EventDao {
     }
 
     public Event getEventByName(String name){
+        for(Event event:eventList){
+            if(event.getName().equals(name)){
+                return event;
+            }
+        }
         return null;
     }
     public void addEvent(Event event){

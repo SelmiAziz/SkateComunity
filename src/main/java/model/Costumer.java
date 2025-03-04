@@ -28,4 +28,8 @@ public class Costumer extends User {
     public void setAuctionProposalList(List<AuctionProposal> auctionProposalList){
         this.auctionProposalList = auctionProposalList;
     }
+
+    public void payCoins(int coinsPayed){
+        super.getAccount().decrementCoins(coinsPayed);
+    }
 }

@@ -17,13 +17,19 @@ public class CostumerHomePageView {
     private Stage stage;
     private final SceneManager sceneManager = SceneManager.getInstance();
 
-    @FXML
-    private Label coinsLabel;
+    @FXML private Label coinsLabel;
+    @FXML private Label errorLabel;
 
     @FXML
-    public void goToEvents() throws IOException {
+    public void goToEvents() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/CostumerEventsPageView.fxml"));
-        Parent root = loader.load();
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText(e.getMessage());
+        }
         CostumerEventsPageView userEventsPageView = loader.getController();
 
         Scene scene = new Scene(root, 1200, 800);
@@ -45,7 +51,8 @@ public class CostumerHomePageView {
         try {
             sceneManager.loadScene("AccessView.fxml");
         }catch (IOException e){
-
+            System.err.println("Errore di I/O: " + e.getMessage());
+            errorLabel.setText(e.getMessage());
         }
     }
 

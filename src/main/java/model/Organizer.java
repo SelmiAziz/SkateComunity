@@ -40,6 +40,8 @@ public class Organizer extends User {
         return this.createdAuctionList;
     }
 
-
+    public void gainCoins(int coinsGained){
+        super.getAccount().incrementCoins(coinsGained);
+    }
 
 }

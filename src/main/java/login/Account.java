@@ -36,7 +36,11 @@ public class Account {
         return this.coinsNumber;
     }
 
-    public void pay(int coinsRequired){
-        this.coinsNumber -= coinsRequired;
+    public void decrementCoins(int decrementCoins){
+        this.coinsNumber -= decrementCoins;
+    }
+
+    public void incrementCoins(int incrementCoins){
+        this.coinsNumber += incrementCoins;
     }
 }

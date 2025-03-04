@@ -46,6 +46,7 @@ public class OrganizerEventsPageView {
 
     @FXML
     public void initialize() {
+        //maybe here you can apply a formatter
         colName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getName()));
 

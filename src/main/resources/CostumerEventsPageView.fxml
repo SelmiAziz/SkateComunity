@@ -88,12 +88,17 @@
             <Label fx:id="eventCoinsLabel" layoutX="174.0" layoutY="137.0" />
 
             <Label layoutX="36.0" layoutY="172.0" text="Posti disponibili:" /> <!-- Spostato più in basso -->
-            <Label fx:id="eventSeatsLabel" layoutX="178.0" layoutY="172.0" />
+            <Label fx:id="eventSeatsAvailableLabel" layoutX="178.0" layoutY="172.0" />
 
             <Button layoutX="35.0" layoutY="239.0" onMouseClicked="#submitRegistrationEvent" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
                <effect>
                   <DropShadow height="5.0" radius="2.0" width="5.0" />
-               </effect></Button> <!-- Spostato più in basso -->
+               </effect></Button>
+            <Label fx:id="errorLabel" layoutX="20.0" layoutY="541.0" prefHeight="22.0" prefWidth="322.0" textFill="#208672">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label> <!-- Spostato più in basso -->
          </children>
       </AnchorPane>
    </left>
@@ -118,9 +123,9 @@
                </effect></Button>
             <TableView fx:id="eventTable" layoutX="36.0" layoutY="104.0" onMouseClicked="#onEventSelected" prefHeight="326.0" prefWidth="509.0">
                <columns>
-                  <TableColumn fx:id="colTitolo" prefWidth="145.0" text="Name" />
-                  <TableColumn fx:id="colDescrizione" prefWidth="255.0" text="Descrizione" />
-                  <TableColumn fx:id="colData" prefWidth="108.0" text="Data" />
+                  <TableColumn fx:id="colName" prefWidth="145.0" text="Name" />
+                  <TableColumn fx:id="colDescription" prefWidth="255.0" text="Descrizione" />
+                  <TableColumn fx:id="colDate" prefWidth="108.0" text="Data" />
                </columns>
             </TableView>
          </children>

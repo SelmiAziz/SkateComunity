@@ -28,6 +28,9 @@ public class Event {
     public void setOrganizer(Organizer organizer){
         this.organizer = organizer;
     }
+    public Organizer getOrganizer(){
+        return this.organizer;
+    }
 
     public  String getName(){
         return this.name;
@@ -49,10 +52,7 @@ public class Event {
         return this.coins;
     }
 
-    public void addRegistration(Costumer participant){
-        this.currentRegistrations += 1;
-        this.participants.add(participant);
-    }
+
 
     public Integer getMaxRegistrations(){
         return this.maxRegistrations;
@@ -66,8 +66,9 @@ public class Event {
         return this.participants;
     }
 
-    public void addParticipant(Costumer costumer){
-        this.participants.add(costumer);
+    public void addParticipant(Costumer participant){
+        this.participants.add(participant);
+        this.currentRegistrations += 1;
     }
 
 }
