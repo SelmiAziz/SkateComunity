@@ -30,7 +30,7 @@ public class CreateEventController {
                 throw new EventAlreadyExistsException("L'Evento in questione è già esiste");
             }
         }
-        newEvent = new Event(eventBean.getName(), eventBean.getDescription(), eventBean.getDate(), eventBean.getCountry(), eventBean.getCoins(), eventBean.getMaxRegistrations());
+        newEvent = new Event(eventBean.getName(), eventBean.getDescription(), eventBean.getDate(), eventBean.getCountry(), eventBean.getCoins(),  eventBean.getMaxRegistrations());
         organizer = organizerDao.getOrganizerByUsername(SessionManager.getInstance().getSession().getAccount().getUsername());
         newEvent.setOrganizer(organizer);
         eventDao.addEvent(newEvent);
@@ -41,7 +41,7 @@ public class CreateEventController {
         List<Event> eventList = eventDao.getAllEvents();
         List<EventBean> eventBeanList = new ArrayList<>();
         for (Event event : eventList){
-            eventBeanList.add(new EventBean(event.getName(),event.getDescription(), event.getDate(), event.getCountry(),event.getCoins(), event.getMaxRegistrations()));
+            eventBeanList.add(new EventBean(event.getName(),event.getDescription(), event.getDate(), event.getCountry(),event.getCoins(), event.getCurrentRegistrations(), event.getMaxRegistrations()));
         }
         return eventBeanList;
     }

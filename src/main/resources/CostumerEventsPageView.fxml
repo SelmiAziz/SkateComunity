@@ -90,7 +90,7 @@
             <Label layoutX="36.0" layoutY="172.0" text="Posti disponibili:" /> <!-- Spostato più in basso -->
             <Label fx:id="eventSeatsAvailableLabel" layoutX="178.0" layoutY="172.0" />
 
-            <Button layoutX="35.0" layoutY="239.0" onMouseClicked="#submitRegistrationEvent" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
+            <Button layoutX="35.0" layoutY="239.0" onMouseClicked="#submitSignToEvent" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
                <effect>
                   <DropShadow height="5.0" radius="2.0" width="5.0" />
                </effect></Button>

@@ -27,7 +27,7 @@ public class LoginController {
         for(Account account : accountList){
             if(account.getUsername().equals(loginBean.getUsername()) && account.getPassword().equals(loginBean.getPassword()) && account.getAccountType() == loginBean.getAccountType()){
                 SessionManager.getInstance().createSession(new Session(account));
-                AccountInfoSession.getInstance().createAccountInfoSession(new AccountInfo(account.getUsername(), account.getCoins()));
+                AccountInfoSessionManager.getInstance().createAccountInfoSession(new AccountInfo(account.getUsername(), account.getCoins()));
                 f = true;
             }
         }
@@ -44,6 +44,7 @@ public class LoginController {
         }
         Account account = new Account(registerUserBean.getUsername(),registerUserBean.getPassword(), registerUserBean.getAccountType());
         SessionManager.getInstance().createSession(new Session(account));
+        AccountInfoSessionManager.getInstance().createAccountInfoSession(new AccountInfo(account.getUsername(), account.getCoins()));
         accountDao.addAccount(account);
         if(registerUserBean.getAccountType() == AccountType.COSTUMER){
             Costumer costumer = new Costumer(registerUserBean.getName(), registerUserBean.getSurname(), account);

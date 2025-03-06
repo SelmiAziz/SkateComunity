@@ -21,8 +21,14 @@ public class EventDemoDao implements EventDao {
         return instance;
     }
 
-    public List<Event> getEventsByDateAndCountry() {
-        return eventList;
+    public List<Event> getEventsByDateAndCountry(String date, String country) {
+        List<Event> newEventList = new ArrayList<>();
+        for(Event event:this.eventList){
+            if( event.getDate().equals(date) && event.getCountry().equals(country)){
+                newEventList.add(event);
+            }
+        }
+        return newEventList;
     }
 
     public void removeEventByName(String name){

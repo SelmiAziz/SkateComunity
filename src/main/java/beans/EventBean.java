@@ -38,7 +38,7 @@ public class EventBean {
         this.date = date;
     }
 
-    public EventBean(String country, String date){
+    public EventBean(String date, String country){
         this.country = country;
         this.date = date;
     }

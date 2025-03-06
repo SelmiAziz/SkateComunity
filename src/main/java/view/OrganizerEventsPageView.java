@@ -10,7 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.AccountInfoSession;
+import utils.AccountInfo;
+import utils.AccountInfoSessionManager;
 import utils.SceneManager;
 import utils.SessionManager;
 
@@ -33,15 +34,17 @@ public class OrganizerEventsPageView {
     @FXML private TableColumn<EventBean, String> colMaxRegistrations;
     @FXML private TableColumn<EventBean, String> colCurrentRegistrations;
     @FXML private ChoiceBox<String> countryChoiceBox;
+    @FXML private Label usernameLabel;
     @FXML private Label coinsLabel;
     @FXML private Label errorLabel;
 
     private final CreateEventController createEventController = new CreateEventController();
+    private final AccountInfoSessionManager accountInfoSessionManager = AccountInfoSessionManager.getInstance();
 
     //I still haven't found a way to deal with the changing in the number of coins of an account
     //ATTENZIONE !!!
     public void updateCoinsInWindow(){
-        this.coinsLabel.setText(""+ AccountInfoSession.getInstance().getAccountInfo().getCoinsNumber());
+        this.coinsLabel.setText(""+ AccountInfoSessionManager.getInstance().getAccountInfo().getCoinsNumber());
     }
 
     @FXML
@@ -69,6 +72,7 @@ public class OrganizerEventsPageView {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getMaxRegistrations())));
 
         populateCountryChoiceBox();
+        updateAccountInfo();
     }
 
     private void validateFields(String name, String description, String date, String country) throws EmptyFieldException{
@@ -104,6 +108,12 @@ public class OrganizerEventsPageView {
         }
 
 
+    }
+
+    public void updateAccountInfo(){
+        AccountInfo accountInfo = accountInfoSessionManager.getAccountInfo();
+        coinsLabel.setText(String.valueOf(accountInfo.getCoinsNumber()));
+        usernameLabel.setText(accountInfo.getUsername());
     }
 
     public void loadEvents(){

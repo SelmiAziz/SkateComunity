@@ -1,14 +1,14 @@
 package utils;
 
-public class AccountInfoSession {
-    private static AccountInfoSession instance;
+public class AccountInfoSessionManager {
+    private static AccountInfoSessionManager instance;
     private AccountInfo accountInfo;
 
-    public AccountInfoSession(){}
+    public AccountInfoSessionManager(){}
 
-    public static AccountInfoSession getInstance(){
+    public static AccountInfoSessionManager getInstance(){
         if(instance == null){
-            instance = new AccountInfoSession();
+            instance = new AccountInfoSessionManager();
         }
         return instance;
     }

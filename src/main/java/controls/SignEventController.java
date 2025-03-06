@@ -3,14 +3,16 @@ package controls;
 import Dao.CostumerDao;
 import Dao.EventDao;
 import Dao.Factories.DaoFactory;
-import Dao.OrganizerDao;
 import beans.EventBean;
 import exceptions.InsufficientCoinsException;
+import exceptions.NoAvailableSeats;
 import exceptions.UserAlreadySignedEvent;
 import login.Account;
 import model.Costumer;
 import model.Event;
+import model.EventParticipation;
 import model.Organizer;
+import utils.AccountInfoSessionManager;
 import utils.SessionManager;
 
 import java.util.ArrayList;
@@ -23,12 +25,12 @@ public class SignEventController {
     private final SessionManager sessionManager = SessionManager.getInstance();
 
 
-    public EventBean showEventDetail(EventBean eventBean){
+    public EventBean eventDetails(EventBean eventBean){
         Event event = eventDao.getEventByName(eventBean.getName());
-        return new EventBean(event.getName(), event.getDescription(), (event.getMaxRegistrations() - event.getCurrentRegistrations()), event.getCoins());
+        return new EventBean(event.getName(), event.getDescription(), event.getCoins(),(event.getMaxRegistrations() - event.getCurrentRegistrations()));
     }
 
-    public List<EventBean> showAllEvents(){
+    public List<EventBean> allEvents(){
         List<Event> eventList = eventDao.getAllEvents();
         List<EventBean> eventBeanList = new ArrayList<>();
         for (Event event : eventList){
@@ -37,23 +39,26 @@ public class SignEventController {
         return eventBeanList;
     }
 
-    public void signEvent(EventBean eventBean) throws UserAlreadySignedEvent {
+    public void signToEvent(EventBean eventBean) throws UserAlreadySignedEvent, InsufficientCoinsException, NoAvailableSeats {
         Account account = sessionManager.getSession().getAccount();
         Costumer currentCostumer = costumerDao.getUserByUsername(account.getUsername());
         Event event = eventDao.getEventByName(eventBean.getName());
         Organizer organizer = event.getOrganizer();
-        List<Costumer> costumerList = event.getParticipants();
-        for(Costumer costumer : costumerList ){
-            if(costumer.getAccount().getUsername().equals(currentCostumer.getAccount().getUsername())){
+        List<EventParticipation> participantsList = event.getParticipants();
+        for(EventParticipation eventParticipation : participantsList ){
+            if(eventParticipation.getParticipant().getAccount().getUsername().equals(currentCostumer.getAccount().getUsername())){
                 throw new UserAlreadySignedEvent("L'utente è già segnato a questo evento");
             }
         }
         if(currentCostumer.getAccount().getCoins() - event.getCoins() < 0){
             throw new InsufficientCoinsException("L'utente non disponde del numero di coins richieste");
         }
+        if(!(event.getMaxRegistrations() - event.getCurrentRegistrations() >0)){
+            throw new NoAvailableSeats("Non sono presenti più posti disponibili per tale evento");
+        }
         currentCostumer.payCoins(event.getCoins());
-        System.out.println("Hai pagato");
-        event.addParticipant(currentCostumer);
+        AccountInfoSessionManager.getInstance().getAccountInfo().decrementCoins(event.getCoins());
+        event.addEventParticipation(new EventParticipation( event.getCoins()+1, currentCostumer));
         organizer.gainCoins(eventBean.getCoins());
 
 
@@ -61,6 +66,10 @@ public class SignEventController {
 
     public List<EventBean> searchEventByDateAndCountry(EventBean eventBean){
         List<EventBean> eventBeanList = new ArrayList<>();
+        List<Event> eventList = eventDao.getEventsByDateAndCountry(eventBean.getDate(), eventBean.getCountry());
+        for(Event event: eventList){
+            eventBeanList.add(new EventBean(event.getName(), event.getDescription(), event.getDate()));
+        }
         return eventBeanList;
     }
 

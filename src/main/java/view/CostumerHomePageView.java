@@ -7,18 +7,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import utils.AccountInfoSession;
+import utils.AccountInfo;
+import utils.AccountInfoSessionManager;
 import utils.SceneManager;
-import utils.SessionManager;
 
 import java.io.IOException;
 
 public class CostumerHomePageView {
     private Stage stage;
     private final SceneManager sceneManager = SceneManager.getInstance();
+    private final AccountInfoSessionManager accountInfoSessionManager = AccountInfoSessionManager.getInstance();
 
+
+    @FXML private Label usernameLabel;
     @FXML private Label coinsLabel;
     @FXML private Label errorLabel;
+
+    public void initialize(){
+        updateAccountInfo();
+    }
 
     @FXML
     public void goToEvents() {
@@ -26,25 +33,25 @@ public class CostumerHomePageView {
         Parent root = null;
         try {
             root = loader.load();
+            CostumerEventsPageView userEventsPageView = loader.getController();
+            Scene scene = new Scene(root, 1200, 800);
+            stage = sceneManager.getStage();
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+            Platform.runLater(userEventsPageView::loadEvents);
         } catch (IOException e) {
             System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
         }
-        CostumerEventsPageView userEventsPageView = loader.getController();
-
-        Scene scene = new Scene(root, 1200, 800);
-        stage = sceneManager.getStage();
-        stage.setResizable(false);
-        stage.setScene(scene);
-        stage.show();
-
-        Platform.runLater(userEventsPageView::loadEvents);
     }
 
-
-    public void updateCoinsInWindow(){
-        this.coinsLabel.setText(""+AccountInfoSession.getInstance().getAccountInfo().getCoinsNumber());
+    public void updateAccountInfo(){
+        AccountInfo accountInfo = accountInfoSessionManager.getAccountInfo();
+        coinsLabel.setText(String.valueOf(accountInfo.getCoinsNumber()));
+        usernameLabel.setText(accountInfo.getUsername());
     }
+
 
     public void logOut()  {
         //SessionManager.getInstance().terminateSession();

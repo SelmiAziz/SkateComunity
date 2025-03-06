@@ -10,7 +10,7 @@ public class Account {
         this.username = username;
         this.password = password;
         this.accountType = accountType;
-        this.coinsNumber = 0;
+        this.coinsNumber = 150;
     }
 
     public Account(String username, String password, AccountType accountType, int coinsNumber){

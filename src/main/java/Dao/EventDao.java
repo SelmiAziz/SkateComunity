@@ -9,5 +9,5 @@ public interface EventDao {
     public void removeEventByName(String NameEvent);
     public void addEvent(Event event);
     public List<Event> getAllEvents();
-    public List<Event> getEventsByDateAndCountry();
+    public List<Event> getEventsByDateAndCountry(String date, String country);
 }

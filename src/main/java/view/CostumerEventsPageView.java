@@ -1,23 +1,24 @@
 package view;
 
-import Dao.EventDao;
-import Dao.EventDemoDao;
 import beans.EventBean;
 import controls.SignEventController;
+import exceptions.InsufficientCoinsException;
+import exceptions.NoAvailableSeats;
+import exceptions.UserAlreadySignedEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import model.Event;
+import utils.AccountInfo;
+import utils.AccountInfoSessionManager;
 import utils.SceneManager;
-import utils.SessionManager;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class CostumerEventsPageView {
     private final SignEventController signEventController = new SignEventController();
     private final SceneManager sceneManager = SceneManager.getInstance();
+    private final AccountInfoSessionManager accountInfoSession = AccountInfoSessionManager.getInstance();
 
     @FXML private TableView<EventBean> eventTable;
     @FXML private TableColumn<EventBean, String> colName;
@@ -30,10 +31,11 @@ public class CostumerEventsPageView {
     @FXML private Label eventNameLabel;
     @FXML private Label eventSeatsAvailableLabel;
     @FXML private Label coinsLabel;
+    @FXML private Label usernameLabel;
     @FXML private Label errorLabel;
 
 
-    private EventBean selectedEvent;
+    private EventBean selectedEventBean;
 
     public void initialize() {
         // Imposta il cellValueFactory per ogni colonna
@@ -45,19 +47,30 @@ public class CostumerEventsPageView {
 
         colDate.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getDate()));
+
+       updateAccountInfo();
     }
+
 
     public void loadEvents() {
 
-        coinsLabel.setText("120");
-
         eventTable.getItems().clear();
+        eventTable.getItems().addAll(signEventController.allEvents());
+    }
 
-        eventTable.getItems().addAll(signEventController.showAllEvents());
+    public void updateAccountInfo(){
+        AccountInfo accountInfo = accountInfoSession.getAccountInfo();
+        coinsLabel.setText(String.valueOf(accountInfo.getCoinsNumber()));
+        usernameLabel.setText(accountInfo.getUsername());
     }
 
     @FXML
     public void searchEvents() {
+        String date = dateSearch.getText();
+        String country = nationalitySearch.getText();
+        EventBean eventBean = new EventBean(date,country);
+        eventTable.getItems().clear();
+        eventTable.getItems().addAll(signEventController.searchEventByDateAndCountry(eventBean));
 
     }
 
@@ -65,25 +78,32 @@ public class CostumerEventsPageView {
     @FXML
     public void onEventSelected() {
         EventBean selected = eventTable.getSelectionModel().getSelectedItem();
-        EventBean eventBeanDetails = signEventController.showEventDetail(selected);
+        EventBean eventBeanDetails = signEventController.eventDetails(selected);
         showEventDetails(eventBeanDetails);
     }
 
     // Mostra i dettagli dell'evento selezionato
     private void showEventDetails(EventBean eventBean) {
         if (eventBean != null) {
-            selectedEvent = eventBean;
+            selectedEventBean = eventBean;
             eventNameLabel.setText(eventBean.getName());
             eventDescriptionLabel.setText(eventBean.getDescription());
             eventCoinsLabel.setText(""+ eventBean.getCoins());
-            eventSeatsAvailableLabel.setText("Registrazioni massime: " + eventBean.getMaxRegistrations());
+            eventSeatsAvailableLabel.setText(""+eventBean.getAvailableRegistrations());
 
         }
     }
 
     @FXML
-    public void submitRegistrationEvent(){
-        //Da implementare
+    public void submitSignToEvent(){
+        try {
+            signEventController.signToEvent(selectedEventBean);
+            updateAccountInfo();
+            onEventSelected();
+        } catch (UserAlreadySignedEvent | InsufficientCoinsException | NoAvailableSeats e) {
+            errorLabel.setText(e.getMessage());
+            System.err.println(e.getMessage());
+        }
     }
 
 
@@ -98,7 +118,7 @@ public class CostumerEventsPageView {
     }
 
     public void logOut(){
-        SessionManager.getInstance().terminateSession();
+        //SessionManager.getInstance().terminateSession();
         try {
             sceneManager.loadScene("AccessView.fxml");
         }catch(IOException e){
