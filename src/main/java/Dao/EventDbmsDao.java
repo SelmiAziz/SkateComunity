@@ -313,7 +313,6 @@ public class EventDbmsDao implements EventDao {
                     eventRegistrationDao.addEventRegistration(eventRegistration);
                 }
             }catch (SQLException e) {
-            System.err.println("Errore durante l'esecuzione della query: " + e.getMessage());
             e.printStackTrace();
         }
 

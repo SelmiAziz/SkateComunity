@@ -30,7 +30,6 @@ public class OrganizerDbmsDao implements OrganizerDao {
         EventDao eventDao = DaoFactory.getInstance().createEventDao();
         for (Organizer organizer : organizerList) {
             if (organizer.getName().equals(profileName)) {
-                System.out.println("TROVATO IN MEMORIA L'ORGANIZZATORE" + organizer.getName());
                 return organizer;
             }
         }

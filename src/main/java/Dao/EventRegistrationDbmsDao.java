@@ -39,7 +39,6 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int generatedId = generatedKeys.getInt(1);
-                        System.out.println("Registrazione inserita con ID: " + generatedId);
                     }
                 }
             }
