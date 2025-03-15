@@ -18,9 +18,10 @@ public class CostumerHomePageView {
     private final SceneManager sceneManager = SceneManager.getInstance();
 
 
-    @FXML private Label usernameLabel;
+
     @FXML private Label coinsLabel;
     @FXML private Label errorLabel;
+    @FXML private Label usernameLabel;
 
     public void initialize(){
         updateUserInfo();

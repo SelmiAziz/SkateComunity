@@ -45,7 +45,6 @@ public class OrganizerHomePageView {
             stage.show();
             Platform.runLater(organizerEventsPageView::loadEvents);
         } catch (IOException e) {
-            System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
         }
 
@@ -63,7 +62,6 @@ public class OrganizerHomePageView {
         try {
             sceneManager.loadScene("viewFxml/AccessView.fxml");
         }catch(IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
         }
     }
