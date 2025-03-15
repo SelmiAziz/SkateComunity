@@ -42,7 +42,6 @@ public class CostumerHomePageView {
             stage.show();
             Platform.runLater(userEventsPageView::loadEvents);
         } catch (IOException e) {
-            System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
         }
     }
@@ -57,11 +56,9 @@ public class CostumerHomePageView {
 
 
     public void logOut()  {
-        //SessionManager.getInstance().terminateSession();
         try {
             sceneManager.loadScene("viewFxml/AccessView.fxml");
         }catch (IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
         }
     }
