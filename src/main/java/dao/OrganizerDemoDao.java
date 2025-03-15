@@ -37,7 +37,7 @@ public class OrganizerDemoDao implements OrganizerDao {
 
     @Override
     public void update(Organizer organizer) {
-
+        //not needed in demo
     }
 
 }
