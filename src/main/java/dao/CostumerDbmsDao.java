@@ -14,7 +14,7 @@ public class CostumerDbmsDao implements CostumerDao{
     private static CostumerDbmsDao instance;
     private final List<Costumer> costumerList = new ArrayList<>();
 
-    public synchronized static CostumerDbmsDao getInstance(){
+    public static synchronized CostumerDbmsDao getInstance(){
         if(instance == null){
             instance = new CostumerDbmsDao();
         }

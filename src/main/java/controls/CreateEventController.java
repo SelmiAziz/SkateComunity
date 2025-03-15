@@ -42,9 +42,6 @@ public class CreateEventController {
     public List<EventBean> organizerEvents(){
         Organizer organizer = organizerDao.selectOrganizerByOrganizerName(SessionManager.getInstance().getSession().getNameProfile());
         List<Event> eventList = organizer.getAllEvents();
-        for(Event event : eventList){
-            System.out.println("L'EVENTOO "+event.getName());
-        }
         List<EventBean> eventBeanList = new ArrayList<>();
         for (Event event : eventList){
             eventBeanList.add(new EventBean(event.getName(),event.getDescription(), event.getDate(), event.getCountry(),event.getCoins(), event.getCurrentRegistrations(), event.getMaxRegistrations()));

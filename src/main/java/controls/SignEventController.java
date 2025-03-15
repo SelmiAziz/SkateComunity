@@ -55,7 +55,7 @@ public class SignEventController {
         if(currentCostumer.getCoins() - event.getCoins() < 0){
             throw new InsufficientCoinsException("L'utente non disponde del numero di coins richieste");
         }
-        if(!(event.getMaxRegistrations() - event.getCurrentRegistrations() >0)){
+        if(event.getMaxRegistrations() - event.getCurrentRegistrations() <= 0){
             throw new NoAvailableSeats("Non sono presenti più posti disponibili per tale evento");
         }
         currentCostumer.payCoins(event.getCoins());

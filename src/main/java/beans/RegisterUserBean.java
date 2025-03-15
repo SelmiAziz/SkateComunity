@@ -9,7 +9,7 @@ public class RegisterUserBean {
     private ProfileType profileType;
 
     public RegisterUserBean( String username, String password, String profileName, ProfileType profileType){
-;
+
         this.username = username;
         this.password = password;
         this.profileName = profileName;
