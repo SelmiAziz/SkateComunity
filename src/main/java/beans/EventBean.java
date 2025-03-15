@@ -1,6 +1,5 @@
 package beans;
 
-import model.Event;
 
 public class EventBean {
     private String name;
