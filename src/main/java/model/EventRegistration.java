@@ -1,17 +1,24 @@
 package model;
 
-public class EventParticipation {
+public class EventRegistration {
+    private int registrationId;
     private String participationDate;
     private int participationNumber;
     private Costumer participant;
+    private Event event;
 
-    public EventParticipation(String participationDate, int participationNumber, Costumer participant){
+    public EventRegistration(int registrationId , int participationNumber){
+        this.registrationId = registrationId;
+        this.participationNumber = participationNumber;
+    }
+
+    public EventRegistration(String participationDate, int participationNumber, Costumer participant){
         this.participationDate = participationDate;
         this.participationNumber = participationNumber;
         this.participant = participant;
     }
 
-    public EventParticipation(int participationNumber, Costumer participant){
+    public EventRegistration(int participationNumber, Costumer participant){
         this.participationNumber = participationNumber;
         this.participant = participant;
     }
@@ -38,6 +45,16 @@ public class EventParticipation {
 
     public void setParticipant(Costumer participant){
         this.participant = participant;
+    }
+
+    public int getRegistrationId(){return this.registrationId;}
+
+    public void setEvent(Event event){
+        this.event = event;
+    }
+
+    public Event getEvent(){
+        return this.event;
     }
 
 }

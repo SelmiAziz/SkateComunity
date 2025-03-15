@@ -16,7 +16,7 @@
          <children>
                 <ImageView fitHeight="421.0" fitWidth="1200.0" layoutY="-29.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@images/img1.png" />
+                        <Image url="@../images/img1.png" />
                     </image>
                 </ImageView>
          </children>
@@ -42,7 +42,7 @@
             <Label layoutX="164.0" layoutY="298.0" onMouseClicked="#goToRegistrationPage" text="registrati" textFill="#1abc9c" />
             <ImageView fitHeight="291.0" fitWidth="301.0" layoutX="902.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/logo.png" />
+                  <Image url="@../images/logo.png" />
                </image>
             </ImageView>
             <Text fill="#00000087" layoutX="21.0" layoutY="108.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lo skateboarding è molto più di uno sport; è un'espressione di libertà e creatività. Ogni tavola diventa una tela su cui tracciare movimenti, sfide e stile unico. Che tu sia un principiante o un veterano, lo skate ti insegna a superare i limiti, a prendere il volo, e a far parte di una comunità che condivide la passione per l'adrenalina e l'arte del movimento." wrappingWidth="776.1300010681152">

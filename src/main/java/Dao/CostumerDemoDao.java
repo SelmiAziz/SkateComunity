@@ -7,8 +7,7 @@ import java.util.List;
 
 public class CostumerDemoDao implements CostumerDao {
     private static CostumerDemoDao instance;
-    private List<Costumer>  costumerList;
-    private AccountDao accountDao;
+    private final List<Costumer>  costumerList;
 
     public CostumerDemoDao() {
         this.costumerList = new ArrayList<>();
@@ -22,22 +21,22 @@ public class CostumerDemoDao implements CostumerDao {
         return instance;
     }
 
-    public List<Costumer> getAllUsers(){
-        return this.costumerList;
-    }
-
     public void addCostumer(Costumer costumer){
         this.costumerList.add(costumer);
     }
 
-    public Costumer getUserByUsername(String username){
+    public Costumer selectCostumerByCostumerName(String costumerName){
         for(Costumer costumer:costumerList){
-            if(costumer.getAccount().getUsername().equals(username)){
+            if(costumer.getName().equals(costumerName)){
                 return costumer;
           }
         }
         return null;
     }
 
+    @Override
+    public void update(Costumer costumer) {
+
+    }
 }
 

@@ -1,6 +1,7 @@
 package view;
 
 import beans.EventBean;
+import beans.UserInfo;
 import controls.SignEventController;
 import exceptions.InsufficientCoinsException;
 import exceptions.NoAvailableSeats;
@@ -8,8 +9,6 @@ import exceptions.UserAlreadySignedEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.AccountInfo;
-import utils.AccountInfoSessionManager;
 import utils.SceneManager;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.io.IOException;
 public class CostumerEventsPageView {
     private final SignEventController signEventController = new SignEventController();
     private final SceneManager sceneManager = SceneManager.getInstance();
-    private final AccountInfoSessionManager accountInfoSession = AccountInfoSessionManager.getInstance();
+    //private final AccountInfoSessionManager accountInfoSession = AccountInfoSessionManager.getInstance();
 
     @FXML private TableView<EventBean> eventTable;
     @FXML private TableColumn<EventBean, String> colName;
@@ -48,20 +47,14 @@ public class CostumerEventsPageView {
         colDate.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getDate()));
 
-       updateAccountInfo();
+       updateUserInfo();
     }
 
 
     public void loadEvents() {
 
         eventTable.getItems().clear();
-        eventTable.getItems().addAll(signEventController.allEvents());
-    }
-
-    public void updateAccountInfo(){
-        AccountInfo accountInfo = accountInfoSession.getAccountInfo();
-        coinsLabel.setText(String.valueOf(accountInfo.getCoinsNumber()));
-        usernameLabel.setText(accountInfo.getUsername());
+        eventTable.getItems().addAll(signEventController.allAvailableEvents());
     }
 
     @FXML
@@ -98,7 +91,7 @@ public class CostumerEventsPageView {
     public void submitSignToEvent(){
         try {
             signEventController.signToEvent(selectedEventBean);
-            updateAccountInfo();
+            updateUserInfo();
             onEventSelected();
         } catch (UserAlreadySignedEvent | InsufficientCoinsException | NoAvailableSeats e) {
             errorLabel.setText(e.getMessage());
@@ -110,17 +103,23 @@ public class CostumerEventsPageView {
 
     public void goToHomePage() {
         try {
-            sceneManager.loadScene("CostumerHomePageView.fxml");
+            sceneManager.loadScene("viewFxml/CostumerHomePageView.fxml");
         }catch(IOException e){
             System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
         }
     }
 
+    void updateUserInfo(){
+        UserInfo userInfo = signEventController.getCurrentUserInfo();
+        usernameLabel.setText(userInfo.getUsername());
+        coinsLabel.setText(String.valueOf(userInfo.getCoins()));
+    }
+
     public void logOut(){
         //SessionManager.getInstance().terminateSession();
         try {
-            sceneManager.loadScene("AccessView.fxml");
+            sceneManager.loadScene("viewFxml/AccessView.fxml");
         }catch(IOException e){
             System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());

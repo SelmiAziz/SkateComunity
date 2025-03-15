@@ -1,18 +1,24 @@
 package beans;
 
-import login.AccountType;
+import login.ProfileType;
 
 public class LogUserBean {
     private String username;
     private String password;
-    private AccountType accountType;
+    private ProfileType profileType;
 
-    public LogUserBean(String username, String password, AccountType accountType){
+    public LogUserBean(String username, String password){
         this.username = username;
         this.password = password;
-        this.accountType = accountType;
     }
 
+    public LogUserBean(ProfileType profileType){
+        this.profileType = profileType;
+    }
+
+    public ProfileType getProfileType() {
+        return profileType;
+    }
 
     public String getUsername(){
         return this.username;
@@ -22,9 +28,6 @@ public class LogUserBean {
         return this.password;
     }
 
-    public AccountType getAccountType(){
-        return this.accountType;
-    }
 
     public void setUsername(String username){
         this.username = username;
@@ -34,9 +37,7 @@ public class LogUserBean {
         this.password = password;
     }
 
-    public void setAccountType(AccountType accountType){
-        this.accountType = accountType;
-    }
+
 
 
 }

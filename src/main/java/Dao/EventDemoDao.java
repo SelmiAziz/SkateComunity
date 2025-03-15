@@ -7,12 +7,8 @@ import java.util.List;
 
 
 public class EventDemoDao implements EventDao {
-    private static EventDemoDao instance;
-    private List<Event> eventList;
-
-    public EventDemoDao(){
-        this.eventList = new ArrayList<>();
-    }
+    private static EventDemoDao instance = null;
+    private final List<Event> eventList = new ArrayList<>();
 
     public synchronized static EventDemoDao getInstance(){
         if(instance == null){
@@ -21,7 +17,7 @@ public class EventDemoDao implements EventDao {
         return instance;
     }
 
-    public List<Event> getEventsByDateAndCountry(String date, String country) {
+    public List<Event> selectEventsByDateAndCountry(String date, String country) {
         List<Event> newEventList = new ArrayList<>();
         for(Event event:this.eventList){
             if( event.getDate().equals(date) && event.getCountry().equals(country)){
@@ -31,11 +27,29 @@ public class EventDemoDao implements EventDao {
         return newEventList;
     }
 
-    public void removeEventByName(String name){
-
+    @Override
+    public boolean checkEvent(String eventName) {
+        for(Event event:eventList){
+            if(event.getName().equals(eventName)){
+                return true;
+            }
+        }
+        return false;
     }
 
-    public Event getEventByName(String name){
+
+    @Override
+    public List<Event> selectAvailableEvents() {
+        List<Event> eventList= new ArrayList<>();
+        for(Event event:this.eventList){
+            if(event.getCurrentRegistrations()< event.getMaxRegistrations()){
+                eventList.add(event);
+            }
+        }
+        return eventList;
+    }
+
+    public Event selectEventByName(String name){
         for(Event event:eventList){
             if(event.getName().equals(name)){
                 return event;
@@ -47,20 +61,9 @@ public class EventDemoDao implements EventDao {
         eventList.add(event);
     }
 
-    public List<Event> getAllEvents(){
+    public List<Event> selectAllEvents(){
         return eventList;
     }
 
-    public void printAllEvents() {
-        if (eventList.isEmpty()) {
-            System.out.println("Non ci sono eventi disponibili.");
-        } else {
-            for (Event event : eventList) {
-                System.out.println("Titolo: " + event.getName());
-                System.out.println("Descrizione: " + event.getDescription());
-                System.out.println("Data: " + event.getDate());
-                System.out.println("---");
-            }
-        }
-    }
+
 }

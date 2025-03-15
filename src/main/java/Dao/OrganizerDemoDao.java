@@ -8,7 +8,6 @@ import java.util.List;
 public class OrganizerDemoDao implements OrganizerDao {
     private static OrganizerDemoDao instance;
     private List<Organizer> organizerList;
-    private AccountDao accountDao;
 
     public OrganizerDemoDao() {
         this.organizerList = new ArrayList<>();
@@ -22,21 +21,23 @@ public class OrganizerDemoDao implements OrganizerDao {
         return instance;
     }
 
-    public List<Organizer> getAllOrganizers(){
-        return this.organizerList;
-    }
 
     public void addOrganizer(Organizer organizer){
         this.organizerList.add(organizer);
     }
 
-    public Organizer getOrganizerByUsername(String username){
+    public Organizer selectOrganizerByOrganizerName(String organizerName){
         for(Organizer organizer:organizerList){
-            if(organizer.getAccount().getUsername().equals(username)){
+            if(organizer.getName().equals(organizerName)){
                 return organizer;
             }
         }
         return null;
+    }
+
+    @Override
+    public void update(Organizer organizer) {
+
     }
 
 }

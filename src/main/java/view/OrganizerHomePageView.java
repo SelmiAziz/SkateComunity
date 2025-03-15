@@ -1,5 +1,7 @@
 package view;
 
+import beans.UserInfo;
+import controls.LoginController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,8 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import utils.AccountInfo;
-import utils.AccountInfoSessionManager;
 import utils.SceneManager;
 import java.io.IOException;
 
@@ -17,7 +17,6 @@ public class OrganizerHomePageView {
     private Stage stage;
 
     SceneManager sceneManager = SceneManager.getInstance();
-    AccountInfoSessionManager accountInfoSessionManager = AccountInfoSessionManager.getInstance();
 
     @FXML private Label usernameLabel;
     @FXML private Label coinsLabel;
@@ -26,19 +25,14 @@ public class OrganizerHomePageView {
 
 
     public void initialize(){
-        updateAccountInfo();
+        updateUserInfo();
     }
 
-    public void updateAccountInfo(){
-        AccountInfo accountInfo = accountInfoSessionManager.getAccountInfo();
-        coinsLabel.setText(String.valueOf(accountInfo.getCoinsNumber()));
-        usernameLabel.setText(accountInfo.getUsername());
-    }
 
     @FXML
     public void goToEvents() {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/OrganizerEventsPageView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerEventsPageView.fxml"));
 
         Parent root = null;
         try {
@@ -57,10 +51,17 @@ public class OrganizerHomePageView {
 
     }
 
+    private final LoginController loginController = new LoginController();
+    void updateUserInfo(){
+        UserInfo userInfo = loginController.getCurrentUserInfo();
+        usernameLabel.setText(userInfo.getUsername());
+        coinsLabel.setText(String.valueOf(userInfo.getCoins()));
+    }
+
     public void logOut()  {
         //here you have to call the controller to logOut
         try {
-            sceneManager.loadScene("AccessView.fxml");
+            sceneManager.loadScene("viewFxml/AccessView.fxml");
         }catch(IOException e){
             System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());

@@ -2,6 +2,7 @@ package view;
 
 
 import beans.EventBean;
+import beans.UserInfo;
 import controls.CreateEventController;
 import exceptions.EmptyFieldException;
 import exceptions.EventAlreadyExistsException;
@@ -10,12 +11,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.AccountInfo;
-import utils.AccountInfoSessionManager;
 import utils.SceneManager;
 import utils.SessionManager;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,13 +39,6 @@ public class OrganizerEventsPageView {
     @FXML private Label errorLabel;
 
     private final CreateEventController createEventController = new CreateEventController();
-    private final AccountInfoSessionManager accountInfoSessionManager = AccountInfoSessionManager.getInstance();
-
-    //I still haven't found a way to deal with the changing in the number of coins of an account
-    //ATTENZIONE !!!
-    public void updateCoinsInWindow(){
-        this.coinsLabel.setText(""+ AccountInfoSessionManager.getInstance().getAccountInfo().getCoinsNumber());
-    }
 
     @FXML
     public void initialize() {
@@ -72,7 +65,7 @@ public class OrganizerEventsPageView {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getMaxRegistrations())));
 
         populateCountryChoiceBox();
-        updateAccountInfo();
+        updateUserInfo();
     }
 
     private void validateFields(String name, String description, String date, String country) throws EmptyFieldException{
@@ -105,27 +98,33 @@ public class OrganizerEventsPageView {
         }catch(EmptyFieldException e){
             System.err.println(e.getMessage());
             errorLabel.setText(e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
 
     }
+    public void saluta(){
 
-    public void updateAccountInfo(){
-        AccountInfo accountInfo = accountInfoSessionManager.getAccountInfo();
-        coinsLabel.setText(String.valueOf(accountInfo.getCoinsNumber()));
-        usernameLabel.setText(accountInfo.getUsername());
+        System.out.println("Hiiiii");
     }
+
 
     public void loadEvents(){
         eventTable.getItems().clear();
-        eventTable.getItems().addAll(createEventController.showAllEvents());
+        eventTable.getItems().addAll(createEventController.organizerEvents());
     }
 
+    public void updateUserInfo(){
+        UserInfo userInfo = createEventController.getCurrentUserInfo();
+        usernameLabel.setText(userInfo.getUsername());
+        coinsLabel.setText(String.valueOf(userInfo.getCoins()));
+    }
 
     public void logOut()  {
         SessionManager.getInstance().terminateSession();
         try {
-            SceneManager.getInstance().loadScene("AccessView.fxml");
+            SceneManager.getInstance().loadScene("viewFxml/AccessView.fxml");
         }catch (IOException e){
             System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
@@ -134,7 +133,7 @@ public class OrganizerEventsPageView {
 
     public void goToHomePage()  {
         try {
-            SceneManager.getInstance().loadScene("OrganizerHomePageView.fxml");
+            SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
         }catch (IOException e){
             System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());

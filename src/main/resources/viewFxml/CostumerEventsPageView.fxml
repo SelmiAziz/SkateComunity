@@ -54,7 +54,7 @@
             <Line endX="17.0" layoutX="203.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="829.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/account.png" />
+                  <Image url="@../images/account.png" />
                </image>
             </ImageView>
             <Label fx:id="usernameLabel" layoutX="758.0" layoutY="45.0" prefHeight="31.0" prefWidth="107.0" text="Selmi15" textFill="#1abc9c">
@@ -64,7 +64,7 @@
             </Label>
             <ImageView fitHeight="65.0" fitWidth="72.0" layoutX="934.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/coins.png" />
+                  <Image url="@../images/coins.png" />
                </image>
             </ImageView>
             <Label fx:id="coinsLabel" layoutX="906.0" layoutY="44.0" prefHeight="32.0" prefWidth="55.0" text="100" textAlignment="RIGHT" textFill="#1abc9c">
@@ -114,7 +114,7 @@
             </HBox>
             <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="400.0" layoutY="414.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/logo.png" />
+                  <Image url="@../images/logo.png" />
                </image>
             </ImageView>
             <Button layoutX="473.0" layoutY="50.0" onMouseClicked="#searchEvents" prefHeight="26.0" prefWidth="66.0" style="-fx-background-color: #1ABC9C;" text="Cerca" textFill="WHITE">

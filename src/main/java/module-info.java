@@ -5,6 +5,7 @@ module startSkate {
 
     requires org.controlsfx.controls;
     requires java.desktop;
+    requires java.management;
 
     opens view to javafx.fxml;
     exports startSkate;

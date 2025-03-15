@@ -1,35 +1,42 @@
 package model;
 
-import login.Account;
-import login.User;
+import login.Profile;
+import login.ProfileType;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Costumer extends User {
-    private List<AuctionProposal> auctionProposalList;
+public class Costumer extends Profile {
+    private List<Competition> negotiationList;
+    private List<EventRegistration> eventParticipationList ;
 
-    public Costumer(String name, String surname, Account account){
-      super(name,surname,account);
+
+
+    public Costumer(String name){
+        super(name,100);
+        this.negotiationList = new ArrayList<>();
+        this.eventParticipationList = new ArrayList<>();
     }
 
-    public Costumer(String name, String surname, Account account, List<AuctionProposal> auctionProposalList){
-        super(name,surname,account);
-        this.auctionProposalList = auctionProposalList;
+    public Costumer(String name, int coins){
+        super(name,coins);
+        this.negotiationList = new ArrayList<>();
+        this.eventParticipationList = new ArrayList<>();
     }
 
-    public List<AuctionProposal> getAllAuctionProposals() {
-        return auctionProposalList;
+    @Override
+    public ProfileType getProfileType() {
+        return ProfileType.COSTUMER;
     }
 
-    public void addAuctionProposal( AuctionProposal auctionProposal){
-        this.auctionProposalList.add(auctionProposal);
+    public List<Competition> getAllNegotations() {
+        return negotiationList ;
     }
 
-    public void setAuctionProposalList(List<AuctionProposal> auctionProposalList){
-        this.auctionProposalList = auctionProposalList;
+    public void addNegotiation( Competition negotiation){
+        this.negotiationList.add(negotiation);
     }
 
-    public void payCoins(int coinsPayed){
-        super.getAccount().decrementCoins(coinsPayed);
-    }
+
+
 }

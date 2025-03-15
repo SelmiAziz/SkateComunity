@@ -6,7 +6,7 @@ import model.Organizer;
 import java.util.List;
 
 public interface OrganizerDao {
-    public void addOrganizer(Organizer organizer);
-    public Organizer getOrganizerByUsername(String username);
-    public List<Organizer> getAllOrganizers();
+    void addOrganizer(Organizer organizer);
+    Organizer selectOrganizerByOrganizerName(String organizerName);
+    void update(Organizer organizer);
 }

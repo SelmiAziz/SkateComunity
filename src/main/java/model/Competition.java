@@ -1,13 +1,10 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Negotiation {
+public class Competition {
     private Product product;
     private Organizer organizer;
 
-    public Negotiation(Product product, Organizer organizer){
+    public Competition(Product product, Organizer organizer){
         this.product  = product;
         this.organizer = organizer;
     }

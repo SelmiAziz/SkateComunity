@@ -1,23 +1,20 @@
-package Dao.Factories;
+package Dao.patternAbstractFactory;
 
-import Dao.AccountDao;
-import Dao.CostumerDao;
-import Dao.EventDao;
-import Dao.OrganizerDao;
+import Dao.*;
 
 abstract public class DaoFactory {
-    public abstract AccountDao createAccountDao();
+    public abstract UserDao createUserDao();
     public abstract CostumerDao createCostumerDao();
     public abstract OrganizerDao createOrganizerDao();
     public abstract EventDao createEventDao();
+    public abstract EventRegistrationDao createEventRegistrationDao();
 
     private static DaoFactory instance;
 
     public synchronized static DaoFactory getInstance(){
-            //For now it is working in this way
             if(instance == null){
 
-                instance = new DaoDemoFactory();
+                instance = new DaoDbmsFactory();
             }
             return instance;
     }

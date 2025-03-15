@@ -1,22 +1,31 @@
 package model;
 
-import login.Account;
-import login.User;
+import login.Profile;
+import login.ProfileType;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Organizer extends User {
+public class Organizer extends Profile {
     public List<Event> createdEventList;
-    public List<Negotiation> createdAuctionList;
+    public List<Competition> negotiationList;
 
-    public Organizer( String name, String surname, Account account){
-        super(name,surname,account);
+    public Organizer(String name){
+        super(name,0);
+        this.negotiationList = new ArrayList<>();
+        this.createdEventList = new ArrayList<>();
     }
 
-    public Organizer(String name, String surname, Account account, List<Event>createdEventList, List<Negotiation>createdAuctionList){
-        super(name, surname, account);
-        this.createdEventList = createdEventList;
-        this.createdAuctionList = createdAuctionList;
+    public Organizer(String name, int coins){
+        super(name,coins);
+        this.negotiationList = new ArrayList<>();
+        this.createdEventList = new ArrayList<>();
+    }
+
+    @Override
+    public ProfileType getProfileType() {
+        return ProfileType.ORGANIZER;
     }
 
     public void addEvent(Event event){
@@ -27,20 +36,17 @@ public class Organizer extends User {
         return this.createdEventList;
     }
 
-    public void addAuction(Negotiation auction){
-        this.createdAuctionList.add(auction) ;
+    public void addNegotiation(Competition negotiation){
+        this.negotiationList.add(negotiation);
     }
 
-    public void setCreatedAuctionList(List<Negotiation> createdAuctionList){
-        this.createdAuctionList = createdAuctionList;
+    public void setNegotiationList(List<Competition> negotiationList){
+        this.negotiationList = negotiationList;
     }
 
-    public List<Negotiation> getAllAuctions(){
-        return this.createdAuctionList;
+    public List<Competition> getAllAuctions(){
+        return this.negotiationList;
     }
 
-    public void gainCoins(int coinsGained){
-        super.getAccount().incrementCoins(coinsGained);
-    }
 
 }

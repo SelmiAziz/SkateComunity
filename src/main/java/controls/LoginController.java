@@ -1,58 +1,73 @@
 package controls;
 
-import Dao.AccountDao;
 import Dao.CostumerDao;
-import Dao.Factories.DaoFactory;
+import Dao.patternAbstractFactory.DaoFactory;
 import Dao.OrganizerDao;
+import Dao.UserDao;
 import beans.LogUserBean;
 import beans.RegisterUserBean;
+import beans.UserInfo;
+import exceptions.ProfileNameAlreadyUsedException;
 import exceptions.UserAlreadyExistsException;
 import exceptions.UserNotFoundException;
-import login.Account;
-import login.AccountType;
+import login.User;
+import login.ProfileType;
 import model.Costumer;
 import model.Organizer;
-import utils.*;
+import utils.Session;
+import utils.SessionManager;
 
-import java.util.List;
 
 public class LoginController {
-    private CostumerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
-    private AccountDao accountDao = DaoFactory.getInstance().createAccountDao();
-    private OrganizerDao organizerDao = DaoFactory.getInstance().createOrganizerDao();
+    private final CostumerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
+    private final UserDao userDao = DaoFactory.getInstance().createUserDao();
+    private final OrganizerDao organizerDao = DaoFactory.getInstance().createOrganizerDao();
 
-    public void logUser(LogUserBean loginBean) throws  UserNotFoundException{
-        List<Account> accountList = accountDao.getAllAccounts();
-        boolean f = false;
-        for(Account account : accountList){
-            if(account.getUsername().equals(loginBean.getUsername()) && account.getPassword().equals(loginBean.getPassword()) && account.getAccountType() == loginBean.getAccountType()){
-                SessionManager.getInstance().createSession(new Session(account));
-                AccountInfoSessionManager.getInstance().createAccountInfoSession(new AccountInfo(account.getUsername(), account.getCoins()));
-                f = true;
-            }
-        }
-        if(!f){
+
+    public  void logUser(LogUserBean loginBean) throws  UserNotFoundException{
+        String username = loginBean.getUsername();
+        String password = loginBean.getPassword();
+        if(userDao.checkUser(username, password)){
+            User user = userDao.selectUserByUsername(username);
+            SessionManager.getInstance().createSession(new Session(user.getUsername(), user.getProfile().getName() , user.getProfile().getProfileType()));
+        }else{
             throw new UserNotFoundException("Utente non trovato");
         }
-
     }
 
 
-    public void registerUser(RegisterUserBean registerUserBean) throws UserAlreadyExistsException{
-        if (accountDao.getAccountByUsername(registerUserBean.getUsername()) != null){
+    public void registerUser(RegisterUserBean registerUserBean) throws UserAlreadyExistsException, ProfileNameAlreadyUsedException{
+        if (userDao.selectUserByUsername(registerUserBean.getUsername()) != null){
            throw new UserAlreadyExistsException("L'utente è già presente nel sistema");
         }
-        Account account = new Account(registerUserBean.getUsername(),registerUserBean.getPassword(), registerUserBean.getAccountType());
-        SessionManager.getInstance().createSession(new Session(account));
-        AccountInfoSessionManager.getInstance().createAccountInfoSession(new AccountInfo(account.getUsername(), account.getCoins()));
-        accountDao.addAccount(account);
-        if(registerUserBean.getAccountType() == AccountType.COSTUMER){
-            Costumer costumer = new Costumer(registerUserBean.getName(), registerUserBean.getSurname(), account);
-            costumerDao.addCostumer(costumer);
+        User user = new User(registerUserBean.getUsername(), registerUserBean.getPassword());
+        if(registerUserBean.getProfileType() == ProfileType.COSTUMER){
+            if (costumerDao.selectCostumerByCostumerName(registerUserBean.getProfileName()) != null){
+                throw new ProfileNameAlreadyUsedException("Il nome profilo è già usato da un altro utente");
+            }
+            Costumer costumer =  new Costumer(registerUserBean.getProfileName());
+            user.setProfile(costumer);
         }else{
-            Organizer organizer = new Organizer(registerUserBean.getName(), registerUserBean.getSurname(), account);
-            organizerDao.addOrganizer(organizer);
+            if (organizerDao.selectOrganizerByOrganizerName(registerUserBean.getProfileName()) != null){
+                throw new ProfileNameAlreadyUsedException("Il nome profilo è già usato da un altro utente");
+            }
+           Organizer organizer = new Organizer(registerUserBean.getProfileName());;
+           user.setProfile(organizer);
         }
-
+        SessionManager.getInstance().createSession(new Session(user.getUsername(), user.getProfile().getName(), user.getProfile().getProfileType()));
+        userDao.addUser(user);
     }
+
+    public LogUserBean determineProfile(){
+        User user = userDao.selectUserByUsername(SessionManager.getInstance().getSession().getUsername());
+        return new LogUserBean(user.getProfile().getProfileType());
+    }
+
+
+    public UserInfo getCurrentUserInfo(){
+        User user = userDao.selectUserByUsername(SessionManager.getInstance().getSession().getUsername());
+        return new  UserInfo(user.getUsername(), user.getProfile().getCoins());
+    }
+
+
 }

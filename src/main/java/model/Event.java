@@ -10,20 +10,20 @@ public class Event {
     private final int coins;
     private final String country;
     private final Integer maxRegistrations;
-    private Integer currentRegistrations;
-    private List<EventParticipation> eventParticipationList;
+    private List<EventRegistration> eventRegistrationList;
     private  Organizer organizer;
 
-    public Event(String name, String description,String date, String country, int coins, Integer maxRegistrations){
+    public Event(String name, String description,String date, String country, int coins, int maxRegistrations){
         this.name = name;
         this.description = description;
         this.date = date;
         this.coins = coins;
         this.country = country;
-        this.currentRegistrations = 0;
         this.maxRegistrations = maxRegistrations;
-        this.eventParticipationList = new ArrayList<>();
+        this.eventRegistrationList = new ArrayList<>();
     }
+
+
 
     public void setOrganizer(Organizer organizer){
         this.organizer = organizer;
@@ -59,21 +59,17 @@ public class Event {
     }
 
     public Integer getCurrentRegistrations(){
-        return this.currentRegistrations;
-    }
-
-    public List<EventParticipation>  getParticipants(){
-        return this.eventParticipationList;
+        return eventRegistrationList.toArray().length;
     }
 
 
-    public void addEventParticipation(EventParticipation eventParticipation){
-        this.eventParticipationList.add(eventParticipation);
-        this.currentRegistrations +=1;
+
+    public void addEventRegistration(EventRegistration eventParticipation){
+        this.eventRegistrationList.add(eventParticipation);
     }
 
-    public  List<EventParticipation> getEventParticipations(){
-        return this.eventParticipationList;
+    public  List<EventRegistration> getEventRegistrations(){
+        return this.eventRegistrationList;
     }
 
 }

@@ -1,21 +1,42 @@
 package utils;
 
-import login.Account;
+import login.Profile;
+import login.ProfileType;
+import login.User;
+import model.Costumer;
+import model.Organizer;
 
 import java.time.Instant;
 
 public class Session {
-    private Account account;
-    private Instant loggTime;
+    private final String username;
+    private final String nameProfile;
+    private final ProfileType profileType;
+    private final Instant loggTime;
 
-    public Session(Account account){
-        this.account= account;
+    public Session(String username, String nameProfile, ProfileType profileType){
+        this.username = username;
+        this.nameProfile = nameProfile;
+        this.profileType = profileType;
         this.loggTime = Instant.now();
+
     }
 
-    public Account getAccount(){
-        return this.account;
+    public  String getUsername(){
+        return this.username;
     }
+
+    public String getNameProfile(){
+        return this.nameProfile;
+    }
+
+    public ProfileType getProfileType(){
+        return this.profileType;
+    }
+
+
+
+
 
     public Instant getLoggTime(){
         return this.loggTime;

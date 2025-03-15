@@ -1,36 +1,45 @@
 package login;
 
 public class User {
-    private String name;
-    private String surname;
-    private Account account;
+    private String username;
+    private String password;
+    private Profile profile;
 
-    public User(String name, String surname, Account account){
-        this.name = name;
-        this.surname = surname;
-        this.account = account;
+    public User( String username, String password){
+
+        this.username = username;
+        this.password = password;
     }
 
-    public User(String name, String surname){
-        this.name = name;
-        this.surname = surname;
+    public Profile getProfile(){
+        return this.profile;
     }
 
-    public Account getAccount(){
-        return this.account;
+    public void setProfile(Profile profile){
+        this.profile = profile;
     }
 
-    public void setAccount(Account account){
-        this.account = account;
+
+    public String getUsername(){return this.username;}
+
+    public void setUsername(String username){
+        this.username = username;
     }
 
-    public String getName(){
-        return this.name;
+    public String getPassword(){
+        return this.password;
     }
 
-    public String getSurname(){
-        return this.surname;
+    public void setPassword(String password){
+        this.password = password;
     }
+
+
+
+
+
+
+
 
 }
 

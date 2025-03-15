@@ -1,6 +1,6 @@
 package login;
 
-public enum AccountType {
+public enum ProfileType {
     COSTUMER,
     ORGANIZER
 }

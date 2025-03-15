@@ -1,6 +1,14 @@
 package controls;
 
+import Dao.patternAbstractFactory.DaoFactory;
+import Dao.UserDao;
+import beans.UserInfo;
+import login.User;
+import utils.SessionManager;
+
 public class NegotiationController {
+    private  final UserDao userDao = DaoFactory.getInstance().createUserDao();
+
     public void publicNegotiation(){
 
     }
@@ -16,4 +24,10 @@ public class NegotiationController {
     public void showNegotiationOrganizer(){
         
     }
+
+    public UserInfo getCurrentUserInfo(){
+        User user = userDao.selectUserByUsername(SessionManager.getInstance().getSession().getUsername());
+        return new  UserInfo(user.getUsername(), user.getProfile().getCoins());
+    }
+
 }

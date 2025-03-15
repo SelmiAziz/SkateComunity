@@ -46,7 +46,7 @@
             <Line endX="18.0" layoutX="203.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
             <ImageView fitHeight="65.0" fitWidth="72.0" layoutX="934.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/coins.png" />
+                  <Image url="@../images/coins.png" />
                </image>
             </ImageView>
             <Label fx:id="coinsLabel" layoutX="906.0" layoutY="44.0" prefHeight="32.0" prefWidth="55.0" text="100" textAlignment="RIGHT" textFill="#1abc9c">
@@ -56,7 +56,7 @@
             </Label>
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="829.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/account.png" />
+                  <Image url="@../images/account.png" />
                </image>
             </ImageView>
             <Label fx:id="usernameLabel" layoutX="758.0" layoutY="45.0" prefHeight="31.0" prefWidth="107.0" text="Selmi15" textFill="#1abc9c">
@@ -122,7 +122,7 @@
             </TableView>
             <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="600.0" layoutY="435.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/logo.png" />
+                  <Image url="@../images/logo.png" />
                </image>
             </ImageView>
          </children>

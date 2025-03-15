@@ -13,7 +13,7 @@ public class mainApp extends Application {
     public void start(Stage primaryStage) throws IOException {
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.setStage(primaryStage); // Inizializza lo stage
-        sceneManager.loadScene("AccessView.fxml");
+        sceneManager.loadScene("viewFxml/AccessView.fxml");
     }
 
     public static void main(String[] args) {

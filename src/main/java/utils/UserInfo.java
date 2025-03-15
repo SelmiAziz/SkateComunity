@@ -1,10 +1,10 @@
 package utils;
 
-public class AccountInfo {
+public class UserInfo {
     private String username;
     private int coinsNumber;
 
-    public AccountInfo(String username, int coinsNumber){
+    public UserInfo(String username, int coinsNumber){
         this.username = username;
         this.coinsNumber = coinsNumber;
     }
@@ -17,7 +17,7 @@ public class AccountInfo {
         this.coinsNumber -= coinsDecrement;
     }
 
-    public void incrementCoinst(int coinsIncrement){
+    public void incrementCoins(int coinsIncrement){
         this.coinsNumber += coinsIncrement;
     }
 
