@@ -1,9 +1,6 @@
-package Dao;
+package dao;
 
-import model.Costumer;
 import model.Organizer;
-
-import java.util.List;
 
 public interface OrganizerDao {
     void addOrganizer(Organizer organizer);

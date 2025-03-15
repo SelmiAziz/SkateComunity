@@ -1,7 +1,6 @@
-package Dao;
+package dao;
 
 import model.Costumer;
-import model.Organizer;
 import utils.DbsConnector;
 
 import java.sql.Connection;

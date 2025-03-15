@@ -1,7 +1,7 @@
 package controls;
 
-import Dao.*;
-import Dao.patternAbstractFactory.DaoFactory;
+import dao.*;
+import dao.patternAbstractFactory.DaoFactory;
 import beans.EventBean;
 import beans.UserInfo;
 import exceptions.InsufficientCoinsException;

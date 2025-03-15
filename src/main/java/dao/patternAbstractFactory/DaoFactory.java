@@ -1,6 +1,6 @@
-package Dao.patternAbstractFactory;
+package dao.patternAbstractFactory;
 
-import Dao.*;
+import dao.*;
 
 abstract public class DaoFactory {
     public abstract UserDao createUserDao();

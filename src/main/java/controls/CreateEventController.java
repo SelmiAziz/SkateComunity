@@ -1,9 +1,9 @@
 package controls;
 
-import Dao.EventDao;
-import Dao.patternAbstractFactory.DaoFactory;
-import Dao.OrganizerDao;
-import Dao.UserDao;
+import dao.EventDao;
+import dao.patternAbstractFactory.DaoFactory;
+import dao.OrganizerDao;
+import dao.UserDao;
 import beans.EventBean;
 import beans.UserInfo;
 import exceptions.EventAlreadyExistsException;

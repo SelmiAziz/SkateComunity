@@ -1,6 +1,6 @@
-package Dao;
+package dao;
 
-import Dao.patternAbstractFactory.DaoFactory;
+import dao.patternAbstractFactory.DaoFactory;
 import model.Costumer;
 import model.EventRegistration;
 import utils.DbsConnector;

@@ -1,7 +1,7 @@
 package controls;
 
-import Dao.patternAbstractFactory.DaoFactory;
-import Dao.UserDao;
+import dao.patternAbstractFactory.DaoFactory;
+import dao.UserDao;
 import beans.UserInfo;
 import login.User;
 import utils.SessionManager;

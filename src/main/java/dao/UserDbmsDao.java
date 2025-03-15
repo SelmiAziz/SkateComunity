@@ -1,7 +1,7 @@
-package Dao;
+package dao;
 
 
-import Dao.patternAbstractFactory.DaoFactory;
+import dao.patternAbstractFactory.DaoFactory;
 import login.ProfileType;
 import login.User;
 import model.Costumer;

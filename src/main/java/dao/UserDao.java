@@ -1,8 +1,6 @@
-package Dao;
+package dao;
 
 import login.User;
-
-import java.util.List;
 
 public interface UserDao {
      User selectUserByUsername(String username);

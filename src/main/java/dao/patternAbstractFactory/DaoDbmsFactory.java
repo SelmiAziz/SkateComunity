@@ -1,6 +1,6 @@
-package Dao.patternAbstractFactory;
+package dao.patternAbstractFactory;
 
-import Dao.*;
+import dao.*;
 
 public class DaoDbmsFactory extends DaoFactory {
 
