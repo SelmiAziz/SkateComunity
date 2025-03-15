@@ -65,7 +65,7 @@
                   <Font size="21.0" />
                </font>
             </Label>
-            <Label fx:id="usernameLabel" layoutX="758.0" layoutY="45.0" prefHeight="31.0" prefWidth="107.0" text="Selmi15" textFill="#1abc9c">
+            <Label fx:id="usernameOrganizerLabel" layoutX="758.0" layoutY="45.0" prefHeight="31.0" prefWidth="107.0" text="Selmi15" textFill="#1abc9c">
                <font>
                   <Font size="21.0" />
                </font>

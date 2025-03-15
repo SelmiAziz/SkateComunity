@@ -18,7 +18,7 @@ public class OrganizerHomePageView {
 
     SceneManager sceneManager = SceneManager.getInstance();
 
-    @FXML private Label usernameLabel;
+    @FXML private Label usernameOrganizerLabel;
     @FXML private Label errorLabel;
     @FXML private Label coinsLabel;
 
@@ -64,6 +64,6 @@ public class OrganizerHomePageView {
     void updateUserInfo(){
         UserInfo userInfo = loginController.getCurrentUserInfo();
         coinsLabel.setText(String.valueOf(userInfo.getCoins()));
-        usernameLabel.setText(userInfo.getUsername());
+        usernameOrganizerLabel.setText(userInfo.getUsername());
     }
 }
