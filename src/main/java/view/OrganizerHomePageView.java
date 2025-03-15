@@ -19,9 +19,8 @@ public class OrganizerHomePageView {
     SceneManager sceneManager = SceneManager.getInstance();
 
     @FXML private Label usernameLabel;
-    @FXML private Label coinsLabel;
     @FXML private Label errorLabel;
-
+    @FXML private Label coinsLabel;
 
 
     public void initialize(){
@@ -40,8 +39,8 @@ public class OrganizerHomePageView {
             OrganizerEventsPageView organizerEventsPageView = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
             stage = SceneManager.getInstance().getStage();
-            stage.setResizable(false);
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
             Platform.runLater(organizerEventsPageView::loadEvents);
         } catch (IOException e) {
@@ -50,12 +49,7 @@ public class OrganizerHomePageView {
 
     }
 
-    private final LoginController loginController = new LoginController();
-    void updateUserInfo(){
-        UserInfo userInfo = loginController.getCurrentUserInfo();
-        usernameLabel.setText(userInfo.getUsername());
-        coinsLabel.setText(String.valueOf(userInfo.getCoins()));
-    }
+
 
     public void logOut()  {
         //here you have to call the controller to logOut
@@ -64,5 +58,12 @@ public class OrganizerHomePageView {
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
+    }
+
+    private final LoginController loginController = new LoginController();
+    void updateUserInfo(){
+        UserInfo userInfo = loginController.getCurrentUserInfo();
+        coinsLabel.setText(String.valueOf(userInfo.getCoins()));
+        usernameLabel.setText(userInfo.getUsername());
     }
 }
