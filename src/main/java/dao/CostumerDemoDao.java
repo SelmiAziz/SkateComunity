@@ -14,7 +14,7 @@ public class CostumerDemoDao implements CostumerDao {
 
     }
 
-    public synchronized static CostumerDemoDao getInstance() {
+    public static synchronized  CostumerDemoDao getInstance() {
         if (instance == null) {
             instance = new CostumerDemoDao();
         }
@@ -36,7 +36,7 @@ public class CostumerDemoDao implements CostumerDao {
 
     @Override
     public void update(Costumer costumer) {
-
+        //Not needed in demo
     }
 }
 

@@ -51,7 +51,7 @@ public class LoginController {
             if (organizerDao.selectOrganizerByOrganizerName(registerUserBean.getProfileName()) != null){
                 throw new ProfileNameAlreadyUsedException("Il nome profilo è già usato da un altro utente");
             }
-           Organizer organizer = new Organizer(registerUserBean.getProfileName());;
+           Organizer organizer = new Organizer(registerUserBean.getProfileName());
            user.setProfile(organizer);
         }
         SessionManager.getInstance().createSession(new Session(user.getUsername(), user.getProfile().getName(), user.getProfile().getProfileType()));
