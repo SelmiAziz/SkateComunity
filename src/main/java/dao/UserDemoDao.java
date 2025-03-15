@@ -20,7 +20,7 @@ public class UserDemoDao implements UserDao {
 
     }
 
-    public synchronized static UserDemoDao getInstance() {
+    public static synchronized  UserDemoDao getInstance() {
         if (instance == null) {
             instance = new UserDemoDao();
         }

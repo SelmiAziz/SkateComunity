@@ -10,7 +10,7 @@ public class EventDemoDao implements EventDao {
     private static EventDemoDao instance = null;
     private final List<Event> eventList = new ArrayList<>();
 
-    public synchronized static EventDemoDao getInstance(){
+    public static synchronized EventDemoDao getInstance(){
         if(instance == null){
             instance = new EventDemoDao();
         }

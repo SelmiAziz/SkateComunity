@@ -14,7 +14,7 @@ public class OrganizerDemoDao implements OrganizerDao {
 
     }
 
-    public synchronized static OrganizerDemoDao getInstance() {
+    public static synchronized  OrganizerDemoDao getInstance() {
         if (instance == null) {
             instance = new OrganizerDemoDao();
         }

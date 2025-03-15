@@ -18,7 +18,7 @@ public class UserDbmsDao implements UserDao {
     private final CostumerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
     private final OrganizerDao organizerDao = DaoFactory.getInstance().createOrganizerDao();
 
-    public synchronized static UserDbmsDao getInstance(){
+    public static synchronized  UserDbmsDao getInstance(){
         if(instance == null){
             instance = new UserDbmsDao();
         }

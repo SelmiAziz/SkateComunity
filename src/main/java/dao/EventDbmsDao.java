@@ -19,7 +19,7 @@ public class EventDbmsDao implements EventDao {
     private final EventRegistrationDao eventRegistrationDao = DaoFactory.getInstance().createEventRegistrationDao();
     private final List<Event> eventList = new ArrayList<>();
 
-    public synchronized static EventDbmsDao getInstance(){
+    public static synchronized EventDbmsDao getInstance(){
         if(instance == null){
             instance = new EventDbmsDao();
         }

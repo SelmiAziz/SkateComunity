@@ -57,4 +57,6 @@ public class EventRegistration {
         return this.event;
     }
 
+    public void setRegistrationId(int id){this.registrationId = id;}
+
 }

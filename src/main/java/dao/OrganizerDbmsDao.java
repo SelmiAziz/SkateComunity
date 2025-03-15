@@ -18,7 +18,7 @@ public class OrganizerDbmsDao implements OrganizerDao {
     private static OrganizerDbmsDao instance;
     private final List<Organizer> organizerList = new ArrayList<>();
 
-    public synchronized static OrganizerDbmsDao getInstance(){
+    public static synchronized  OrganizerDbmsDao getInstance(){
         if(instance == null){
             instance = new OrganizerDbmsDao();
         }
