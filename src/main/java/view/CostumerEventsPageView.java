@@ -17,7 +17,6 @@ import java.io.IOException;
 public class CostumerEventsPageView {
     private final SignEventController signEventController = new SignEventController();
     private final SceneManager sceneManager = SceneManager.getInstance();
-    //private final AccountInfoSessionManager accountInfoSession = AccountInfoSessionManager.getInstance();
 
     @FXML private TableView<EventBean> eventTable;
     @FXML private TableColumn<EventBean, String> colName;
@@ -37,7 +36,6 @@ public class CostumerEventsPageView {
     private EventBean selectedEventBean;
 
     public void initialize() {
-        // Imposta il cellValueFactory per ogni colonna
         colName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getName()));
 
@@ -67,7 +65,6 @@ public class CostumerEventsPageView {
 
     }
 
-    // Metodo per gestire la selezione di un evento
     @FXML
     public void onEventSelected() {
         EventBean selected = eventTable.getSelectionModel().getSelectedItem();
@@ -105,7 +102,6 @@ public class CostumerEventsPageView {
         try {
             sceneManager.loadScene("viewFxml/CostumerHomePageView.fxml");
         }catch(IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
         }
     }
@@ -117,11 +113,9 @@ public class CostumerEventsPageView {
     }
 
     public void logOut(){
-        //SessionManager.getInstance().terminateSession();
         try {
             sceneManager.loadScene("viewFxml/AccessView.fxml");
         }catch(IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText(e.getMessage());
         }
     }
