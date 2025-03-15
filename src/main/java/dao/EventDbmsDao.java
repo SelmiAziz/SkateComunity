@@ -87,15 +87,15 @@ public class EventDbmsDao implements EventDao {
         return null;
     }
     public List<Event> selectAvailableEvents() {
-        List<Event> eventList = new ArrayList<>();
+        List<Event> newEventList = new ArrayList<>();
         for(Event event:this.eventList){
             if(event.getCurrentRegistrations() < event.getCurrentRegistrations()){
-                eventList.add(event);
+                newEventList.add(event);
             }
         }
 
-        if(!eventList.isEmpty()){
-            return eventList;
+        if(!newEventList.isEmpty()){
+            return newEventList;
         }
 
         EventRegistrationDao eventRegistrationDao = DaoFactory.getInstance().createEventRegistrationDao();
@@ -197,16 +197,16 @@ public class EventDbmsDao implements EventDao {
 
     @Override
     public List<Event> selectEventsByDateAndCountry(String date, String country) {
-        List<Event> eventList = new ArrayList<>();
+        List<Event> newEventList = new ArrayList<>();
 
         //first I look in memory
         for (Event event : this.eventList) {
             if (event.getDate().equals(date) && event.getCountry().equals(country)) {
-                eventList.add(event);
+                newEventList.add(event);
             }
         }
-        if (!eventList.isEmpty()) {
-            return eventList;
+        if (!newEventList.isEmpty()) {
+            return newEventList;
         }
 
         // Query if there is nothing in memory
@@ -252,7 +252,6 @@ public class EventDbmsDao implements EventDao {
             e.printStackTrace();
         }
 
-        EventRegistrationDao eventRegistrationDao = DaoFactory.getInstance().createEventRegistrationDao();
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
             this.eventList.add(event);
