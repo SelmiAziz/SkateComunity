@@ -8,9 +8,6 @@ import java.util.Properties;
 
 
 public class DbsConnector {
-    private static final String URL = "jdbc:mysql://localhost:3306/progettoSoftware";  // URL del database
-    private static final String USER = "root";  // Username per il DB
-    private static final String PASSWORD = "1515";  // Password per il DB
 
     private static DbsConnector instance;
     private Connection connection;
