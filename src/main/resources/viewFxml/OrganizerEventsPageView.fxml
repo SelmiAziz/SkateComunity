@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -86,10 +87,8 @@
                </effect></ChoiceBox>
 
             <Label layoutX="20" layoutY="300" text="Required Coins:" />
-            <TextField fx:id="coinsAmountField" layoutX="150" layoutY="300" prefWidth="180" />
 
             <Label layoutX="20.0" layoutY="357.0" text="Max Registrations:" />
-            <TextField fx:id="maxRegistrationsField" layoutX="150.0" layoutY="353.0" prefWidth="180" />
 
             <Button fx:id="createEventButton" layoutX="150" layoutY="450" onMouseClicked="#createEvent" prefWidth="180" text="Create Event" textFill="#282828">
                <effect>
@@ -100,6 +99,8 @@
                   <Font size="16.0" />
                </font>
             </Label>
+            <Spinner fx:id="maxRegistrationsSpinner" layoutX="150.0" layoutY="353.0" prefHeight="26.0" prefWidth="66.0" />
+            <Spinner  fx:id="coinsSpinner" layoutX="148.0" layoutY="296.0" prefHeight="26.0" prefWidth="66.0" />
          </children>
       </AnchorPane>
    </left>

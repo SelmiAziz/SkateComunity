@@ -2,7 +2,7 @@ package login;
 
 public abstract class Profile {
     private final String name;
-    private int coins;
+    protected int coins;
 
     public Profile(String name, int coins){
         this.name = name;

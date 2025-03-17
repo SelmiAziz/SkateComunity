@@ -3,6 +3,6 @@ package dao;
 import model.Trick;
 
 public interface TrickDao {
-    Trick getTrickById();
+    Trick getTrickByName(String trickName);
     void addTrick(Trick trick);
 }

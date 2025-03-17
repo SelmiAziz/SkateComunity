@@ -32,7 +32,7 @@ public class OrganizerHomePageView {
     public void goToEvents() {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerEventsPageView.fxml"));
-
+        System.out.println("Hhihi");
         Parent root = null;
         try {
             root = loader.load();
@@ -41,7 +41,9 @@ public class OrganizerHomePageView {
             stage = SceneManager.getInstance().getStage();
             stage.setScene(scene);
             stage.setResizable(false);
+            System.out.println("Hem");
             stage.show();
+            System.out.println("Gg");
             Platform.runLater(organizerEventsPageView::loadEvents);
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());

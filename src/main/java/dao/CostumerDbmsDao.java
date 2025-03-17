@@ -1,5 +1,6 @@
 package dao;
 
+import dao.patternObserver.Observer;
 import model.Costumer;
 import utils.DbsConnector;
 
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CostumerDbmsDao implements CostumerDao{
+public class CostumerDbmsDao implements CostumerDao , Observer {
     private static CostumerDbmsDao instance;
     private final List<Costumer> costumerList = new ArrayList<>();
 
@@ -21,10 +22,16 @@ public class CostumerDbmsDao implements CostumerDao{
         return instance;
     }
 
+    //prova del pattern observer
+    private  Costumer observedCostumer;
+
+
+
     @Override
     public Costumer selectCostumerByCostumerName(String  profileName) {
         for(Costumer costumer:costumerList){
             if(costumer.getName().equals(profileName)){
+                this.observedCostumer = costumer;
                 return costumer;
             }
         }
@@ -37,6 +44,8 @@ public class CostumerDbmsDao implements CostumerDao{
                     String pName = resultSet.getString("profileName");
                     int numCoins = resultSet.getInt("numCoins");
                     Costumer costumer = new  Costumer(pName, numCoins);
+                    costumer.attach(instance);
+                    this.observedCostumer = costumer;
                     costumerList.add(costumer);
                     return costumer;
                 }
@@ -66,14 +75,15 @@ public class CostumerDbmsDao implements CostumerDao{
         }
     }
 
-    @Override
-    public void update(Costumer costumer) {
+
+    public void update() {
         String query = "UPDATE profiles SET numCoins = ? WHERE profileName = ?";
         Connection connection = DbsConnector.getInstance().getConnection();
-
+        System.out.println("Hello");
+        System.out.println(observedCostumer.getCoins() + observedCostumer.getName());
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, costumer.getCoins());
-            preparedStatement.setString(2, costumer.getName());
+            preparedStatement.setInt(1, observedCostumer.getCoins());
+            preparedStatement.setString(2, observedCostumer.getName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

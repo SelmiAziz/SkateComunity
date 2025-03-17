@@ -1,4 +1,4 @@
-package view;
+package viewBasic;
 
 
 import beans.EventBean;
@@ -19,10 +19,12 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-public class OrganizerEventsPageView {
+public class OrganizerEventsPageViewBasic {
     @FXML private TextField eventNameField;
-    @FXML private DatePicker eventDatePicker;
+    @FXML private TextField eventDateField;
     @FXML private TextArea eventDescriptionArea;
+    @FXML private TextField coinsAmountField;
+    @FXML private TextField maxRegistrationsField;
     @FXML private TableView<EventBean> eventTable;
     @FXML private TableColumn<EventBean, String> colName;
     @FXML private TableColumn<EventBean, String> colDescription;
@@ -35,14 +37,11 @@ public class OrganizerEventsPageView {
     @FXML private Label usernameLabel;
     @FXML private Label coinsLabel;
     @FXML private Label errorLabel;
-    @FXML private Spinner<Integer> coinsSpinner;
-    @FXML private Spinner<Integer> maxRegistrationsSpinner;
 
     private final CreateEventController createEventController = new CreateEventController();
 
     @FXML
     public void initialize() {
-        System.out.println("Prova");
         //maybe here you can apply a formatter
         colName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getName()));
@@ -64,8 +63,7 @@ public class OrganizerEventsPageView {
 
         colMaxRegistrations.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getMaxRegistrations())));
-        coinsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 5));
-        maxRegistrationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 5));
+
         populateCountryChoiceBox();
         updateUserInfo();
     }
@@ -77,18 +75,23 @@ public class OrganizerEventsPageView {
     }
 
 
+    String changeFormat(String previousFormat){
+        return (previousFormat != null) ? previousFormat.replace("-", "/") : "";
+
+    }
+
     @FXML
     private void createEvent() {
         String name = eventNameField.getText();
         String description = eventDescriptionArea.getText();
-        String date = eventDatePicker.getValue() != null ? eventDatePicker.getValue().toString() : "";
+        String date = changeFormat(eventDateField.getText());
         String country = countryChoiceBox.getValue();
         int coinsRequired , maxRegistrations;
 
         try{
             validateFields(name, description,date,country);
-            coinsRequired = coinsSpinner.getValue();
-            maxRegistrations =  maxRegistrationsSpinner.getValue();
+            coinsRequired = Integer.parseInt(coinsAmountField.getText());
+            maxRegistrations = Integer.parseInt(maxRegistrationsField.getText());
             createEventController.createEvent(new EventBean(name,description,date,country,coinsRequired,maxRegistrations));
             loadEvents();
         } catch (NumberFormatException e) {
@@ -106,6 +109,11 @@ public class OrganizerEventsPageView {
 
 
     }
+    public void saluta(){
+
+        System.out.println("Hiiiii");
+    }
+
 
     public void loadEvents(){
         eventTable.getItems().clear();

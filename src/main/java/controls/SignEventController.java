@@ -65,7 +65,6 @@ public class SignEventController {
         event.addEventRegistration(newEventRegistration);
         eventRegistrationDao.addEventRegistration(newEventRegistration);
         organizer.gainCoins(eventBean.getCoins());
-        costumerDao.update(currentCostumer);
         organizerDao.update(organizer);
 
 
