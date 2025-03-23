@@ -53,44 +53,68 @@ public class RegisterView {
     }
 
     //Si deve alzare qualche exeption
-    public String formatDateOfBirth(String date){
+    public String formatDateOfBirth(String date) throws WrongFormatException {
         String[] arrDate = date.split("-");
-        if(arrDate.length != 3 ) return "";
+        if (arrDate.length != 3) throw new WrongFormatException("Errore nel formato della data");
+
         String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-        for(int i = 0; i<months.length; i++){
-            if (arrDate[1].equals(months[i])){
-                String m;
-                if(i<9){m = "0"+(i+1);}else{m = ""+(i+1);}
-                return arrDate[0]+"/"+m+"/"+arrDate[2];
-            }
+
+        int day, year;
+        try {
+            day = Integer.parseInt(arrDate[0]);
+            year = Integer.parseInt(arrDate[2]);
+        } catch (NumberFormatException e) {
+            throw new WrongFormatException("Errore formato: giorno o anno non validi");
         }
-        return "";
+
+        int monthIndex = Arrays.asList(months).indexOf(arrDate[1]);
+        if (monthIndex == -1) throw new WrongFormatException("Errore formato: mese non valido");
+
+        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        // Controllo anno bisestile
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            daysInMonth[1] = 29;
+        }
+
+        if (day < 1 || day > daysInMonth[monthIndex]) {
+            throw new WrongFormatException("Errore formato: giorno non valido per il mese");
+        }
+
+        String formattedMonth = monthIndex < 9 ? "0" + (monthIndex + 1) : "" + (monthIndex + 1);
+        return String.format("%02d/%s/%04d", day, formattedMonth, year);
     }
+
 
     @FXML
     public void submitRegistration(){
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String dateOfBirth = formatDateOfBirth(dateBirthField.getText());
-        String passwordConfirmation = passwordConfirmationField.getText();
+        try {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            String dateOfBirth = formatDateOfBirth(dateBirthField.getText());
+            String passwordConfirmation = passwordConfirmationField.getText();
 
-        ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();
-
-        try{
-            validateRegistration( username,password,passwordConfirmation, selected);
+            ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();
+            validateRegistration(username, password, passwordConfirmation, selected);
             String role = (selected == btnCostumer) ? "Costumer" : "Organizer";
             String skillLevel = levelChoice.getValue().toString();
-            RegisterUserBean userBean = new RegisterUserBean(username, password,role,dateOfBirth,skillLevel );
+
+            try {
+                RegisterUserBean userBean = new RegisterUserBean(username, password, role, dateOfBirth, skillLevel);
 
 
-            loginController.registerUser(userBean);
-            usernameField.setText("");
-            passwordField.setText("");
-            passwordConfirmationField.setText("");
-            dateBirthField.setText("");
-            resultLabel.setText("Registrazione avvenuta con successo!!");
+                loginController.registerUser(userBean);
+                usernameField.setText("");
+                passwordField.setText("");
+                passwordConfirmationField.setText("");
+                dateBirthField.setText("");
+                resultLabel.setText("Registrazione avvenuta con successo!!");
 
-        }catch (UserNameAlreadyUsedException | EmptyFieldException | PasswordConfirmationException | NoUserTypeSelectedException | UserAlreadyExistsException e){
+            } catch (UserNameAlreadyUsedException | UserAlreadyExistsException e) {
+                resultLabel.setText(e.getMessage());
+            }
+        }catch(WrongFormatException | EmptyFieldException | PasswordConfirmationException |
+                NoUserTypeSelectedException  e){
             resultLabel.setText(e.getMessage());
         }
     }

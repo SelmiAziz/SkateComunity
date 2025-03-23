@@ -51,11 +51,13 @@ public class CustomerDbmsDao implements CustomerDao{
                                                 skaterLevel.equals("Advanced") ? SkaterLevel.ADVANCED : SkaterLevel.PROFICIENT;
                     String dateOfBirth = resultSet.getString("dateOfBirth");
                     String registrationIdsStr = resultSet.getString("registrationIds");
-                    String[] arrRegistrationIds = registrationIdsStr.split(",");
                     int numCoins = resultSet.getInt("numCoins");
                     Customer costumer = new Customer(costumerUsername, password, dateOfBirth,skaterLevelEn , numCoins);
-                    for(String s:arrRegistrationIds){
-                        System.out.println(s+" ");
+                    if(registrationIdsStr != null){
+                        String[] arrRegistrationIds = registrationIdsStr.split(",");
+                        for(String s:arrRegistrationIds){
+                            System.out.println(s+" ");
+                        }
                     }
                     costumerList.add(costumer);
                     return costumer;

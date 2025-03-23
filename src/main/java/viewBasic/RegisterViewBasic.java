@@ -15,7 +15,11 @@ public class RegisterViewBasic {
 
     @FXML private TextField usernameField;
     @FXML private TextField passwordField;
-    @FXML private TextField profileNameField;
+
+    @FXML private TextField monthField;
+    @FXML private TextField dayField;
+    @FXML private TextField yearField;
+
     @FXML private TextField passwordConfirmationField;
     @FXML private Label resultLabel;
     @FXML private ToggleButton btnCostumer;
@@ -57,28 +61,76 @@ public class RegisterViewBasic {
     }
 
 
+    public String getSkaterLevel(){
+        RadioButton selectedRadio = (RadioButton) skillGroup.getSelectedToggle();
+        if (selectedRadio != null) {
+            return selectedRadio.getText();
+        } else {
+            return "";
+        }
+    }
+
+    public String formatDateOfBirth(String month, String day, String year) throws WrongFormatException {
+        int dayInt, monthInt, yearInt;
+        try {
+            monthInt = Integer.parseInt(month);
+            dayInt = Integer.parseInt(day);
+            yearInt = Integer.parseInt("20" + year);
+        } catch (NumberFormatException e) {
+            throw new WrongFormatException("Errore formato: mese, giorno o anno non validi");
+        }
+
+        if (monthInt < 1 || monthInt > 12) {
+            throw new WrongFormatException("Errore formato: mese non valido");
+        }
+
+        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        // Controllo anno bisestile
+        if ((yearInt % 4 == 0 && yearInt % 100 != 0) || (yearInt % 400 == 0)) {
+            daysInMonth[1] = 29;
+        }
+
+        if (dayInt < 1 || dayInt > daysInMonth[monthInt - 1]) {
+            throw new WrongFormatException("Errore formato: giorno non valido per il mese");
+        }
+
+        String formattedMonth = monthInt < 10 ? "0" + monthInt : "" + monthInt;
+        return String.format("%02d/%s/%04d", dayInt, formattedMonth, yearInt);
+    }
+
     @FXML
     public void submitRegistration(){
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String profileName = profileNameField.getText();
-        String passwordConfirmation = passwordConfirmationField.getText();
+        try {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            String month = monthField.getText();
+            String day = dayField.getText();
+            String year = yearField.getText();
+            String dateOfBirth = formatDateOfBirth(month, day, year);
+            String passwordConfirmation = passwordConfirmationField.getText();
+            String skaterLevel = getSkaterLevel();
+
+            ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();
+            validateRegistration(username, password, passwordConfirmation, selected);
+
+            try {
+                String role = (selected == btnCostumer) ? "Costumer" : "Organizer";
+                loginController.registerUser(new RegisterUserBean(username, password, role, dateOfBirth, skaterLevel));
+                usernameField.setText("");
+                passwordField.setText("");
+                passwordConfirmationField.setText("");
+                monthField.setText("");
+                dayField.setText("");
+                yearField.setText("");
+                resultLabel.setText("Registrazione avvenuta con successo!!");
 
 
-        ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();
-
-        try{
-            validateRegistration( username,password,passwordConfirmation, selected);
-            String  role = (selected == btnCostumer) ? "Costumer" : "Organizerr";
-            loginController.registerUser(new RegisterUserBean(username,password, "", role));
-            usernameField.setText("");
-            passwordField.setText("");
-            passwordConfirmationField.setText("");
-            profileNameField.setText("");
-            resultLabel.setText("Registrazione avvenuta con successo!!");
-
-
-        }catch (UserNameAlreadyUsedException | EmptyFieldException | PasswordConfirmationException | NoUserTypeSelectedException | UserAlreadyExistsException e){
+            } catch (UserNameAlreadyUsedException | UserAlreadyExistsException e) {
+                resultLabel.setText(e.getMessage());
+            }
+        }catch(EmptyFieldException | PasswordConfirmationException |
+                NoUserTypeSelectedException  | WrongFormatException e){
             resultLabel.setText(e.getMessage());
         }
     }

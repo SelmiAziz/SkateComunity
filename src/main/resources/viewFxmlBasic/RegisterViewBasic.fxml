@@ -44,7 +44,7 @@
                 <Button layoutX="394.0" layoutY="684.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="81.0" style="-fx-background-color: #1ABC9C;" text="Indietro" textFill="WHITE" />
                 <Button layoutX="75.0" layoutY="684.0" mnemonicParsing="false" onAction="#goLogin" prefHeight="35.0" prefWidth="81.0" style="-fx-background-color: #1ABC9C;" text="Login" textFill="WHITE" />
                 <TextField fx:id="passwordConfirmationField" layoutX="250.0" layoutY="260.0" prefHeight="26.0" prefWidth="190.0" />
-                <TextField fx:id="profileNameField" layoutX="275.0" layoutY="318.0" prefHeight="26.0" prefWidth="31.0" />
+                <TextField fx:id="monthField" layoutX="275.0" layoutY="318.0" prefHeight="26.0" prefWidth="31.0" />
                 <Label layoutX="69.0" layoutY="164.0" prefHeight="24.0" prefWidth="87.0" text="Username" textFill="#00000087">
                     <font>
                         <Font size="17.0" />
@@ -56,8 +56,8 @@
                     </font>
                 </Label>
             <Label layoutX="251.0" layoutY="322.0" text="MM" />
-            <TextField fx:id="profileNameField1" layoutX="345.0" layoutY="318.0" prefHeight="26.0" prefWidth="31.0" />
-            <TextField fx:id="profileNameField11" layoutX="412.0" layoutY="318.0" prefHeight="26.0" prefWidth="31.0" />
+            <TextField fx:id="dayField" layoutX="345.0" layoutY="318.0" prefHeight="26.0" prefWidth="31.0" />
+            <TextField fx:id="yearField" layoutX="412.0" layoutY="318.0" prefHeight="26.0" prefWidth="31.0" />
                 <Label fx:id="resultLabel" layoutX="67.0" layoutY="599.0" prefHeight="22.0" prefWidth="378.0" textFill="#208672" wrapText="true">
                     <font>
                         <Font size="16.0" />
