@@ -3,20 +3,29 @@ package login;
 public class User {
     private String username;
     private String password;
-    private Profile profile;
+    private String dateOfBirth;
+    protected Role role;
 
-    public User( String username, String password){
+    public User( String username, String password, String dateOfBirth, Role role){
 
         this.username = username;
         this.password = password;
+        this.role = role;
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public Profile getProfile(){
-        return this.profile;
+    public User(String username, String password, String dateOfBirth){
+        this.username = username;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public void setProfile(Profile profile){
-        this.profile = profile;
+    public Role getRole(){
+        return this.role;
+    }
+
+    public void setRole(Role role){
+        this.role = role;
     }
 
 
@@ -33,6 +42,10 @@ public class User {
     public void setPassword(String password){
         this.password = password;
     }
+
+    public String getDateOfBirth(){return this.dateOfBirth;}
+
+    public void setDateOfBirth(String dateOfBirth){this.dateOfBirth = dateOfBirth;}
 
 
 

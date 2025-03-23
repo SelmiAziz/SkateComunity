@@ -28,8 +28,8 @@
                </font></Label>
             <TextField fx:id="usernameField" layoutX="218.0" layoutY="159.0" />
             <TextField fx:id="passwordField" layoutX="218.0" layoutY="217.0" />
-            <Button layoutX="67.0" layoutY="283.0" mnemonicParsing="false" onAction="#submitLogin" prefHeight="35.0" prefWidth="81.0" style="-fx-background-color: #1ABC9C;" text="Conferma" textFill="WHITE" />
-            <Button layoutX="394.0" layoutY="684.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="81.0" style="-fx-background-color: #1ABC9C;" text="Indietro" textFill="WHITE" />
+            <Button layoutX="67.0" layoutY="283.0" mnemonicParsing="false" onAction="#submitLogin" prefHeight="35.0" prefWidth="81.0" style="-fx-background-color: #1ABC9C;" text="Submit" textFill="WHITE" />
+            <Button layoutX="394.0" layoutY="684.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="81.0" style="-fx-background-color: #1ABC9C;" text="Back" textFill="WHITE" />
             <Label layoutX="61.0" layoutY="436.0" prefHeight="28.0" prefWidth="202.0" text="non hai un account: " textFill="#00000087">
                <font>
                   <Font size="17.0" />
@@ -58,7 +58,7 @@
                   <Image url="@../images/logo2.png" />
                </image>
             </ImageView>
-            <Label layoutX="210.0" layoutY="453.0" prefHeight="36.0" prefWidth="249.0" text="SkateCommunity" textFill="WHITE">
+            <Label layoutX="226.0" layoutY="456.0" prefHeight="36.0" prefWidth="249.0" text="SkateCommunity" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>

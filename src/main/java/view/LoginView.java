@@ -7,7 +7,7 @@ import exceptions.UserNotFoundException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import login.ProfileType;
+import login.Role;
 import utils.SceneManager;
 
 import java.io.IOException;
@@ -35,16 +35,15 @@ public class LoginView {
 
         try {
             validateLogin(username, password);
-            loginController.logUser(new LogUserBean(username, password));
+            LogUserBean logUserBean =  loginController.logUser(new LogUserBean(username, password));
             try{
-                LogUserBean logUserBean = loginController.determineProfile();
-                if (logUserBean.getProfileType() == ProfileType.COSTUMER){
-                    SceneManager.getInstance().loadScene("viewFxml/CostumerHomePageView.fxml");
+
+                if (logUserBean.getRole().equals("Costumer")){
+                    SceneManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
                 }else {
                     SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
                 }
             }catch (IOException e){
-                System.err.println("Errore di I/O: " + e.getMessage());
                 errorLabel.setText("Errore di sistema. Riprova più tardi.");
             }
 
@@ -59,7 +58,6 @@ public class LoginView {
         try {
             sceneManager.loadScene("viewFxml/AccessView.fxml");
         } catch (IOException e) {
-            System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText("Errore di sistema. Riprova più tardi.");
         }
     }
@@ -69,7 +67,6 @@ public class LoginView {
         try {
             sceneManager.loadScene("viewFxml/RegisterView.fxml");
         } catch (IOException e) {
-            System.err.println("Errore di I/O: " + e.getMessage());
             errorLabel.setText("Errore di sistema. Riprova più tardi.");
         }
     }

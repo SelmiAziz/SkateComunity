@@ -17,7 +17,12 @@ public class TrickDemoDao implements TrickDao {
     }
 
     @Override
-    public Trick getTrickByName(String trickName) {
+    public Trick selectTrickByName(String trickName) {
+        for(Trick trick:this.trickList){
+            if(trick.getNameTrick().equals(trickName)){
+                return trick;
+            }
+        }
         return null;
     }
 
@@ -25,6 +30,12 @@ public class TrickDemoDao implements TrickDao {
     public void addTrick(Trick trick) {
         trickList.add(trick);
             }
+
+    @Override
+    public List<Trick> selectAvailableTricks(){
+        return this.trickList;
+    }
+
 }
 
 

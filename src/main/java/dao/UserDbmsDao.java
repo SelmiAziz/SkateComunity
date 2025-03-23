@@ -2,9 +2,9 @@ package dao;
 
 
 import dao.patternAbstractFactory.DaoFactory;
-import login.ProfileType;
+import login.Role;
 import login.User;
-import model.Costumer;
+import model.Customer;
 import model.Organizer;
 import utils.DbsConnector;
 
@@ -15,8 +15,6 @@ import java.util.List;
 public class UserDbmsDao implements UserDao {
     private static UserDbmsDao instance;
     private final List<User> userList = new ArrayList<>();
-    private final CostumerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
-    private final OrganizerDao organizerDao = DaoFactory.getInstance().createOrganizerDao();
 
     public static synchronized  UserDbmsDao getInstance(){
         if(instance == null){
@@ -33,7 +31,7 @@ public class UserDbmsDao implements UserDao {
             }
         }
 
-        String query = "SELECT username, password, profileName, profileType FROM users WHERE username = ?";
+        String query = "SELECT username, password, dateOfBirth, role FROM users WHERE username = ?";
         Connection connection = DbsConnector.getInstance().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
@@ -41,16 +39,9 @@ public class UserDbmsDao implements UserDao {
                 if (resultSet.next()) {
                     String uName = resultSet.getString("username");
                     String password = resultSet.getString("password");
-                    String profileName = resultSet.getString("profileName");
-                    String profileType = resultSet.getString("profileType");
-                    User user = new User(uName,password);
-                    if(profileType.equals("costumer")){
-                        Costumer costumer = costumerDao.selectCostumerByCostumerName(profileName);
-                        user.setProfile(costumer);
-                    }else{
-                        Organizer organizer = organizerDao.selectOrganizerByOrganizerName(profileName);
-                        user.setProfile(organizer);
-                    }
+                    String dateOfBirth = resultSet.getString("dateOfBirth");
+                    String role = resultSet.getString("role");
+                    User user = new User(uName,password,dateOfBirth, role.equals("Organizer") ? Role.ORGANIZER: Role.COSTUMER);
                     userList.add(user);
                     return user;
                 } else {
@@ -65,9 +56,9 @@ public class UserDbmsDao implements UserDao {
     }
 
     @Override
-    public boolean checkUser(String username, String password){
+    public boolean checkUserByUsernameAndPassword(String username, String password){
         for(User user: userList){
-            if(user.getUsername().equals(username) && user.getPassword().equals(password)){
+            if(user.getUsername().equals(username) && user.getPassword().equals(password)  ){
                 return true;
             }
         }
@@ -76,7 +67,26 @@ public class UserDbmsDao implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
-            System.out.println("Usando databasePer cercare");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
+    @Override
+    public boolean checkUserByUsername(String username){
+        for(User user: userList){
+            if(user.getUsername().equals(username)){
+                return true;
+            }
+        }
+        Connection connection = DbsConnector.getInstance().getConnection();
+        String query = "SELECT 1 FROM users WHERE username = ?  LIMIT 1";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
@@ -88,25 +98,19 @@ public class UserDbmsDao implements UserDao {
 
     @Override
     public void addUser(User user){
-        //first I put everything in memory
         userList.add(user);
-        if (user.getProfile().getProfileType() == ProfileType.COSTUMER) {
-            costumerDao.addCostumer((Costumer)user.getProfile());
-        }else if(user.getProfile().getProfileType() == ProfileType.ORGANIZER){
-            organizerDao.addOrganizer((Organizer)user.getProfile());
-        }
 
-        String query = "INSERT INTO users (username, password, profileName,profileType) VALUES (?, ?, ?,?)";
+        String query = "INSERT INTO users (username, password, dateOfBirth,role) VALUES (?, ?, ?, ?)";
         Connection connection = DbsConnector.getInstance().getConnection();
         String username = user.getUsername();
         String password = user.getPassword();
-        String profileName = user.getProfile().getName();
-        String profileType = user.getProfile().getProfileType() == ProfileType.COSTUMER ? "costumer": "organizer";
+        String dateOfBirth = user.getDateOfBirth();
+        String role = user.getRole()== Role.COSTUMER ? "Customer": "Organizer";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
-            preparedStatement.setString(3, profileName);
-            preparedStatement.setString(4,profileType);
+            preparedStatement.setString(3, dateOfBirth);
+            preparedStatement.setString(4,role);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

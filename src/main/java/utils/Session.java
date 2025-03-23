@@ -1,33 +1,28 @@
 package utils;
 
-import login.ProfileType;
+import login.Role;
 
 import java.time.Instant;
 
 public class Session {
-    private final String username;
-    private final String nameProfile;
-    private final ProfileType profileType;
+    private final String usernameUserLogged;
+    private final Role role;
     private final Instant loggTime;
 
-    public Session(String username, String nameProfile, ProfileType profileType){
-        this.username = username;
-        this.nameProfile = nameProfile;
-        this.profileType = profileType;
+    public Session(String usernameUserLogged, Role role){
+        this.usernameUserLogged = usernameUserLogged;
+        this.role = role;
         this.loggTime = Instant.now();
 
     }
 
     public  String getUsername(){
-        return this.username;
+        return this.usernameUserLogged;
     }
 
-    public String getNameProfile(){
-        return this.nameProfile;
-    }
 
-    public ProfileType getProfileType(){
-        return this.profileType;
+    public Role getRole(){
+        return this.role;
     }
 
 

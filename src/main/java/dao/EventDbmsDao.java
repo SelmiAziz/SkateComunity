@@ -40,13 +40,13 @@ public class EventDbmsDao implements EventDao {
                 "e.description, " +
                 "e.coinsRequired, " +
                 "e.date, " +
-                "e.country, " +
+                "e.location, " +
                 "e.MaxRegistrationNumber, " +
                 "GROUP_CONCAT(r.idRegistration) AS registrationIds " +
                 "FROM events e " +
                 "LEFT JOIN registrations r ON e.eventName = r.eventName " +
                 "WHERE e.eventName = ? " +
-                "GROUP BY e.eventName, e.description, e.coinsRequired, e.date, e.country, e.MaxRegistrationNumber";
+                "GROUP BY e.eventName, e.description, e.coinsRequired, e.date, e.location, e.MaxRegistrationNumber";
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -59,7 +59,7 @@ public class EventDbmsDao implements EventDao {
                         eventName,
                         rs.getString("description"),
                         rs.getString("date"),
-                        rs.getString("country"),
+                        rs.getString("location"),
                         rs.getInt("coinsRequired"),
                         rs.getInt("MaxRegistrationNumber")
                 );
@@ -100,20 +100,20 @@ public class EventDbmsDao implements EventDao {
 
         EventRegistrationDao eventRegistrationDao = DaoFactory.getInstance().createEventRegistrationDao();
         List<Event> events = new ArrayList<>();
-        List<String> organizerNames = new ArrayList<>(); // Lista dei nomi degli organizzatori
+        List<String> organizerUsernames = new ArrayList<>(); // Lista dei nomi degli organizzatori
         List<String> registrationIdsList = new ArrayList<>(); // Lista delle stringhe con ID registrazioni
 
         String sql = "SELECT e.eventName, " +
                 "e.description, " +
                 "e.coinsRequired, " +
                 "e.date, " +
-                "e.country, " +
-                "e.organizerName, " +
+                "e.location, " +
+                "e.organizerUsername, " +
                 "e.MaxRegistrationNumber, " +
                 "GROUP_CONCAT(r.idRegistration) AS registrationIds " +
                 "FROM events e " +
                 "LEFT JOIN registrations r ON e.eventName = r.eventName " +
-                "GROUP BY e.eventName, e.description, e.coinsRequired, e.date, e.country, e.MaxRegistrationNumber, e.organizerName " +
+                "GROUP BY e.eventName, e.description, e.coinsRequired, e.date, e.location, e.MaxRegistrationNumber, e.organizerUsername " +
                 "HAVING COUNT(r.idRegistration) < e.MaxRegistrationNumber";
 
         try (
@@ -126,13 +126,13 @@ public class EventDbmsDao implements EventDao {
                         rs.getString("eventName"),
                         rs.getString("description"),
                         rs.getString("date"),
-                        rs.getString("country"),
+                        rs.getString("location"),
                         rs.getInt("coinsRequired"),
                         rs.getInt("MaxRegistrationNumber")
                 );
 
                 events.add(event);
-                organizerNames.add(rs.getString("organizerName"));
+                organizerUsernames.add(rs.getString("organizerUsername"));
                 registrationIdsList.add(rs.getString("registrationIds"));
             }
 
@@ -142,11 +142,10 @@ public class EventDbmsDao implements EventDao {
 
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
-            eventList.add(event);
             this.eventList.add(event);
-            String organizerName = organizerNames.get(i);
-            if (organizerName != null) {
-                Organizer organizer = organizerDao.selectOrganizerByOrganizerName(organizerName);
+            String organizerUsername = organizerUsernames.get(i);
+            if (organizerUsername != null) {
+                Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
                 if (organizer != null) {
                     event.setOrganizer(organizer);
                 }
@@ -196,16 +195,18 @@ public class EventDbmsDao implements EventDao {
     }
 
     @Override
-    public List<Event> selectEventsByDateAndCountry(String date, String country) {
+    public List<Event> selectEventsByDateAndLocation(String date, String location) {
         List<Event> newEventList = new ArrayList<>();
 
         //first I look in memory
         for (Event event : this.eventList) {
-            if (event.getDate().equals(date) && event.getCountry().equals(country)) {
+            if (event.getDate().equals(date) && event.getLocation().equals(location)) {
                 newEventList.add(event);
+                System.out.println("In memoria sta");
             }
         }
         if (!newEventList.isEmpty()) {
+            System.out.println("TI ho dato");
             return newEventList;
         }
 
@@ -214,23 +215,23 @@ public class EventDbmsDao implements EventDao {
                 "e.description, " +
                 "e.coinsRequired, " +
                 "e.date, " +
-                "e.country, " +
-                "e.organizerName, " +
+                "e.location, " +
+                "e.organizerUsername, " +
                 "e.MaxRegistrationNumber, " +
                 "GROUP_CONCAT(r.idRegistration) AS registrationIds " +
                 "FROM events e " +
                 "LEFT JOIN registrations r ON e.eventName = r.eventName " +
-                "WHERE e.date = ? AND e.country = ? " +
-                "GROUP BY e.eventName, e.description, e.coinsRequired, e.date, e.country, e.MaxRegistrationNumber, e.organizerName";
+                "WHERE e.date = ? AND e.location = ? " +
+                "GROUP BY e.eventName, e.description, e.coinsRequired, e.date, e.location, e.MaxRegistrationNumber, e.organizerUsername";
 
         List<Event> events = new ArrayList<>();
-        List<String> organizerNames = new ArrayList<>();
+        List<String> organizerUsernames = new ArrayList<>();
         List<String> registrationIdsList = new ArrayList<>();
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, date);
-            stmt.setString(2, country);
+            stmt.setString(2, location);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -238,13 +239,14 @@ public class EventDbmsDao implements EventDao {
                             rs.getString("eventName"),
                             rs.getString("description"),
                             rs.getString("date"),
-                            rs.getString("country"),
+                            rs.getString("location"),
                             rs.getInt("coinsRequired"),
                             rs.getInt("MaxRegistrationNumber")
                     );
 
                     events.add(event);
-                    organizerNames.add(rs.getString("organizerName"));
+                    eventList.add(event);
+                    organizerUsernames.add(rs.getString("organizerUsername"));
                     registrationIdsList.add(rs.getString("registrationIds"));
                 }
             }
@@ -256,9 +258,9 @@ public class EventDbmsDao implements EventDao {
             Event event = events.get(i);
             this.eventList.add(event);
 
-            String organizerName = organizerNames.get(i);
-            if (organizerName != null) {
-                Organizer organizer = organizerDao.selectOrganizerByOrganizerName(organizerName);
+            String organizerUsername = organizerUsernames.get(i);
+            if (organizerUsername != null) {
+                Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
                 if (organizer != null) {
                     event.setOrganizer(organizer);
                 }
@@ -290,21 +292,21 @@ public class EventDbmsDao implements EventDao {
                 "date, " +
                 "MaxRegistrationNumber, " +
                 "currentRegistrationNumber, " +
-                "organizerName, " +
-                "country) " +
+                "organizerUsername, " +
+                "location) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection connection = DbsConnector.getInstance().getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setString(1, event.getName());
-                stmt.setInt(2, event.getCoins());
+                stmt.setInt(2, event.getParticipationFee());
                 stmt.setString(3, event.getDescription());
                 stmt.setString(4, event.getDate());
                 stmt.setInt(5, event.getMaxRegistrations());
                 stmt.setInt(6, event.getCurrentRegistrations()); // Aggiunto currentRegistration
-                stmt.setString(7, event.getOrganizer().getName());
-                stmt.setString(8, event.getCountry());
+                stmt.setString(7, event.getOrganizer().getUsername());
+                stmt.setString(8, event.getLocation());
 
                 stmt.executeUpdate();
 

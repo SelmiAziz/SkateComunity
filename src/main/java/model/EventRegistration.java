@@ -4,7 +4,7 @@ public class EventRegistration {
     private int registrationId;
     private String participationDate;
     private int participationNumber;
-    private Costumer participant;
+    private Customer participant;
     private Event event;
 
     public EventRegistration(int registrationId , int participationNumber){
@@ -12,13 +12,13 @@ public class EventRegistration {
         this.participationNumber = participationNumber;
     }
 
-    public EventRegistration(String participationDate, int participationNumber, Costumer participant){
+    public EventRegistration(String participationDate, int participationNumber, Customer participant){
         this.participationDate = participationDate;
         this.participationNumber = participationNumber;
         this.participant = participant;
     }
 
-    public EventRegistration(int participationNumber, Costumer participant){
+    public EventRegistration(int participationNumber, Customer participant){
         this.participationNumber = participationNumber;
         this.participant = participant;
     }
@@ -39,11 +39,11 @@ public class EventRegistration {
         this.participationNumber = participationNumber;
     }
 
-    public Costumer getParticipant(){
+    public Customer getParticipant(){
         return this.participant;
     }
 
-    public void setParticipant(Costumer participant){
+    public void setParticipant(Customer participant){
         this.participant = participant;
     }
 

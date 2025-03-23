@@ -1,7 +1,7 @@
 package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
-import model.Costumer;
+import model.Customer;
 import model.EventRegistration;
 import utils.DbsConnector;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventRegistrationDbmsDao implements EventRegistrationDao{
-    private final CostumerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
+    private final CustomerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
     private final List<EventRegistration> eventRegistrationList = new ArrayList<>();
     private static EventRegistrationDbmsDao instance = null;
 
@@ -31,7 +31,7 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, eventRegistration.getParticipationNumber());
-            stmt.setString(2, eventRegistration.getParticipant().getName());
+            stmt.setString(2, eventRegistration.getParticipant().getUsername());
             stmt.setString(3, eventRegistration.getEvent().getName());
 
             int rowsInserted = stmt.executeUpdate();
@@ -57,9 +57,9 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
                 return eventRegistration;
             }
         }
-        String sql = "SELECT er.numberRegistration, p.profileName, er.eventName " +
+        String sql = "SELECT er.numberRegistration, p.username, er.eventName " +
                     "FROM registrations er " +
-                    "JOIN profiles p ON er.costumerName = p.profileName " +
+                    "JOIN users p ON er.customerUsername = p.username " +
                     "WHERE er.idRegistration = ?";
 
         Connection conn = DbsConnector.getInstance().getConnection();
@@ -69,10 +69,10 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
 
             if (rs.next()) {
                 int numberRegistration = rs.getInt("numberRegistration");
-                String customerName = rs.getString("profileName");
+                String customerName = rs.getString("username");
 
                 EventRegistration eventRegistration = new EventRegistration(registrationId, numberRegistration);
-                Costumer customer = costumerDao.selectCostumerByCostumerName(customerName);
+                Customer customer = costumerDao.selectCustomerByUsername(customerName);
                 eventRegistration.setParticipant(customer);
                 return eventRegistration;
             }

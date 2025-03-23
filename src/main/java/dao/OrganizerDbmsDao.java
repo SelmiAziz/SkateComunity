@@ -1,6 +1,7 @@
 package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
+import login.Role;
 import model.Event;
 import model.Organizer;
 import utils.DbsConnector;
@@ -26,18 +27,18 @@ public class OrganizerDbmsDao implements OrganizerDao {
     }
 
     @Override
-    public Organizer selectOrganizerByOrganizerName(String profileName) {
+    public Organizer selectOrganizerByUsername(String profileName) {
         EventDao eventDao = DaoFactory.getInstance().createEventDao();
         for (Organizer organizer : organizerList) {
-            if (organizer.getName().equals(profileName)) {
+            if (organizer.getUsername().equals(profileName)) {
                 return organizer;
             }
         }
 
-        String query = "SELECT o.profileName, o.numCoins, e.eventName  " +
-                "FROM profiles o " +
-                "LEFT JOIN events e ON o.profileName = e.organizerName " +
-                "WHERE o.profileName = ?";
+        String query = "SELECT u.username, u.password, u.dateOfBirth, e.eventName " +
+                "FROM users u " +
+                "LEFT JOIN events e ON u.username = e.organizerUsername " +
+                "WHERE u.username = ?";
 
         Connection connection = DbsConnector.getInstance().getConnection();
 
@@ -50,9 +51,10 @@ public class OrganizerDbmsDao implements OrganizerDao {
 
                 while (resultSet.next()) {
                     if (organizer == null) {
-                        String pName = resultSet.getString("profileName");
-                        int numCoins = resultSet.getInt("numCoins");
-                        organizer = new Organizer(pName, numCoins);
+                        String username = resultSet.getString("username");
+                        String password = resultSet.getString("password");
+                        String dateOfBirth = resultSet.getString("dateOfBirth");
+                        organizer = new Organizer(username, password, dateOfBirth);
                     }
 
                     String eventName = resultSet.getString("eventName");
@@ -81,15 +83,15 @@ public class OrganizerDbmsDao implements OrganizerDao {
         return null;
     }
 
-    @Override
+
     public void update(Organizer organizer) {
         String query = "UPDATE profiles SET numCoins = ? WHERE profileName = ?";
 
         Connection connection = DbsConnector.getInstance().getConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, organizer.getCoins());
-            preparedStatement.setString(2, organizer.getName());
+            preparedStatement.setInt(1, 15);
+            preparedStatement.setString(2, organizer.getUsername());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -100,17 +102,9 @@ public class OrganizerDbmsDao implements OrganizerDao {
     @Override
     public void addOrganizer(Organizer organizer) {
         organizerList.add(organizer);
-        String query = "INSERT INTO profiles (profileName, numCoins, profileType) VALUES (?, ?, ?)";
-        Connection connection = DbsConnector.getInstance().getConnection();
+        UserDao userDao = DaoFactory.getInstance().createUserDao();
+        userDao.addUser(organizer);
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, organizer.getName());
-            preparedStatement.setInt(2, organizer.getCoins());
-            preparedStatement.setString(3, "organizer");
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
 }

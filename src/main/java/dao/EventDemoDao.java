@@ -17,10 +17,10 @@ public class EventDemoDao implements EventDao {
         return instance;
     }
 
-    public List<Event> selectEventsByDateAndCountry(String date, String country) {
+    public List<Event> selectEventsByDateAndLocation(String date, String location) {
         List<Event> newEventList = new ArrayList<>();
         for(Event event:this.eventList){
-            if( event.getDate().equals(date) && event.getCountry().equals(country)){
+            if( event.getDate().equals(date) && event.getLocation().equals(location)){
                 newEventList.add(event);
             }
         }

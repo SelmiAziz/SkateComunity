@@ -1,6 +1,6 @@
 package login;
 
-public enum ProfileType {
+public enum Role {
     COSTUMER,
     ORGANIZER
 }

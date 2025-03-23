@@ -31,8 +31,8 @@ public class CreateEventController {
         if (eventDao.checkEvent(newEventName)) {
                 throw new EventAlreadyExistsException("L'Evento in questione è già esiste");
         }
-        Event newEvent = new Event(eventBean.getName(), eventBean.getDescription(), eventBean.getDate(), eventBean.getCountry(), eventBean.getCoins(),  eventBean.getMaxRegistrations());
-        Organizer organizer = organizerDao.selectOrganizerByOrganizerName(SessionManager.getInstance().getSession().getNameProfile());
+        Event newEvent = new Event(eventBean.getName(), eventBean.getDescription(), eventBean.getDate(), eventBean.getLocation(), eventBean.getCoins(),  eventBean.getMaxRegistrations());
+        Organizer organizer = organizerDao.selectOrganizerByUsername(SessionManager.getInstance().getSession().getUsername());
         newEvent.setOrganizer(organizer);
         organizer.addEvent(newEvent);
         eventDao.addEvent(newEvent);
@@ -40,17 +40,13 @@ public class CreateEventController {
 
 
     public List<EventBean> organizerEvents(){
-        Organizer organizer = organizerDao.selectOrganizerByOrganizerName(SessionManager.getInstance().getSession().getNameProfile());
-        List<Event> eventList = organizer.getAllEvents();
+        Organizer organizer = organizerDao.selectOrganizerByUsername(SessionManager.getInstance().getSession().getUsername());
+        List<Event> eventList = organizer.getEventCreatedList();
         List<EventBean> eventBeanList = new ArrayList<>();
         for (Event event : eventList){
-            eventBeanList.add(new EventBean(event.getName(),event.getDescription(), event.getDate(), event.getCountry(),event.getCoins(), event.getCurrentRegistrations(), event.getMaxRegistrations()));
+            eventBeanList.add(new EventBean(event.getName(),event.getDescription(), event.getDate(), event.getLocation(),event.getParticipationFee(), event.getCurrentRegistrations(), event.getMaxRegistrations()));
         }
         return eventBeanList;
     }
 
-    public UserInfo getCurrentUserInfo(){
-        User user = userDao.selectUserByUsername(SessionManager.getInstance().getSession().getUsername());
-        return new  UserInfo(user.getUsername(), user.getProfile().getCoins());
-    }
 }

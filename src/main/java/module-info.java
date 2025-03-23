@@ -8,5 +8,6 @@ module startSkate {
     requires java.management;
 
     opens view to javafx.fxml;
+    opens viewBasic to javafx.fxml;
     exports startSkate;
 }

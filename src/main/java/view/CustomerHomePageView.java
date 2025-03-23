@@ -10,10 +10,11 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import beans.UserInfo;
 import utils.SceneManager;
+import viewBasic.CustomerEventsPageViewBasic;
 
 import java.io.IOException;
 
-public class CostumerHomePageView {
+public class CustomerHomePageView {
     private Stage stage;
     private final SceneManager sceneManager = SceneManager.getInstance();
 
@@ -24,18 +25,18 @@ public class CostumerHomePageView {
     @FXML private Label usernameLabel;
 
     public void initialize(){
-        updateUserInfo();
+
     }
 
 
 
     @FXML
     public void goToEvents() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CostumerEventsPageView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerEventsPageView.fxml"));
         Parent root = null;
         try {
             root = loader.load();
-            CostumerEventsPageView userEventsPageView = loader.getController();
+            CustomerEventsPageView userEventsPageView = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
             stage = sceneManager.getStage();
             stage.setResizable(false);
@@ -47,13 +48,24 @@ public class CostumerHomePageView {
         }
     }
 
+    @FXML
+    public void goToCompetitionsPage(){
+
+    }
+
+    @FXML
+    public void goToTricksPage(){
+        System.out.println("Heo");
+        try {
+            SceneManager.getInstance().loadScene("viewFxml/CustomerTricksPageView.fxml");
+        }catch(IOException e){
+            errorLabel.setText(e.getMessage());
+        }
+    }
+
     private final LoginController loginController = new LoginController();
 
-    void updateUserInfo(){
-        UserInfo userInfo = loginController.getCurrentUserInfo();
-        usernameLabel.setText(userInfo.getUsername());
-        coinsLabel.setText(String.valueOf(userInfo.getCoins()));
-    }
+
 
 
     public void logOut()  {

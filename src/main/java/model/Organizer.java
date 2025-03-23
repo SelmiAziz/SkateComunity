@@ -1,52 +1,35 @@
 package model;
 
-import login.Profile;
-import login.ProfileType;
+import login.Role;
+import login.User;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Organizer extends Profile {
-    public List<Event> createdEventList;
-    public List<Competition> negotiationList;
+public class Organizer extends User {
+    public List<Event> eventCreatedList = new ArrayList<>();
+    public List<Competition> competitionCreatedList = new ArrayList<>();
 
-    public Organizer(String name){
-        super(name,0);
-        this.negotiationList = new ArrayList<>();
-        this.createdEventList = new ArrayList<>();
+    public Organizer(String username, String password,String dateOfBirth){
+        super(username,password,dateOfBirth);
+        this.role = Role.ORGANIZER;
     }
 
-    public Organizer(String name, int coins){
-        super(name,coins);
-        this.negotiationList = new ArrayList<>();
-        this.createdEventList = new ArrayList<>();
-    }
 
-    @Override
-    public ProfileType getProfileType() {
-        return ProfileType.ORGANIZER;
-    }
 
     public void addEvent(Event event){
-        this.createdEventList.add(event);
+        this.eventCreatedList.add(event);
     }
 
-    public List<Event> getAllEvents(){
-        return this.createdEventList;
+    public List<Event> getEventCreatedList(){
+        return this.eventCreatedList;
     }
 
-    public void addNegotiation(Competition negotiation){
-        this.negotiationList.add(negotiation);
-    }
 
-    public void setNegotiationList(List<Competition> negotiationList){
-        this.negotiationList = negotiationList;
-    }
+    public void addCompetition(Competition competition){this.competitionCreatedList.add(competition);}
 
-    public List<Competition> getAllAuctions(){
-        return this.negotiationList;
-    }
+    public List<Competition> getCompetitionCreatedList(){return this.competitionCreatedList;}
 
 
 }

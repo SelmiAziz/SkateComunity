@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import utils.SceneManager;
+import viewBasic.OrganizerEventsPageViewBasic;
+
 import java.io.IOException;
 
 public class OrganizerHomePageView {
@@ -18,21 +20,19 @@ public class OrganizerHomePageView {
 
     SceneManager sceneManager = SceneManager.getInstance();
 
-    @FXML private Label usernameOrganizerLabel;
     @FXML private Label errorLabel;
-    @FXML private Label coinsLabel;
 
 
     public void initialize(){
-        updateUserInfo();
+
     }
+
 
 
     @FXML
     public void goToEvents() {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerEventsPageView.fxml"));
-        System.out.println("Hhihi");
         Parent root = null;
         try {
             root = loader.load();
@@ -41,13 +41,27 @@ public class OrganizerHomePageView {
             stage = SceneManager.getInstance().getStage();
             stage.setScene(scene);
             stage.setResizable(false);
-            System.out.println("Hem");
             stage.show();
-            System.out.println("Gg");
             Platform.runLater(organizerEventsPageView::loadEvents);
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
+
+
+
+    }
+
+    @FXML
+    public void goToTricksPage(){
+        try {
+            SceneManager.getInstance().loadScene("viewFxml/OrganizerTricksPageView.fxml");
+        }catch(IOException e){
+            errorLabel.setText(e.getMessage());
+        }
+    }
+
+    @FXML
+    public void goToCompetitionsPage(){
 
     }
 
@@ -62,10 +76,5 @@ public class OrganizerHomePageView {
         }
     }
 
-    private final LoginController loginController = new LoginController();
-    void updateUserInfo(){
-        UserInfo userInfo = loginController.getCurrentUserInfo();
-        coinsLabel.setText(String.valueOf(userInfo.getCoins()));
-        usernameOrganizerLabel.setText(userInfo.getUsername());
-    }
+
 }

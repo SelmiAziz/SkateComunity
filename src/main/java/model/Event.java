@@ -7,20 +7,21 @@ public class Event {
     private final String name;
     private final String description;
     private final String date;
-    private final int coins;
-    private final String country;
+    private final int participationFee;
+    private final String location;
     private final Integer maxRegistrations;
-    private List<EventRegistration> eventRegistrationList;
+    private List<EventRegistration> requestList;
     private  Organizer organizer;
+    private List<EventReview> reviewEventList;
 
-    public Event(String name, String description,String date, String country, int coins, int maxRegistrations){
+    public Event(String name, String description, String date, String location, int participationFee, int maxRegistrations){
         this.name = name;
         this.description = description;
         this.date = date;
-        this.coins = coins;
-        this.country = country;
+        this.participationFee= participationFee;
+        this.location = location;
         this.maxRegistrations = maxRegistrations;
-        this.eventRegistrationList = new ArrayList<>();
+        this.requestList = new ArrayList<>();
     }
 
 
@@ -44,32 +45,33 @@ public class Event {
         return this.date;
     }
 
-    public String getCountry(){
-        return this.country;
+    public String getLocation(){
+        return this.location;
     }
 
-    public Integer getCoins(){
-        return this.coins;
+    public Integer getParticipationFee(){
+        return this.participationFee;
     }
-
-
 
     public Integer getMaxRegistrations(){
         return this.maxRegistrations;
     }
 
     public Integer getCurrentRegistrations(){
-        return eventRegistrationList.toArray().length;
+        return requestList.toArray().length;
     }
 
 
+    public void addEventReview(EventReview  eventReview){
+        this.reviewEventList.add(eventReview);
+    }
 
-    public void addEventRegistration(EventRegistration eventParticipation){
-        this.eventRegistrationList.add(eventParticipation);
+    public void addEventRegistration(EventRegistration request){
+        this.requestList.add(request);
     }
 
     public  List<EventRegistration> getEventRegistrations(){
-        return this.eventRegistrationList;
+        return this.requestList;
     }
 
 }

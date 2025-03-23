@@ -14,7 +14,7 @@ import utils.SceneManager;
 import java.io.IOException;
 
 
-public class CostumerEventsPageView {
+public class CustomerEventsPageView {
     private final SignEventController signEventController = new SignEventController();
     private final SceneManager sceneManager = SceneManager.getInstance();
 
@@ -22,8 +22,8 @@ public class CostumerEventsPageView {
     @FXML private TableColumn<EventBean, String> colName;
     @FXML private TableColumn<EventBean, String> colDescription;
     @FXML private TableColumn<EventBean, String> colDate;
-    @FXML private TextField nationalitySearch;
-    @FXML private TextField dateSearch;
+    @FXML private TextField locationSearch;
+    @FXML private DatePicker datePicker;
     @FXML private Label eventDescriptionLabel;
     @FXML private Label eventCoinsLabel;
     @FXML private Label eventNameLabel;
@@ -35,17 +35,20 @@ public class CostumerEventsPageView {
 
     private EventBean selectedEventBean;
 
+    String formatDateToView(String date){
+        return date.replace("-", "/");
+    }
+
     public void initialize() {
         colName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getName()));
 
         colDescription.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDescription()));
+                new SimpleStringProperty(cellData.getValue().getLocation()));
 
         colDate.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDate()));
+                new SimpleStringProperty(formatDateToView(cellData.getValue().getDate())));
 
-       updateUserInfo();
     }
 
 
@@ -55,13 +58,23 @@ public class CostumerEventsPageView {
         eventTable.getItems().addAll(signEventController.allAvailableEvents());
     }
 
+    public void reviewEvent(){
+
+    }
+
+    public String formatFromDataPicker(String date){
+        String[] parts = date.split("-");
+        return parts[2] + "-" + parts[1] + "-" + parts[0];
+    }
+
     @FXML
     public void searchEvents() {
-        String date = dateSearch.getText();
-        String country = nationalitySearch.getText();
-        EventBean eventBean = new EventBean(date,country);
+        String date = formatFromDataPicker(datePicker.getValue().toString());
+        String location = locationSearch.getText();
+        System.out.println(date+location);
+        EventBean eventBean = new EventBean(date,location);
         eventTable.getItems().clear();
-        eventTable.getItems().addAll(signEventController.searchEventByDateAndCountry(eventBean));
+        eventTable.getItems().addAll(signEventController.searchEventByDateAndLocation(eventBean));
 
     }
 
@@ -88,11 +101,23 @@ public class CostumerEventsPageView {
     public void submitSignToEvent(){
         try {
             signEventController.signToEvent(selectedEventBean);
-            updateUserInfo();
             onEventSelected();
         } catch (UserAlreadySignedEvent | InsufficientCoinsException | NoAvailableSeats e) {
             errorLabel.setText(e.getMessage());
             System.err.println(e.getMessage());
+        }
+    }
+    @FXML
+    public void goToCompetitionsPage(){
+
+    }
+
+    @FXML
+    public void goToTricksPage(){
+        try {
+            SceneManager.getInstance().loadScene("viewFxml/CustomerTricksPageView.fxml");
+        }catch(IOException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -100,17 +125,13 @@ public class CostumerEventsPageView {
 
     public void goToHomePage() {
         try {
-            sceneManager.loadScene("viewFxml/CostumerHomePageView.fxml");
+            sceneManager.loadScene("viewFxml/CustomerHomePageView.fxml");
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
     }
 
-    void updateUserInfo(){
-        UserInfo userInfo = signEventController.getCurrentUserInfo();
-        usernameLabel.setText(userInfo.getUsername());
-        coinsLabel.setText(String.valueOf(userInfo.getCoins()));
-    }
+
 
     public void logOut(){
         try {

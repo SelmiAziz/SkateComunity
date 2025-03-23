@@ -10,8 +10,8 @@ public class DaoDbmsFactory extends DaoFactory {
         return UserDbmsDao.getInstance();
     }
 
-    public CostumerDbmsDao createCostumerDao(){
-        return CostumerDbmsDao.getInstance();
+    public CustomerDbmsDao createCostumerDao(){
+        return CustomerDbmsDao.getInstance();
     }
 
     public OrganizerDbmsDao createOrganizerDao(){
@@ -21,4 +21,6 @@ public class DaoDbmsFactory extends DaoFactory {
     public EventDbmsDao createEventDao(){ return EventDbmsDao.getInstance();}
 
     public EventRegistrationDbmsDao createEventRegistrationDao(){return EventRegistrationDbmsDao.getInstance();};
+
+    public TrickDbmsDao createTrickDao(){return TrickDbmsDao.getInstance();}
 }

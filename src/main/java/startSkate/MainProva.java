@@ -12,7 +12,7 @@ public class MainProva extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         SceneManager sceneManager = SceneManager.getInstance();
-        sceneManager.setStage(primaryStage); // Inizializza lo stage
+        sceneManager.setStage(primaryStage);
         sceneManager.loadScene("viewFxmlBasic/AccessViewBasic.fxml");
     }
 

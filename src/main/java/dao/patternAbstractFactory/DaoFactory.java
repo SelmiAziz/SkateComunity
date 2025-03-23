@@ -4,10 +4,11 @@ import dao.*;
 
 abstract public class DaoFactory {
     public abstract UserDao createUserDao();
-    public abstract CostumerDao createCostumerDao();
+    public abstract CustomerDao createCostumerDao();
     public abstract OrganizerDao createOrganizerDao();
     public abstract EventDao createEventDao();
     public abstract EventRegistrationDao createEventRegistrationDao();
+    public abstract TrickDao createTrickDao();
 
     private static DaoFactory instance;
 

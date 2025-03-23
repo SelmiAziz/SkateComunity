@@ -10,5 +10,5 @@ public interface EventDao {
     boolean checkEvent(String eventName);
     void addEvent(Event event) throws SQLException;
     List<Event> selectAvailableEvents();
-    List<Event> selectEventsByDateAndCountry(String date, String country);
+    List<Event> selectEventsByDateAndLocation(String date, String country);
 }

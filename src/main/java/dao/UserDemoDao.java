@@ -1,9 +1,9 @@
 package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
-import login.ProfileType;
+import login.Role;
 import login.User;
-import model.Costumer;
+import model.Customer;
 import model.Organizer;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 public class UserDemoDao implements UserDao {
     private static UserDemoDao instance;
     private final OrganizerDao organizerDao = DaoFactory.getInstance().createOrganizerDao();
-    private final CostumerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
+    private final CustomerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
     private final List<User> userList;
 
     public UserDemoDao() {
@@ -27,17 +27,12 @@ public class UserDemoDao implements UserDao {
         return instance;
     }
 
-
+    @Override
     public void addUser(User user){
         this.userList.add(user);
-        if(user.getProfile().getProfileType() == ProfileType.ORGANIZER){
-            organizerDao.addOrganizer((Organizer)user.getProfile());
-        }else if(user.getProfile().getProfileType() == ProfileType.COSTUMER){
-            costumerDao.addCostumer((Costumer)user.getProfile());
-        }
     }
 
-
+    @Override
     public User selectUserByUsername(String username){
         for( User user: this.userList){
             if(user.getUsername().equals(username)) {
@@ -49,9 +44,19 @@ public class UserDemoDao implements UserDao {
 
 
     @Override
-    public boolean checkUser(String username, String password) {
+    public boolean checkUserByUsernameAndPassword(String username, String password) {
         for(User user: userList){
-            if(user.getUsername().equals(username) && user.getPassword().equals(password)){
+            if(user.getUsername().equals(username) && user.getPassword().equals(password) ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkUserByUsername(String username){
+        for(User user:userList){
+            if(user.getUsername().equals(username)){
                 return true;
             }
         }

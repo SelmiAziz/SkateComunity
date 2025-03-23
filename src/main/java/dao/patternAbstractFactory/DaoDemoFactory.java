@@ -10,8 +10,8 @@ public class DaoDemoFactory extends DaoFactory {
         return UserDemoDao.getInstance();
     }
 
-    public CostumerDemoDao createCostumerDao(){
-        return CostumerDemoDao.getInstance();
+    public CustomerDemoDao createCostumerDao(){
+        return CustomerDemoDao.getInstance();
     }
 
     public OrganizerDemoDao createOrganizerDao(){
@@ -20,6 +20,7 @@ public class DaoDemoFactory extends DaoFactory {
 
     public EventDemoDao createEventDao(){return EventDemoDao.getInstance();}
 
+    public TrickDemoDao createTrickDao(){return TrickDemoDao.getInstance();}
 
     public EventRegistrationDemoDao createEventRegistrationDao(){return EventRegistrationDemoDao.getInstance();}
 }

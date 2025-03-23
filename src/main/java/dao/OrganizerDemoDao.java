@@ -26,16 +26,17 @@ public class OrganizerDemoDao implements OrganizerDao {
         this.organizerList.add(organizer);
     }
 
-    public Organizer selectOrganizerByOrganizerName(String organizerName){
+    public Organizer selectOrganizerByUsername(String username){
         for(Organizer organizer:organizerList){
-            if(organizer.getName().equals(organizerName)){
+            if(organizer.getUsername().equals(username)){
                 return organizer;
             }
         }
         return null;
     }
 
-    @Override
+
+
     public void update(Organizer organizer) {
         //not needed in demo
     }

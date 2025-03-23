@@ -1,24 +1,29 @@
 package beans;
 
-import login.ProfileType;
+import javax.management.relation.Role;
 
 public class LogUserBean {
     private String username;
     private String password;
-    private ProfileType profileType;
+    private String role;
+
+    public LogUserBean(String username, String password, String role){
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
 
     public LogUserBean(String username, String password){
         this.username = username;
         this.password = password;
     }
 
-    public LogUserBean(ProfileType profileType){
-        this.profileType = profileType;
+    public LogUserBean(String role){
+        this.role = role;
     }
 
-    public ProfileType getProfileType() {
-        return profileType;
-    }
+    public String getRole(){return this.role;}
 
     public String getUsername(){
         return this.username;
@@ -37,6 +42,7 @@ public class LogUserBean {
         this.password = password;
     }
 
+    public void setRole(String role){this.role = role;}
 
 
 

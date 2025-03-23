@@ -1,9 +1,8 @@
 package startSkate;
 
-import login.Profile;
-import login.ProfileType;
+import login.Role;
 import login.User;
-import model.Costumer;
+import model.Customer;
 import model.Organizer;
 
 import java.io.*;
@@ -15,22 +14,22 @@ import static java.lang.Integer.parseInt;
 public class provaFileSystem {
     public void saveUserToFile(User user, String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-                String profileType =  user.getProfile().getProfileType() == ProfileType.COSTUMER ? "costumer" : "organizer";
-                writer.write(user.getUsername() + "," + user.getPassword() + "," + user.getProfile().getName() + "," +profileType );
-                if(profileType.equals("costumer")){
-                    saveCostumerToFile((Costumer)user.getProfile(), "src/main/resources/csv/profiles.csv");
-                }else{
-                    saveOrganizerToFile((Organizer)user.getProfile(), "src/main/resources/csv/profiles.csv");
-                }
+              //  String profileType =  user.getProfile().getProfileType() == Role.COSTUMER ? "costumer" : "organizer";
+                //writer.write(user.getUsername() + "," + user.getPassword() + "," + user.getProfile().getName() + "," +profileType );
+                //if(profileType.equals("costumer")){
+                    // saveCostumerToFile((Customer)user.getProfile(), "src/main/resources/csv/profiles.csv");
+                //}else{
+                    //saveOrganizerToFile((Organizer)user.getProfile(), "src/main/resources/csv/profiles.csv");
+                //}
                 writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void saveCostumerToFile(Costumer costumer, String filename){
+    public void saveCostumerToFile(Customer costumer, String filename){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            writer.write(costumer.getName() + "," + costumer.getCoins() + "," +"costumer");
+            //writer.write(costumer.getName() + "," + costumer.getCoins() + "," +"costumer");
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,7 +38,7 @@ public class provaFileSystem {
 
     public void saveOrganizerToFile(Organizer organizer, String filename){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            writer.write(organizer.getName() + "," + organizer.getCoins() + "," +"costumer");
+           // writer.write(organizer.getName() + "," + organizer.getCoins() + "," +"costumer");
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,7 +53,7 @@ public class provaFileSystem {
                 String[] data = line.split(",");
                 if(data.length == 3){
                     if(nameProfile.equals(data[0])){
-                        profile = new Organizer(data[0], parseInt(data[1]));
+                      //  profile = new Organizer(data[0], parseInt(data[1]));
                     }
                 }
             }
@@ -65,15 +64,15 @@ public class provaFileSystem {
     }
 
 
-    public Costumer retriveCostumerFromFile(String filename, String nameProfile){
-        Costumer profile = null;
+    public Customer retriveCostumerFromFile(String filename, String nameProfile){
+        Customer profile = null;
         try(BufferedReader reader = new BufferedReader(new FileReader(filename))){
             String line;
             while((line = reader.readLine()) != null){
                 String[] data = line.split(",");
                 if(data.length == 3){
                     if(nameProfile.equals(data[0])){
-                        profile = new Costumer(data[0], parseInt(data[1]));
+                        //profile = new Customer(data[0], parseInt(data[1]));
                     }
                 }
             }
@@ -90,15 +89,15 @@ public class provaFileSystem {
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data.length == 4) {
-                    Profile profile;
+                   // Profile profile;
                     if(data[3].equals("costumer")){
-                        profile = retriveCostumerFromFile("src/main/resources/csv/profiles.csv", data[2]);
+                        //profile = retriveCostumerFromFile("src/main/resources/csv/profiles.csv", data[2]);
                     }else{
-                        profile = retriveOrganizerFromFile("src/main/resources/csv/profiles.csv", data[2]);
+                        //profile = retriveOrganizerFromFile("src/main/resources/csv/profiles.csv", data[2]);
                     }
-                    User user = new User(data[0], data[1]);
-                    user.setProfile(profile);
-                    userList.add(user);
+                    //User user = new User(data[0], data[1]);
+                    //user.setProfile(profile);
+                    //userList.add(user);
                 }
             }
         } catch (IOException e) {

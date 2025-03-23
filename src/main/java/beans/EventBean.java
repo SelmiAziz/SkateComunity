@@ -4,41 +4,41 @@ package beans;
 public class EventBean {
     private String name;
     private String description;
-    private String country;
+    private String location;
     private String date;
     private int coins;
     private int availableRegistrations;
     private int maxRegistrations;
     private int currentRegistrations;
 
-    public EventBean(String name, String description, String date, String country, int coins,int maxRegistrations){
+    public EventBean(String name, String description, String date, String location, int coins,int maxRegistrations){
         this.name = name;
         this.description = description;
         this.date = date;
-        this.country = country;
+        this.location = location;
         this.coins = coins;
         this.maxRegistrations = maxRegistrations;
     }
 
-    public EventBean(String name, String description, String date, String country, int coins,int currentRegistrations,int maxRegistrations){
+    public EventBean(String name, String description, String date, String location, int coins,int currentRegistrations,int maxRegistrations){
         this.name = name;
         this.description = description;
         this.date = date;
-        this.country = country;
+        this.location = location;
         this.coins = coins;
         this.currentRegistrations = currentRegistrations;
         this.maxRegistrations = maxRegistrations;
     }
 
 
-    public EventBean(String name, String description, String date){
+    public EventBean(String name, String location, String date){
         this.name = name;
-        this.description = description;
+        this.location = location;
         this.date = date;
     }
 
     public EventBean(String date, String country){
-        this.country = country;
+        this.location = country;
         this.date = date;
     }
 
@@ -58,8 +58,8 @@ public class EventBean {
         return this.description;
     }
 
-    public String getCountry(){
-        return this.country;
+    public String getLocation(){
+        return this.location;
     }
 
     public String getDate(){
