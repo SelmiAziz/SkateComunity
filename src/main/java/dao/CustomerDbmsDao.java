@@ -99,8 +99,6 @@ public class CustomerDbmsDao implements CustomerDao{
         String query = "UPDATE profiles SET numCoins = ? WHERE profileName = ?";
         Connection connection = DbsConnector.getInstance().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            //preparedStatement.setInt(1, observedCostumer.getCoins());
-            //preparedStatement.setString(2, observedCostumer.getUsername());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
