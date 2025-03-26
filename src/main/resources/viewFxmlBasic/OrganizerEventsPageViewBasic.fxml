@@ -98,12 +98,8 @@
                         <Image url="@../images/logo.png" />
                     </image>
                 </ImageView>
-            <ListView fx:id="eventList" layoutX="111.0" layoutY="61.0" prefHeight="177.0" prefWidth="581.0" />
-            <ListView fx:id="eventList1" layoutX="111.0" layoutY="281.0" prefHeight="213.0" prefWidth="581.0" />
+            <ListView fx:id="eventList" layoutX="111.0" layoutY="61.0" prefHeight="303.0" prefWidth="581.0" />
             <Label layoutX="111.0" layoutY="25.0" prefHeight="18.0" prefWidth="311.0" text="Events Hosted" />
-            <TextField fx:id="reviewField" layoutX="226.0" layoutY="249.0" prefHeight="26.0" prefWidth="160.0" />
-            <Label layoutX="111.0" layoutY="253.0" prefHeight="18.0" prefWidth="109.0" text="Reviews of event:" />
-            <Button layoutX="392.0" layoutY="249.0" mnemonicParsing="false" onAction="#displayReviews" prefHeight="26.0" prefWidth="86.0" text="display" />
             </children>
         </AnchorPane>
     </center>

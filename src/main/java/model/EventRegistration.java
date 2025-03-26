@@ -2,34 +2,28 @@ package model;
 
 public class EventRegistration {
     private int registrationId;
-    private String participationDate;
     private int participationNumber;
     private Customer participant;
     private Event event;
+    private String registrationCode;
+    private String assignedSeat;
 
-    public EventRegistration(int registrationId , int participationNumber){
+    public EventRegistration(int registrationId , int participationNumber, String registrationCode, String assignedSeat){
         this.registrationId = registrationId;
         this.participationNumber = participationNumber;
+        this.registrationCode = registrationCode;
+        this.assignedSeat = assignedSeat;
     }
 
-    public EventRegistration(String participationDate, int participationNumber, Customer participant){
-        this.participationDate = participationDate;
+
+
+    public EventRegistration(int participationNumber,  String registrationCode, String assignedSeat){
         this.participationNumber = participationNumber;
-        this.participant = participant;
+        this.registrationCode = registrationCode;
+        this.assignedSeat = assignedSeat;
     }
 
-    public EventRegistration(int participationNumber, Customer participant){
-        this.participationNumber = participationNumber;
-        this.participant = participant;
-    }
 
-    public String getParticipationDate(){
-        return this.participationDate;
-    }
-
-    public void setParticipantDate(String participationDate){
-        this.participationDate = participationDate;
-    }
 
     public int getParticipationNumber(){
         return this.participationNumber;
@@ -59,4 +53,22 @@ public class EventRegistration {
 
     public void setRegistrationId(int id){this.registrationId = id;}
 
+
+    public void setAssignedSeat(String assignedSeat) {
+        this.assignedSeat = assignedSeat;
+    }
+
+    public String getAssignedSeat() {
+        return assignedSeat;
+    }
+
+
+
+    public void setRegistrationCode(String registrationCode) {
+        this.registrationCode = registrationCode;
+    }
+
+    public String getRegistrationCode() {
+        return registrationCode;
+    }
 }

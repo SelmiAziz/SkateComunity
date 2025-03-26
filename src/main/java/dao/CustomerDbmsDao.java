@@ -31,13 +31,13 @@ public class CustomerDbmsDao implements CustomerDao{
                 return costumer;
             }
         }
-        String query = "SELECT u.username, u.password, u.dateOfBirth, c.numCoins, c.skaterLevel, " +
+        String query = "SELECT u.username, u.password, u.dateOfBirth, c.skaterLevel, " +
                 "GROUP_CONCAT(r.idRegistration) AS registrationIds " +
                 "FROM users u " +
                 "LEFT JOIN registrations r ON r.customerUsername = u.username " +
                 "LEFT JOIN customers c ON u.username = c.customerUsername " +
                 "WHERE u.username = ? " +
-                "GROUP BY u.username, u.password, u.dateOfBirth, c.numCoins, c.skaterLevel";
+                "GROUP BY u.username, u.password, u.dateOfBirth, c.skaterLevel";
 
         Connection connection = DbsConnector.getInstance().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -51,13 +51,9 @@ public class CustomerDbmsDao implements CustomerDao{
                                                 skaterLevel.equals("Advanced") ? SkaterLevel.ADVANCED : SkaterLevel.PROFICIENT;
                     String dateOfBirth = resultSet.getString("dateOfBirth");
                     String registrationIdsStr = resultSet.getString("registrationIds");
-                    int numCoins = resultSet.getInt("numCoins");
-                    Customer costumer = new Customer(costumerUsername, password, dateOfBirth,skaterLevelEn , numCoins);
+                    Customer costumer = new Customer(costumerUsername, password, dateOfBirth,skaterLevelEn );
                     if(registrationIdsStr != null){
                         String[] arrRegistrationIds = registrationIdsStr.split(",");
-                        for(String s:arrRegistrationIds){
-                            System.out.println(s+" ");
-                        }
                     }
                     costumerList.add(costumer);
                     return costumer;
@@ -79,18 +75,15 @@ public class CustomerDbmsDao implements CustomerDao{
         userDao.addUser(customer);
         System.out.println(("Ya fra"));
 
-        String query = "INSERT INTO customers (customerUsername, numCoins, skaterLevel) VALUES (?, ?,  ?)";
+        String query = "INSERT INTO customers (customerUsername, skaterLevel) VALUES (?, ?)";
         Connection connection = DbsConnector.getInstance().getConnection();
         String username = customer.getUsername();
-        int coins = customer.getCoins();
         String skaterLevel = customer.getSkaterLevel() == SkaterLevel.NOVICE ? "Novice":
                              customer.getSkaterLevel() == SkaterLevel.ADVANCED ? "Advanced": "Proficient";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
-            preparedStatement.setInt(2, coins);
-            preparedStatement.setString(3, skaterLevel);
+            preparedStatement.setString(2, skaterLevel);
             preparedStatement.executeUpdate();
-            System.out.println("Fatta ia fra");
         } catch (SQLException e) {
             e.printStackTrace();
         }

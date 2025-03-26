@@ -61,6 +61,8 @@ public class CustomerTricksPageViewBasic {
     }
 
 
+
+
     @FXML
     public void logOut() {
         SessionManager.getInstance().terminateSession();

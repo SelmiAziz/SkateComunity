@@ -1,6 +1,7 @@
 package view;
 
 import beans.EventBean;
+import beans.EventRegistrationBean;
 import beans.UserInfo;
 import controls.SignEventController;
 import exceptions.InsufficientCoinsException;
@@ -9,6 +10,7 @@ import exceptions.UserAlreadySignedEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import utils.SceneManager;
 
 import java.io.IOException;
@@ -31,9 +33,11 @@ public class CustomerEventsPageView {
     @FXML private Label coinsLabel;
     @FXML private Label usernameLabel;
     @FXML private Label errorLabel;
+    @FXML private Label registrationCodeLabel;
+    @FXML private Label assignedSeatLabel;
+    @FXML private Pane provaPane;
 
 
-    private EventBean selectedEventBean;
 
     String formatDateToView(String date){
         return date.replace("-", "/");
@@ -49,6 +53,7 @@ public class CustomerEventsPageView {
         colDate.setCellValueFactory(cellData ->
                 new SimpleStringProperty(formatDateToView(cellData.getValue().getDate())));
 
+        provaPane.setVisible(false);
     }
 
 
@@ -88,7 +93,6 @@ public class CustomerEventsPageView {
     // Mostra i dettagli dell'evento selezionato
     private void showEventDetails(EventBean eventBean) {
         if (eventBean != null) {
-            selectedEventBean = eventBean;
             eventNameLabel.setText(eventBean.getName());
             eventDescriptionLabel.setText(eventBean.getDescription());
             eventCoinsLabel.setText(""+ eventBean.getCoins());
@@ -100,8 +104,12 @@ public class CustomerEventsPageView {
     @FXML
     public void submitSignToEvent(){
         try {
-            signEventController.signToEvent(selectedEventBean);
+            EventBean selectedEventBean = eventTable.getSelectionModel().getSelectedItem();
+            EventRegistrationBean eventRegistrationBean= signEventController.signToEvent(selectedEventBean);
             onEventSelected();
+            registrationCodeLabel.setText("Il codice della registrazione:"+eventRegistrationBean.getRegistrationCode());
+            assignedSeatLabel.setText("Il posto assegnato è:"+eventRegistrationBean.getAssignedSeat());
+            provaPane.setVisible(true);
         } catch (UserAlreadySignedEvent | InsufficientCoinsException | NoAvailableSeats e) {
             errorLabel.setText(e.getMessage());
             System.err.println(e.getMessage());

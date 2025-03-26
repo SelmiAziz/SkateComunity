@@ -42,6 +42,11 @@ public class CustomerTricksPageView {
         loadTricks();
     }
 
+    public void selectTrick(){
+        TrickBean trickBean = trickTable.getSelectionModel().getSelectedItem();
+        showTrick(trickBean);
+    }
+
     @FXML
     public void goToEvents() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerEventsPageView.fxml"));
@@ -62,9 +67,7 @@ public class CustomerTricksPageView {
 
 
 
-    public void showTrick(){
-        String trickName = trickNameTextField.getText();
-        TrickBean trickBean = new TrickBean(trickName);
+    public void showTrick(TrickBean trickBean){
         TrickBean detailedTrick = learnTrickController.detailsTrick(trickBean);
         descriptionLabel.setText("Description: " + detailedTrick.getDescription());
         categoryLabel.setText("Category: " +detailedTrick.getCategory());

@@ -1,0 +1,37 @@
+package beans;
+
+public class EventRegistrationBean {
+    int currentRegistrationNumber;
+    String assignedSeat;
+    String registrationCode;
+
+    public EventRegistrationBean(int currentRegistrationNumber, String registrationCode, String assignedSea){
+        this.currentRegistrationNumber = currentRegistrationNumber;
+        this.assignedSeat = assignedSeat;
+        this.registrationCode = registrationCode;
+    }
+
+    public String getRegistrationCode() {
+        return registrationCode;
+    }
+
+    public int getCurrentRegistrationNumber() {
+        return currentRegistrationNumber;
+    }
+
+    public String getAssignedSeat() {
+        return assignedSeat;
+    }
+
+    public void setCurrentRegistrationNumber(int currentRegistrationNumber) {
+        this.currentRegistrationNumber = currentRegistrationNumber;
+    }
+
+    public void setRegistrationCode(String registrationCode) {
+        this.registrationCode = registrationCode;
+    }
+
+    public void setAssignedSeat(String assignedSeat) {
+        this.assignedSeat = assignedSeat;
+    }
+}

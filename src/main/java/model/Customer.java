@@ -8,41 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer extends User {
-    private List<EventRegistration> eventRegistrationList = new ArrayList<>() ;
-    private List<Application> applicationList = new ArrayList<>();
-    private List<Competition> competitionList = new ArrayList<>();
-    private int coins = 100; // a value of default
+    private List<EventRegistration> eventRegistrationList ;// a value of default
     private SkaterLevel skaterLevel;
+    private List<SkateboardCommission> skateboardCommissionsSubmittedList;
+    private List<SkateboardCommission> skateboardCommissionsApproved;
 
 
     public Customer(String username, String password, String dateOfBirth, SkaterLevel skaterLevel){
         super(username,password,dateOfBirth);
         this.role = Role.COSTUMER;
+        this.eventRegistrationList = new ArrayList<>();
         this.skaterLevel = skaterLevel;
     }
 
-    public Customer(String username, String password, String dateOfBirth, SkaterLevel skaterLevel, int coins){
-        super(username, password,dateOfBirth);
-        this.role = Role.COSTUMER;
-        this.skaterLevel = skaterLevel;
-        this.coins = coins;
-    }
 
     public void addEventRegistration(EventRegistration eventRegistration){this.eventRegistrationList.add(eventRegistration);}
-    public void addApplicationRegistration(Application application){this.applicationList.add(application);}
-    public void addCompetition(Competition competition){this.competitionList.add(competition);}
 
-    public void setCoins(int coins){
-        this.coins = coins;
-    }
 
-    public int getCoins(){
-        return this.coins;
-    }
-
-    public void pay(int coinsPayed){
-        this.coins -= coinsPayed;
-    }
 
     public void setSkaterLevel(SkaterLevel skaterLevel) {
         this.skaterLevel = skaterLevel;
@@ -52,10 +34,24 @@ public class Customer extends User {
         return this.skaterLevel;
     }
 
-    public List<EventRegistration> getEventParticipationList(){return this.eventRegistrationList;}
-    public List<Application> getApplicationList(){return this.applicationList;}
-    public List<Competition> getCompetitionList(){return this.competitionList;}
+    public List<EventRegistration> getEventRegistrationList() {
+        return eventRegistrationList;
+    }
+
+    public void addSkateboardCommissionApproved(SkateboardCommission skateboardCommission){
+        this.skateboardCommissionsApproved.add(skateboardCommission);
+    }
+
+    public void addSkateboardCommissionSubmitted(SkateboardCommission skateboardCommission){
+        this.skateboardCommissionsSubmittedList.add(skateboardCommission);
+    }
+
+    public List<SkateboardCommission> getSkateboardCommissionsApproved() {
+        return skateboardCommissionsApproved;
+    }
 
 
-
+    public List<SkateboardCommission> getSkateboardCommissionsSubmittedList() {
+        return skateboardCommissionsSubmittedList;
+    }
 }

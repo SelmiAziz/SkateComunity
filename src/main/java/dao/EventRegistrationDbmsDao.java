@@ -24,8 +24,8 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
 
     @Override
     public void addEventRegistration(EventRegistration eventRegistration) {
-        String sql = "INSERT INTO registrations (numberRegistration, customerUsername, eventName) " +
-                "VALUES (?, ?, ?)";
+        String sql = "INSERT INTO registrations (numberRegistration, customerUsername, eventName, registrationCode, assignedSeat) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
 
         Connection conn = DbsConnector.getInstance().getConnection();
@@ -33,6 +33,8 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
             stmt.setInt(1, eventRegistration.getParticipationNumber());
             stmt.setString(2, eventRegistration.getParticipant().getUsername());
             stmt.setString(3, eventRegistration.getEvent().getName());
+            stmt.setString(4, eventRegistration.getRegistrationCode());
+            stmt.setString(5,eventRegistration.getAssignedSeat());
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
@@ -57,7 +59,7 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
                 return eventRegistration;
             }
         }
-        String sql = "SELECT er.numberRegistration, p.username, er.eventName " +
+        String sql = "SELECT er.numberRegistration, p.username, er.eventName, er.registrationCode, er.assignedSeat " +
                     "FROM registrations er " +
                     "JOIN users p ON er.customerUsername = p.username " +
                     "WHERE er.idRegistration = ?";
@@ -70,8 +72,10 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
             if (rs.next()) {
                 int numberRegistration = rs.getInt("numberRegistration");
                 String customerName = rs.getString("username");
+                String registrationCode = rs.getString("registrationCode");
+                String assignedSeat = rs.getString("assignedSeat");
 
-                EventRegistration eventRegistration = new EventRegistration(registrationId, numberRegistration);
+                EventRegistration eventRegistration = new EventRegistration(registrationId, numberRegistration, registrationCode, assignedSeat);
                 Customer customer = costumerDao.selectCustomerByUsername(customerName);
                 eventRegistration.setParticipant(customer);
                 return eventRegistration;

@@ -12,7 +12,6 @@ public class Event {
     private final Integer maxRegistrations;
     private List<EventRegistration> requestList;
     private  Organizer organizer;
-    private List<EventReview> reviewEventList;
 
     public Event(String name, String description, String date, String location, int participationFee, int maxRegistrations){
         this.name = name;
@@ -62,9 +61,6 @@ public class Event {
     }
 
 
-    public void addEventReview(EventReview  eventReview){
-        this.reviewEventList.add(eventReview);
-    }
 
     public void addEventRegistration(EventRegistration request){
         this.requestList.add(request);

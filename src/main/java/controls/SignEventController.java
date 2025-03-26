@@ -1,13 +1,12 @@
 package controls;
 
+import beans.EventRegistrationBean;
 import dao.*;
 import dao.patternAbstractFactory.DaoFactory;
 import beans.EventBean;
-import beans.UserInfo;
 import exceptions.InsufficientCoinsException;
 import exceptions.NoAvailableSeats;
 import exceptions.UserAlreadySignedEvent;
-import login.User;
 import model.Customer;
 import model.Event;
 import model.EventRegistration;
@@ -41,32 +40,53 @@ public class SignEventController {
         return eventBeanList;
     }
 
-    public void signToEvent(EventBean eventBean) throws UserAlreadySignedEvent, InsufficientCoinsException, NoAvailableSeats {
-        String costumerName = sessionManager.getSession().getUsername();
-        Customer currentCostumer = costumerDao.selectCustomerByUsername(costumerName);
-        System.out.println(currentCostumer.getUsername()+currentCostumer.getDateOfBirth()+currentCostumer.getRole()+currentCostumer.getSkaterLevel());
+    //dummy function that generate a code
+    private String generateCode(String eventName,int currentRegistrationNumber){
+        return "XX0" + eventName+currentRegistrationNumber;
+    }
+
+    private String findAvailableSpotForEvent(int registrationNumber) {
+        int groupSize = 19;
+        int groupIndex = (registrationNumber - 1) / groupSize;
+        int number = ((registrationNumber - 1) % groupSize) + 1;
+
+        String letter = "";
+        do {
+            letter = (char) ('A' + (groupIndex % 26)) + letter;
+            groupIndex = groupIndex / 26 - 1;
+        } while (groupIndex >= 0);
+
+        return letter + number;
+    }
+
+
+    public EventRegistrationBean signToEvent(EventBean eventBean) throws UserAlreadySignedEvent, InsufficientCoinsException, NoAvailableSeats {
+        String customerName = sessionManager.getSession().getUsername();
+        Customer currentCustomer = costumerDao.selectCustomerByUsername(customerName);
         Event event = eventDao.selectEventByName(eventBean.getName());
         Organizer organizer = event.getOrganizer();
         List<EventRegistration> participantsList = event.getEventRegistrations();
         for(EventRegistration eventParticipation : participantsList ){
-            if(eventParticipation.getParticipant().getUsername().equals(currentCostumer.getUsername())){
+            if(eventParticipation.getParticipant().getUsername().equals(currentCustomer.getUsername())){
                 throw new UserAlreadySignedEvent("L'utente è già segnato a questo evento");
             }
         }
-        if(currentCostumer.getCoins() - event.getParticipationFee() < 0){
-            throw new InsufficientCoinsException("L'utente non disponde del numero di coins richieste");
-        }
+
         if(event.getMaxRegistrations() - event.getCurrentRegistrations() <= 0){
             throw new NoAvailableSeats("Non sono presenti più posti disponibili per tale evento");
         }
-        //I have to fink about this
-        currentCostumer.pay(event.getParticipationFee());
 
-        EventRegistration newEventRegistration = new EventRegistration( event.getCurrentRegistrations()+1, currentCostumer);
+        int registrationNumber = event.getCurrentRegistrations() +1;
+        String registrationCode = generateCode(event.getName(),event.getCurrentRegistrations());
+        String availableSeatCode = findAvailableSpotForEvent(registrationNumber);
+        EventRegistration newEventRegistration = new EventRegistration(registrationNumber, registrationCode, availableSeatCode);
+        newEventRegistration.setParticipant(currentCustomer);
         newEventRegistration.setEvent(event);
         event.addEventRegistration(newEventRegistration);
         eventRegistrationDao.addEventRegistration(newEventRegistration);
 
+        EventRegistrationBean eventRegistrationBean = new EventRegistrationBean(registrationNumber, registrationCode, availableSeatCode);
+        return eventRegistrationBean;
 
     }
 

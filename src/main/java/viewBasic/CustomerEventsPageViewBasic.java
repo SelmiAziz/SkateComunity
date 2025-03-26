@@ -1,18 +1,15 @@
 package viewBasic;
 
 import beans.EventBean;
-import beans.UserInfo;
 import controls.SignEventController;
 import exceptions.InsufficientCoinsException;
 import exceptions.NoAvailableSeats;
 import exceptions.UserAlreadySignedEvent;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.SceneManager;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.List;
 
 

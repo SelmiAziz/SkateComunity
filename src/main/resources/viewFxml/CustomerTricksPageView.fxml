@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -25,12 +24,12 @@
                         <DropShadow height="6.17" radius="3.2675" width="8.9" />
                     </effect>
                 </Button>
-                <Label  layoutX="50.0" layoutY="40.0" onMouseClicked="#goToHomePage" prefHeight="35.0" prefWidth="90.0" text="Home" textFill="#1abc9c">
+                <Label layoutX="50.0" layoutY="40.0" onMouseClicked="#goToHomePage" prefHeight="35.0" prefWidth="90.0" text="Home" textFill="#1abc9c">
                     <font>
                         <Font size="24.0" />
                     </font>
                 </Label>
-                <Label onMouseClicked="#goToEvents" layoutX="150.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
+                <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToEvents" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
                     <font>
                         <Font size="24.0" />
                     </font>
@@ -72,7 +71,7 @@
     <left>
         <AnchorPane prefHeight="705.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;">
             <children>
-                <TableView fx:id="trickTable" layoutX="117.0" layoutY="64.0" prefHeight="376.0" prefWidth="443.0">
+                <TableView fx:id="trickTable" layoutX="117.0" layoutY="64.0" onMouseClicked="#selectTrick" prefHeight="376.0" prefWidth="443.0">
                     <columns>
                         <TableColumn fx:id="colTrickName" prefWidth="442.0" text="Trick name" />
                     </columns>
@@ -87,13 +86,7 @@
     <center>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <Label layoutX="71.0" layoutY="78.0" text="Trick name" />
-                <TextField fx:id="trickNameTextField" layoutX="191.0" layoutY="74.0" />
-                <Button layoutX="402.0" layoutY="74.0" mnemonicParsing="false" onAction="#showTrick" onMouseClicked="#showTrick" style="-fx-background-color: #1ABC9C;" text="Learn" textFill="WHITE">
-                    <effect>
-                        <DropShadow height="5.0" radius="2.0" width="5.0" />
-                    </effect>
-                </Button>
+                <Label layoutX="71.0" layoutY="78.0" text="Seleziona un trick per maggiori informazioni" />
             <Label fx:id="descriptionLabel" layoutX="71.0" layoutY="144.0" prefHeight="18.0" prefWidth="394.0" textFill="#00000087" />
             <Label fx:id="categoryLabel" layoutX="71.0" layoutY="193.0" prefHeight="18.0" prefWidth="391.0" textFill="#00000087" />
             <Label fx:id="difficultyLabel" layoutX="71.0" layoutY="248.0" prefHeight="18.0" prefWidth="345.0" textFill="#00000087" />

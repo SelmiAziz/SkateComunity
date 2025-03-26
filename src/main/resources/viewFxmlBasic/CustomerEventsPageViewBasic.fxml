@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -113,10 +112,8 @@
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                      </effect>
                   </Button>
-                  <Spinner layoutX="35.0" layoutY="563.0" prefHeight="26.0" prefWidth="61.0" />
-                  <TextField fx:id="EventReviewField1" layoutX="30.0" layoutY="358.0" prefHeight="26.0" prefWidth="333.0" promptText="EventName" />
-                  <TextArea fx:id="commentField" layoutX="31.0" layoutY="393.0" prefHeight="159.0" prefWidth="331.0" promptText="Comment" />
-                  <Button fx:id="reviewButton" layoutX="286.0" layoutY="563.0" onMouseClicked="#submitReview" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Review" textFill="WHITE">
+                  <TextField layoutX="32.0" layoutY="21.0" prefHeight="26.0" prefWidth="180.0" promptText="eventName for more info" />
+                  <Button layoutX="235.0" layoutY="21.0" onMouseClicked="#eventDetails" prefHeight="26.0" prefWidth="66.0" style="-fx-background-color: #1ABC9C;" text="dettagli" textFill="WHITE">
                      <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                      </effect>
@@ -154,12 +151,6 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <TextField layoutX="40.0" layoutY="362.0" />
-            <Button layoutX="216.0" layoutY="362.0" onMouseClicked="#eventDetails" prefHeight="26.0" prefWidth="66.0" style="-fx-background-color: #1ABC9C;" text="Cerca" textFill="WHITE">
-               <effect>
-                  <DropShadow height="5.0" radius="2.0" width="5.0" />
-               </effect>
-            </Button>
             </children>
         </AnchorPane>
     </right>

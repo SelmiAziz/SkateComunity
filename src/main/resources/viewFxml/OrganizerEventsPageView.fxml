@@ -91,7 +91,7 @@
    <center>
       <AnchorPane prefHeight="647.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="eventTable" layoutX="24.0" layoutY="42.0" prefHeight="232.0" prefWidth="803.0">
+            <TableView fx:id="eventTable" layoutX="24.0" layoutY="42.0" prefHeight="368.0" prefWidth="803.0">
                <columns>
                   <TableColumn fx:id="colName" prefWidth="84.0" text="Name" />
                   <TableColumn fx:id="colDescription" prefWidth="276.0" text="Description" />
@@ -107,14 +107,6 @@
                   <Image url="@../images/logo.png" />
                </image>
             </ImageView>
-            <Label layoutX="24.0" layoutY="24.0" prefHeight="18.0" prefWidth="296.0" text="Events Hosted  click an event to display reviews:" />
-            <Label layoutX="24.0" layoutY="297.0" prefHeight="18.0" prefWidth="109.0" text="Reviews of event:" />
-            <TableView fx:id="eventReiviews" layoutX="24.0" layoutY="319.0" prefHeight="232.0" prefWidth="564.0">
-               <columns>
-                  <TableColumn fx:id="colComment" prefWidth="473.0" text="Costumer comment" />
-                  <TableColumn fx:id="colRate" prefWidth="90.0" text="Rate" />
-               </columns>
-            </TableView>
          </children>
       </AnchorPane>
    </center>
