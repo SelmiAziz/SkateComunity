@@ -5,7 +5,7 @@ public class EventRegistrationBean {
     String assignedSeat;
     String registrationCode;
 
-    public EventRegistrationBean(int currentRegistrationNumber, String registrationCode, String assignedSea){
+    public EventRegistrationBean(int currentRegistrationNumber, String registrationCode, String assignedSeat){
         this.currentRegistrationNumber = currentRegistrationNumber;
         this.assignedSeat = assignedSeat;
         this.registrationCode = registrationCode;

@@ -1,6 +1,5 @@
 package beans;
 
-import javax.management.relation.Role;
 
 public class LogUserBean {
     private String username;
