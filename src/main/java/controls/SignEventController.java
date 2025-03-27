@@ -19,8 +19,6 @@ import java.util.List;
 public class SignEventController {
     private final DaoFactory daoFactory = DaoFactory.getInstance();
     private final EventDao eventDao = daoFactory.createEventDao();
-    private final UserDao userDao = daoFactory.createUserDao();
-    private final OrganizerDao organizerDao = daoFactory.createOrganizerDao();
     private final EventRegistrationDao eventRegistrationDao = daoFactory.createEventRegistrationDao();
     private final CustomerDao costumerDao = daoFactory.createCostumerDao();
     private final SessionManager sessionManager = SessionManager.getInstance();

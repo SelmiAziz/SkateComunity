@@ -202,11 +202,9 @@ public class EventDbmsDao implements EventDao {
         for (Event event : this.eventList) {
             if (event.getDate().equals(date) && event.getLocation().equals(location)) {
                 newEventList.add(event);
-                System.out.println("In memoria sta");
             }
         }
         if (!newEventList.isEmpty()) {
-            System.out.println("TI ho dato");
             return newEventList;
         }
 

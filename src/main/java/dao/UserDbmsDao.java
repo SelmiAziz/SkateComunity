@@ -45,7 +45,9 @@ public class UserDbmsDao implements UserDao {
                     userList.add(user);
                     return user;
                 } else {
-                    System.out.println("Utente non trovato.");
+
+
+
                 }
             }
         } catch (SQLException e) {

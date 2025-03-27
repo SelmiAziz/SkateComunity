@@ -73,7 +73,6 @@ public class CustomerDbmsDao implements CustomerDao{
 
         UserDao userDao = DaoFactory.getInstance().createUserDao();
         userDao.addUser(customer);
-        System.out.println(("Ya fra"));
 
         String query = "INSERT INTO customers (customerUsername, skaterLevel) VALUES (?, ?)";
         Connection connection = DbsConnector.getInstance().getConnection();

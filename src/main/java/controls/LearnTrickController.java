@@ -38,7 +38,6 @@ public class LearnTrickController {
 
     public void RegisterTrick(TrickBean trickBean){
         DifficultyTrick difficulty = DifficultyTrick.fromString(trickBean.getDifficulty());
-        System.out.println("La dfficoltà"+trickBean.getDifficulty());
         Trick trick = new Trick(trickBean.getNameTrick(), trickBean.getDescription(), difficulty, trickBean.getCategory(), trickBean.getDate());
         trickDao.addTrick(trick);
     }

@@ -21,8 +21,6 @@ public class CreateEventController {
     private final OrganizerDao organizerDao = daoFactory.createOrganizerDao();
 
 
-
-
     public void createEvent(EventBean eventBean) throws EventAlreadyExistsException, SQLException {
         String newEventName = eventBean.getName();
         eventDao.checkEvent(newEventName);

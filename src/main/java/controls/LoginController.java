@@ -46,7 +46,6 @@ public class LoginController {
         String password = registerUserBean.getPassword();
         String dateOfBirth = registerUserBean.getDateOfBirth();
         Role role =  registerUserBean.getRole().equals("Organizer") ? Role.ORGANIZER : Role.COSTUMER;
-        System.out.println(username+" "+password+" "+dateOfBirth+" "+role);
         User user;
         if(role == Role.COSTUMER){
             SkaterLevel skillLevel = registerUserBean.getSkillLevel().equals("Novice") ? SkaterLevel.NOVICE
