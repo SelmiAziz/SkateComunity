@@ -5,8 +5,6 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.shape.Line?>
@@ -29,7 +27,7 @@
                         <Font size="24.0" />
                     </font>
                 </Label>
-                <Label onMouseClicked="#goToEvents" layoutX="150.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
+                <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToEvents" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
                     <font>
                         <Font size="24.0" />
                     </font>
@@ -40,26 +38,6 @@
                     </font>
                 </Label>
                 <Line endX="14.0" layoutX="293.0" layoutY="81.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
-                <ImageView fitHeight="65.0" fitWidth="72.0" layoutX="934.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../images/coins.png" />
-                    </image>
-                </ImageView>
-                <Label fx:id="coinsLabel" layoutX="906.0" layoutY="44.0" prefHeight="32.0" prefWidth="55.0" text="100" textAlignment="RIGHT" textFill="#1abc9c">
-                    <font>
-                        <Font size="21.0" />
-                    </font>
-                </Label>
-                <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="829.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../images/account.png" />
-                    </image>
-                </ImageView>
-                <Label fx:id="usernameOrganizerLabel" layoutX="758.0" layoutY="45.0" prefHeight="31.0" prefWidth="107.0" text="Selmi15" textFill="#1abc9c">
-                    <font>
-                        <Font size="21.0" />
-                    </font>
-                </Label>
                 <Label layoutX="241.0" layoutY="40.0" prefHeight="35.0" prefWidth="156.0" text="Learn" textFill="#1abc9c">
                     <font>
                         <Font size="24.0" />

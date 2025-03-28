@@ -2,6 +2,7 @@ package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
 import model.Customer;
+import model.Wallet;
 import utils.DbsConnector;
 import utils.SkaterLevel;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class CustomerDbmsDao implements CustomerDao{
     private static CustomerDbmsDao instance;
     private final List<Customer> costumerList = new ArrayList<>();
+    private final WalletDao walletDao = DaoFactory.getInstance().createWalletDao();
 
     public static synchronized CustomerDbmsDao getInstance(){
         if(instance == null){
@@ -31,13 +33,14 @@ public class CustomerDbmsDao implements CustomerDao{
                 return costumer;
             }
         }
-        String query = "SELECT u.username, u.password, u.dateOfBirth, c.skaterLevel, " +
+        String query = "SELECT u.username, u.password, u.dateOfBirth, w.walletId , c.skaterLevel, " +
                 "GROUP_CONCAT(r.idRegistration) AS registrationIds " +
                 "FROM users u " +
                 "LEFT JOIN registrations r ON r.customerUsername = u.username " +
                 "LEFT JOIN customers c ON u.username = c.customerUsername " +
+                "LEFT JOIN wallets w ON w.balanceOwner = c.customerUsername " +
                 "WHERE u.username = ? " +
-                "GROUP BY u.username, u.password, u.dateOfBirth, c.skaterLevel";
+                "GROUP BY u.username, u.password, u.dateOfBirth, w.walletId , c.skaterLevel";
 
         Connection connection = DbsConnector.getInstance().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -51,7 +54,9 @@ public class CustomerDbmsDao implements CustomerDao{
                                                 skaterLevel.equals("Advanced") ? SkaterLevel.ADVANCED : SkaterLevel.PROFICIENT;
                     String dateOfBirth = resultSet.getString("dateOfBirth");
                     String registrationIdsStr = resultSet.getString("registrationIds");
-                    Customer costumer = new Customer(costumerUsername, password, dateOfBirth,skaterLevelEn );
+                    int walletId = resultSet.getInt("walletId");
+                    Wallet wallet = walletDao.selectWalletById(walletId);
+                    Customer costumer = new Customer(costumerUsername, password, dateOfBirth,skaterLevelEn , wallet);
                     if(registrationIdsStr != null){
                         String[] arrRegistrationIds = registrationIdsStr.split(",");
                     }
@@ -77,6 +82,10 @@ public class CustomerDbmsDao implements CustomerDao{
         String query = "INSERT INTO customers (customerUsername, skaterLevel) VALUES (?, ?)";
         Connection connection = DbsConnector.getInstance().getConnection();
         String username = customer.getUsername();
+
+
+
+
         String skaterLevel = customer.getSkaterLevel() == SkaterLevel.NOVICE ? "Novice":
                              customer.getSkaterLevel() == SkaterLevel.ADVANCED ? "Advanced": "Proficient";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -86,16 +95,11 @@ public class CustomerDbmsDao implements CustomerDao{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        walletDao.addWallet(customer.getWallet(), customer.getUsername());
+
     }
 
 
-    public void update() {
-        String query = "UPDATE profiles SET numCoins = ? WHERE profileName = ?";
-        Connection connection = DbsConnector.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

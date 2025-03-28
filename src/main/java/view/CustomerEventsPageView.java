@@ -1,8 +1,8 @@
 package view;
 
+import beans.WalletBean;
 import beans.EventBean;
 import beans.EventRegistrationBean;
-import beans.UserInfo;
 import controls.SignEventController;
 import exceptions.InsufficientCoinsException;
 import exceptions.NoAvailableSeats;
@@ -10,7 +10,6 @@ import exceptions.UserAlreadySignedEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
 import utils.SceneManager;
 
 import java.io.IOException;
@@ -30,13 +29,11 @@ public class CustomerEventsPageView {
     @FXML private Label eventCoinsLabel;
     @FXML private Label eventNameLabel;
     @FXML private Label eventSeatsAvailableLabel;
-    @FXML private Label coinsLabel;
-    @FXML private Label usernameLabel;
     @FXML private Label errorLabel;
     @FXML private Label registrationCodeLabel;
     @FXML private Label assignedSeatLabel;
-    @FXML private Pane provaPane;
-
+    @FXML private Label welcomeLabel;
+    @FXML private Label coinsLabel;
 
 
     String formatDateToView(String date){
@@ -53,7 +50,13 @@ public class CustomerEventsPageView {
         colDate.setCellValueFactory(cellData ->
                 new SimpleStringProperty(formatDateToView(cellData.getValue().getDate())));
 
-        provaPane.setVisible(false);
+        updateCustomerInfo();
+    }
+
+    public void updateCustomerInfo(){
+        WalletBean walletBean = signEventController.costumerInfo();
+        welcomeLabel.setText("Gentile client nel suo saldo sono presenti:");
+        coinsLabel.setText(""+walletBean.getBalance());
     }
 
 
@@ -85,6 +88,8 @@ public class CustomerEventsPageView {
 
     @FXML
     public void onEventSelected() {
+        registrationCodeLabel.setText("");
+        assignedSeatLabel.setText("");
         EventBean selected = eventTable.getSelectionModel().getSelectedItem();
         EventBean eventBeanDetails = signEventController.eventDetails(selected);
         showEventDetails(eventBeanDetails);
@@ -103,22 +108,26 @@ public class CustomerEventsPageView {
 
     @FXML
     public void submitSignToEvent(){
-        try {
-            EventBean selectedEventBean = eventTable.getSelectionModel().getSelectedItem();
-            EventRegistrationBean eventRegistrationBean= signEventController.signToEvent(selectedEventBean);
-            onEventSelected();
-            registrationCodeLabel.setText("Il codice della registrazione:"+eventRegistrationBean.getRegistrationCode());
-            assignedSeatLabel.setText("Il posto assegnato è:"+eventRegistrationBean.getAssignedSeat());
-            provaPane.setVisible(true);
-        } catch (UserAlreadySignedEvent | InsufficientCoinsException | NoAvailableSeats e) {
-            errorLabel.setText(e.getMessage());
-            System.err.println(e.getMessage());
-        }
+            try {
+                EventBean selectedEventBean = eventTable.getSelectionModel().getSelectedItem();
+                EventRegistrationBean eventRegistrationBean = signEventController.signToEvent(selectedEventBean);
+                onEventSelected();
+                registrationCodeLabel.setText("Il codice della registrazione:" + eventRegistrationBean.getRegistrationCode());
+                assignedSeatLabel.setText("Il posto assegnato è:" + eventRegistrationBean.getAssignedSeat());
+            } catch (UserAlreadySignedEvent | InsufficientCoinsException | NoAvailableSeats e) {
+                errorLabel.setText(e.getMessage());
+                System.err.println(e.getMessage());
+            }
+            updateCustomerInfo();
     }
     @FXML
     public void goToCompetitionsPage(){
 
     }
+
+
+
+
 
     @FXML
     public void goToTricksPage(){

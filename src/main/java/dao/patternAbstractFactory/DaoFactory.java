@@ -3,6 +3,7 @@ package dao.patternAbstractFactory;
 import dao.*;
 
 abstract public class DaoFactory {
+    public abstract WalletDao createWalletDao();
     public abstract UserDao createUserDao();
     public abstract CustomerDao createCostumerDao();
     public abstract OrganizerDao createOrganizerDao();

@@ -24,6 +24,8 @@ public class EventRegistrationDbmsDao implements EventRegistrationDao{
 
     @Override
     public void addEventRegistration(EventRegistration eventRegistration) {
+        eventRegistrationList.add(eventRegistration);
+
         String sql = "INSERT INTO registrations (numberRegistration, customerUsername, eventName, registrationCode, assignedSeat) " +
                 "VALUES (?, ?, ?, ?, ?)";
 

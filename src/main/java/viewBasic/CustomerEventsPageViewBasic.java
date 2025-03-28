@@ -1,7 +1,10 @@
 package viewBasic;
 
+import beans.WalletBean;
 import beans.EventBean;
+import beans.EventRegistrationBean;
 import controls.SignEventController;
+import exceptions.EmptyFieldException;
 import exceptions.InsufficientCoinsException;
 import exceptions.NoAvailableSeats;
 import exceptions.UserAlreadySignedEvent;
@@ -24,14 +27,21 @@ public class CustomerEventsPageViewBasic {
     @FXML private TextField yearField;
     @FXML private Label coinsLabel;
     @FXML private Label usernameLabel;
+    @FXML private Label generateCodeLabel;
+    @FXML private Label assignedSeatLabel;
+    @FXML private TextField eventNameField;
     @FXML private Label errorLabel;
+    @FXML private Label eventDescriptionLabel;
+    @FXML private Label eventSeatsAvailableLabel;
+    @FXML private Label eventCoinsLabel;
+    @FXML private Label eventNameLabel;
     @FXML private ListView<String> eventList;
 
-    private EventBean selectedEventBean;
 
     public void initialize() {
         List<EventBean> availableEventsBean =  signEventController.allAvailableEvents();
         loadEvents( availableEventsBean);
+        updateWalletInfo();
     }
 
     String formatLocationToView(String location){
@@ -44,12 +54,27 @@ public class CustomerEventsPageViewBasic {
         return datArr[1]+"-"+datArr[0]+"-"+datArr[2];
     }
 
-    public void submitReview(){
 
+    public void updateWalletInfo(){
+        WalletBean walletBean = signEventController.costumerInfo();
+        coinsLabel.setText(""+walletBean.getBalance());
     }
 
     public void eventDetails(){
+        try {
+            String eventName = eventNameField.getText();
+            if(eventName.isEmpty()){throw new EmptyFieldException("Campo nome evento risulta vuoto!!");}
+            EventBean eventBean = new EventBean(eventName);
+            EventBean eventBeanDetailed = signEventController.eventDetails(eventBean);
+            eventNameLabel.setText(eventBeanDetailed.getName());
+            eventCoinsLabel.setText(""+eventBeanDetailed.getCoins());
+            eventDescriptionLabel.setText(eventBeanDetailed.getDescription());
+            eventSeatsAvailableLabel.setText(""+eventBeanDetailed.getAvailableRegistrations());
 
+
+        }catch(EmptyFieldException e){
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     public void loadEvents(List<EventBean> toLoadEvents) {
@@ -71,7 +96,7 @@ public class CustomerEventsPageViewBasic {
     String formatDate(String month, String day, String year){
         return day+"-"+month+"-20"+year;
     }
-    String formatLocation(String location){return location.replace("/","-");};
+    String formatLocation(String location){return location.replace("/","-");}
 
     @FXML
     public void searchEvents() {
@@ -90,10 +115,20 @@ public class CustomerEventsPageViewBasic {
     @FXML
     public void submitSignToEvent(){
         try {
-            signEventController.signToEvent(selectedEventBean);
-        } catch (UserAlreadySignedEvent | InsufficientCoinsException | NoAvailableSeats e) {
+            System.out.println("Prova");
+            try {
+                String eventName = eventNameField.getText();
+                System.out.println(eventName);
+                if(eventName.isEmpty()) throw  new EmptyFieldException("Campo nome evento risulta vuoto!!!");
+                EventBean eventBean = new EventBean(eventName);
+                EventRegistrationBean eventRegistrationBean = signEventController.signToEvent(eventBean);
+                assignedSeatLabel.setText(eventRegistrationBean.getAssignedSeat());
+                generateCodeLabel.setText(eventRegistrationBean.getAssignedSeat());
+            } catch (UserAlreadySignedEvent | InsufficientCoinsException | NoAvailableSeats e) {
+                errorLabel.setText(e.getMessage());
+            }
+        }catch(EmptyFieldException e){
             errorLabel.setText(e.getMessage());
-            System.err.println(e.getMessage());
         }
     }
 

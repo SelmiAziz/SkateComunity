@@ -13,6 +13,7 @@ import login.User;
 import login.Role;
 import model.Customer;
 import model.Organizer;
+import model.Wallet;
 import utils.Session;
 import utils.SessionManager;
 import utils.SkaterLevel;
@@ -51,7 +52,8 @@ public class LoginController {
             SkaterLevel skillLevel = registerUserBean.getSkillLevel().equals("Novice") ? SkaterLevel.NOVICE
                                     : registerUserBean.getSkillLevel().equals("Proficient") ? SkaterLevel.PROFICIENT
                                     : SkaterLevel.ADVANCED;
-            Customer costumer =  new Customer(username,password,dateOfBirth,skillLevel);
+            Wallet wallet = new Wallet();
+            Customer costumer =  new Customer(username,password,dateOfBirth,skillLevel, wallet);
             costumerDao.addCustomer(costumer);
             user = costumer;
         }else{
@@ -61,7 +63,6 @@ public class LoginController {
         }
         SessionManager.getInstance().createSession(new Session(user.getUsername(), user.getRole()));
     }
-
 
 
 

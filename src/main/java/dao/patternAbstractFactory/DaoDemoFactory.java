@@ -5,6 +5,7 @@ import dao.*;
 
 public class DaoDemoFactory extends DaoFactory {
 
+    public WalletDemoDao createWalletDao(){return WalletDemoDao.getInstance();}
 
     public UserDemoDao createUserDao(){
         return UserDemoDao.getInstance();

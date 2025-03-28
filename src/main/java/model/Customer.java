@@ -12,14 +12,18 @@ public class Customer extends User {
     private SkaterLevel skaterLevel;
     private List<SkateboardCommission> skateboardCommissionsSubmittedList;
     private List<SkateboardCommission> skateboardCommissionsApproved;
+    private Wallet wallet;
 
-
-    public Customer(String username, String password, String dateOfBirth, SkaterLevel skaterLevel){
+    public Customer(String username, String password, String dateOfBirth, SkaterLevel skaterLevel, Wallet wallet){
         super(username,password,dateOfBirth);
         this.role = Role.COSTUMER;
+        this.wallet = wallet;
         this.eventRegistrationList = new ArrayList<>();
         this.skaterLevel = skaterLevel;
     }
+
+
+
 
 
     public void addEventRegistration(EventRegistration eventRegistration){this.eventRegistrationList.add(eventRegistration);}
@@ -33,6 +37,16 @@ public class Customer extends User {
     public SkaterLevel getSkaterLevel(){
         return this.skaterLevel;
     }
+
+
+    public void setWallet(Wallet wallet){
+        this.wallet = wallet;
+    }
+
+    public Wallet getWallet(){
+        return this.wallet;
+    }
+
 
     public List<EventRegistration> getEventRegistrationList() {
         return eventRegistrationList;

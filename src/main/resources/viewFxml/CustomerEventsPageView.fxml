@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -14,7 +13,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
@@ -87,43 +85,46 @@
       <AnchorPane prefHeight="20.0" prefWidth="1200.0" style="-fx-background-color: #1ABC9C;" BorderPane.alignment="CENTER" />
    </bottom>
    <left>
-      <AnchorPane prefHeight="664.0" prefWidth="550.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="543.0" prefWidth="550.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="36.0" layoutY="60.0" text="Nome evento:" /> <!-- Spostato più in basso -->
-            <Label fx:id="eventNameLabel" layoutX="174.0" layoutY="60.0" />
+            <Label layoutX="40.0" layoutY="200.0" text="Nome evento:" /> <!-- Spostato più in basso -->
+            <Label fx:id="eventNameLabel" layoutX="178.0" layoutY="200.0" prefHeight="18.0" prefWidth="67.0" />
 
-            <Label layoutX="36.0" layoutY="98.0" text="Descrizione evento:" /> <!-- Spostato più in basso -->
-            <Label fx:id="eventDescriptionLabel" layoutX="174.0" layoutY="98.0" prefHeight="18.0" prefWidth="354.0" wrapText="true" />
+            <Label layoutX="40.0" layoutY="230.0" text="Descrizione evento:" /> <!-- Spostato più in basso -->
+            <Label fx:id="eventDescriptionLabel" layoutX="178.0" layoutY="230.0" prefHeight="18.0" prefWidth="354.0" wrapText="true" />
 
-            <Label layoutX="35.0" layoutY="137.0" text="Coins richiesti:" /> <!-- Spostato più in basso -->
-            <Label fx:id="eventCoinsLabel" layoutX="174.0" layoutY="137.0" />
+            <Label layoutX="40.0" layoutY="260.0" text="Coins richiesti:" /> <!-- Spostato più in basso -->
+            <Label fx:id="eventCoinsLabel" layoutX="179.0" layoutY="260.0" prefHeight="18.0" prefWidth="66.0" />
 
-            <Label layoutX="36.0" layoutY="172.0" text="Posti disponibili:" /> <!-- Spostato più in basso -->
-            <Label fx:id="eventSeatsAvailableLabel" layoutX="178.0" layoutY="172.0" />
-
-            <Button layoutX="35.0" layoutY="465.0" onMouseClicked="#submitSignToEvent" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
-               <effect>
-                  <DropShadow height="5.0" radius="2.0" width="5.0" />
-               </effect></Button>
-            <Label fx:id="errorLabel" layoutX="29.0" layoutY="587.0" prefHeight="22.0" prefWidth="322.0" textFill="#208672">
+            <Label layoutX="40.0" layoutY="290.0" text="Posti disponibili:" /> <!-- Spostato più in basso -->
+            <Label fx:id="eventSeatsAvailableLabel" layoutX="179.0" layoutY="290.0" prefHeight="18.0" prefWidth="34.0" />
+            <Label fx:id="errorLabel" layoutX="27.0" layoutY="549.0" prefHeight="22.0" prefWidth="458.0" textFill="#208672">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="35.0" layoutY="25.0" prefHeight="18.0" prefWidth="463.0" text="Clicca ad un evento nella tabella degli eventi accanto ed iscriviti!!" />
-            <Label fx:id="registrationCodeLabel" layoutX="35.0" layoutY="456.0" prefHeight="18.0" prefWidth="377.0" />
-            <Label fx:id="assignedSeatLabel" layoutX="36.0" layoutY="496.0" prefHeight="18.0" prefWidth="381.0" />
-            <StackPane layoutX="190.0" layoutY="339.0" prefHeight="252.0" prefWidth="368.0" />
-            <Pane fx:id="provaPane" layoutX="29.0" layoutY="232.0" prefHeight="200.0" prefWidth="378.0">
+            <Label layoutX="38.0" layoutY="157.0" prefHeight="18.0" prefWidth="463.0" text="Clicca ad un evento nella tabella degli eventi accanto ed iscriviti!!" />
+            <Label fx:id="registrationCodeLabel" layoutX="40.0" layoutY="426.0" prefHeight="18.0" prefWidth="377.0" />
+            <Label fx:id="assignedSeatLabel" layoutX="38.0" layoutY="466.0" prefHeight="18.0" prefWidth="381.0" />
+
+                  <Button layoutX="392.0" layoutY="286.0" onMouseClicked="#submitSignToEvent" prefHeight="26.0" prefWidth="93.0" style="-fx-background-color: #1ABC9C;" text="conferma" textFill="WHITE">
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0" />
+               </effect>
+            </Button>
+            <Pane layoutX="34.0" layoutY="40.0" prefHeight="76.0" prefWidth="434.0">
                <children>
-                  <TextField layoutX="14.0" layoutY="74.0" prefHeight="26.0" prefWidth="189.0" />
-                  <RadioButton layoutX="203.0" layoutY="124.0" mnemonicParsing="false" text="prepagata" />
-                  <TextField layoutX="214.0" layoutY="74.0" prefHeight="26.0" prefWidth="146.0" />
-                  <RadioButton layoutX="296.0" layoutY="124.0" mnemonicParsing="false" text="debito" />
-                  <RadioButton layoutX="120.0" layoutY="124.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="83.0" text="credito" />
-                  <Label layoutX="14.0" layoutY="56.0" text="Numero di carta" textFill="#00000087" />
-                  <Label layoutX="214.0" layoutY="56.0" text="Data di scadenza" textFill="#00000087" />
-                  <Label layoutX="21.0" layoutY="124.0" text="Tipo di carta:" />
+                  <ImageView fitHeight="65.0" fitWidth="72.0" layoutX="344.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/coins.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="coinsLabel" layoutX="317.0" layoutY="18.0" prefHeight="32.0" prefWidth="55.0" text="100" textAlignment="RIGHT" textFill="#1abc9c">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="welcomeLabel" layoutX="25.0" layoutY="26.0" prefHeight="18.0" prefWidth="268.0" />
                </children>
             </Pane> <!-- Spostato più in basso -->
          </children>

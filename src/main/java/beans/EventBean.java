@@ -42,6 +42,10 @@ public class EventBean {
         this.date = date;
     }
 
+    public EventBean(String eventName){
+        this.name = eventName;
+    }
+
     public EventBean(String name, String description, int coins, int availableRegistrations){
         this.name = name;
         this.description = description;

@@ -1,5 +1,6 @@
 package controls;
 
+import beans.WalletBean;
 import beans.EventRegistrationBean;
 import dao.*;
 import dao.patternAbstractFactory.DaoFactory;
@@ -7,10 +8,7 @@ import beans.EventBean;
 import exceptions.InsufficientCoinsException;
 import exceptions.NoAvailableSeats;
 import exceptions.UserAlreadySignedEvent;
-import model.Customer;
-import model.Event;
-import model.EventRegistration;
-import model.Organizer;
+import model.*;
 import utils.SessionManager;
 
 import java.util.ArrayList;
@@ -22,6 +20,7 @@ public class SignEventController {
     private final EventRegistrationDao eventRegistrationDao = daoFactory.createEventRegistrationDao();
     private final CustomerDao costumerDao = daoFactory.createCostumerDao();
     private final SessionManager sessionManager = SessionManager.getInstance();
+    private final PaymentController paymentController = new PaymentController();
 
 
     public EventBean eventDetails(EventBean eventBean){
@@ -74,9 +73,16 @@ public class SignEventController {
             throw new NoAvailableSeats("Non sono presenti più posti disponibili per tale evento");
         }
 
+        try{
+            paymentController.payWithCoins(currentCustomer.getWallet(), event.getParticipationFee());
+        }catch(InsufficientCoinsException e){
+            throw e;
+        }
+
         int registrationNumber = event.getCurrentRegistrations() +1;
         String registrationCode = generateCode(event.getName(),event.getCurrentRegistrations());
         String availableSeatCode = findAvailableSpotForEvent(registrationNumber);
+
         EventRegistration newEventRegistration = new EventRegistration(registrationNumber, registrationCode, availableSeatCode);
         newEventRegistration.setParticipant(currentCustomer);
         newEventRegistration.setEvent(event);
@@ -97,6 +103,12 @@ public class SignEventController {
         return eventBeanList;
     }
 
-
+    public WalletBean costumerInfo(){
+        String username = sessionManager.getSession().getUsername();
+        Customer customer = costumerDao.selectCustomerByUsername(username);
+        Wallet wallet = customer.getWallet();
+        WalletBean walletBeanBean = new WalletBean(wallet.getBalance());
+        return walletBeanBean;
+    }
 
 }
