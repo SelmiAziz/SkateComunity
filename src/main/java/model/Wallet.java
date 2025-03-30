@@ -41,5 +41,5 @@ public class Wallet {
         return this.walletId;
     }
 
-
+    public String toCsvString(){ return String.format("%d,%d", walletId, balance);}
 }

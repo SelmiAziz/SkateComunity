@@ -47,13 +47,7 @@ public class User {
 
     public void setDateOfBirth(String dateOfBirth){this.dateOfBirth = dateOfBirth;}
 
-
-
-
-
-
-
-
+    public String toCsvString(){ return String.format("%s,%s,%s,%s", username, password, dateOfBirth, role);}
 }
 
 

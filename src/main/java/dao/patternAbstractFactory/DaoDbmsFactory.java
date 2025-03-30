@@ -4,7 +4,7 @@ import dao.*;
 
 public class DaoDbmsFactory extends DaoFactory {
 
-    public WalletDbmsDao createWalletDao(){return WalletDbmsDao.getInstance();}
+    public WalletDao createWalletDao(){return WalletFileSystemDao.getInstance();}
 
     public UserDbmsDao createUserDao(){
         return UserDbmsDao.getInstance();
