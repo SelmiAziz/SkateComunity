@@ -13,37 +13,41 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CustomerTricksPageView">
     <top>
         <AnchorPane prefHeight="95.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
-            <children>
-                <Button layoutX="1044.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="50.0" prefWidth="119.0" style="-fx-background-color: #949494;" text="Log Out" textFill="WHITE">
-                    <font>
+         <children>
+            <AnchorPane prefHeight="95.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                  <Button layoutX="1044.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="50.0" prefWidth="119.0" style="-fx-background-color: #949494;" text="Log Out" textFill="WHITE">
+                     <font>
                         <Font name="System Bold" size="18.0" />
-                    </font>
-                    <effect>
+                     </font>
+                     <effect>
                         <DropShadow height="6.17" radius="3.2675" width="8.9" />
-                    </effect>
-                </Button>
-                <Label layoutX="50.0" layoutY="40.0" onMouseClicked="#goToHomePage" prefHeight="35.0" prefWidth="90.0" text="Home" textFill="#1abc9c">
-                    <font>
+                     </effect>
+                  </Button>
+                  <Label layoutX="50.0" layoutY="40.0" onMouseClicked="#goToHomePage" prefHeight="35.0" prefWidth="90.0" text="Home" textFill="#1abc9c">
+                     <font>
                         <Font size="24.0" />
-                    </font>
-                </Label>
-                <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToEvents" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
-                    <font>
+                     </font>
+                  </Label>
+                  <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToCommissionsPage" prefHeight="35.0" prefWidth="78.0" text="Board" textFill="#1abc9c">
+                     <font>
                         <Font size="24.0" />
-                    </font>
-                </Label>
-                <Label layoutX="248.0" layoutY="40.0" prefHeight="35.0" prefWidth="153.0" text="Learn" textFill="#1abc9c">
-                    <font>
+                     </font>
+                  </Label>
+                  <Label layoutX="370.0" layoutY="40.0" prefHeight="35.0" prefWidth="153.0" text="Learn" textFill="#1abc9c">
+                     <font>
                         <Font size="24.0" />
-                    </font>
-                </Label>
-                <Label fx:id="goToCompetitionsPage" layoutX="332.0" layoutY="40.0" prefHeight="35.0" prefWidth="153.0" text="Competitions" textFill="#1abc9c">
-                    <font>
+                     </font>
+                  </Label>
+                  <Label layoutX="241.0" layoutY="40.0" onMouseClicked="#goToCompetitionsPage" prefHeight="35.0" prefWidth="107.0" text="Compete" textFill="#1abc9c">
+                     <font>
                         <Font size="24.0" />
-                    </font>
-                </Label>
-                <Line endX="6.0" layoutX="301.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
-            </children>
+                     </font>
+                  </Label>
+                  <Line endX="13.0" layoutX="423.0" layoutY="81.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
+               </children>
+            </AnchorPane>
+         </children>
         </AnchorPane>
     </top>
     <left>

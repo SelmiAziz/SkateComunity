@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import utils.SceneManager;
 import utils.SessionManager;
-import viewBasic.CustomerEventsPageViewBasic;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,23 +47,28 @@ public class CustomerTricksPageView {
     }
 
     @FXML
-    public void goToEvents() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerEventsPageView.fxml"));
+    public void goToCompetitionsPage() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerCompetitionsPageView.fxml"));
         Parent root = null;
         try {
             root = loader.load();
-            CustomerEventsPageView userEventsPageView = loader.getController();
+            CustomerCompetitionsPageView userEventsPageView = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
             stage =SceneManager.getInstance().getStage();
             stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
-            Platform.runLater(userEventsPageView::loadEvents);
+            Platform.runLater(userEventsPageView::loadCompetitions);
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
+
+    @FXML
+    public void goToCommissionsPage(){
+
+    }
 
 
     public void showTrick(TrickBean trickBean){

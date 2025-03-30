@@ -1,5 +1,5 @@
 package model.decorator;
 
-public class ConcaveDecorator {
+public class NoseConcaveDecorator {
     //in base  ai cm
 }

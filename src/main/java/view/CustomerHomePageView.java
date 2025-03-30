@@ -8,9 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import beans.UserInfo;
 import utils.SceneManager;
-import viewBasic.CustomerEventsPageViewBasic;
 
 import java.io.IOException;
 
@@ -28,30 +26,29 @@ public class CustomerHomePageView {
 
     }
 
+    @FXML
+    public void goToCommissionsPage(){}
 
 
     @FXML
-    public void goToEvents() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerEventsPageView.fxml"));
+    public void goToCompetitionsPage() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerCompetitionsPageView.fxml"));
         Parent root = null;
         try {
             root = loader.load();
-            CustomerEventsPageView userEventsPageView = loader.getController();
+            CustomerCompetitionsPageView userEventsPageView = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
             stage = sceneManager.getStage();
             stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
-            Platform.runLater(userEventsPageView::loadEvents);
+            Platform.runLater(userEventsPageView::loadCompetitions);
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
-    @FXML
-    public void goToCompetitionsPage(){
 
-    }
 
     @FXML
     public void goToTricksPage(){

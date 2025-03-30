@@ -1,8 +1,7 @@
 package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
-import login.Role;
-import model.Event;
+import model.Competition;
 import model.Organizer;
 import utils.DbsConnector;
 
@@ -28,16 +27,16 @@ public class OrganizerDbmsDao implements OrganizerDao {
 
     @Override
     public Organizer selectOrganizerByUsername(String profileName) {
-        EventDao eventDao = DaoFactory.getInstance().createEventDao();
+        CompetitionDao competitionDao = DaoFactory.getInstance().createCompetitionDao();
         for (Organizer organizer : organizerList) {
             if (organizer.getUsername().equals(profileName)) {
                 return organizer;
             }
         }
 
-        String query = "SELECT u.username, u.password, u.dateOfBirth, e.eventName " +
+        String query = "SELECT u.username, u.password, u.dateOfBirth, e.competitionName " +
                 "FROM users u " +
-                "LEFT JOIN events e ON u.username = e.organizerUsername " +
+                "LEFT JOIN competitions e ON u.username = e.organizerUsername " +
                 "WHERE u.username = ?";
 
         Connection connection = DbsConnector.getInstance().getConnection();
@@ -47,7 +46,7 @@ public class OrganizerDbmsDao implements OrganizerDao {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 Organizer organizer = null;
-                Set<String> eventNames = new HashSet<>();
+                Set<String> competitionNames = new HashSet<>();
 
                 while (resultSet.next()) {
                     if (organizer == null) {
@@ -57,19 +56,18 @@ public class OrganizerDbmsDao implements OrganizerDao {
                         organizer = new Organizer(username, password, dateOfBirth);
                     }
 
-                    String eventName = resultSet.getString("eventName");
-                    if (eventName != null) {
-                        eventNames.add(eventName);
+                    String competitionName = resultSet.getString("competitionName");
+                    if (competitionName != null) {
+                        competitionNames.add(competitionName);
                     }
                 }
 
                 if (organizer != null) {
-                    // Recupero gli eventi completi chiamando EventDao
-                    for (String eventName : eventNames) {
-                        Event event = eventDao.selectEventByName(eventName);
+                    for (String competitionName : competitionNames) {
+                        Competition competition = competitionDao.selectCompetitionByName(competitionName);
 
-                           organizer.addEvent(event);
-                           event.setOrganizer(organizer);
+                           organizer.addCompetition(competition);
+                           competition.setOrganizer(organizer);
                     }
 
                     organizerList.add(organizer);

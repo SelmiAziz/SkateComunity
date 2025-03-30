@@ -1,26 +1,26 @@
 package model;
 
-public class EventRegistration {
+public class CompetitionRegistration {
     private int registrationId;
     private int participationNumber;
     private Customer participant;
-    private Event event;
+    private Competition competition;
     private String registrationCode;
-    private String assignedSeat;
+    private String assignedTurn;
 
-    public EventRegistration(int registrationId , int participationNumber, String registrationCode, String assignedSeat){
+    public CompetitionRegistration(int registrationId , int participationNumber, String registrationCode, String assignedTurn){
         this.registrationId = registrationId;
         this.participationNumber = participationNumber;
         this.registrationCode = registrationCode;
-        this.assignedSeat = assignedSeat;
+        this.assignedTurn = assignedTurn;
     }
 
 
 
-    public EventRegistration(int participationNumber,  String registrationCode, String assignedSeat){
+    public CompetitionRegistration(int participationNumber, String registrationCode, String assignedTurn){
         this.participationNumber = participationNumber;
         this.registrationCode = registrationCode;
-        this.assignedSeat = assignedSeat;
+        this.assignedTurn = assignedTurn;
     }
 
 
@@ -43,23 +43,23 @@ public class EventRegistration {
 
     public int getRegistrationId(){return this.registrationId;}
 
-    public void setEvent(Event event){
-        this.event = event;
+    public void setCompetition(Competition competition){
+        this.competition = competition;
     }
 
-    public Event getEvent(){
-        return this.event;
+    public Competition getCompetition(){
+        return this.competition;
     }
 
     public void setRegistrationId(int id){this.registrationId = id;}
 
 
-    public void setAssignedSeat(String assignedSeat) {
-        this.assignedSeat = assignedSeat;
+    public void setAssignedTurn(String assignedTurn) {
+        this.assignedTurn = assignedTurn;
     }
 
-    public String getAssignedSeat() {
-        return assignedSeat;
+    public String getAssignedTurn() {
+        return assignedTurn;
     }
 
 

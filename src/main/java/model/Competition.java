@@ -3,18 +3,18 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Event {
-    private final String name;
+public class Competition {
+    private final String competitionName;
     private final String description;
     private final String date;
     private final int participationFee;
     private final String location;
     private final Integer maxRegistrations;
-    private List<EventRegistration> requestList;
+    private List<CompetitionRegistration> requestList;
     private  Organizer organizer;
 
-    public Event(String name, String description, String date, String location, int participationFee, int maxRegistrations){
-        this.name = name;
+    public Competition(String competitionName, String description, String date, String location, int participationFee, int maxRegistrations){
+        this.competitionName = competitionName;
         this.description = description;
         this.date = date;
         this.participationFee= participationFee;
@@ -33,7 +33,7 @@ public class Event {
     }
 
     public  String getName(){
-        return this.name;
+        return this.competitionName;
     }
 
     public String getDescription(){
@@ -62,11 +62,11 @@ public class Event {
 
 
 
-    public void addEventRegistration(EventRegistration request){
-        this.requestList.add(request);
+    public void addCompetitionRegistration(CompetitionRegistration competitionRegistration){
+        this.requestList.add(competitionRegistration);
     }
 
-    public  List<EventRegistration> getEventRegistrations(){
+    public  List<CompetitionRegistration> getCompetitionRegistrations(){
         return this.requestList;
     }
 

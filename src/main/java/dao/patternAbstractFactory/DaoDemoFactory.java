@@ -19,9 +19,9 @@ public class DaoDemoFactory extends DaoFactory {
         return OrganizerDemoDao.getInstance();
     }
 
-    public EventDemoDao createEventDao(){return EventDemoDao.getInstance();}
+    public CompetitionDemoDao createCompetitionDao(){return CompetitionDemoDao.getInstance();}
 
     public TrickDemoDao createTrickDao(){return TrickDemoDao.getInstance();}
 
-    public EventRegistrationDemoDao createEventRegistrationDao(){return EventRegistrationDemoDao.getInstance();}
+    public CompetitionRegistrationDemoDao createCompetitionRegistrationDao(){return CompetitionRegistrationDemoDao.getInstance();}
 }

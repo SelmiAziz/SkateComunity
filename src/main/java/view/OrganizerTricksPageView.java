@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import utils.SceneManager;
 import utils.SessionManager;
-import viewBasic.OrganizerEventsPageViewBasic;
 
 import java.io.IOException;
 import java.util.List;
@@ -85,19 +84,19 @@ public class OrganizerTricksPageView {
 
 
     @FXML
-    public void goToEvents() {
+    public void goToCompetitionsPage() {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerEventsPageView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerCompetitionsPageView.fxml"));
         Parent root = null;
         try {
             root = loader.load();
-            OrganizerEventsPageView organizerEventsPageView = loader.getController();
+            OrganizerCompetitionsPageView organizerEventsPageView = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
             stage = SceneManager.getInstance().getStage();
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
-            Platform.runLater(organizerEventsPageView::loadEvents);
+            Platform.runLater(organizerEventsPageView::loadCompetitions);
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -143,7 +142,7 @@ public class OrganizerTricksPageView {
     }
 
     @FXML
-    public void goToCompetitionsPage(){
+    public void goToCommissionsPage(){
 
     }
 

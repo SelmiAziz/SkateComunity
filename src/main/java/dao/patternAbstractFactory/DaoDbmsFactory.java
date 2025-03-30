@@ -18,9 +18,9 @@ public class DaoDbmsFactory extends DaoFactory {
         return OrganizerDbmsDao.getInstance();
     }
 
-    public EventDbmsDao createEventDao(){ return EventDbmsDao.getInstance();}
+    public CompetitionDbmsDao createCompetitionDao(){ return CompetitionDbmsDao.getInstance();}
 
-    public EventRegistrationDbmsDao createEventRegistrationDao(){return EventRegistrationDbmsDao.getInstance();};
+    public CompetitionRegistrationDbmsDao createCompetitionRegistrationDao(){return CompetitionRegistrationDbmsDao.getInstance();};
 
     public TrickDbmsDao createTrickDao(){return TrickDbmsDao.getInstance();}
 }

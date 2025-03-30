@@ -1,7 +1,7 @@
 package beans;
 
 
-public class EventBean {
+public class CompetitionBean {
     private String name;
     private String description;
     private String location;
@@ -11,7 +11,7 @@ public class EventBean {
     private int maxRegistrations;
     private int currentRegistrations;
 
-    public EventBean(String name, String description, String date, String location, int coins,int maxRegistrations){
+    public CompetitionBean(String name, String description, String date, String location, int coins, int maxRegistrations){
         this.name = name;
         this.description = description;
         this.date = date;
@@ -20,7 +20,7 @@ public class EventBean {
         this.maxRegistrations = maxRegistrations;
     }
 
-    public EventBean(String name, String description, String date, String location, int coins,int currentRegistrations,int maxRegistrations){
+    public CompetitionBean(String name, String description, String date, String location, int coins, int currentRegistrations, int maxRegistrations){
         this.name = name;
         this.description = description;
         this.date = date;
@@ -31,22 +31,22 @@ public class EventBean {
     }
 
 
-    public EventBean(String name, String location, String date){
+    public CompetitionBean(String name, String location, String date){
         this.name = name;
         this.location = location;
         this.date = date;
     }
 
-    public EventBean(String date, String country){
+    public CompetitionBean(String date, String country){
         this.location = country;
         this.date = date;
     }
 
-    public EventBean(String eventName){
+    public CompetitionBean(String eventName){
         this.name = eventName;
     }
 
-    public EventBean(String name, String description, int coins, int availableRegistrations){
+    public CompetitionBean(String name, String description, int coins, int availableRegistrations){
         this.name = name;
         this.description = description;
         this.coins = coins;

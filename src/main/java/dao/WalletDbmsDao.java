@@ -1,7 +1,6 @@
 package dao;
 
-import model.Customer;
-import model.EventRegistration;
+
 import model.Wallet;
 import utils.DbsConnector;
 
@@ -67,18 +66,18 @@ public class WalletDbmsDao implements  WalletDao{
     }
 
     @Override
-    public void addWallet(Wallet wallet, String costumerUsername) {
+    public void addWallet(Wallet wallet, String walletOwner) {
         walletList.add(wallet);
 
 
-        String sql = "INSERT INTO wallets (balance,balanceOwner) " +
+        String sql = "INSERT INTO wallets (balance,walletOwner) " +
                 "VALUES (?,?)";
 
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, wallet.getBalance());
-            stmt.setString(2,costumerUsername);
+            stmt.setString(2,walletOwner);
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {

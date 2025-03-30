@@ -38,7 +38,7 @@ public class CustomerDbmsDao implements CustomerDao{
                 "FROM users u " +
                 "LEFT JOIN registrations r ON r.customerUsername = u.username " +
                 "LEFT JOIN customers c ON u.username = c.customerUsername " +
-                "LEFT JOIN wallets w ON w.balanceOwner = c.customerUsername " +
+                "LEFT JOIN wallets w ON w.walletOwner = c.customerUsername " +
                 "WHERE u.username = ? " +
                 "GROUP BY u.username, u.password, u.dateOfBirth, w.walletId , c.skaterLevel";
 

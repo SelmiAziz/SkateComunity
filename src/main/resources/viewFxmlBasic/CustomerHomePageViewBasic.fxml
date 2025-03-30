@@ -33,7 +33,7 @@
                         <Font size="24.0" />
                     </font>
                 </Label>
-                <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToEvents" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
+                <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToCompetitionsPage" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
                     <font>
                         <Font size="24.0" />
                     </font>

@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.OrganizerEventsPageView">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.OrganizerCompetitionsPageView">
    <top>
       <AnchorPane prefHeight="95.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
@@ -33,18 +33,18 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="150.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
+            <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToCommissionsPage" prefHeight="35.0" prefWidth="163.0" text="Commissions" textFill="#1abc9c">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="248.0" layoutY="40.0" onMouseClicked="#goToTricksPage" prefHeight="35.0" prefWidth="90.0" text="Tricks" textFill="#1abc9c">
+            <Label fx:id="goToTricksPage" layoutX="505.0" layoutY="40.0" onMouseClicked="#goToTricksPage" prefHeight="35.0" prefWidth="90.0" text="Tricks" textFill="#1abc9c">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Line endX="18.0" layoutX="203.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
-            <Label fx:id="goToCompetitionsPage" layoutX="338.0" layoutY="40.0" prefHeight="35.0" prefWidth="153.0" text="Competitions" textFill="#1abc9c">
+            <Line endX="97.0" layoutX="383.0" layoutY="79.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
+            <Label layoutX="330.0" layoutY="40.0" prefHeight="35.0" prefWidth="153.0" text="Competitions" textFill="#1abc9c">
                <font>
                   <Font size="24.0" />
                </font>
@@ -55,14 +55,14 @@
    <left>
       <AnchorPane prefHeight="705.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;">
          <children>
-            <Label layoutX="20" layoutY="50" text="Event Name:" />
-            <TextField fx:id="eventNameField" layoutX="150" layoutY="50" prefWidth="180" />
+            <Label layoutX="20" layoutY="50" text="Competition Name:" />
+            <TextField fx:id="competitionNameField" layoutX="150" layoutY="50" prefWidth="180" />
 
-            <Label layoutX="20" layoutY="100" text="Event Date:" />
-            <DatePicker fx:id="eventDatePicker" layoutX="150" layoutY="100" prefWidth="180" />
+            <Label layoutX="20" layoutY="100" text="Competition Date:" />
+            <DatePicker fx:id="competitionDatePicker" layoutX="150" layoutY="100" prefWidth="180" />
 
             <Label layoutX="20" layoutY="150" text="Description:" />
-            <TextArea fx:id="eventDescriptionArea" layoutX="150" layoutY="150" prefHeight="80" prefWidth="180" />
+            <TextArea fx:id="competitionDescriptionArea" layoutX="150" layoutY="150" prefHeight="80" prefWidth="180" />
 
             <Label layoutX="20" layoutY="250" prefHeight="18.0" prefWidth="63.0" text="Location:" />
 
@@ -70,7 +70,7 @@
 
             <Label layoutX="20.0" layoutY="357.0" text="Max Registrations:" />
 
-            <Button fx:id="createEventButton" layoutX="150" layoutY="450" onMouseClicked="#createEvent" prefWidth="180" text="Create Event" textFill="#282828">
+            <Button fx:id="createCompetitionButton" layoutX="150" layoutY="450" onMouseClicked="#createCompetition" prefWidth="180" text="Create Competition" textFill="#282828">
                <effect>
                   <DropShadow height="4.0" radius="1.5" width="4.0" />
                </effect></Button>
@@ -91,7 +91,7 @@
    <center>
       <AnchorPane prefHeight="647.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="eventTable" layoutX="24.0" layoutY="42.0" prefHeight="368.0" prefWidth="803.0">
+            <TableView fx:id="competitionTable" layoutX="24.0" layoutY="42.0" prefHeight="368.0" prefWidth="803.0">
                <columns>
                   <TableColumn fx:id="colName" prefWidth="84.0" text="Name" />
                   <TableColumn fx:id="colDescription" prefWidth="276.0" text="Description" />

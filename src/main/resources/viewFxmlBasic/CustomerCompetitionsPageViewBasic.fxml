@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -16,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewBasic.CustomerEventsPageViewBasic">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewBasic.CustomerCompetitionsPageViewBasic">
     <top>
         <AnchorPane prefHeight="116.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
             <children>
@@ -33,7 +32,7 @@
                         <Font size="24.0" />
                     </font>
                 </Label>
-                <Label layoutX="150.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Events" textFill="#1abc9c">
+                <Label layoutX="150.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Competitions" textFill="#1abc9c">
                     <font>
                         <Font size="24.0" />
                     </font>
@@ -60,8 +59,8 @@
                      <font>
                         <Font size="21.0" />
                      </font>
-                  </Label> <!-- Spostato più in basso -->
-                      <Label fx:id="eventDescriptionLabel" layoutX="113.0" layoutY="25.0" prefHeight="18.0" prefWidth="193.0" text="Saldo Attuale:" wrapText="true" />
+                  </Label>
+                  <Label layoutX="124.0" layoutY="25.0" prefHeight="18.0" prefWidth="85.0" text="Saldo Attuale:" wrapText="true" />
                </children>
             </Pane>
             </children>
@@ -70,18 +69,18 @@
     <left>
         <AnchorPane prefHeight="664.0" prefWidth="550.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
             <children>
-                <Label layoutX="36.0" layoutY="60.0" text="Nome evento:" /> <!-- Spostato più in basso -->
-                <Label fx:id="eventNameLabel" layoutX="174.0" layoutY="60.0" />
+                <Label layoutX="36.0" layoutY="60.0" text="Nome competizione:" /> <!-- Spostato più in basso -->
+                <Label fx:id="competitionNameLabel" layoutX="174.0" layoutY="60.0" />
 
-                <Label layoutX="36.0" layoutY="98.0" text="Descrizione evento:" />
+                <Label layoutX="36.0" layoutY="98.0" text="Descrizione competizione:" />
 
                 <Label layoutX="35.0" layoutY="137.0" text="Coins richiesti:" /> <!-- Spostato più in basso -->
-                <Label fx:id="eventCoinsLabel" layoutX="174.0" layoutY="137.0" />
+                <Label fx:id="competitionCoinsLabel" layoutX="174.0" layoutY="137.0" />
 
                 <Label layoutX="36.0" layoutY="172.0" text="Posti disponibili:" /> <!-- Spostato più in basso -->
-                <Label fx:id="eventSeatsAvailableLabel" layoutX="178.0" layoutY="172.0" />
+                <Label fx:id="competitionSeatsAvailableLabel" layoutX="178.0" layoutY="172.0" />
 
-                <Button layoutX="35.0" layoutY="239.0" onMouseClicked="#submitSignToEvent" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
+                <Button fx:id="confirmRegistrationButton" layoutX="35.0" layoutY="239.0" onMouseClicked="#submitSignToCompetition" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
                     <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                     </effect></Button>
@@ -90,33 +89,15 @@
                         <Font size="16.0" />
                     </font>
                 </Label>
-            <Spinner layoutX="30.0" layoutY="563.0" prefHeight="26.0" prefWidth="61.0" />
-            <TextField fx:id="EventReviewField" layoutX="30.0" layoutY="377.0" prefHeight="26.0" prefWidth="333.0" promptText="EventName" />
-            <AnchorPane layoutX="20.0" prefHeight="664.0" prefWidth="550.0" style="-fx-background-color: #FFFFFF;">
-               <children>
-                  <Label layoutX="30.0" layoutY="100.0" text="Nome evento:" />
-                  <Label fx:id="eventNameLabel1" layoutX="174.0" layoutY="100.0" />
-                  <Label layoutX="30.0" layoutY="140.0" text="Descrizione evento:" />
-                  <Label fx:id="eventDescriptionLabel1" layoutX="174.0" layoutY="140.0" prefHeight="18.0" prefWidth="354.0" wrapText="true" />
-                  <Label layoutX="30.0" layoutY="180.0" text="Coins richiesti:" />
-                  <Label fx:id="eventCoinsLabel1" layoutX="174.0" layoutY="180.0" />
-                  <Label layoutX="30.0" layoutY="220.0" text="Posti disponibili:" />
-                  <Label fx:id="eventSeatsAvailableLabel1" layoutX="174.0" layoutY="220.0" />
-                  <Button layoutX="28.0" layoutY="254.0" onMouseClicked="#submitSignToEvent" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
-                     <effect>
-                        <DropShadow height="5.0" radius="2.0" width="5.0" />
-                     </effect>
-                  </Button>
-                  <TextField fx:id="eventNameField" layoutX="29.0" layoutY="56.0" prefHeight="26.0" prefWidth="180.0" promptText="eventName for more info" />
-                  <Button layoutX="232.0" layoutY="56.0" onMouseClicked="#eventDetails" prefHeight="26.0" prefWidth="66.0" style="-fx-background-color: #1ABC9C;" text="dettagli" textFill="WHITE">
-                     <effect>
-                        <DropShadow height="5.0" radius="2.0" width="5.0" />
-                     </effect>
-                  </Button>
-                  <Label fx:id="generateCodeLabel" layoutX="29.0" layoutY="490.0" prefHeight="18.0" prefWidth="176.0" />
-                  <Label fx:id="assignedSeatLabel" layoutX="28.0" layoutY="520.0" prefHeight="18.0" prefWidth="176.0" />
-               </children>
-            </AnchorPane> <!-- Spostato più in basso -->
+            <Button layoutX="291.0" layoutY="16.0" onMouseClicked="#competitionDetails" prefHeight="26.0" prefWidth="66.0" style="-fx-background-color: #1ABC9C;" text="dettagli" textFill="WHITE">
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0" />
+               </effect>
+            </Button>
+            <TextField fx:id="competitionNameField" layoutX="34.0" layoutY="16.0" prefHeight="26.0" prefWidth="180.0" promptText="Competition name for more info" />
+            <Label fx:id="generateCodeLabel" layoutX="36.0" layoutY="492.0" prefHeight="18.0" prefWidth="323.0" />
+            <Label fx:id="assignedSeatLabel" layoutX="36.0" layoutY="533.0" prefHeight="18.0" prefWidth="312.0" /> <!-- Spostato più in basso -->
+                <Label fx:id="competitionDescriptionLabel" layoutX="205.0" layoutY="98.0" prefHeight="18.0" prefWidth="193.0" wrapText="true" /> <!-- Spostato più in basso -->
             </children>
         </AnchorPane>
     </left>
@@ -132,11 +113,11 @@
                         <Image url="@../images/logo.png" />
                     </image>
                 </ImageView>
-                <Button layoutX="482.0" layoutY="50.0" onMouseClicked="#searchEvents" prefHeight="26.0" prefWidth="66.0" style="-fx-background-color: #1ABC9C;" text="Cerca" textFill="WHITE">
+                <Button layoutX="482.0" layoutY="50.0" onMouseClicked="#searchCompetitions" prefHeight="26.0" prefWidth="66.0" style="-fx-background-color: #1ABC9C;" text="Cerca" textFill="WHITE">
                     <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                     </effect></Button>
-            <ListView fx:id="eventList" layoutX="38.0" layoutY="108.0" prefHeight="236.0" prefWidth="510.0" />
+            <ListView fx:id="competitionList" layoutX="38.0" layoutY="108.0" prefHeight="236.0" prefWidth="510.0" />
             <TextField fx:id="monthField" layoutX="276.0" layoutY="50.0" prefHeight="26.0" prefWidth="34.0" />
             <TextField fx:id="dayField" layoutX="346.0" layoutY="50.0" prefHeight="26.0" prefWidth="34.0" />
             <Text fill="#00000087" layoutX="249.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MM" />

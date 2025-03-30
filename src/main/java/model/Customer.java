@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer extends User {
-    private List<EventRegistration> eventRegistrationList ;// a value of default
+    private List<CompetitionRegistration> competitionRegistrationList ;// a value of default
     private SkaterLevel skaterLevel;
     private List<SkateboardCommission> skateboardCommissionsSubmittedList;
     private List<SkateboardCommission> skateboardCommissionsApproved;
@@ -18,7 +18,7 @@ public class Customer extends User {
         super(username,password,dateOfBirth);
         this.role = Role.COSTUMER;
         this.wallet = wallet;
-        this.eventRegistrationList = new ArrayList<>();
+        this.competitionRegistrationList = new ArrayList<>();
         this.skaterLevel = skaterLevel;
     }
 
@@ -26,7 +26,7 @@ public class Customer extends User {
 
 
 
-    public void addEventRegistration(EventRegistration eventRegistration){this.eventRegistrationList.add(eventRegistration);}
+    public void addCompetitionRegistration(CompetitionRegistration competitionRegistration){this.competitionRegistrationList.add(competitionRegistration);}
 
 
 
@@ -48,8 +48,8 @@ public class Customer extends User {
     }
 
 
-    public List<EventRegistration> getEventRegistrationList() {
-        return eventRegistrationList;
+    public List<CompetitionRegistration> getCompetitionRegistrationList() {
+        return competitionRegistrationList;
     }
 
     public void addSkateboardCommissionApproved(SkateboardCommission skateboardCommission){

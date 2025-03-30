@@ -8,24 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Organizer extends User {
-    public List<Event> eventCreatedList;
+    public List<Competition> competitionCreatedList;
     public List<SkateboardCommission> skateboardCommissionInChargeList;
 
     public Organizer(String username, String password,String dateOfBirth){
         super(username,password,dateOfBirth);
         this.role = Role.ORGANIZER;
-        this.eventCreatedList = new ArrayList<>();
+        this.competitionCreatedList = new ArrayList<>();
         this.skateboardCommissionInChargeList = new ArrayList<>();
     }
 
 
 
-    public void addEvent(Event event){
-        this.eventCreatedList.add(event);
+    public void addCompetition(Competition competition){
+        this.competitionCreatedList.add(competition);
     }
 
-    public List<Event> getEventCreatedList(){
-        return this.eventCreatedList;
+    public List<Competition> getCompetitionCreatedList(){
+        return this.competitionCreatedList;
     }
 
     public void addSkateboardCommissionInCharge(SkateboardCommission skateboardCommission){

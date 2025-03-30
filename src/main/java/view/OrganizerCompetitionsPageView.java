@@ -1,11 +1,9 @@
 package view;
 
-
-import beans.EventBean;
-import beans.UserInfo;
-import controls.CreateEventController;
+import beans.CompetitionBean;
+import controls.CreateCompetitionController;
 import exceptions.EmptyFieldException;
-import exceptions.EventAlreadyExistsException;
+import exceptions.CompetitionAlreadyExistsException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -15,24 +13,24 @@ import utils.SessionManager;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class OrganizerEventsPageView {
-    @FXML private TextField eventNameField;
+public class OrganizerCompetitionsPageView {
+    @FXML private TextField competitionNameField;
     @FXML private TextField locationField;
-    @FXML private DatePicker eventDatePicker;
-    @FXML private TextArea eventDescriptionArea;
-    @FXML private TableView<EventBean> eventTable;
-    @FXML private TableColumn<EventBean, String> colName;
-    @FXML private TableColumn<EventBean, String> colDescription;
-    @FXML private TableColumn<EventBean, String> colDate;
-    @FXML private TableColumn<EventBean, String> colLocation;
-    @FXML private TableColumn<EventBean, String> colCoinsRequired;
-    @FXML private TableColumn<EventBean, String> colMaxRegistrations;
-    @FXML private TableColumn<EventBean, String> colCurrentRegistrations;
+    @FXML private DatePicker competitionDatePicker;
+    @FXML private TextArea competitionDescriptionArea;
+    @FXML private TableView<CompetitionBean> competitionTable;
+    @FXML private TableColumn<CompetitionBean, String> colName;
+    @FXML private TableColumn<CompetitionBean, String> colDescription;
+    @FXML private TableColumn<CompetitionBean, String> colDate;
+    @FXML private TableColumn<CompetitionBean, String> colLocation;
+    @FXML private TableColumn<CompetitionBean, String> colCoinsRequired;
+    @FXML private TableColumn<CompetitionBean, String> colMaxRegistrations;
+    @FXML private TableColumn<CompetitionBean, String> colCurrentRegistrations;
     @FXML private Label errorLabel;
     @FXML private Spinner<Integer> coinsSpinner;
     @FXML private Spinner<Integer> maxRegistrationsSpinner;
 
-    private final CreateEventController createEventController = new CreateEventController();
+    private final CreateCompetitionController createCompetitionController = new CreateCompetitionController();
 
     @FXML
     public void initialize() {
@@ -61,87 +59,84 @@ public class OrganizerEventsPageView {
         maxRegistrationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 5));
     }
 
-
-    private void validateFields(String name, String description, String date, String location) throws EmptyFieldException{
+    private void validateFields(String name, String description, String date, String location) throws EmptyFieldException {
         if (name.isEmpty() || description.isEmpty() || date.isEmpty() || location.isEmpty()) {
-            throw new EmptyFieldException("I campi per la creazione dell'evento devono essere tutti compilati!!!");
+            throw new EmptyFieldException("I campi per la creazione della competizione devono essere tutti compilati!!!");
         }
     }
 
-
-    public String formatFromDatePicker(String date){
+    public String formatFromDatePicker(String date) {
         String[] parts = date.split("-");
         return parts[2] + "-" + parts[1] + "-" + parts[0];
     }
 
-    String formatDateToView(String date){
+    String formatDateToView(String date) {
         return date.replace("-", "/");
     }
 
     @FXML
-    private void createEvent() {
-        String name = eventNameField.getText();
-        String description = eventDescriptionArea.getText();
-        String date = formatFromDatePicker(eventDatePicker.getValue().toString());
-        String location =  locationField.getText();
-        int coinsRequired , maxRegistrations;
+    private void createCompetition() {
+        String name = competitionNameField.getText();
+        String description = competitionDescriptionArea.getText();
+        String date = formatFromDatePicker(competitionDatePicker.getValue().toString());
+        String location = locationField.getText();
+        int coinsRequired, maxRegistrations;
 
-        try{
-            validateFields(name, description,date,location);
+        try {
+            validateFields(name, description, date, location);
             coinsRequired = coinsSpinner.getValue();
-            maxRegistrations =  maxRegistrationsSpinner.getValue();
-            createEventController.createEvent(new EventBean(name,description,date,location,coinsRequired,maxRegistrations));
-            loadEvents();
+            maxRegistrations = maxRegistrationsSpinner.getValue();
+            createCompetitionController.createCompetition(new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
+            loadCompetitions();
         } catch (NumberFormatException e) {
             errorLabel.setText(e.getMessage());
-        }catch(EventAlreadyExistsException e){
+        } catch (CompetitionAlreadyExistsException e) {
             errorLabel.setText(e.getMessage());
-        }catch(EmptyFieldException e){
+        } catch (EmptyFieldException e) {
             errorLabel.setText(e.getMessage());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
-    public void loadEvents(){
-        eventTable.getItems().clear();
-        eventTable.getItems().addAll(createEventController.organizerEvents());
-    }
-
-    @FXML
-    public void goToCompetitionsPage(){
-
+    public void loadCompetitions() {
+        competitionTable.getItems().clear();
+        competitionTable.getItems().addAll(createCompetitionController.organizerCompetitions());
     }
 
     @FXML
-    public void goToTricksPage(){
+    public void goToCompetitionsPage() {
+    }
+
+    public void goToCommissionsPage(){
+
+    }
+
+
+    @FXML
+    public void goToTricksPage() {
         try {
             SceneManager.getInstance().loadScene("viewFxml/OrganizerTricksPageView.fxml");
-        }catch(IOException e){
+        } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
-
-    public void logOut()  {
+    public void logOut() {
         SessionManager.getInstance().terminateSession();
         try {
             SceneManager.getInstance().loadScene("viewFxml/AccessView.fxml");
-        }catch (IOException e){
+        } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
-    public void goToHomePage()  {
+    public void goToHomePage() {
         try {
             SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
-        }catch (IOException e){
+        } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
-
-
-
 }
+

@@ -64,19 +64,19 @@ public class OrganizerTricksPageViewBasic {
 
 
     @FXML
-    public void goToEvents() {
+    public void goToCompetitionsPage() {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/OrganizerEventsPageViewBasic.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml"));
         Parent root = null;
         try {
             root = loader.load();
-            OrganizerEventsPageViewBasic organizerEventsPageViewBasic = loader.getController();
+            OrganizerCompetitionsPageViewBasic organizerEventsPageViewBasic = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
             stage = SceneManager.getInstance().getStage();
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
-            Platform.runLater(organizerEventsPageViewBasic::loadEvents);
+            Platform.runLater(organizerEventsPageViewBasic::loadCompetitions);
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -136,11 +136,10 @@ public class OrganizerTricksPageViewBasic {
             errorLabel.setText(e.getMessage());
         }
     }
-    @FXML
-    public void goToCompetitionsPage(){
+
+    public void goToCommissionsPage(){
 
     }
-
     public void goToHomePage() {
         try {
             SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");

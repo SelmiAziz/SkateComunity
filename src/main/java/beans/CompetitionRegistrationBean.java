@@ -1,11 +1,11 @@
 package beans;
 
-public class EventRegistrationBean {
+public class CompetitionRegistrationBean {
     int currentRegistrationNumber;
     String assignedSeat;
     String registrationCode;
 
-    public EventRegistrationBean(int currentRegistrationNumber, String registrationCode, String assignedSeat){
+    public CompetitionRegistrationBean(int currentRegistrationNumber, String registrationCode, String assignedSeat){
         this.currentRegistrationNumber = currentRegistrationNumber;
         this.assignedSeat = assignedSeat;
         this.registrationCode = registrationCode;

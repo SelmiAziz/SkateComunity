@@ -2,7 +2,6 @@ package viewBasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -76,11 +75,11 @@ public class CustomerTricksPageViewBasic {
     @FXML
     public void goToEvents() {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/CustomerEventsPageViewBasic.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml"));
         Parent root = null;
         try {
             root = loader.load();
-            CustomerEventsPageViewBasic customerEventsPageViewBasic = loader.getController();
+            CustomerCompetitionsPageViewBasic customerEventsPageViewBasic = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
             stage = SceneManager.getInstance().getStage();
             stage.setScene(scene);
