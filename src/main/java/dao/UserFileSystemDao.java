@@ -53,9 +53,6 @@ public class UserFileSystemDao  implements UserDao{
         @Override
     public void addUser(User user) {
         this.userList.add(user);
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fd, true))) {
             writer.write(user.toCsvString());
             writer.newLine();

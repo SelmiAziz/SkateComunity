@@ -26,6 +26,7 @@ public class Customer extends User {
 
 
 
+
     public void addCompetitionRegistration(CompetitionRegistration competitionRegistration){this.competitionRegistrationList.add(competitionRegistration);}
 
 

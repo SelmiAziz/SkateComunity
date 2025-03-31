@@ -48,8 +48,8 @@ public class WalletFileSystemDao implements WalletDao{
     }
 
     public void updateWallet(Wallet wallet) {
-        File tempFile = new File("tempFile.csv"); // Creiamo un file temporaneo
-        File originalFile = new File(fd); // Il file originale
+        File tempFile = new File("tempFile.csv");
+        File originalFile = new File(fd);
         boolean walletUpdated = false;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
@@ -60,9 +60,8 @@ public class WalletFileSystemDao implements WalletDao{
                 String[] arr = line.split(",");
                 int walletId = Integer.parseInt(arr[0]);
 
-                // Se troviamo il wallet corrispondente, aggiorniamo il saldo
                 if (walletId == wallet.getWalletId()) {
-                    line = arr[0] + "," + wallet.getBalance() + "," + arr[2]; // Aggiorna il saldo
+                    line = arr[0] + "," + wallet.getBalance() + "," + arr[2];
                     walletUpdated = true;
                 }
 
@@ -74,7 +73,6 @@ public class WalletFileSystemDao implements WalletDao{
             e.printStackTrace();
         }
 
-        // Ora sostituiamo il file originale con quello temporaneo
         if (walletUpdated) {
             if (!originalFile.delete()) {
             }
