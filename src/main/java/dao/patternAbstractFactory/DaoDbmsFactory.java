@@ -4,14 +4,14 @@ import dao.*;
 
 public class DaoDbmsFactory extends DaoFactory {
 
-    public WalletDbmsDao createWalletDao(){return WalletDbmsDao.getInstance();}
+    public WalletDao createWalletDao(){return WalletFileSystemDao.getInstance();}
 
-    public UserDbmsDao createUserDao(){
-        return UserDbmsDao.getInstance();
+    public UserDao createUserDao(){
+        return UserFileSystemDao.getInstance();
     }
 
-    public CustomerDbmsDao createCostumerDao(){
-        return CustomerDbmsDao.getInstance();
+    public CustomerDao createCostumerDao(){
+        return CustomerFileSystemDao.getInstance();
     }
 
     public OrganizerDbmsDao createOrganizerDao(){

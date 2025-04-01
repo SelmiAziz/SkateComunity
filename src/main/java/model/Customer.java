@@ -69,4 +69,5 @@ public class Customer extends User {
     public List<SkateboardCommission> getSkateboardCommissionsSubmittedList() {
         return skateboardCommissionsSubmittedList;
     }
+
 }
