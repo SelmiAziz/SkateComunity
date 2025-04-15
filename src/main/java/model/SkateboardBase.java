@@ -16,7 +16,7 @@ public class SkateboardBase implements Skateboard {
         this.size = size;
     }
 
-    public SkateboardBase(int id, String name, String description , String dimension, int price){
+    public SkateboardBase(int id, String name, String description , String size, int price){
         this.name = name;
         this.description = description;
         this.size = size;
