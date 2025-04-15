@@ -25,7 +25,14 @@ public class CustomerHomePageView {
     }
 
     @FXML
-    public void goToCommissionsPage(){}
+    public void goToOrdersPage(){
+        try {
+            SceneManager.getInstance().loadScene("viewFxml/CustomerOrdersPageView.fxml");
+            sceneManager.openBro();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
+    }
 
 
     @FXML
@@ -51,8 +58,8 @@ public class CustomerHomePageView {
     @FXML
     public void goToTricksPage(){
         try {
-            sceneManager.loadScene("viewFxml/CustomerTricksPageView.fxml");
-        }catch(IOException e){
+            SceneManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
+        } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }

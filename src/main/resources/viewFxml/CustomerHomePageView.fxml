@@ -35,7 +35,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToCommissionsPage" prefHeight="35.0" prefWidth="181.0" text="Board" textFill="#1abc9c">
+                  <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToOrdersPage" prefHeight="35.0" prefWidth="181.0" text="Board" textFill="#1abc9c">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -57,7 +57,7 @@
       </AnchorPane>
    </top>
    <bottom>
-      <AnchorPane onMouseClicked="#goToCommissionsPage" prefHeight="403.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="403.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="20.0" layoutY="14.0" prefHeight="48.0" prefWidth="296.0" text="SkateCommunity" textFill="#1abc9c">
                <font>

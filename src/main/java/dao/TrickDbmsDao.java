@@ -35,7 +35,7 @@ public class TrickDbmsDao implements TrickDao{
 
             stmt.setString(1, trick.getNameTrick());
             stmt.setString(2, trick.getDescription());
-            stmt.setString(3, trick.getDifficultyTrick().toString()); // Se `Difficulty` è un Enum
+            stmt.setString(3, trick.getDifficultyTrick().toString());
             stmt.setString(4, trick.getCategory());
             stmt.setString(5, trick.getDataCaricamento());
 
@@ -89,7 +89,6 @@ public class TrickDbmsDao implements TrickDao{
         if(!this.trickList.isEmpty()) {
             return this.trickList;
         }
-        List<Trick> newTrickList = new ArrayList<>();
         String sql = "SELECT trickName, description, difficulty, category, date FROM tricks";
 
         Connection conn = DbsConnector.getInstance().getConnection();

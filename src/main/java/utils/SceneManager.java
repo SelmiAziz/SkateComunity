@@ -1,13 +1,18 @@
 package utils;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.IOException;
 
 public class SceneManager {
     private Stage stage;
+    private Stage stageBr;
     private static SceneManager instance;
 
     private SceneManager() {} // Costruttore privato
@@ -21,7 +26,7 @@ public class SceneManager {
     }
 
     public void setStage(Stage stage) {
-        if (this.stage == null) { // Assegna lo stage solo se non è già impostato
+        if (this.stage == null) {
             this.stage = stage;
         }
     }
@@ -43,5 +48,48 @@ public class SceneManager {
         stage.setScene(scene);
         stage.show();
     }
+
+
+    public void openBro() throws IOException {
+        // Se già aperto, non fare nulla
+        if (stageBr != null && stageBr.isShowing()) {
+            stageBr.toFront();
+            return;
+        }
+
+        stageBr = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CoordinatorOrdersPageView.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root, 1200, 800);
+
+
+        stageBr.setResizable(false);
+        stageBr.setScene(scene);
+        stageBr.show();
+
+
+
+        Platform.runLater(() -> {
+            // Minimizza la finestra principale per un istante
+            stage.setIconified(true);
+
+            // Aspetta un attimo prima di ripristinarla
+            PauseTransition delay = new PauseTransition(Duration.millis(1));
+            delay.setOnFinished(e -> {
+                stage.setIconified(false);  // Ripristina la finestra principale
+                stage.toFront();  // Porta la finestra principale davanti
+                stage.requestFocus();  // Forza il focus sulla finestra principale
+            });
+            delay.play();
+        });
+    }
+
+    public void closeBro() {
+        if (stageBr != null) {
+            stageBr.close();
+            stageBr = null; // resettiamo il riferimento
+        }
+    }
+
 }
 

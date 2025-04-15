@@ -40,9 +40,9 @@ public class SkateboardDemoDao implements SkateboardDao{
     }
 
     @Override
-    public Skateboard selectSkateboardById(int id) {
+    public Skateboard selectSkateboardById(String id) {
         for(Skateboard skateboard : skateboardList){
-            if(skateboard.skateboardId() == id){
+            if(skateboard.skateboardId().equals(id)){
                 return skateboard;
             }
         }
@@ -50,7 +50,7 @@ public class SkateboardDemoDao implements SkateboardDao{
     }
 
     @Override
-    public void addSkateboard(Skateboard skateboard, int idOrder) {
+    public void addSkateboard(Skateboard skateboard, String idOrder) {
         skateboardList.add(skateboard);
     }
 }

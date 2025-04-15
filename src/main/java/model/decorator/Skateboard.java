@@ -5,5 +5,5 @@ public interface Skateboard {
     public String description();
     public String name();
     public String size();
-    public int skateboardId();
+    public String skateboardId();
 }

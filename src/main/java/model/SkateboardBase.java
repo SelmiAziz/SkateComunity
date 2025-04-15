@@ -2,21 +2,25 @@ package model;
 
 import model.decorator.Skateboard;
 
+import java.util.UUID;
+
 public class SkateboardBase implements Skateboard {
-    private int id;
+    private String id;
     private String description;
     private int price;
     private String name;
     private String size;
 
     public SkateboardBase(String name, String description, String size, int price){
+        this.id =  UUID.randomUUID().toString();
         this.description = description;
         this.price = price;
         this.name = name;
         this.size = size;
     }
 
-    public SkateboardBase(int id, String name, String description , String size, int price){
+    public SkateboardBase(String id, String name, String description , String size, int price){
+        this.id = id;
         this.name = name;
         this.description = description;
         this.size = size;
@@ -48,7 +52,7 @@ public class SkateboardBase implements Skateboard {
         return name;
     }
 
-    public int skateboardId() {
+    public String skateboardId() {
         return id;
     }
 
@@ -56,7 +60,7 @@ public class SkateboardBase implements Skateboard {
         this.size = size;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
