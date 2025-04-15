@@ -1,47 +1,69 @@
 package model;
 
-public class SkateboardBase {
+import model.decorator.Skateboard;
+
+public class SkateboardBase implements Skateboard {
+    private int id;
     private String description;
     private int price;
-    private String color;
-    private String dimension;
+    private String name;
+    private String size;
 
-    public SkateboardBase(String description, int price, String color, String dimension){
+    public SkateboardBase(String name, String description, String size, int price){
         this.description = description;
         this.price = price;
-        this.color = color;
-        this.dimension = dimension;
+        this.name = name;
+        this.size = size;
+    }
+
+    public SkateboardBase(int id, String name, String description , String dimension, int price){
+        this.name = name;
+        this.description = description;
+        this.size = size;
+        this.price = price;
     }
 
 
-    public String getDescription() {
+    public String description() {
         return description;
     }
 
-    public int getPrice() {
+    public int price() {
         return price;
     }
 
-    public String getColor() {
-        return color;
+    public void SetSize(String size) {
+        this.size = size;
     }
 
-    public String getDimension() {
-        return dimension;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public String size() {
+        return size;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public int skateboardId() {
+        return id;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public void setDimension(String dimension) {
-        this.dimension = dimension;
-    }
 
     public void setPrice(int price) {
         this.price = price;

@@ -4,6 +4,9 @@ import beans.CompetitionBean;
 import controls.CreateCompetitionController;
 import exceptions.EmptyFieldException;
 import exceptions.CompetitionAlreadyExistsException;
+import exceptions.WrongFormatException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.SceneManager;
@@ -11,6 +14,7 @@ import utils.SessionManager;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 public class OrganizerCompetitionsPageViewBasic {
@@ -24,58 +28,22 @@ public class OrganizerCompetitionsPageViewBasic {
     @FXML private ListView<String> competitionList;
     @FXML private TextField locationField;
     @FXML private Label errorLabel;
+    @FXML private ChoiceBox<String> choicePage;
 
     private final CreateCompetitionController createCompetitionController = new CreateCompetitionController();
+    private final SceneManager sceneManager = SceneManager.getInstance();
 
-
-    private void validateFields(String name, String description, String date, String location) throws EmptyFieldException{
-        if (name.isEmpty() || description.isEmpty() || date.isEmpty() || location.isEmpty()) {
-            throw new EmptyFieldException("I campi per la creazione della competizione devono essere tutti compilati!!!");
-        }
+    public void initialize(){
+        populatePageChoice();
     }
 
-
-    String formatDate(String month, String day, String year){
-        return day+"-"+month+"-20"+year;
+    private void populatePageChoice() {
+        List<String> list = Arrays.asList( "Commissions", "Tricks", "Log Out");
+        ObservableList<String> categories = FXCollections.observableArrayList(list);
+        choicePage.setItems(categories);
+        choicePage.setValue("Competitions");
     }
 
-    String formatDateToView(String date){
-        String[] datArr = date.split("-");
-        return datArr[1]+"-"+datArr[0]+"-"+datArr[2];
-    }
-
-
-    String formatLocation(String location){return location.replace("/", "-");}
-
-    String formatLocationToView(String location){return location.replace("-", "/");}
-
-    @FXML
-    private void createCompetition() {
-        String name = competitionNameField.getText();
-        String description = competitionDescriptionArea.getText();
-        String month = monthField.getText();
-        String day = dayField.getText();
-        String year = yearField.getText();
-        String date = formatDate(month, day, year);
-        String location = formatLocation(locationField.getText());
-        int coinsRequired, maxRegistrations;
-
-        try{
-            validateFields(name, description, date, location);
-            coinsRequired = Integer.parseInt(coinsAmountField.getText());
-            maxRegistrations = Integer.parseInt(maxRegistrationsField.getText());
-            createCompetitionController.createCompetition(new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
-            loadCompetitions();
-        } catch (NumberFormatException e) {
-            errorLabel.setText(e.getMessage());
-        } catch(CompetitionAlreadyExistsException e){
-            errorLabel.setText(e.getMessage());
-        } catch(EmptyFieldException e){
-            errorLabel.setText(e.getMessage());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void loadCompetitions(){
         List<CompetitionBean> availableCompetitionsBean = createCompetitionController.organizerCompetitions();
@@ -85,8 +53,8 @@ public class OrganizerCompetitionsPageViewBasic {
                     "<<Name Competition: %s>>-<<Description: %s>>-<<Date: %s>>-<<Location: %s>>-<<Coins Required: %d>>-<<CurrentRegistration: %d>>-<<MaxRegistration: %d>>",
                     competitionBean.getName(),
                     competitionBean.getDescription(),
-                    formatDateToView(competitionBean.getDate()),
-                    formatLocationToView(competitionBean.getLocation()),
+                    competitionBean.getDate(),
+                    competitionBean.getLocation(),
                     competitionBean.getCoins(),
                     competitionBean.getCurrentRegistrations(),
                     competitionBean.getMaxRegistrations()
@@ -95,46 +63,84 @@ public class OrganizerCompetitionsPageViewBasic {
         }
     }
 
-    public void logOut()  {
-        SessionManager.getInstance().terminateSession();
-        try {
-            SceneManager.getInstance().loadScene("viewFxml/AccessView.fxml");
-        } catch (IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
+    private void validateFields(String name, String description, String date, String location) throws EmptyFieldException{
+        if (name.isEmpty() || description.isEmpty() || date.isEmpty() || location.isEmpty()) {
+            throw new EmptyFieldException("I campi per la creazione della competizione devono essere tutti compilati!!!");
+        }
+    }
+
+
+    private String formatValidateDate(String month, String day, String year) throws WrongFormatException {
+        int monthInt = Integer.parseInt(month);
+        if (monthInt < 1 || monthInt > 12) {
+            throw new WrongFormatException("Mese non valido: " + month);
+        }
+
+        int dayInt = Integer.parseInt(day);
+        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        int yearInt = Integer.parseInt(year);
+        if (monthInt == 2 && ((yearInt % 4 == 0 && yearInt % 100 != 0) || (yearInt % 400 == 0))) {
+            daysInMonth[1] = 29;
+        }
+
+        if (dayInt < 1 || dayInt > daysInMonth[monthInt - 1]) {
+            throw new WrongFormatException("Giorno non valido: " + day + " per il mese " + month);
+        }
+
+        return day + "/" + month + "/20" + year;
+    }
+
+
+
+    @FXML
+    private void createCompetition() {
+        String name = competitionNameField.getText();
+        String description = competitionDescriptionArea.getText();
+        String month = monthField.getText();
+        String day = dayField.getText();
+        String year = yearField.getText();
+        String location = locationField.getText();
+        int coinsRequired, maxRegistrations;
+
+        try{
+            String date = formatValidateDate(month, day, year);
+            validateFields(name, description, date, location);
+            coinsRequired = Integer.parseInt(coinsAmountField.getText());
+            maxRegistrations = Integer.parseInt(maxRegistrationsField.getText());
+            createCompetitionController.createCompetition(new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
+            loadCompetitions();
+        } catch (NumberFormatException | EmptyFieldException | WrongFormatException |
+                 CompetitionAlreadyExistsException | SQLException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
-    public void displayReviews(){
-
-    }
-
     @FXML
-    public void goToCommissionsPage(){
-
-    }
-
-    @FXML
-    public void goToTricksPage(){
-        try {
-            SceneManager.getInstance().loadScene("viewFxmlBasic/OrganizerTricksPageViewBasic.fxml");
-        } catch(IOException e){
-            errorLabel.setText(e.getMessage());
+    public void changePage(){
+        String page = choicePage.getValue();
+        if(page.equals("Tricks")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/OrganizerTricksPageViewBasic.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }else if(page.equals("Commissions")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }else if(page.equals("Log Out")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
         }
     }
 
-    @FXML
-    public void goToCompetitionsPage(){
 
-    }
 
-    public void goToHomePage()  {
-        try {
-            SceneManager.getInstance().loadScene("viewFxmlBasic/OrganizerHomePageViewBasic.fxml");
-        } catch (IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
-            errorLabel.setText(e.getMessage());
-        }
-    }
 }
 

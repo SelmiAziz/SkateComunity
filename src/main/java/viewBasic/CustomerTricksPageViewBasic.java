@@ -2,6 +2,8 @@ package viewBasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +14,7 @@ import utils.SceneManager;
 import utils.SessionManager;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomerTricksPageViewBasic {
@@ -21,8 +24,10 @@ public class CustomerTricksPageViewBasic {
     @FXML private ListView<String> eventListView;
     @FXML private Label difficultyLabel;
     @FXML private Label categoryLabel;
-    private Stage stage;
+    @FXML private ChoiceBox<String> choicePage;
 
+
+    SceneManager sceneManager = SceneManager.getInstance();
     LearnTrickController learnTrickController = new LearnTrickController();
 
     public void loadTricks(){
@@ -36,18 +41,21 @@ public class CustomerTricksPageViewBasic {
     }
 
 
+    private void populatePageChoice() {
+        List<String> list = Arrays.asList( "Commissions", "Competitions", "Log Out");
+        ObservableList<String> categories = FXCollections.observableArrayList(list);
+        choicePage.setItems(categories);
+        choicePage.setValue("Learn");
+    }
+
+
+
     @FXML
     public void initialize() {
         loadTricks();
+        populatePageChoice();
     }
 
-    private String formatDifficultyForView(String difficulty){
-        return difficulty.toLowerCase();
-    }
-
-    private String formatDifficultyForControl(String difficulty){
-        return difficulty.toUpperCase();
-    }
 
 
     public void showTrick(){
@@ -66,30 +74,36 @@ public class CustomerTricksPageViewBasic {
     public void logOut() {
         SessionManager.getInstance().terminateSession();
         try {
-            SceneManager.getInstance().loadScene("viewFxmlBasic/AccessViewBasic.fxml");
+            SceneManager.getInstance().loadScene("viewFxmlBasic/LogPageBasicView.fxml");
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
+
+
     @FXML
-    public void goToEvents() {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-            CustomerCompetitionsPageViewBasic customerEventsPageViewBasic = loader.getController();
-            Scene scene = new Scene(root, 1200, 800);
-            stage = SceneManager.getInstance().getStage();
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-            //Platform.runLater(customerEventsPageViewBasic::loadEvents);
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
+    public void changePage(){
+        String page = choicePage.getValue();
+        if(page.equals("Competitions")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }else if(page.equals("Commissions")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }else if(page.equals("Log Out")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
         }
-
     }
 
     @FXML
@@ -97,12 +111,4 @@ public class CustomerTricksPageViewBasic {
 
     }
 
-    @FXML
-    public void goToHomePage() {
-        try {
-            SceneManager.getInstance().loadScene("viewFxmlBasic/CustomerHomePageViewBasic.fxml");
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
-    }
 }

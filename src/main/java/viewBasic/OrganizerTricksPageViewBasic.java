@@ -2,6 +2,7 @@ package viewBasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import exceptions.WrongFormatException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +29,10 @@ public class OrganizerTricksPageViewBasic {
     @FXML private TextField monthField;
     @FXML private TextField dayField;
     @FXML private TextField yearField;
+    @FXML private ChoiceBox<String> choicePage;
     private Stage stage;
+    SceneManager sceneManager = SceneManager.getInstance();
+
 
     LearnTrickController learnTrickController = new LearnTrickController();
 
@@ -37,7 +41,7 @@ public class OrganizerTricksPageViewBasic {
         eventListView.getItems().clear();
         for (TrickBean trick : availableTricksBean) {
             String trickDisplay = String.format("<<Nome Trick: %s>>   -   <<Categoria: %s>>   -   <<Difficoltà: %s>>   -   <<Descrizione: %s>>",
-                    trick.getNameTrick(), trick.getCategory(), formatDifficultyForView(trick.getDifficulty()), trick.getDescription());
+                    trick.getNameTrick(), trick.getCategory(), trick.getDifficulty(), trick.getDescription());
             eventListView.getItems().add(trickDisplay);
         }
     }
@@ -48,20 +52,16 @@ public class OrganizerTricksPageViewBasic {
       loadTricks();
       populateCategoryChoiceBox();
       populateDifficultyChoiceBox();
+      populatePageChoice();
     }
 
-    private String formatDifficultyForView(String difficulty){
-        return difficulty.toLowerCase();
-    }
 
-    private String formatDifficultyForControl(String difficulty){
-        return difficulty.toUpperCase();
+    private void populatePageChoice() {
+        List<String> list = Arrays.asList( "Commissions", "Competitions", "Log Out");
+        ObservableList<String> categories = FXCollections.observableArrayList(list);
+        choicePage.setItems(categories);
+        choicePage.setValue("Commissions");
     }
-
-    String formatDate(String month, String day, String year){
-        return day+"-"+month+"-20"+year;
-    }
-
 
     @FXML
     public void goToCompetitionsPage() {
@@ -83,17 +83,38 @@ public class OrganizerTricksPageViewBasic {
 
     }
 
+    private String formatValidateDate(String month, String day, String year) throws WrongFormatException {
+        int monthInt = Integer.parseInt(month);
+        if (monthInt < 1 || monthInt > 12) {
+            throw new WrongFormatException("Mese non valido: " + month);
+        }
+
+        int dayInt = Integer.parseInt(day);
+        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        int yearInt = Integer.parseInt(year);
+        if (monthInt == 2 && ((yearInt % 4 == 0 && yearInt % 100 != 0) || (yearInt % 400 == 0))) {
+            daysInMonth[1] = 29;
+        }
+
+        if (dayInt < 1 || dayInt > daysInMonth[monthInt - 1]) {
+            throw new WrongFormatException("Giorno non valido: " + day + " per il mese " + month);
+        }
+
+        return day + "/" + month + "/20" + year;
+    }
+
     @FXML
     public void createTrick() {
         String trickName = trickNameTextField.getText();
         String category = categoryChoiceBox.getValue();
         String trickDescription = descriptionTextArea.getText();
-        String difficulty =  formatDifficultyForControl(difficultyChoiceBox.getValue());
+        String difficulty =  difficultyChoiceBox.getValue();
         String month = monthField.getText();
         String day = dayField.getText();
         String year = yearField.getText();
 
-        String date = formatDate(month,day,year);
+        String date = formatValidateDate(month,day,year);
 
 
         if (trickName.isEmpty() || category.isEmpty() || trickDescription.isEmpty() || date.isEmpty()) {
@@ -114,37 +135,42 @@ public class OrganizerTricksPageViewBasic {
     }
 
     private void populateCategoryChoiceBox() {
-        List<String> categoryList = Arrays.asList("flat", "grind", "ramp");
+        List<String> categoryList = Arrays.asList("Flat", "Grind", "Ramp");
         ObservableList<String> categories = FXCollections.observableArrayList(categoryList);
         categoryChoiceBox.setItems(categories);
         categoryChoiceBox.setValue("flat");
     }
 
     private void populateDifficultyChoiceBox() {
-        List<String> difficultyList  = Arrays.asList("beginner", "intermediate" , "advanced", "expert");
+        List<String> difficultyList  = Arrays.asList("Beginner", "Intermediate" , "Advanced", "Expert");
         ObservableList<String> difficulties = FXCollections.observableArrayList(difficultyList);
         difficultyChoiceBox.setItems(difficulties);
         difficultyChoiceBox.setValue("intermediate");
     }
 
 
-    public void logOut() {
-        SessionManager.getInstance().terminateSession();
-        try {
-            SceneManager.getInstance().loadScene("viewFxml/AccessView.fxml");
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
+    @FXML
+    public void changePage(){
+        String page = choicePage.getValue();
+        if(page.equals("Competitions")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }else if(page.equals("Commissions")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }else if(page.equals("Log Out")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
         }
     }
 
-    public void goToCommissionsPage(){
-
-    }
-    public void goToHomePage() {
-        try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
-    }
 }

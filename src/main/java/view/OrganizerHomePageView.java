@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import utils.SceneManager;
+import utils.SessionManager;
 
 import java.io.IOException;
 
@@ -58,9 +59,17 @@ public class OrganizerHomePageView {
     }
 
     @FXML
-    public void goToCommissionsPage(){
-
+    public void goToSkateboardsPage(){
+        SessionManager.getInstance().terminateSession();
+        try {
+            SceneManager.getInstance().loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
+
+
+
 
 
 

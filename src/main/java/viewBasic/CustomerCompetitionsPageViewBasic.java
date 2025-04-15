@@ -4,15 +4,15 @@ import beans.WalletBean;
 import beans.CompetitionBean;
 import beans.CompetitionRegistrationBean;
 import controls.SignCompetitionController;
-import exceptions.EmptyFieldException;
-import exceptions.InsufficientCoinsException;
-import exceptions.NoAvailableSeats;
-import exceptions.UserAlreadySignedCompetition;
+import exceptions.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.SceneManager;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomerCompetitionsPageViewBasic {
@@ -34,23 +34,24 @@ public class CustomerCompetitionsPageViewBasic {
     @FXML private Label competitionNameLabel;
     @FXML private ListView<String> competitionList;
     @FXML private Button confirmRegistrationButton;
+    @FXML private ChoiceBox<String> choicePage;
 
     public void initialize() {
         List<CompetitionBean> availableCompetitionsBean =  signCompetitionController.allAvailableCompetitions();
         loadCompetitions(availableCompetitionsBean);
         updateWalletInfo();
         confirmRegistrationButton.setVisible(false);
+        populatePageChoice();
     }
 
-    String formatLocationToView(String location){
-        if(location == null) return "";
-        return location.replace("-", "/");
+
+    private void populatePageChoice() {
+        List<String> list = Arrays.asList( "Commissions", "Learn", "Log Out");
+        ObservableList<String> categories = FXCollections.observableArrayList(list);
+        choicePage.setItems(categories);
+        choicePage.setValue("Competitions");
     }
 
-    String formatDateToView(String date){
-        String[] datArr = date.split("-");
-        return datArr[1]+"-"+datArr[0]+"-"+datArr[2];
-    }
 
     public void updateWalletInfo(){
         WalletBean walletBean = signCompetitionController.customerInfo();
@@ -79,26 +80,45 @@ public class CustomerCompetitionsPageViewBasic {
             String competitionDisplay = String.format(
                     "<<Name Competition: %s>>-<<Date: %s>>-<<Location: %s>>",
                     competitionBean.getName(),
-                    formatDateToView(competitionBean.getDate()),
-                    formatLocationToView(competitionBean.getLocation())
+                    competitionBean.getDate(),
+                    competitionBean.getLocation()
             );
             competitionList.getItems().add(competitionDisplay);
         }
     }
 
-    String formatDate(String month, String day, String year){
-        return day+"-"+month+"-20"+year;
-    }
+    private String formatValidateDate(String month, String day, String year) throws WrongFormatException {
+        int monthInt = Integer.parseInt(month);
+        if (monthInt < 1 || monthInt > 12) {
+            throw new WrongFormatException("Mese non valido: " + month);
+        }
 
-    String formatLocation(String location){ return location.replace("/","-"); }
+        int dayInt = Integer.parseInt(day);
+        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        int yearInt = Integer.parseInt(year);
+        if (monthInt == 2 && ((yearInt % 4 == 0 && yearInt % 100 != 0) || (yearInt % 400 == 0))) {
+            daysInMonth[1] = 29;
+        }
+
+        if (dayInt < 1 || dayInt > daysInMonth[monthInt - 1]) {
+            throw new WrongFormatException("Giorno non valido: " + day + " per il mese " + month);
+        }
+
+        return day + "/" + month + "/20" + year;
+    }
 
     @FXML
     public void searchCompetitions() {
-        String date = formatDate(monthField.getText(), dayField.getText(), yearField.getText());
-        String location = formatLocation(locationSearch.getText());
-        CompetitionBean competitionBean = new CompetitionBean(date, location);
-        List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation(competitionBean);
-        loadCompetitions(filteredCompetitions);
+        try {
+            String date = formatValidateDate(monthField.getText(), dayField.getText(), yearField.getText());
+            String location = locationSearch.getText();
+            CompetitionBean competitionBean = new CompetitionBean(date, location);
+            List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation(competitionBean);
+            loadCompetitions(filteredCompetitions);
+        }catch(WrongFormatException e){
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     @FXML
@@ -118,34 +138,32 @@ public class CustomerCompetitionsPageViewBasic {
     }
 
     @FXML
-    public void goToCommissionsPage(){
-
-    }
-
-    public void goToHomePage() {
-        try {
-            sceneManager.loadScene("viewFxmlBasic/CustomerHomePageViewBasic.fxml");
-        } catch(IOException e){
-            errorLabel.setText(e.getMessage());
+    public void changePage(){
+        String page = choicePage.getValue();
+        if(page.equals("Learn")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/CustomerTricksPageViewBasic.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }else if(page.equals("Commissions")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }else if(page.equals("Log Out")){
+            try {
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            } catch(IOException e){
+                errorLabel.setText(e.getMessage());
+            }
         }
-    }
-
-    @FXML
-    public void goToTricksPage(){
-        try {
-            sceneManager.loadScene("viewFxmlBasic/CustomerTricksPageViewBasic.fxml");
-        } catch(IOException e){
-            errorLabel.setText(e.getMessage());
-        }
-    }
-
-    @FXML
-    public void goToCompetitionsPage(){
     }
 
     public void logOut(){
         try {
-            sceneManager.loadScene("viewFxmlBasic/AccessViewBasic.fxml");
+            sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
         } catch(IOException e){
             errorLabel.setText(e.getMessage());
         }

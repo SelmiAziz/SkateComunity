@@ -34,18 +34,18 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToCommissionsPage" prefHeight="35.0" prefWidth="163.0" text="Commissions" textFill="#1abc9c">
+                  <Label layoutX="150.0" layoutY="40.0" onMouseClicked="#goToCompetitionsPage" prefHeight="35.0" prefWidth="163.0" text="Competitions" textFill="#1abc9c">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="goToTricksPage" layoutX="505.0" layoutY="40.0"  prefHeight="35.0" prefWidth="90.0" text="Tricks" textFill="#1abc9c">
+                  <Label fx:id="goToTricksPage" layoutX="503.0" layoutY="40.0" prefHeight="35.0" prefWidth="90.0" text="Tricks" textFill="#1abc9c">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
                   <Line endX="10.0" layoutX="558.0" layoutY="75.0" startX="-51.0" stroke="#1abc9c" strokeWidth="3.0" />
-                  <Label layoutX="330.0" layoutY="40.0" onMouseClicked="#goToCompetitionsPage" prefHeight="35.0" prefWidth="153.0" text="Competitions" textFill="#1abc9c">
+                  <Label layoutX="330.0" layoutY="40.0" onMouseClicked="#goToSkateboardsPage" prefHeight="35.0" prefWidth="153.0" text="Skateboards" textFill="#1abc9c">
                      <font>
                         <Font size="24.0" />
                      </font>

@@ -142,9 +142,15 @@ public class OrganizerTricksPageView {
     }
 
     @FXML
-    public void goToCommissionsPage(){
-
+    public void goToSkateboardsPage(){
+        SessionManager.getInstance().terminateSession();
+        try {
+            SceneManager.getInstance().loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
+
 
     // Log out and navigate to the access view
     public void logOut() {

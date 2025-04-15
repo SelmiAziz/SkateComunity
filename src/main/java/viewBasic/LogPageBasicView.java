@@ -1,15 +1,17 @@
 package viewBasic;
 
+import beans.LogUserBean;
 import beans.RegisterUserBean;
 import controls.LoginController;
 import exceptions.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import utils.SceneManager;
 
 import java.io.IOException;
 
-public class RegisterViewBasic {
+public class LogPageBasicView {
     private final SceneManager sceneManager = SceneManager.getInstance();
     private final LoginController loginController = new LoginController();
 
@@ -19,7 +21,9 @@ public class RegisterViewBasic {
     @FXML private TextField monthField;
     @FXML private TextField dayField;
     @FXML private TextField yearField;
-
+    @FXML private Pane loginPane;
+    @FXML private Button goRegister;
+    @FXML private Button goLogin;
     @FXML private TextField passwordConfirmationField;
     @FXML private Label resultLabel;
     @FXML private ToggleButton btnCostumer;
@@ -29,7 +33,8 @@ public class RegisterViewBasic {
     @FXML private RadioButton advancedRadio;
     @FXML private ToggleGroup skillGroup;
     @FXML private Label skillLabel;
-
+    @FXML private TextField usernameFieldLog;
+    @FXML private TextField passwordFieldLog;
 
     public void initialize(){
         skillGroup = new ToggleGroup();
@@ -37,6 +42,7 @@ public class RegisterViewBasic {
         proficientRadio.setToggleGroup(skillGroup);
         advancedRadio.setToggleGroup(skillGroup);
         skillLevelShow(false);
+        goLogin.setVisible(false);
     }
 
     public void validateRegistration( String username, String password, String passwordConfirmation, ToggleButton selected) throws EmptyFieldException, PasswordConfirmationException, NoUserTypeSelectedException{
@@ -69,53 +75,45 @@ public class RegisterViewBasic {
             return "";
         }
     }
-
-    public String formatDateOfBirth(String month, String day, String year) throws WrongFormatException {
-        int dayInt, monthInt, yearInt;
-        try {
-            monthInt = Integer.parseInt(month);
-            dayInt = Integer.parseInt(day);
-            yearInt = Integer.parseInt("20" + year);
-        } catch (NumberFormatException e) {
-            throw new WrongFormatException("Errore formato: mese, giorno o anno non validi");
-        }
-
+    private String formatValidateDate(String month, String day, String year) throws WrongFormatException {
+        int monthInt = Integer.parseInt(month);
         if (monthInt < 1 || monthInt > 12) {
-            throw new WrongFormatException("Errore formato: mese non valido");
+            throw new WrongFormatException("Mese non valido: " + month);
         }
 
+        int dayInt = Integer.parseInt(day);
         int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-        // Controllo anno bisestile
-        if ((yearInt % 4 == 0 && yearInt % 100 != 0) || (yearInt % 400 == 0)) {
+        int yearInt = Integer.parseInt(year);
+        if (monthInt == 2 && ((yearInt % 4 == 0 && yearInt % 100 != 0) || (yearInt % 400 == 0))) {
             daysInMonth[1] = 29;
         }
 
         if (dayInt < 1 || dayInt > daysInMonth[monthInt - 1]) {
-            throw new WrongFormatException("Errore formato: giorno non valido per il mese");
+            throw new WrongFormatException("Giorno non valido: " + day + " per il mese " + month);
         }
 
-        String formattedMonth = monthInt < 10 ? "0" + monthInt : "" + monthInt;
-        return String.format("%02d/%s/%04d", dayInt, formattedMonth, yearInt);
+        return day + "/" + month + "/20" + year;
     }
 
     @FXML
-    public void submitRegistration(){
+    public void doRegistration(){
         try {
             String username = usernameField.getText();
             String password = passwordField.getText();
             String month = monthField.getText();
             String day = dayField.getText();
             String year = yearField.getText();
-            String dateOfBirth = formatDateOfBirth(month, day, year);
             String passwordConfirmation = passwordConfirmationField.getText();
             String skaterLevel = getSkaterLevel();
 
             ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();
+            String role = (selected == btnCostumer) ? "Costumer" : "Organizer";
+            String dateOfBirth = formatValidateDate(month, day, year);
             validateRegistration(username, password, passwordConfirmation, selected);
 
             try {
-                String role = (selected == btnCostumer) ? "Costumer" : "Organizer";
+
                 loginController.registerUser(new RegisterUserBean(username, password, role, dateOfBirth, skaterLevel));
                 usernameField.setText("");
                 passwordField.setText("");
@@ -131,6 +129,36 @@ public class RegisterViewBasic {
             }
         }catch(EmptyFieldException | PasswordConfirmationException |
                 NoUserTypeSelectedException  | WrongFormatException e){
+            resultLabel.setText(e.getMessage());
+        }
+    }
+
+    public void validateLogin(String username, String password) throws EmptyFieldException {
+        if (username.isEmpty() || password.isEmpty()) {
+            throw new EmptyFieldException("Username e password devono essere compilati!");
+        }
+
+    }
+
+    @FXML
+    public void doLogin() {
+        String username = usernameFieldLog.getText();
+        String password = passwordFieldLog.getText();
+
+        try {
+            validateLogin(username, password);
+            LogUserBean logUserBean = loginController.logUser(new LogUserBean(username, password));
+            try{
+                if (logUserBean.getRole().equals("Costumer")){
+                    SceneManager.getInstance().loadScene("viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml");
+                }else {
+                    SceneManager.getInstance().loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
+                }
+            }catch (IOException e){
+                resultLabel.setText("Errore di sistema. Riprova più tardi.");
+            }
+
+        } catch (EmptyFieldException  | UserNotFoundException e) {
             resultLabel.setText(e.getMessage());
         }
     }
@@ -161,23 +189,19 @@ public class RegisterViewBasic {
 
 
 
-    @FXML
-    public void goBack() {
-        try {
-            sceneManager.loadScene("viewFxml/AccessView.fxml");
-        }catch(IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
-            resultLabel.setText("Errore di sistema. Riprova più tardi.");
-        }
-    }
 
     @FXML
     public void goLogin(){
-        try {
-            sceneManager.loadScene("viewFxml/LoginView.fxml");
-        }catch(IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
-            resultLabel.setText("Errore di sistema. Riprova più tardi.");
-        }
+        loginPane.setVisible(true);
+        goRegister.setVisible(true);
+        goLogin.setVisible(false);
+    }
+
+
+    @FXML
+    public void goRegister(){
+        loginPane.setVisible(false);
+        goRegister.setVisible(false);
+        goLogin.setVisible(true);
     }
 }

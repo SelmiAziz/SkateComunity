@@ -13,7 +13,7 @@ public class MainProva extends Application {
     public void start(Stage primaryStage) throws IOException {
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.setStage(primaryStage);
-        sceneManager.loadScene("viewFxmlBasic/AccessViewBasic.fxml");
+        sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
     }
 
     public static void main(String[] args) {

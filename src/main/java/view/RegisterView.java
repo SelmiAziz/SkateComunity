@@ -10,7 +10,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import login.Role;
 import utils.SceneManager;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ public class RegisterView {
     @FXML private TextField usernameField;
     @FXML private TextField passwordField;
     @FXML private TextField dateBirthField;
-    @FXML private ChoiceBox levelChoice;
+    @FXML private ChoiceBox<String> levelChoice;
     @FXML private Label levelLabel;
     @FXML private TextField passwordConfirmationField;
     @FXML private Label resultLabel;
@@ -52,37 +51,29 @@ public class RegisterView {
         }
     }
 
-    //Si deve alzare qualche exeption
-    public String formatDateOfBirth(String date) throws WrongFormatException {
-        String[] arrDate = date.split("-");
-        if (arrDate.length != 3) throw new WrongFormatException("Errore nel formato della data");
-
-        String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-
-        int day, year;
-        try {
-            day = Integer.parseInt(arrDate[0]);
-            year = Integer.parseInt(arrDate[2]);
-        } catch (NumberFormatException e) {
-            throw new WrongFormatException("Errore formato: giorno o anno non validi");
+    private void validaDate(String data) throws WrongFormatException {
+        if (data == null || !data.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
+            throw new WrongFormatException("Formato non valido (deve essere dd/mm/yyyy)");
         }
 
-        int monthIndex = Arrays.asList(months).indexOf(arrDate[1]);
-        if (monthIndex == -1) throw new WrongFormatException("Errore formato: mese non valido");
+        String[] parts = data.split("/");
+        int day = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        int year = Integer.parseInt(parts[2]);
 
-        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        if (month < 1 || month > 12) {
+            throw new WrongFormatException("Mese non valido: " + month);
+        }
 
-        // Controllo anno bisestile
-        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+        int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+        if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))) {
             daysInMonth[1] = 29;
         }
 
-        if (day < 1 || day > daysInMonth[monthIndex]) {
-            throw new WrongFormatException("Errore formato: giorno non valido per il mese");
+        if (day < 1 || day > daysInMonth[month - 1]) {
+            throw new WrongFormatException("Giorno non valido: " + day + " per il mese " + month);
         }
-
-        String formattedMonth = monthIndex < 9 ? "0" + (monthIndex + 1) : "" + (monthIndex + 1);
-        return String.format("%02d/%s/%04d", day, formattedMonth, year);
     }
 
 
@@ -91,7 +82,10 @@ public class RegisterView {
         try {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            String dateOfBirth = formatDateOfBirth(dateBirthField.getText());
+
+            String dateOfBirth = dateBirthField.getText();
+            validaDate(dateOfBirth);
+
             String passwordConfirmation = passwordConfirmationField.getText();
 
             ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();

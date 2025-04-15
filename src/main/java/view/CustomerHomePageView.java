@@ -18,9 +18,7 @@ public class CustomerHomePageView {
 
 
 
-    @FXML private Label coinsLabel;
     @FXML private Label errorLabel;
-    @FXML private Label usernameLabel;
 
     public void initialize(){
 
@@ -52,17 +50,12 @@ public class CustomerHomePageView {
 
     @FXML
     public void goToTricksPage(){
-        System.out.println("Heo");
         try {
-            SceneManager.getInstance().loadScene("viewFxml/CustomerTricksPageView.fxml");
+            sceneManager.loadScene("viewFxml/CustomerTricksPageView.fxml");
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
     }
-
-    private final LoginController loginController = new LoginController();
-
-
 
 
     public void logOut()  {

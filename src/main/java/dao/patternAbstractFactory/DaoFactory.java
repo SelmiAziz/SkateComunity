@@ -10,6 +10,7 @@ abstract public class DaoFactory {
     public abstract CompetitionDao createCompetitionDao();
     public abstract CompetitionRegistrationDao createCompetitionRegistrationDao();
     public abstract TrickDao createTrickDao();
+    public abstract SkateboardDao createSkateboardDao();
 
     private static DaoFactory instance;
 

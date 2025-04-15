@@ -53,6 +53,8 @@ public class LoginView {
     }
 
 
+
+
     @FXML
     public void goBack() {
         try {
@@ -71,3 +73,5 @@ public class LoginView {
         }
     }
 }
+
+

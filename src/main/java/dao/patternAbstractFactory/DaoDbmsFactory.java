@@ -4,14 +4,14 @@ import dao.*;
 
 public class DaoDbmsFactory extends DaoFactory {
 
-    public WalletDao createWalletDao(){return WalletFileSystemDao.getInstance();}
+    public WalletDbmsDao createWalletDao(){return WalletDbmsDao.getInstance();}
 
-    public UserDao createUserDao(){
-        return UserFileSystemDao.getInstance();
+    public UserDbmsDao createUserDao(){
+        return UserDbmsDao.getInstance();
     }
 
-    public CustomerDao createCostumerDao(){
-        return CustomerFileSystemDao.getInstance();
+    public CustomerDbmsDao createCostumerDao(){
+        return CustomerDbmsDao.getInstance();
     }
 
     public OrganizerDbmsDao createOrganizerDao(){
@@ -23,4 +23,6 @@ public class DaoDbmsFactory extends DaoFactory {
     public CompetitionRegistrationDbmsDao createCompetitionRegistrationDao(){return CompetitionRegistrationDbmsDao.getInstance();};
 
     public TrickDbmsDao createTrickDao(){return TrickDbmsDao.getInstance();}
+
+    public SkateboardDbmsDao createSkateboardDao(){return SkateboardDbmsDao.getInstance();}
 }
