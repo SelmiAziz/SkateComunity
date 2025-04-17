@@ -38,11 +38,13 @@ public class OrganizerCompetitionsPageViewBasic {
     }
 
     private void populatePageChoice() {
-        List<String> list = Arrays.asList( "Commissions", "Tricks", "Log Out");
+        List<String> list = Arrays.asList( "Skateboards", "Tricks", "Log Out");
         ObservableList<String> categories = FXCollections.observableArrayList(list);
         choicePage.setItems(categories);
         choicePage.setValue("Competitions");
     }
+
+
 
 
     public void loadCompetitions(){
@@ -125,9 +127,9 @@ public class OrganizerCompetitionsPageViewBasic {
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
-        }else if(page.equals("Commissions")){
+        }else if(page.equals("Skateboards")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+                sceneManager.loadScene("viewFxmlBasic/OrganizerSkateboardsPageViewBasic.fxml");
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

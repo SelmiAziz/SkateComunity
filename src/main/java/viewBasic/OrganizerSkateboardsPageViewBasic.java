@@ -3,13 +3,14 @@ package viewBasic;
 import beans.SkateboardBean;
 import controls.CreateSkateboardController;
 import exceptions.EmptyFieldException;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.SceneManager;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class OrganizerSkateboardsPageViewBasic {
@@ -17,33 +18,42 @@ public class OrganizerSkateboardsPageViewBasic {
     @FXML private TextField costTextField;
     @FXML private ChoiceBox<String> sizeChoiceBox;
     @FXML private TextField skateboardNameField;
-    @FXML private TextArea descriptionTextArea;
-    @FXML private TableView<SkateboardBean> skateboardTable;
-    @FXML private TableColumn<SkateboardBean, String> colSkateboardName;
-    @FXML private TableColumn<SkateboardBean, String> colDescription;
-    @FXML private TableColumn<SkateboardBean, String> colSize;
-    @FXML private TableColumn<SkateboardBean, String> colCost;
+    @FXML private TextArea descriptionTextArea;    @FXML private TableView<SkateboardBean> skateboardTable;
+
+
+    @FXML private ListView<String> skateboardList;
     @FXML private ChoiceBox<String> choicePage;
 
     SceneManager sceneManager = SceneManager.getInstance();
     CreateSkateboardController createSkateboardController = new CreateSkateboardController();
 
     public void initialize(){
-        colSkateboardName.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getName()));
-
-        colDescription.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDescription()));
-
-        colSize.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getSize()));
-
-        colCost.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice())));
-
         populateChoiceBox();
         loadSkateboards();
+        populatePageChoice();
 
+    }
+
+    private void populatePageChoice() {
+        List<String> list = Arrays.asList( "Competitions", "Tricks", "Log Out");
+        ObservableList<String> categories = FXCollections.observableArrayList(list);
+        choicePage.setItems(categories);
+        choicePage.setValue("Skateboards");
+    }
+
+    public void loadSkateboards() {
+        List<SkateboardBean> skateboards = createSkateboardController.getStoredSkateboards();
+        skateboardList.getItems().clear();
+        for (SkateboardBean bean : skateboards) {
+            String display = String.format(
+                    "<<Nome: %s>>-<<Description: %s>>-<<Size: %s>>-<<Cost: %d>>",
+                    bean.getName(),
+                    bean.getDescription(),
+                    bean.getSize(),
+                    bean.getPrice()
+            );
+            skateboardList.getItems().add(display);
+        }
     }
 
 
@@ -54,11 +64,7 @@ public class OrganizerSkateboardsPageViewBasic {
         sizeChoiceBox.setValue(dim[0]);
     }
 
-    public void loadSkateboards(){
-        List<SkateboardBean> availableSkateboardsList = createSkateboardController.getStoredSkateboards();
-        skateboardTable.getItems().clear();
-        skateboardTable.getItems().addAll(availableSkateboardsList);
-    }
+
 
 
     public void submitSkateboard(){

@@ -36,7 +36,7 @@
         <AnchorPane prefHeight="705.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;">
             <children>
                 <Label fx:id="errorLabel" layoutX="38.0" layoutY="518.0" prefHeight="18.0" prefWidth="486.0" />
-            <ListView layoutX="38.0" layoutY="59.0" prefHeight="318.0" prefWidth="427.0" />
+            <ListView fx:id="skateboardList" layoutX="38.0" layoutY="59.0" prefHeight="318.0" prefWidth="427.0" />
 
             </children>
         </AnchorPane>
@@ -58,8 +58,8 @@
                 </Button>
                 <Label layoutX="67.0" layoutY="319.0" text="Size" />
                 <Label layoutX="67.0" layoutY="382.0" text="Cost" />
-            <ChoiceBox layoutX="169.0" layoutY="315.0" prefHeight="26.0" prefWidth="163.0" />
-            <TextField layoutX="169.0" layoutY="378.0" />
+            <ChoiceBox fx:id="sizeChoiceBox" layoutX="169.0" layoutY="315.0" prefHeight="26.0" prefWidth="163.0" />
+            <TextField fx:id="costTextField" layoutX="169.0" layoutY="378.0" />
 
             </children>
         </AnchorPane>
