@@ -2,7 +2,6 @@ package view;
 
 import beans.SkateboardBean;
 import controls.CreateSkateboardController;
-import dao.SkateboardDao;
 import exceptions.EmptyFieldException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;

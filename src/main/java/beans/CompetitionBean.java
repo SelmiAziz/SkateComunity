@@ -11,6 +11,7 @@ public class CompetitionBean {
     private int maxRegistrations;
     private int currentRegistrations;
 
+
     public CompetitionBean(String name, String description, String date, String location, int coins, int maxRegistrations){
         this.name = name;
         this.description = description;

@@ -69,6 +69,8 @@ public class SkateboardDbmsDao implements SkateboardDao{
             stmt.setString(4, skateboard.size());
             stmt.setInt(5, skateboard.price());
 
+            stmt.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,7 +94,7 @@ public class SkateboardDbmsDao implements SkateboardDao{
 
     @Override
     public Skateboard selectSkateboardByName(String name) {
-        for(Skateboard skateboard: skateboardList){
+        for(Skateboard skateboard: skateboardListBase){
             if(skateboard.name().equals(name)){
                 return skateboard;
             }
