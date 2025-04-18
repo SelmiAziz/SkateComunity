@@ -1,5 +1,9 @@
 package utils;
 
+import beans.CustomSkateboardBean;
+import beans.DeliveryDestinationBean;
+import beans.SkateboardBean;
+import controls.CustomOrderController;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import view.CustomerDoneOrdersPageView;
+import view.CustomerMakeOrdersPageView;
 
 import java.io.IOException;
 
@@ -47,6 +53,48 @@ public class SceneManager {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void loadMakeOrdersPage( CustomOrderController controller, SkateboardBean skateboardBean) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerMakeOrdersPageView.fxml"));
+            Parent root = loader.load();
+
+            CustomerMakeOrdersPageView viewController = loader.getController();
+            viewController.setController(controller);
+            viewController.setSkateboardBean(skateboardBean);
+            viewController.initData();
+
+            Scene scene = new Scene(root, 1200, 800);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void loadDoneOrderPage(CustomOrderController controller, SkateboardBean skateboardBean, DeliveryDestinationBean deliveryDestinationBean) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerDoneOrdersPageView.fxml"));
+            Parent root = loader.load();
+
+            CustomerDoneOrdersPageView viewController = loader.getController();
+            viewController.setController(controller);
+            viewController.setSkateboardBean(skateboardBean);
+            viewController.setDeliveryDestinationBean(deliveryDestinationBean);
+            viewController.initData();
+
+            Scene scene = new Scene(root, 1200, 800);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

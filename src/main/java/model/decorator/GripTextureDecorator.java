@@ -12,8 +12,8 @@ public class GripTextureDecorator extends SkateBoardDecorator {
         super(skateboard);
         this.gripValue = gripValue;
         setCostMultiplier(10);
-        setMaxGrip(0.4);
-        setMinGrip(0.7);
+        setMaxGrip(0.7);
+        setMinGrip(0.4);
         this.skateboard = skateboard;
     }
 
@@ -36,7 +36,8 @@ public class GripTextureDecorator extends SkateBoardDecorator {
         int v = super.price();
         double g = Math.max(this.minGrip, Math.min(this.maxGrip, this.gripValue));
         double norm = (g - this.minGrip) / (this.maxGrip - this.minGrip);
-        int curvedCost = (int)Math.round(Math.pow(norm, 2.2) *10);
+        System.out.println(norm +" " + g);
+        int curvedCost = (int)Math.round(Math.pow(norm, 2.2) * this.costMultiplier);
         return v+curvedCost;
     }
 

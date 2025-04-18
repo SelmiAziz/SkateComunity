@@ -35,6 +35,10 @@ public class CustomerOrdersPageView {
 
     CustomOrderController customOrderController = new CustomOrderController();
     SkateboardBean skateboardBean ;
+    SkateboardBean newSkateboardBean;
+
+    SceneManager sceneManager = SceneManager.getInstance();
+
 
     public void initialize(){
         customPane.setVisible(false);
@@ -110,7 +114,7 @@ public class CustomerOrdersPageView {
         customSkateboardBean.setWarrantyMonths(warrantyMonths);
         customSkateboardBean.setNoiseReduction(noiseReduction);
 
-        SkateboardBean newSkateboardBean = customOrderController.generateModel(customSkateboardBean);
+        newSkateboardBean = customOrderController.generateModel(customSkateboardBean);
         skateboardPriceLabel.setText("Price "+newSkateboardBean.getPrice());
         descriptionArea.setText(newSkateboardBean.getDescription());
 
@@ -131,7 +135,12 @@ public class CustomerOrdersPageView {
     }
 
     public void makeOrder(){
-
+       try{
+           sceneManager.loadMakeOrdersPage(customOrderController, newSkateboardBean);
+           sceneManager.openBro();
+       }catch(IOException e){
+           errorLabel.setText(e.getMessage());
+       }
     }
 
     public void back(){

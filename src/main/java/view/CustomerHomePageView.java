@@ -28,7 +28,6 @@ public class CustomerHomePageView {
     public void goToOrdersPage(){
         try {
             SceneManager.getInstance().loadScene("viewFxml/CustomerOrdersPageView.fxml");
-            sceneManager.openBro();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }

@@ -18,7 +18,7 @@ public class OrganizerSkateboardsPageViewBasic {
     @FXML private TextField costTextField;
     @FXML private ChoiceBox<String> sizeChoiceBox;
     @FXML private TextField skateboardNameField;
-    @FXML private TextArea descriptionTextArea;    @FXML private TableView<SkateboardBean> skateboardTable;
+    @FXML private TextArea descriptionTextArea;
 
 
     @FXML private ListView<String> skateboardList;

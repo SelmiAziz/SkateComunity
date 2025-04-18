@@ -26,7 +26,6 @@ public class CustomOrderController {
 
 
     public SkateboardBean generateModel(CustomSkateboardBean customSkateboardBean){
-        System.out.println("Il nome "+customSkateboardBean.getName());
         Skateboard skateboard = skateboardDao.selectSkateboardByName(customSkateboardBean.getName());
 
         //I think that doesn't work in this way
@@ -38,7 +37,7 @@ public class CustomOrderController {
 
 
         SkateboardBean skateboardBean = new SkateboardBean();
-        skateboardBean.setName( skateboard.name());
+        skateboardBean.setName(skateboard.name());
         skateboardBean.setDescription(skateboard.description());
         skateboardBean.setSize(skateboard.size());
         skateboardBean.setPrice(piles.price());

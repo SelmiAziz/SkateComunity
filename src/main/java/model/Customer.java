@@ -10,8 +10,8 @@ import java.util.List;
 public class Customer extends User {
     private List<CompetitionRegistration> competitionRegistrationList ;// a value of default
     private SkaterLevel skaterLevel;
-    private List<SkateboardCommission> skateboardCommissionsSubmittedList;
-    private List<SkateboardCommission> skateboardCommissionsApproved;
+    private List<Order> ordersSubmittedList;
+    private List<Order> ordersAcquiredList;
     private Wallet wallet;
 
     public Customer(String username, String password, String dateOfBirth, SkaterLevel skaterLevel, Wallet wallet){
@@ -53,21 +53,24 @@ public class Customer extends User {
         return competitionRegistrationList;
     }
 
-    public void addSkateboardCommissionApproved(SkateboardCommission skateboardCommission){
-        this.skateboardCommissionsApproved.add(skateboardCommission);
+    public void addSubmittedOrder(Order order){
+        this.ordersSubmittedList.add(order);
     }
 
-    public void addSkateboardCommissionSubmitted(SkateboardCommission skateboardCommission){
-        this.skateboardCommissionsSubmittedList.add(skateboardCommission);
+    public List<Order> getOrdersSubmittedList(){
+        return ordersSubmittedList;
     }
 
-    public List<SkateboardCommission> getSkateboardCommissionsApproved() {
-        return skateboardCommissionsApproved;
+    public void addAcquiredOrder(Order order){
+        this.ordersAcquiredList.add(order);
+    }
+
+    public List<Order> getOrdersAcquired(){
+        return ordersAcquiredList;
     }
 
 
-    public List<SkateboardCommission> getSkateboardCommissionsSubmittedList() {
-        return skateboardCommissionsSubmittedList;
-    }
+
+
 
 }
