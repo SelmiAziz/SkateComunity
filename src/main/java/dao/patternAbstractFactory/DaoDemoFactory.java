@@ -25,5 +25,11 @@ public class DaoDemoFactory extends DaoFactory {
 
     public CompetitionRegistrationDemoDao createCompetitionRegistrationDao(){return CompetitionRegistrationDemoDao.getInstance();}
 
-    public SkateboardDemoDao createSkateboardDao(){return SkateboardDemoDao.getInstance();}
+    public BoardDemoDao createBoardDao(){return BoardDemoDao.getInstance();}
+
+    public CustomOrderDao createCustomOderDao(){return CustomOrderDemoDao.getInstance();}
+
+    public ProgressNoteDao createProgressNoteDao(){return ProgressNoteDemoDao.getInstance();}
+
+    public DeliveryDestinationDao deliveryDestinationDao(){return DeliveryDestinationDemoDao.getInstance();}
 }

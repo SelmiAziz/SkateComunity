@@ -1,9 +1,9 @@
 package model.decorator;
 
-public interface Skateboard {
+public interface Board {
     public int price();
     public String description();
     public String name();
     public String size();
-    public String skateboardId();
+    public String boardId();
 }

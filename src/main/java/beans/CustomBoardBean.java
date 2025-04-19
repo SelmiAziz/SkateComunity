@@ -1,21 +1,19 @@
 package beans;
 
-public class CustomSkateboardBean {
+public class CustomBoardBean {
     private String name;
     private int extraPiles;
     private double gripTexture;
-    private int noiseReduction;
     private double concaveNose;
     private double concaveTail;
     private int warrantyMonths;
 
-    public CustomSkateboardBean(){};
+    public CustomBoardBean(){};
 
-    public CustomSkateboardBean(String name, int extraPiles, float gripTexture, int noiseReduction, float concaveNose, float concaveTail, int warrantyMonths){
+    public CustomBoardBean(String name, int extraPiles, float gripTexture, float concaveNose, float concaveTail, int warrantyMonths){
         this.name = name;
         this.extraPiles = extraPiles;
         this.gripTexture = gripTexture;
-        this.noiseReduction = noiseReduction;
         this.concaveNose = concaveNose;
         this.concaveTail = concaveTail;
         this.warrantyMonths = warrantyMonths;
@@ -49,9 +47,6 @@ public class CustomSkateboardBean {
         return concaveNose;
     }
 
-    public int getNoiseReduction() {
-        return noiseReduction;
-    }
 
     public double getConcaveTail() {
         return concaveTail;
@@ -70,9 +65,6 @@ public class CustomSkateboardBean {
         this.concaveTail = concaveTail;
     }
 
-    public void setNoiseReduction(int noiseReduction) {
-        this.noiseReduction = noiseReduction;
-    }
 
     public void setWarrantyMonths(int warrantyMonths) {
         this.warrantyMonths = warrantyMonths;

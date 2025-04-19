@@ -1,7 +1,7 @@
 package view;
 
 import beans.DeliveryDestinationBean;
-import beans.SkateboardBean;
+import beans.BoardBean;
 import controls.CustomOrderController;
 import exceptions.EmptyFieldException;
 import javafx.fxml.FXML;
@@ -14,10 +14,9 @@ import java.util.List;
 
 public class CustomerMakeOrdersPageView {
 
-
     SceneManager sceneManager = SceneManager.getInstance();
     CustomOrderController customOrderController;
-    SkateboardBean skateboardBean;
+    BoardBean skateboardBean;
 
     @FXML private MenuButton menuRegions;
     @FXML private Label skateboardNameLabel;
@@ -29,17 +28,18 @@ public class CustomerMakeOrdersPageView {
     @FXML private TextField provinceTextField;
     @FXML private TextField cityTextField;
 
+    @FXML private Label regionCost;
+
     @FXML private Spinner<String> timeSlotSpinner;
     @FXML private TextArea commentArea;
 
     @FXML private Label errorLabel;
 
-
     public void setController(CustomOrderController customOrderController){
         this.customOrderController = customOrderController;
     }
 
-    public void setSkateboardBean(SkateboardBean skateboardBean){
+    public void setSkateboardBean(BoardBean skateboardBean){
         this.skateboardBean = skateboardBean;
     }
 
@@ -81,11 +81,18 @@ public class CustomerMakeOrdersPageView {
                 "Trentino-Alto Adige", "Umbria", "Valle d'Aosta", "Veneto"
         );
 
-        for (String r : regioni) {
-            MenuItem item = new MenuItem(r);
-            item.setOnAction(e -> menuRegions.setText(r));
+        for (int i = 0; i < regioni.size(); i++) {
+            String region = regioni.get(i);
+            MenuItem item = new MenuItem(region);
+            item.setOnAction(e -> {
+                menuRegions.setText(region);;
+            });
             menuRegions.getItems().add(item);
         }
+    }
+
+    private void updateRegionCost( int cost) {
+        regionCost.setText( cost + "coins");
     }
 
     public void order(){

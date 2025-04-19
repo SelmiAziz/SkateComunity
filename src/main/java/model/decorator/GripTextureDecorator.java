@@ -1,20 +1,20 @@
 package model.decorator;
 
-public class GripTextureDecorator extends SkateBoardDecorator {
+public class GripTextureDecorator extends BoardDecorator {
 
-    private Skateboard skateboard;
+    private Board board;
     private double costMultiplier;
     private double gripValue;
     private double maxGrip;
     private double minGrip;
 
-    public GripTextureDecorator(Skateboard skateboard, double gripValue){
-        super(skateboard);
+    public GripTextureDecorator(Board board, double gripValue){
+        super(board);
         this.gripValue = gripValue;
         setCostMultiplier(10);
         setMaxGrip(0.7);
         setMinGrip(0.4);
-        this.skateboard = skateboard;
+        this.board = board;
     }
 
 

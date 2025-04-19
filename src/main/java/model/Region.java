@@ -1,38 +1,37 @@
 package model;
 
 public enum Region {
-
-    LAZIO("Lazio", 0),
-    UMBRIA("Umbria", 1),
-    TOSCANA("Toscana", 2),
-    ABRUZZO("Abruzzo", 2),
-    MARCHE("Marche", 2),
-    CAMPANIA("Campania", 3),
-    MOLISE("Molise", 3),
-    EMILIA_ROMAGNA("Emilia-Romagna", 3),
-    LIGURIA("Liguria", 4),
-    PUGLIA("Puglia", 4),
-    BASILICATA("Basilicata", 4),
-    PIEMONTE("Piemonte", 5),
-    LOMBARDIA("Lombardia", 5),
-    CALABRIA("Calabria", 6),
-    VENETO("Veneto", 5),
-    TRENTINO_ALTO_ADIGE("Trentino-Alto Adige", 6),
-    FRIULI_VENEZIA_GIULIA("Friuli-Venezia Giulia", 6),
-    SARDEGNA("Sardegna", 7),
-    SICILIA("Sicilia", 7),
-    VALLE_D_AOSTA("Valle d'Aosta", 6);
+    LAZIO("Lazio", 1),
+    UMBRIA("Umbria", 2),
+    TOSCANA("Toscana", 3),
+    ABRUZZO("Abruzzo", 3),
+    MARCHE("Marche", 3),
+    CAMPANIA("Campania", 4),
+    MOLISE("Molise", 4),
+    EMILIA_ROMAGNA("Emilia-Romagna", 4),
+    LIGURIA("Liguria", 5),
+    PUGLIA("Puglia", 5),
+    BASILICATA("Basilicata", 5),
+    PIEMONTE("Piemonte", 6),
+    LOMBARDIA("Lombardia", 6),
+    CALABRIA("Calabria", 7),
+    VENETO("Veneto", 6),
+    TRENTINO_ALTO_ADIGE("Trentino-Alto Adige", 7),
+    FRIULI_VENEZIA_GIULIA("Friuli-Venezia Giulia", 7),
+    SARDEGNA("Sardegna", 8),
+    SICILIA("Sicilia", 8),
+    VALLE_D_AOSTA("Valle d'Aosta", 7);
 
     private final String name;
-    private final int cost;
+    private final int estimatedDays;
 
-    Region(String name, int cost) {
+    Region(String name, int estimatedDays) {
         this.name = name;
-        this.cost = cost;
+        this.estimatedDays = estimatedDays;
     }
 
-    public int getCostRegion() {
-        return cost;
+    public int getEstimatedDays() {
+        return estimatedDays;
     }
 
     @Override
@@ -50,3 +49,4 @@ public enum Region {
         return null;
     }
 }
+

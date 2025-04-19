@@ -6,6 +6,7 @@ module startSkate {
     requires org.controlsfx.controls;
     requires java.desktop;
     requires java.management;
+    requires transitive mysql.connector.j;
 
     opens view to javafx.fxml;
     opens viewBasic to javafx.fxml;

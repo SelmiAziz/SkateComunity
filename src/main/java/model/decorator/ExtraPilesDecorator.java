@@ -1,17 +1,17 @@
 package model.decorator;
 
-public class ExtraPilesDecorator extends SkateBoardDecorator {
+public class ExtraPilesDecorator extends BoardDecorator {
 
-    private Skateboard skateboard;
+    private Board board;
     private int extraPiles; // 1 o 2
     private int minExtra;
     private int maxExtra;
     private int costForOne;
     private int costForTwo;
 
-    public ExtraPilesDecorator(Skateboard skateboard, int extraPiles) {
-        super(skateboard);
-        this.skateboard = skateboard;
+    public ExtraPilesDecorator(Board board, int extraPiles) {
+        super(board);
+        this.board = board;
         this.extraPiles = extraPiles;
         setMinExtra(0);
         setMaxExtra(2);

@@ -13,8 +13,8 @@ public class DeliveryDestination {
         this.streetAddress = streetAddress;
     }
 
-    public int deliveryCost(){
-        return region.getCostRegion();
+    public int estimatedDeliveryDays(){
+        return region.getEstimatedDays();
     }
 
     public void setStreetAddress(String streetAddress) {

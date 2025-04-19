@@ -1,8 +1,5 @@
 package view;
 
-import beans.DeliveryDestinationBean;
-import beans.DeliveryPreferencesBean;
-import beans.SkateboardBean;
 import controls.CustomOrderController;
 
 public class CustomerDoneOrdersPageView {

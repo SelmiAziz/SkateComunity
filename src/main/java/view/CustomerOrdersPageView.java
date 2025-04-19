@@ -1,8 +1,8 @@
 package view;
 
 
-import beans.CustomSkateboardBean;
-import beans.SkateboardBean;
+import beans.CustomBoardBean;
+import beans.BoardBean;
 import controls.CustomOrderController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -27,15 +27,15 @@ public class CustomerOrdersPageView {
     @FXML private Spinner<Double> noseSpinner;
     @FXML private Spinner<Double> tailSpinner;
     @FXML private Label gripValueLabel;
-    @FXML private TableView<SkateboardBean> skateboardTable;
-    @FXML private TableColumn<SkateboardBean, String> colSkateboardName;
-    @FXML private TableColumn<SkateboardBean, String> colDescription;
-    @FXML private TableColumn<SkateboardBean, String> colSize;
-    @FXML private TableColumn<SkateboardBean, String> colCost;
+    @FXML private TableView<BoardBean> skateboardTable;
+    @FXML private TableColumn<BoardBean, String> colSkateboardName;
+    @FXML private TableColumn<BoardBean, String> colDescription;
+    @FXML private TableColumn<BoardBean, String> colSize;
+    @FXML private TableColumn<BoardBean, String> colCost;
 
     CustomOrderController customOrderController = new CustomOrderController();
-    SkateboardBean skateboardBean ;
-    SkateboardBean newSkateboardBean;
+    BoardBean skateboardBean ;
+    BoardBean newSkateboardBean;
 
     SceneManager sceneManager = SceneManager.getInstance();
 
@@ -79,7 +79,7 @@ public class CustomerOrdersPageView {
 
 
     public void loadSamples(){
-        List<SkateboardBean> availableSkateboardsList = customOrderController.getSkateboardSamples();
+        List<BoardBean> availableSkateboardsList = customOrderController.getBoardSamples();
         skateboardTable.getItems().clear();
         skateboardTable.getItems().addAll(availableSkateboardsList);
     }
@@ -105,7 +105,7 @@ public class CustomerOrdersPageView {
         int noiseReduction = 10;
 
 
-        CustomSkateboardBean customSkateboardBean = new  CustomSkateboardBean();
+        CustomBoardBean customSkateboardBean = new  CustomBoardBean();
         customSkateboardBean.setName(skateboardBean.getName());
         customSkateboardBean.setConcaveNose(noseConcave);
         customSkateboardBean.setConcaveTail(tailConcave);
@@ -114,7 +114,7 @@ public class CustomerOrdersPageView {
         customSkateboardBean.setWarrantyMonths(warrantyMonths);
         customSkateboardBean.setNoiseReduction(noiseReduction);
 
-        newSkateboardBean = customOrderController.generateModel(customSkateboardBean);
+        newSkateboardBean = customOrderController.generateCustomBoard(customSkateboardBean);
         skateboardPriceLabel.setText("Price "+newSkateboardBean.getPrice());
         descriptionArea.setText(newSkateboardBean.getDescription());
 

@@ -1,15 +1,15 @@
 package beans;
 
-public class SkateboardBean {
+public class BoardBean {
     private int id;
     private String name;
     private String size;
     private int price;
     private String description;
 
-    public SkateboardBean(){};
+    public BoardBean(){};
 
-    public SkateboardBean(String name, String description, String size, int price){
+    public BoardBean(String name, String description, String size, int price){
         this.name = name;
         this.size = size;
         this.price = price;
@@ -17,7 +17,7 @@ public class SkateboardBean {
     }
 
 
-    public SkateboardBean(int id, String name, String description, String size, int price){
+    public BoardBean(int id, String name, String description, String size, int price){
         this.id = id;
         this.name = name;
         this.size = size;

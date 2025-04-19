@@ -1,8 +1,8 @@
 package model.decorator;
 
-public class WarrantyDecorator extends SkateBoardDecorator {
+public class WarrantyDecorator extends BoardDecorator {
 
-    private Skateboard skateboard;
+    private Board board;
     private int warrantyMonths;
     private int minWarrantyMonths;
     private int maxWarrantyMonths;
@@ -11,9 +11,9 @@ public class WarrantyDecorator extends SkateBoardDecorator {
     private int firstPeriodMonths;
     private int secondPeriodMonths;
 
-    public WarrantyDecorator(Skateboard skateboard, int warrantyMonths) {
-        super(skateboard);
-        this.skateboard = skateboard;
+    public WarrantyDecorator(Board board, int warrantyMonths) {
+        super(board);
+        this.board = board;
         this.warrantyMonths = warrantyMonths;
         setMinWarrantyMonths(0);
         setMaxWarrantyMonths(12);

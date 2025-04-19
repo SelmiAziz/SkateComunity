@@ -9,13 +9,11 @@ import java.util.List;
 
 public class Organizer extends User {
     public List<Competition> competitionCreatedList;
-    public List<SkateboardCommission> skateboardCommissionInChargeList;
 
     public Organizer(String username, String password,String dateOfBirth){
         super(username,password,dateOfBirth);
         this.role = Role.ORGANIZER;
         this.competitionCreatedList = new ArrayList<>();
-        this.skateboardCommissionInChargeList = new ArrayList<>();
     }
 
 
@@ -28,12 +26,5 @@ public class Organizer extends User {
         return this.competitionCreatedList;
     }
 
-    public void addSkateboardCommissionInCharge(SkateboardCommission skateboardCommission){
-        this.skateboardCommissionInChargeList.add(skateboardCommission);
-    }
-
-    public List<SkateboardCommission> getSkateboardCommissionInChargeList(){
-        return skateboardCommissionInChargeList;
-    }
 
 }

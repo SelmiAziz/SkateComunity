@@ -1,7 +1,7 @@
 package view;
 
-import beans.SkateboardBean;
-import controls.CreateSkateboardController;
+import beans.BoardBean;
+import controls.CreateBoardController;
 import exceptions.EmptyFieldException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -18,13 +18,13 @@ public class OrganizerSkateboardsPageView {
     @FXML private Spinner<String> sizeSpinner;
     @FXML private TextField skateboardNameField;
     @FXML private TextArea descriptionTextArea;
-    @FXML private TableView<SkateboardBean> skateboardTable;
-    @FXML private TableColumn<SkateboardBean, String> colSkateboardName;
-    @FXML private TableColumn<SkateboardBean, String> colDescription;
-    @FXML private TableColumn<SkateboardBean, String> colSize;
-    @FXML private TableColumn<SkateboardBean, String> colCost;
+    @FXML private TableView<BoardBean> skateboardTable;
+    @FXML private TableColumn<BoardBean, String> colSkateboardName;
+    @FXML private TableColumn<BoardBean, String> colDescription;
+    @FXML private TableColumn<BoardBean, String> colSize;
+    @FXML private TableColumn<BoardBean, String> colCost;
     SceneManager sceneManager = SceneManager.getInstance();
-    CreateSkateboardController createSkateboardController = new CreateSkateboardController();
+    CreateBoardController createSkateboardController = new CreateBoardController();
 
     public void initialize(){
         colSkateboardName.setCellValueFactory(cellData ->
@@ -50,9 +50,9 @@ public class OrganizerSkateboardsPageView {
 
 
     public void loadSkateboards(){
-        List<SkateboardBean> availableSkateboardsList = createSkateboardController.getStoredSkateboards();
+        List<BoardBean> availableSkateboardsList = createSkateboardController.getStoredBoards();
         skateboardTable.getItems().clear();
-        for(SkateboardBean s: availableSkateboardsList){
+        for(BoardBean s: availableSkateboardsList){
             System.out.println(s.getName());
         }
         skateboardTable.getItems().addAll(availableSkateboardsList);
@@ -68,7 +68,7 @@ public class OrganizerSkateboardsPageView {
           if(name == null || description == null){
               throw new EmptyFieldException("Inserire correttamente campi");
           }
-          createSkateboardController.createSkateboard( new SkateboardBean(name, description, size, cost));
+          createSkateboardController.createBoard( new BoardBean(name, description, size, cost));
           loadSkateboards();
       }catch(EmptyFieldException e){
           errorLabel.setText(e.getMessage());

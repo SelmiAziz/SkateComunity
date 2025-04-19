@@ -1,16 +1,16 @@
 package model.decorator;
 
-public class NoseConcaveDecorator extends SkateBoardDecorator {
+public class NoseConcaveDecorator extends BoardDecorator {
 
-    private Skateboard skateboard;
+    private Board board;
     private double concaveDepthMm;
     private double costMultiplier;
     private double maxDepth;
     private double minDepth;
 
-    public NoseConcaveDecorator(Skateboard skateboard, double concaveDepthMm) {
-        super(skateboard);
-        this.skateboard = skateboard;
+    public NoseConcaveDecorator(Board board, double concaveDepthMm) {
+        super(board);
+        this.board = board;
         this.concaveDepthMm = concaveDepthMm;
         setCostMultiplier(1.2);
         setMinDepth(3.0);

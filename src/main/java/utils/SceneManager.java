@@ -1,8 +1,7 @@
 package utils;
 
-import beans.CustomSkateboardBean;
 import beans.DeliveryDestinationBean;
-import beans.SkateboardBean;
+import beans.BoardBean;
 import controls.CustomOrderController;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -55,7 +54,7 @@ public class SceneManager {
         stage.show();
     }
 
-    public void loadMakeOrdersPage( CustomOrderController controller, SkateboardBean skateboardBean) {
+    public void loadMakeOrdersPage( CustomOrderController controller, BoardBean skateboardBean) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerMakeOrdersPageView.fxml"));
             Parent root = loader.load();
@@ -76,15 +75,14 @@ public class SceneManager {
     }
 
 
-    public void loadDoneOrderPage(CustomOrderController controller, SkateboardBean skateboardBean, DeliveryDestinationBean deliveryDestinationBean) {
+    public void loadDoneOrderPage(CustomOrderController controller, BoardBean skateboardBean, DeliveryDestinationBean deliveryDestinationBean) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerDoneOrdersPageView.fxml"));
             Parent root = loader.load();
 
             CustomerDoneOrdersPageView viewController = loader.getController();
             viewController.setController(controller);
-            viewController.setSkateboardBean(skateboardBean);
-            viewController.setDeliveryDestinationBean(deliveryDestinationBean);
+
             viewController.initData();
 
             Scene scene = new Scene(root, 1200, 800);

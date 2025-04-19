@@ -1,7 +1,7 @@
 package viewBasic;
 
-import beans.SkateboardBean;
-import controls.CreateSkateboardController;
+import beans.BoardBean;
+import controls.CreateBoardController;
 import exceptions.EmptyFieldException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +25,7 @@ public class OrganizerSkateboardsPageViewBasic {
     @FXML private ChoiceBox<String> choicePage;
 
     SceneManager sceneManager = SceneManager.getInstance();
-    CreateSkateboardController createSkateboardController = new CreateSkateboardController();
+    CreateBoardController createSkateboardController = new CreateBoardController();
 
     public void initialize(){
         populateChoiceBox();
@@ -42,9 +42,9 @@ public class OrganizerSkateboardsPageViewBasic {
     }
 
     public void loadSkateboards() {
-        List<SkateboardBean> skateboards = createSkateboardController.getStoredSkateboards();
+        List<BoardBean> skateboards = createSkateboardController.getStoredBoards();
         skateboardList.getItems().clear();
-        for (SkateboardBean bean : skateboards) {
+        for (BoardBean bean : skateboards) {
             String display = String.format(
                     "<<Nome: %s>>-<<Description: %s>>-<<Size: %s>>-<<Cost: %d>>",
                     bean.getName(),
@@ -77,7 +77,7 @@ public class OrganizerSkateboardsPageViewBasic {
                 throw new EmptyFieldException("Inserire correttamente campi");
             }
             int cost = Integer.parseInt(costTextField.getText());
-            createSkateboardController.createSkateboard( new SkateboardBean(name, description, size, cost));
+            createSkateboardController.createBoard( new BoardBean(name, description, size, cost));
             loadSkateboards();
         }catch(NumberFormatException | EmptyFieldException e){
             errorLabel.setText(e.getMessage());
