@@ -20,14 +20,17 @@ public class CustomOrderController {
     private final ProgressNoteDao progressNoteDao = DaoFactory.getInstance().createProgressNoteDao();
     private CustomerMakeOrdersPageView makeOrdersPageView;
     private CoordinatorOrderPageView  coordinatorOrderPageView;
-
-    private final SessionManager sessionManager = SessionManager.getInstance();
+    private final PaymentController paymentController = new PaymentController();
 
     public List<BoardBean> getBoardSamples(){
         List<BoardBean> boardBeanList = new ArrayList<>();
         List<Board> boardList = boardDao.selectAvailableBoards();
         for(Board board : boardList){
-            BoardBean boardBean = new BoardBean(board.name(), board.description(), board.size(), board.price());
+            BoardBean boardBean = new BoardBean();
+            boardBean.setName(board.name());
+            boardBean.setDescription(board.description());
+            boardBean.setPrice(board.price());
+            boardBean.setSize(board.size());
             boardBeanList.add(boardBean);
         }
         return boardBeanList;
@@ -51,11 +54,27 @@ public class CustomOrderController {
         return boardBean;
     }
 
-    public void saveCreatedDesignBoard(BoardBean boardBean){
+    public void saveCreatedCustomizedBoard(BoardBean boardBean){
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
         Board board = new BoardBase(boardBean.getName(), boardBean.getDescription(), boardBean.getSize(), boardBean.getPrice());
         customer.addDesignBoard(board);
         boardDao.addBoard(board, customer.getUsername());
+    }
+
+
+    public List<BoardBean> getCustomizedBoards(){
+        Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
+        List<BoardBean> boardBeanList = new ArrayList<>();
+        for(Board board : customer.customizedBoards()){
+            BoardBean boardBean = new BoardBean();
+            boardBean.setId(board.boardId());
+            boardBean.setDescription(board.description());
+            boardBean.setName(board.name());
+            boardBean.setSize(board.size());
+            boardBean.setPrice(board.price());
+            boardBeanList.add(boardBean);
+        }
+        return boardBeanList;
     }
 
     protected void notifyOrderCoordinator() {
@@ -72,10 +91,14 @@ public class CustomOrderController {
             customOrder.setOrderStatus(OrderStatus.PROCESSING);
         }else{
             customOrder.setOrderStatus(OrderStatus.REJECTED);
+            int coinsRefunded = customOrder.totalCost();
+            Wallet  wallet = customOrder.getCustomer().getWallet();
+            wallet.depositCoins(coinsRefunded);
         }
         customOrderDao.updateCustomOrder(customOrder);
         notifyCustomer();
     }
+
 
     public void writeNote(ProgressNoteBean progressNoteBean, CustomOrderBean customOrderBean){
         ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(), progressNoteBean.getDate());
@@ -107,11 +130,14 @@ public class CustomOrderController {
 
         DeliveryPreferences deliveryPreferences = new DeliveryPreferences(deliveryPreferencesBean.getComment(), deliveryPreferencesBean.getPreferredTimeSlot());
 
-
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
 
         CustomOrder customOrder = new CustomOrder(customer,deliveryDestination,deliveryPreferences, board);
         customer.addSubmittedOrder(customOrder);
+
+        int costCoins = customOrder.totalCost();
+        Wallet wallet = customer.getWallet();
+        paymentController.payWithCoins(wallet, costCoins);
 
         notifyOrderCoordinator();
 
@@ -129,7 +155,7 @@ public class CustomOrderController {
     public List<CustomOrderBean> getOrdersSubmitted(){
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
         List<CustomOrderBean> customOrderBeanList = new ArrayList<>();
-        for(CustomOrder customOrder: customer.getOrdersSubmittedList()){
+        for(CustomOrder customOrder: customer.customOrdersSubmitted()){
             CustomOrderBean customOrderBean = new CustomOrderBean();
             customOrderBean.setId(customOrder.getId());
             customOrderBean.setCreationDate(customOrder.creationDate());
@@ -151,7 +177,7 @@ public class CustomOrderController {
     public List<CustomOrderBean> getOrdersAcquired(){
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
         List<CustomOrderBean> customOrderBeanList = new ArrayList<>();
-        for(CustomOrder customOrder: customer.getOrdersAcquiredList()){
+        for(CustomOrder customOrder: customer.customOrdersAcquired()){
             CustomOrderBean customOrderBean = new CustomOrderBean();
             customOrderBean.setId(customOrder.getId());
             customOrderBean.setCreationDate(customOrder.creationDate());

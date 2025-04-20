@@ -26,9 +26,9 @@ public class DaoDbmsFactory extends DaoFactory {
 
     public BoardDbmsDao createBoardDao(){return BoardDbmsDao.getInstance();}
 
-    public CustomOrderDao createCustomOderDao(){return CustomOrderDbmsDao.getInstance();}
+    public CustomOrderDao createCustomOrderDao(){return CustomOrderDbmsDao.getInstance();}
 
     public ProgressNoteDao createProgressNoteDao(){return ProgressNoteDbmsDao.getInstance();}
 
-    public DeliveryDestinationDao deliveryDestinationDao(){return DeliveryDestinationDbmsDao.getInstance();}
+    public DeliveryDestinationDao createDeliveryDestinationDao(){return DeliveryDestinationDbmsDao.getInstance();}
 }

@@ -1,7 +1,9 @@
 package dao;
 
-public class ProgressNoteDemoDao {
-    private static ProgressNoteDemoDao instance;
+import model.ProgressNote;
+
+public class ProgressNoteDemoDao implements ProgressNoteDao {
+    private static ProgressNoteDemoDao instance ;
 
 
     public static synchronized ProgressNoteDemoDao getInstance(){
@@ -9,5 +11,15 @@ public class ProgressNoteDemoDao {
             instance = new ProgressNoteDemoDao();
         }
         return instance;
+    }
+
+    @Override
+    public void saveProgressNote(ProgressNote progressNote, String customOrderId) {
+
+    }
+
+    @Override
+    public ProgressNote selectProgressNoteById(String id) {
+        return null;
     }
 }

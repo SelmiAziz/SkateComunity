@@ -4,4 +4,5 @@ import model.ProgressNote;
 
 public interface ProgressNoteDao {
     void saveProgressNote(ProgressNote progressNote, String customOrderId);
+    ProgressNote selectProgressNoteById(String id);
 }

@@ -62,7 +62,7 @@ public class Customer extends User {
         this.ordersSubmittedList.add(order);
     }
 
-    public List<CustomOrder> getOrdersSubmittedList(){
+    public List<CustomOrder> customOrdersSubmitted(){
         return ordersSubmittedList;
     }
 
@@ -70,7 +70,7 @@ public class Customer extends User {
         this.ordersAcquiredList.add(order);
     }
 
-    public List<CustomOrder> getOrdersAcquiredList(){
+    public List<CustomOrder> customOrdersAcquired(){
         return this.ordersAcquiredList;
     }
 
@@ -78,7 +78,7 @@ public class Customer extends User {
         this.boardDesignedList.add(board);
     }
 
-    public List<Board> getDesignBoardList(){
+    public List<Board> customizedBoards(){
         return this.boardDesignedList;
     }
 

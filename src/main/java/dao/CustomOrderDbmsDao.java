@@ -1,10 +1,15 @@
 package dao;
 
+import dao.patternAbstractFactory.DaoFactory;
 import model.CustomOrder;
 
-public class CustomOrderDbmsDao extends CustomOrderDao {
-    private static CustomOrderDbmsDao instance;
+import java.util.ArrayList;
+import java.util.List;
 
+public class CustomOrderDbmsDao implements CustomOrderDao {
+    private static CustomOrderDbmsDao instance;
+    private final List<CustomOrder> customOrderList = new ArrayList<>();
+    private final DeliveryDestinationDao deliveryDestinationDao = DaoFactory.getInstance().createDeliveryDestinationDao();
 
     public static synchronized CustomOrderDbmsDao getInstance(){
         if(instance == null){
@@ -15,12 +20,18 @@ public class CustomOrderDbmsDao extends CustomOrderDao {
 
     @Override
     public CustomOrder selectCustomOrderById(String id) {
+        for(CustomOrder customOrder: this.customOrderList){
+            if(customOrder.getId().equals(id)){
+                return customOrder;
+            }
+        }
         return null;
     }
 
     @Override
     public void saveCustomOrder(CustomOrder customOrder) {
-
+        customOrderList.add(customOrder);
+        deliveryDestinationDao.saveDeliveryDestination(customOrder.getDeliveryDestination());
     }
 
     @Override

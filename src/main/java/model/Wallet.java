@@ -29,7 +29,7 @@ public class Wallet {
     }
 
 
-    public void gainCoins(int coinsGained){
+    public void depositCoins(int coinsGained){
         this.balance += coinsGained;
     }
 

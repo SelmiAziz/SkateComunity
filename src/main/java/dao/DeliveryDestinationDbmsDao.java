@@ -1,6 +1,8 @@
 package dao;
 
-public class DeliveryDestinationDbmsDao {
+import model.DeliveryDestination;
+
+public class DeliveryDestinationDbmsDao implements DeliveryDestinationDao {
 
     private static DeliveryDestinationDbmsDao instance;
 
@@ -10,5 +12,15 @@ public class DeliveryDestinationDbmsDao {
             instance = new DeliveryDestinationDbmsDao();
         }
         return instance;
+    }
+
+    @Override
+    public DeliveryDestination selectDestinationById(String id) {
+        return null;
+    }
+
+    @Override
+    public void saveDeliveryDestination(DeliveryDestination deliveryDestination) {
+
     }
 }
