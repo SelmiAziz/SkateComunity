@@ -2,6 +2,7 @@ package model;
 
 import login.Role;
 import login.User;
+import model.decorator.Board;
 import utils.SkaterLevel;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class Customer extends User {
     private SkaterLevel skaterLevel;
     private List<CustomOrder> ordersSubmittedList;
     private List<CustomOrder> ordersAcquiredList;
+    private List<Board> boardDesignedList;
     private Wallet wallet;
 
     public Customer(String username, String password, String dateOfBirth, SkaterLevel skaterLevel, Wallet wallet){
@@ -19,6 +21,9 @@ public class Customer extends User {
         this.role = Role.COSTUMER;
         this.wallet = wallet;
         this.competitionRegistrationList = new ArrayList<>();
+        this.ordersSubmittedList = new ArrayList<>();
+        this.ordersAcquiredList = new ArrayList<>();
+        this.boardDesignedList = new ArrayList<>();
         this.skaterLevel = skaterLevel;
     }
 
@@ -65,10 +70,17 @@ public class Customer extends User {
         this.ordersAcquiredList.add(order);
     }
 
-    public List<CustomOrder> getOrdersAcquired(){
-        return ordersAcquiredList;
+    public List<CustomOrder> getOrdersAcquiredList(){
+        return this.ordersAcquiredList;
     }
 
+    public void addDesignBoard(Board board){
+        this.boardDesignedList.add(board);
+    }
+
+    public List<Board> getDesignBoardList(){
+        return this.boardDesignedList;
+    }
 
 
 

@@ -73,6 +73,10 @@ public class CustomerMakeOrdersPageView {
         descriptionArea.setText(skateboardBean.getDescription());
     }
 
+    public void orderUpdate(){
+
+    }
+
     public void loadRegionsMenu(){
         List<String> regioni = Arrays.asList(
                 "Abruzzo", "Basilicata", "Calabria", "Campania", "Emilia-Romagna",

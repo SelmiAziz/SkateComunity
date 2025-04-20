@@ -9,12 +9,12 @@ public class ProgressNote {
 
     public ProgressNote() {
         this.comment = "Order chronology starts here!";
-        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
-    public ProgressNote(String comment) {
+    public ProgressNote(String comment, String date) {
         this.comment = comment;
-        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.date = date;
     }
 
     public String getComment() {

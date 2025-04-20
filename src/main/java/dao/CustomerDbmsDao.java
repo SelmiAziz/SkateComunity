@@ -97,7 +97,6 @@ public class CustomerDbmsDao implements CustomerDao{
         }
 
         walletDao.addWallet(customer.getWallet(), customer.getUsername());
-
     }
 
 

@@ -32,7 +32,7 @@ public class CustomOrder {
         return progressNoteList.get(progressNoteList.size() - 1).getDate();
     }
 
-    public String DeliveryDate(List<ProgressNote> progressNoteList) {
+    public String deliveryDate() {
         if(orderStatus == OrderStatus.COMPLETED){
             return progressNoteList.get(0).getDate();
         }
@@ -59,7 +59,7 @@ public class CustomOrder {
         return progressNoteList;
     }
 
-    public void addProgressNote(ProgressNote progressNote) {
+    public void addProgressNoteOrder(ProgressNote progressNote) {
         this.progressNoteList.add(progressNote);
     }
 

@@ -48,6 +48,7 @@ public class BoardDemoDao implements BoardDao {
     }
 
     @Override
-    public void addBoard(Board board, String idOrder) {
+    public void addBoard(Board board, String customerId) {
+        this.boardList.add(board);
     }
 }
