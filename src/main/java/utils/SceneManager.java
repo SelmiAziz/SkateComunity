@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import view.CustomerDoneOrdersPageView;
 import view.CustomerMakeOrdersPageView;
 
 import java.io.IOException;
@@ -81,9 +80,7 @@ public class SceneManager {
             Parent root = loader.load();
 
             CustomerDoneOrdersPageView viewController = loader.getController();
-            viewController.setController(controller);
 
-            viewController.initData();
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setResizable(false);

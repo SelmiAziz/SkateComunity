@@ -67,7 +67,7 @@
                         <TableColumn fx:id="colCost" prefWidth="113.0" text="cost" />
                     </columns>
                 </TableView>
-                <Label layoutX="346.0" layoutY="436.0" prefHeight="18.0" prefWidth="194.0" text="Click on a board !!!" />
+                <Label layoutX="416.0" layoutY="436.0" prefHeight="18.0" prefWidth="126.0" text="Click on a board !!!" />
                 <Label fx:id="errorLabel" layoutX="41.0" layoutY="580.0" prefHeight="18.0" prefWidth="501.0" />
                 <Button fx:id="availableButton" layoutX="177.0" layoutY="432.0" mnemonicParsing="false" onMouseClicked="#displayAvailableBoardSamples" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="available" textFill="WHITE">
                     <effect>
@@ -92,15 +92,15 @@
                 </ImageView>
                 <Pane fx:id="customPane" layoutX="37.0" layoutY="-4.0" prefHeight="520.0" prefWidth="536.0">
                     <children>
-                        <Label fx:id="customizeLabel" layoutX="2.0" layoutY="5.0" prefHeight="24.0" prefWidth="469.0" text="Customize your board" textFill="#1abc9c">
+                        <Label fx:id="customizeLabel" layoutY="3.0" prefHeight="24.0" prefWidth="469.0" text="Customize your board" textFill="#1abc9c">
                             <font>
-                                <Font size="17.0" />
+                                <Font size="21.0" />
                             </font>
                         </Label>
                         <Label layoutX="2.0" layoutY="50.0" prefHeight="18.0" prefWidth="283.0" text="Nose Concave (mm) :" />
                         <Label layoutX="2.0" layoutY="85.0" prefHeight="18.0" prefWidth="125.0" text="Tail Concave (mm) :" />
                         <Label layoutX="2.0" layoutY="120.0" prefHeight="18.0" prefWidth="172.0" text="Warranty Period (months) :" />
-                        <Label layoutX="2.0" layoutY="155.0" prefHeight="18.0" prefWidth="106.0" text="Extra Plies" />
+                        <Label layoutX="2.0" layoutY="155.0" prefHeight="18.0" prefWidth="106.0" text="Extra Plies:" />
                         <Label layoutX="1.0" layoutY="191.0" prefHeight="18.0" prefWidth="274.0" text="Grip Texture:" />
                         <TextArea fx:id="descriptionArea" layoutX="3.0" layoutY="289.0" prefHeight="126.0" prefWidth="475.0" />
                         <Label fx:id="boardPriceLabel" layoutX="5.0" layoutY="254.0" prefHeight="18.0" prefWidth="135.0" />
@@ -119,7 +119,7 @@
                         <Slider fx:id="gripSlider" layoutX="309.0" layoutY="193.0" prefHeight="15.0" prefWidth="160.0" />
                         <Spinner fx:id="noseSpinner" layoutX="308.0" layoutY="45.0" />
                         <Spinner fx:id="tailSpinner" layoutX="308.0" layoutY="81.0" />
-                        <Label fx:id="gripValueLabel" layoutX="87.0" layoutY="225.0" prefHeight="18.0" prefWidth="175.0" />
+                        <Label fx:id="gripValueLabel" layoutX="88.0" layoutY="192.0" prefHeight="18.0" prefWidth="175.0" />
                         <Button layoutX="308.0" layoutY="248.0" mnemonicParsing="false" onMouseClicked="#generate" prefHeight="26.0" prefWidth="155.0" style="-fx-background-color: #1ABC9C;" text="generate" textFill="WHITE">
                             <effect>
                                 <DropShadow height="5.0" radius="2.0" width="5.0" />
