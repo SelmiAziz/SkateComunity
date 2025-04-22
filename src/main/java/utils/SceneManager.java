@@ -1,6 +1,6 @@
 package utils;
 
-import beans.DeliveryDestinationBean;
+import beans.CustomOrderSummaryBean;
 import beans.BoardBean;
 import controls.CustomOrderController;
 import javafx.animation.PauseTransition;
@@ -10,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import view.CoordinatorOrderPageView;
+import view.CustomerAllOrdersPageView;
 import view.CustomerMakeOrdersPageView;
 
 import java.io.IOException;
@@ -53,14 +55,15 @@ public class SceneManager {
         stage.show();
     }
 
-    public void loadMakeOrdersPage( CustomOrderController controller, BoardBean skateboardBean) {
+    public void loadMakeOrdersPage( CustomOrderController controller, BoardBean boardBean) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerMakeOrdersPageView.fxml"));
             Parent root = loader.load();
 
             CustomerMakeOrdersPageView viewController = loader.getController();
             viewController.setController(controller);
-            viewController.setSkateboardBean(skateboardBean);
+            viewController.setBoardBean(boardBean);
+            openBro(controller);
             viewController.initData();
 
             Scene scene = new Scene(root, 1200, 800);
@@ -74,18 +77,21 @@ public class SceneManager {
     }
 
 
-    public void loadDoneOrderPage(CustomOrderController controller, BoardBean skateboardBean, DeliveryDestinationBean deliveryDestinationBean) {
+    public void loadAllOrdersPage(CustomOrderController controller, CustomOrderSummaryBean customOrderBean) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerDoneOrdersPageView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerAllOrdersPageView.fxml"));
             Parent root = loader.load();
 
-            CustomerDoneOrdersPageView viewController = loader.getController();
-
+            CustomerAllOrdersPageView viewController = loader.getController();
+            viewController.setCustomOrderBean(customOrderBean);
+            viewController.setCustomOrderController(controller);
+            controller.setCustomAllOrdersPageView(viewController);
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
+            viewController.initAfter();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -93,7 +99,7 @@ public class SceneManager {
     }
 
 
-    public void openBro() throws IOException {
+    public void openBro(CustomOrderController customOrderController) throws IOException {
         // Se già aperto, non fare nulla
         if (stageBr != null && stageBr.isShowing()) {
             stageBr.toFront();
@@ -104,7 +110,9 @@ public class SceneManager {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CoordinatorOrdersPageView.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 1200, 800);
-
+        CoordinatorOrderPageView coordinatorController = loader.getController();
+        customOrderController.setCoordinatorOrderPageView(coordinatorController);
+        coordinatorController.setCustomOrderController(customOrderController);
 
         stageBr.setResizable(false);
         stageBr.setScene(scene);

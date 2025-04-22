@@ -131,17 +131,9 @@ public class CustomerOrdersPageView {
         // implement if needed
     }
     public void orderBoard(){
-
+        sceneManager.loadMakeOrdersPage(customOrderController, newBoardBean);
     }
 
-    public void makeOrder() {
-        try {
-            sceneManager.loadMakeOrdersPage(customOrderController, newBoardBean);
-            sceneManager.openBro();
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
-    }
 
     public void back() {
         customPane.setVisible(false);

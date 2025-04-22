@@ -11,13 +11,13 @@ public class CustomOrder {
     private Customer customer;
     private DeliveryDestination deliveryDestination;
     private List<ProgressNote> progressNoteList = new ArrayList<>();
-    private Board skateboard;
+    private Board board;
     private OrderStatus orderStatus;
 
 
-    public CustomOrder(Customer customer, DeliveryDestination deliveryDestination, DeliveryPreferences deliveryPreferences, Board skateboard){
+    public CustomOrder(Customer customer, DeliveryDestination deliveryDestination, DeliveryPreferences deliveryPreferences, Board board){
         this.deliveryDestination = deliveryDestination;
-        this.skateboard = skateboard;
+        this.board = board;
         this.customer = customer;
         this.progressNoteList.add(new ProgressNote());
         this.orderStatus = OrderStatus.REQUESTED;
@@ -40,7 +40,7 @@ public class CustomOrder {
     }
 
     public int totalCost(){
-        return skateboard.price() ;
+        return board.price() ;
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
@@ -74,7 +74,7 @@ public class CustomOrder {
     }
 
     public Board getBoard() {
-        return skateboard;
+        return board;
     }
 
 

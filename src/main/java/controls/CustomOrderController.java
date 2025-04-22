@@ -8,7 +8,7 @@ import model.*;
 import model.decorator.*;
 import utils.SessionManager;
 import view.CoordinatorOrderPageView;
-import view.CustomerMakeOrdersPageView;
+import view.CustomerAllOrdersPageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,17 @@ public class CustomOrderController {
     private final CustomOrderDao customOrderDao = DaoFactory.getInstance().createCustomOrderDao();
     private final CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
     private final ProgressNoteDao progressNoteDao = DaoFactory.getInstance().createProgressNoteDao();
-    private CustomerMakeOrdersPageView makeOrdersPageView;
+    private CustomerAllOrdersPageView customerAllOrdersPageView;
     private CoordinatorOrderPageView  coordinatorOrderPageView;
     private final PaymentController paymentController = new PaymentController();
+
+    public void setCoordinatorOrderPageView(CoordinatorOrderPageView coordinatorOrderPageView) {
+        this.coordinatorOrderPageView = coordinatorOrderPageView;
+    }
+
+    public void setCustomAllOrdersPageView(CustomerAllOrdersPageView customerAllOrdersPageView) {
+        this.customerAllOrdersPageView = customerAllOrdersPageView;
+    }
 
     public List<BoardBean> getBoardSamples(){
         List<BoardBean> boardBeanList = new ArrayList<>();
@@ -46,6 +54,7 @@ public class CustomOrderController {
         ExtraPilesDecorator piles = new ExtraPilesDecorator(warranty, customBoardBean.getExtraPiles());
 
         BoardBean boardBean = new BoardBean();
+        boardBean.setId(baseBoard.boardId());
         boardBean.setName(baseBoard.name());
         boardBean.setDescription(piles.description());
         boardBean.setSize(baseBoard.size());
@@ -56,7 +65,7 @@ public class CustomOrderController {
 
     public void saveCreatedCustomizedBoard(BoardBean boardBean){
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
-        Board board = new BoardBase(boardBean.getName(), boardBean.getDescription(), boardBean.getSize(), boardBean.getPrice());
+        Board board = new BoardBase(boardBean.getId(),boardBean.getName(), boardBean.getDescription(), boardBean.getSize(), boardBean.getPrice());
         customer.addDesignBoard(board);
         boardDao.addBoard(board, customer.getUsername());
     }
@@ -82,7 +91,7 @@ public class CustomOrderController {
     }
 
     protected void notifyCustomer(){
-        makeOrdersPageView.orderUpdate();
+        customerAllOrdersPageView.orderUpdate();
     }
 
     public void acceptCustomOrder(CustomOrderBean customOrderBean, boolean accept){
@@ -100,7 +109,7 @@ public class CustomOrderController {
     }
 
 
-    public void writeNote(ProgressNoteBean progressNoteBean, CustomOrderBean customOrderBean){
+    public void writeNote( CustomOrderBean customOrderBean, ProgressNoteBean progressNoteBean){
         ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(), progressNoteBean.getDate());
 
         CustomOrder customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
@@ -119,7 +128,10 @@ public class CustomOrderController {
         notifyCustomer();
     }
 
-    public CustomOrderBean elaborateOrder(DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean){
+    public CustomOrderSummaryBean elaborateOrder(DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean){
+       //provissori
+        saveCreatedCustomizedBoard(boardBean);
+
         DeliveryDestination deliveryDestination = new DeliveryDestination(Region.fromString(deliveryDestinationBean.getRegion()),
                 deliveryDestinationBean.getProvince(),
                 deliveryDestinationBean.getCity(),
@@ -139,16 +151,33 @@ public class CustomOrderController {
         Wallet wallet = customer.getWallet();
         paymentController.payWithCoins(wallet, costCoins);
 
+        this.customOrderDao.saveCustomOrder(customOrder);
         notifyOrderCoordinator();
 
-        CustomOrderBean customOrderBean = new  CustomOrderBean();
-        customOrderBean.setId(customOrder.getId());
-        customOrderBean.setCreationDate(customOrder.creationDate());
-        customOrderBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
-        customOrderBean.setStatus(customOrder.getOrderStatus().toString());
-        customOrderBean.setNameBoard(customOrder.getBoard().name());
-        customOrderBean.setTotalCost(customOrder.totalCost());
-        return customOrderBean;
+        CustomOrderSummaryBean customOrderSummaryBean = new CustomOrderSummaryBean();
+        customOrderSummaryBean.setId(customOrder.getId());
+        customOrderSummaryBean.setCreationDate(customOrder.creationDate());
+        customOrderSummaryBean.setDescriptionBoard(customOrder.getBoard().description());
+        customOrderSummaryBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
+        customOrderSummaryBean.setStatus(customOrder.getOrderStatus().toString());
+        customOrderSummaryBean.setNameBoard(customOrder.getBoard().name());
+        customOrderSummaryBean.setTotalCost(customOrder.totalCost());
+        return customOrderSummaryBean;
+    }
+
+
+    public List<CustomOrderBean> getAllOrders(){
+       List<CustomOrder> customOrderList = customOrderDao.selectAllOpenOrder();
+       List<CustomOrderBean> customOrderBeanList = new ArrayList<>();
+       for(CustomOrder customOrder:customOrderList){
+           CustomOrderBean customOrderBean = new CustomOrderBean();
+           customOrderBean.setId(customOrder.getId());
+           customOrderBean.setCreationDate(customOrder.creationDate());
+           customOrderBean.setDescriptionBoard(customOrder.getBoard().description());
+           customOrderBean.setStatus(customOrder.getOrderStatus().toString());
+           customOrderBeanList.add(customOrderBean);
+       }
+        return customOrderBeanList;
     }
 
 
@@ -159,15 +188,8 @@ public class CustomOrderController {
             CustomOrderBean customOrderBean = new CustomOrderBean();
             customOrderBean.setId(customOrder.getId());
             customOrderBean.setCreationDate(customOrder.creationDate());
-            customOrderBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
             customOrderBean.setStatus(customOrder.getOrderStatus().toString());
-            customOrderBean.setNameBoard(customOrder.getBoard().name());
-            customOrderBean.setTotalCost(customOrder.totalCost());
-            customOrderBean.setRegionDestination(customOrder.getDeliveryDestination().getRegion().toString());
-            customOrderBean.setProvinceDestination(customOrder.getDeliveryDestination().getProvince());
-            customOrderBean.setCityDestination(customOrder.getDeliveryDestination().getCity());
-            customOrderBean.setStreetAddersDestination(customOrder.getDeliveryDestination().getStreetAddress());
-            customOrderBean.setStatus(customOrder.getOrderStatus().toString());
+            customOrderBean.setDescriptionBoard(customOrder.getBoard().description());
             customOrderBeanList.add(customOrderBean);
         }
         return customOrderBeanList;
@@ -181,22 +203,28 @@ public class CustomOrderController {
             CustomOrderBean customOrderBean = new CustomOrderBean();
             customOrderBean.setId(customOrder.getId());
             customOrderBean.setCreationDate(customOrder.creationDate());
-            customOrderBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
             customOrderBean.setStatus(customOrder.getOrderStatus().toString());
-            customOrderBean.setNameBoard(customOrder.getBoard().name());
-            customOrderBean.setTotalCost(customOrder.totalCost());
-            customOrderBean.setRegionDestination(customOrder.getDeliveryDestination().getRegion().toString());
-            customOrderBean.setProvinceDestination(customOrder.getDeliveryDestination().getProvince());
-            customOrderBean.setCityDestination(customOrder.getDeliveryDestination().getCity());
-            customOrderBean.setStreetAddersDestination(customOrder.getDeliveryDestination().getStreetAddress());
-            customOrderBean.setDeliveryDate(customOrder.deliveryDate());
+            customOrderBean.setDescriptionBoard(customOrder.getBoard().description());
             customOrderBeanList.add(customOrderBean);
         }
         return customOrderBeanList;
     }
 
+    public CustomOrderSummaryBean getMoreInfoOnOrder(CustomOrderBean customOrderBean){
+        CustomOrder customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+        CustomOrderSummaryBean customOrderSummaryBean = new CustomOrderSummaryBean();
+        customOrderSummaryBean.setId(customOrder.getId());
+        customOrderSummaryBean.setCreationDate(customOrder.creationDate());
+        customOrderSummaryBean.setDescriptionBoard(customOrder.getBoard().description());
+        customOrderSummaryBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
+        customOrderSummaryBean.setStatus(customOrder.getOrderStatus().toString());
+        customOrderSummaryBean.setNameBoard(customOrder.getBoard().name());
+        customOrderSummaryBean.setTotalCost(customOrder.totalCost());
+        return customOrderSummaryBean;
+    }
 
-    public List<ProgressNoteBean> progressNoteBeanList(CustomOrderBean customOrderBean){
+
+    public List<ProgressNoteBean> progressNoteBeanList(CustomOrderSummaryBean customOrderBean){
         CustomOrder customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
         List<ProgressNote> progressNoteList = customOrder.progressDetails();
         List<ProgressNoteBean> progressNoteBeanList = new ArrayList<>();

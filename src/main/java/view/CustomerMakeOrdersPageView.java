@@ -3,7 +3,7 @@ package view;
 import beans.*;
 import controls.CustomOrderController;
 import exceptions.EmptyFieldException;
-import javafx.beans.property.SimpleStringProperty;
+import exceptions.InsufficientCoinsException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.SceneManager;
@@ -30,7 +30,6 @@ public class CustomerMakeOrdersPageView {
     @FXML private TextField provinceTextField;
     @FXML private TextField cityTextField;
 
-    @FXML private Label regionCost;
 
     @FXML private Spinner<String> timeSlotSpinner;
     @FXML private TextArea commentArea;
@@ -41,8 +40,8 @@ public class CustomerMakeOrdersPageView {
         this.customOrderController = customOrderController;
     }
 
-    public void setSkateboardBean(BoardBean skateboardBean){
-        this.boardBean = skateboardBean;
+    public void setBoardBean(BoardBean boardBean){
+        this.boardBean = boardBean;
     }
 
     public void initialize() {
@@ -77,9 +76,7 @@ public class CustomerMakeOrdersPageView {
         descriptionArea.setText(boardBean.getDescription());
     }
 
-    public void orderUpdate(){
 
-    }
 
     public void loadRegionsMenu(){
         List<String> regioni = Arrays.asList(
@@ -97,6 +94,7 @@ public class CustomerMakeOrdersPageView {
             });
             menuRegions.getItems().add(item);
         }
+        menuRegions.setText(regioni.get(0));
     }
 
 
@@ -106,7 +104,7 @@ public class CustomerMakeOrdersPageView {
         String city = cityTextField.getText();
         String address = streetTextField.getText();
         String comment = commentArea.getText();
-        //String timeSlot = timeSlotSpinner.getValue();
+        String timeSlot = timeSlotSpinner.getValue();
 
         try{
             if(province == null || city == null || address == null || comment == null){
@@ -120,8 +118,13 @@ public class CustomerMakeOrdersPageView {
 
             DeliveryPreferencesBean deliveryPreferencesBean = new DeliveryPreferencesBean();
 
-            customOrderController.elaborateOrder(deliveryDestinationBean,deliveryPreferencesBean, boardBean );
-            sceneManager.loadDoneOrderPage(customOrderController, boardBean, deliveryDestinationBean);
+            try {
+
+                CustomOrderSummaryBean customOrderBean = customOrderController.elaborateOrder(deliveryDestinationBean, deliveryPreferencesBean, boardBean);
+                sceneManager.loadAllOrdersPage(customOrderController, customOrderBean);
+            }catch(InsufficientCoinsException e){
+                errorLabel.setText(e.getMessage());
+            }
 
         }catch(EmptyFieldException e){
             errorLabel.setText(e.getMessage());

@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CoordinatorOrderPageView">
    <bottom>
@@ -16,31 +21,73 @@
    <left>
       <AnchorPane prefHeight="780.0" prefWidth="563.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane layoutX="-5.0" layoutY="-1.0" prefHeight="781.0" prefWidth="600.0" style="-fx-background-color: #ffffff;">
+            <AnchorPane prefHeight="781.0" prefWidth="569.0" style="-fx-background-color: #ffffff;">
                <children>
-                  <TableView fx:id="skateboardTable" layoutX="75.0" layoutY="167.0" prefHeight="391.0" prefWidth="449.0">
+                  <Label layoutX="26.0" layoutY="125.0" prefHeight="18.0" prefWidth="113.0" text="List of orders" />
+                  <Label layoutX="32.0" layoutY="609.0" text="Clic on an order to visualize more: " />
+                  <TableView fx:id="ordersTable" layoutX="24.0" layoutY="162.0" onMouseClicked="#onOrderSelected" prefHeight="368.0" prefWidth="553.0">
                      <columns>
-                        <TableColumn fx:id="colSkateboardName" prefWidth="129.0" text="N order" />
-                        <TableColumn fx:id="colSize" prefWidth="319.0" text="date" />
+                        <TableColumn fx:id="colDescription" prefWidth="197.0" text="Description" />
+                        <TableColumn fx:id="colDate" prefWidth="198.0" text="Date" />
+                        <TableColumn fx:id="colState" prefWidth="195.0" text="state" />
                      </columns>
                   </TableView>
-                  <Label layoutX="79.0" layoutY="113.0" prefHeight="18.0" prefWidth="113.0" text="List of orders" />
-                  <Label layoutX="80.0" layoutY="610.0" text="Clic on an order to visualize more: " />
+                  <Label fx:id="errorLabel" layoutX="25.0" layoutY="675.0" prefHeight="18.0" prefWidth="322.0" />
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
    </left>
-   <right>
-      <AnchorPane prefHeight="780.0" prefWidth="611.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+   <center>
+      <AnchorPane prefHeight="780.0" prefWidth="508.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="361.0" layoutY="530.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/logo.png" />
                </image>
             </ImageView>
-            <Pane layoutX="66.0" layoutY="166.0" prefHeight="384.0" prefWidth="430.0" />
+            <Pane layoutX="40.0" layoutY="341.0" prefHeight="238.0" prefWidth="566.0">
+               <children>
+                  <Pane fx:id="postOrderPane" layoutX="20.0" layoutY="14.0" prefHeight="152.0" prefWidth="476.0">
+                     <children>
+                        <TextArea fx:id="noteArea" layoutX="3.0" layoutY="43.0" prefHeight="59.0" prefWidth="472.0" />
+                        <Text fill="#00000087" layoutX="8.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a note:" />
+                        <CheckBox fx:id="checkComplete" layoutX="5.0" layoutY="114.0" mnemonicParsing="false" text="Complete order" />
+                        <Button layoutX="354.0" layoutY="110.0" mnemonicParsing="false" onMouseClicked="#postNote" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="post note" textFill="WHITE">
+                           <effect>
+                              <DropShadow height="5.0" radius="2.0" width="5.0" />
+                           </effect>
+                        </Button>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="acceptanceOrderPane" layoutX="20.0" layoutY="145.0" prefHeight="103.0" prefWidth="304.0">
+                     <children>
+                        <Button layoutX="6.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#acceptOrder" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="accept" textFill="WHITE">
+                           <effect>
+                              <DropShadow height="5.0" radius="2.0" width="5.0" />
+                           </effect>
+                        </Button>
+                        <Button layoutX="152.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#rejectOrder" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #949494;" text="reject" textFill="WHITE">
+                           <effect>
+                              <DropShadow height="5.0" radius="2.0" width="5.0" />
+                           </effect>
+                        </Button>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+            <Pane fx:id="detailsOrderPane" layoutX="57.0" layoutY="158.0" prefHeight="196.0" prefWidth="497.0">
+               <children>
+                  <Label fx:id="boardDetailsLabel" layoutY="30.0" prefHeight="18.0" prefWidth="355.0" />
+                  <Label fx:id="boardDatesLabel" layoutY="55.0" prefHeight="18.0" prefWidth="322.0" />
+                  <Label fx:id="boardDayEstimatedLabel" layoutY="80.0" prefHeight="18.0" prefWidth="322.0" />
+                  <Label fx:id="boardDestinationLabel" layoutY="105.0" prefHeight="18.0" prefWidth="322.0" />
+                  <Label fx:id="boardOrderStatusLabel" layoutY="130.0" prefHeight="18.0" prefWidth="322.0" />
+                  <Label fx:id="boardPriceLabel" layoutY="155.0" prefHeight="18.0" prefWidth="339.0" />
+                  <Label layoutY="-1.0" prefHeight="18.0" prefWidth="195.0" text="Informazioni inerenti all'ordine" />
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
-   </right>
+   </center>
 </BorderPane>
