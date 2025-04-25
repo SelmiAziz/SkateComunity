@@ -59,19 +59,8 @@
         <AnchorPane prefHeight="685.0" prefWidth="583.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="errorLabel" layoutX="41.0" layoutY="580.0" prefHeight="18.0" prefWidth="501.0" />
-                <TextArea fx:id="descriptionArea" layoutX="50.0" layoutY="220.0" prefHeight="126.0" prefWidth="499.0" />
-                <Label fx:id="boardSizeLabel" layoutX="51.0" layoutY="180.0" prefHeight="18.0" prefWidth="355.0" />
-                <Label layoutX="50.0" layoutY="71.0" text="Board order" textFill="#1abc9c">
-                    <font>
-                        <Font size="20.0" />
-                    </font></Label>
                 <Label fx:id="boardNameLabel" layoutX="51.0" layoutY="150.0" prefHeight="18.0" prefWidth="322.0" />
                 <Label fx:id="boardPriceLabel" layoutX="51.0" layoutY="368.0" prefHeight="18.0" prefWidth="339.0" />
-                <Button layoutX="50.0" layoutY="432.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="cancel" textFill="WHITE">
-                    <effect>
-                        <DropShadow height="5.0" radius="2.0" width="5.0" />
-                    </effect>
-                </Button>
             </children>
         </AnchorPane>
     </left>

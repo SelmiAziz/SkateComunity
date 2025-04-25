@@ -1,7 +1,7 @@
 package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
-import model.CustomOrder;
+import model.Order;
 import model.OrderStatus;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CustomOrderDbmsDao implements CustomOrderDao {
     private static CustomOrderDbmsDao instance;
-    private final List<CustomOrder> customOrderList = new ArrayList<>();
+    private final List<Order> customOrderList = new ArrayList<>();
     private final DeliveryDestinationDao deliveryDestinationDao = DaoFactory.getInstance().createDeliveryDestinationDao();
 
     public static synchronized CustomOrderDbmsDao getInstance(){
@@ -20,8 +20,8 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
     }
 
     @Override
-    public CustomOrder selectCustomOrderById(String id) {
-        for(CustomOrder customOrder: this.customOrderList){
+    public Order selectCustomOrderById(String id) {
+        for(Order customOrder: this.customOrderList){
             if(customOrder.getId().equals(id)){
                 return customOrder;
             }
@@ -30,15 +30,15 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
     }
 
     @Override
-    public void saveCustomOrder(CustomOrder customOrder) {
+    public void saveCustomOrder(Order customOrder) {
         customOrderList.add(customOrder);
         deliveryDestinationDao.saveDeliveryDestination(customOrder.getDeliveryDestination());
     }
 
     @Override
-    public List<CustomOrder> selectAllOpenOrder() {
-        List<CustomOrder> openCustomOrderList = new ArrayList<>();
-        for(CustomOrder customOrder:this.customOrderList){
+    public List<Order> selectAllOpenOrder() {
+        List<Order> openCustomOrderList = new ArrayList<>();
+        for(Order customOrder:this.customOrderList){
             if(customOrder.getOrderStatus() == OrderStatus.REQUESTED || customOrder.getOrderStatus() == OrderStatus.PROCESSING){
                 openCustomOrderList.add(customOrder);
             }
@@ -49,7 +49,7 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
 
 
     @Override
-    public void updateCustomOrder(CustomOrder customOrder) {
+    public void updateCustomOrder(Order customOrder) {
 
     }
 }

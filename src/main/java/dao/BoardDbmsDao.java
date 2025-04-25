@@ -75,7 +75,6 @@ public class BoardDbmsDao implements BoardDao {
 
     @Override
     public void addBoard(Board board, String customerId) {
-        System.out.println("Messo"+board.boardId());
         this.boardList.add(board);
     }
 

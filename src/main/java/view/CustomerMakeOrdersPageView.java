@@ -19,11 +19,6 @@ public class CustomerMakeOrdersPageView {
     BoardBean boardBean;
 
     @FXML private MenuButton menuRegions;
-    @FXML private Label boardNameLabel;
-    @FXML private Label boardSizeLabel;
-    @FXML private Label boardPriceLabel;
-    @FXML private TextArea descriptionArea;
-
 
 
     @FXML private TextField streetTextField;
@@ -65,16 +60,6 @@ public class CustomerMakeOrdersPageView {
         return slots;
     }
 
-    public void initData() {
-        displayGeneratedSample();
-    }
-
-    public void displayGeneratedSample(){
-        boardNameLabel.setText("Nome dello skateboard di partenza: " + boardBean.getName());
-        boardSizeLabel.setText("Dimensione skateboard: " + boardBean.getSize());
-        boardPriceLabel.setText("Costo totale in coins: " + boardBean.getPrice());
-        descriptionArea.setText(boardBean.getDescription());
-    }
 
 
 
@@ -119,8 +104,8 @@ public class CustomerMakeOrdersPageView {
             DeliveryPreferencesBean deliveryPreferencesBean = new DeliveryPreferencesBean();
 
             try {
-
-                CustomOrderSummaryBean customOrderBean = customOrderController.elaborateOrder(deliveryDestinationBean, deliveryPreferencesBean, boardBean);
+                System.out.println("Hell");
+                OrderSummaryBean customOrderBean = customOrderController.elaborateOrder(deliveryDestinationBean, deliveryPreferencesBean, boardBean);
                 sceneManager.loadAllOrdersPage(customOrderController, customOrderBean);
             }catch(InsufficientCoinsException e){
                 errorLabel.setText(e.getMessage());

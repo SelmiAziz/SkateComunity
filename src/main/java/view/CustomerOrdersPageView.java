@@ -1,7 +1,8 @@
 package view;
 
-import beans.CustomBoardBean;
 import beans.BoardBean;
+import beans.CustomBoardBean;
+import beans.CustomizedBoardBean;
 import controls.CustomOrderController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -25,18 +26,27 @@ public class CustomerOrdersPageView {
     @FXML private Spinner<Double> noseSpinner;
     @FXML private Spinner<Double> tailSpinner;
     @FXML private Label gripValueLabel;
-    @FXML private TableView<BoardBean> boardTable;
-    @FXML private TableColumn<BoardBean, String> colBoardName;
-    @FXML private TableColumn<BoardBean, String> colDescription;
-    @FXML private TableColumn<BoardBean, String> colSize;
-    @FXML private TableColumn<BoardBean, String> colCost;
+    @FXML private TableView<CustomizedBoardBean> boardTable;
+    @FXML private TableColumn<CustomizedBoardBean, String> colBoardName;
+    @FXML private TableColumn<CustomizedBoardBean, String> colDescription;
+    @FXML private TableColumn<CustomizedBoardBean, String> colSize;
+    @FXML private TableColumn<CustomizedBoardBean, String> colCost;
+    @FXML private Pane pannelPane;
+    @FXML private Label priceBoardLabel;
+    @FXML private Label sizeBoardLabel;
+    @FXML private Label descriptionBoardLabel;
+    @FXML private Label nameBoardLabel;
+    @FXML private Pane orderPane;
 
     @FXML private Button availableButton;
     @FXML private Button designButton;
+    @FXML private Button saveBoardButton;
+    @FXML private Label statusLabel;
+
 
     CustomOrderController customOrderController = new CustomOrderController();
+    CustomizedBoardBean customizedBoardBean;
     BoardBean boardBean;
-    BoardBean newBoardBean;
 
     SceneManager sceneManager = SceneManager.getInstance();
 
@@ -65,10 +75,21 @@ public class CustomerOrdersPageView {
         colCost.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice())));
         displayAvailableBoardSamples();
+        initConf();
+    }
+
+    public void initConf(){
+        pannelPane.setVisible(false);
+        saveBoardButton.setVisible(true);
+        customPane.setVisible(false);
+        orderPane.setVisible(false);
+        boardPriceLabel.setText("");
+        descriptionArea.setText("");
     }
 
     public void displayAvailableBoardSamples() {
-        List<BoardBean> availableBoardsList = customOrderController.getBoardSamples();
+        List<CustomizedBoardBean> availableBoardsList = customOrderController.getBoardSamples();
+        statusLabel.setText("available");
         boardTable.getItems().clear();
         boardTable.getItems().addAll(availableBoardsList);
         designButton.setStyle("-fx-background-color:  #949494;");
@@ -76,7 +97,8 @@ public class CustomerOrdersPageView {
     }
 
     public void displayBoardsCustomizedByCustomer(){
-        List<BoardBean> boardBeanList = customOrderController.getCustomizedBoards();
+        List<CustomizedBoardBean> boardBeanList = customOrderController.getCustomizedBoards();
+        statusLabel.setText("designed");
         boardTable.getItems().clear();
         boardTable.getItems().addAll(boardBeanList);
         designButton.setStyle("-fx-background-color:  #1ABC9C;");
@@ -84,14 +106,31 @@ public class CustomerOrdersPageView {
     }
 
 
+    public void loadBoardForOrder(CustomizedBoardBean customizedBoardBean){
+        nameBoardLabel.setText("Board sample name: "+customizedBoardBean.getName());
+        priceBoardLabel.setText("Price:  "+ customizedBoardBean.getPrice());
+        sizeBoardLabel.setText("Size of the board: "+customizedBoardBean.getSize());
+        descriptionBoardLabel.setText("Description" + customizedBoardBean.getDescription());
+    }
+
+
     public void saveDesignBoard(){
-        customOrderController.saveCreatedCustomizedBoard(newBoardBean);
+        loadBoardForOrder(customizedBoardBean);
+        boardBean = customOrderController.saveCreatedCustomizedBoard(customizedBoardBean);
+        orderPane.setVisible(true);
     }
 
     public void onSampleSelected() {
-        boardBean = boardTable.getSelectionModel().getSelectedItem();
-        customizeLabel.setText("Customize the following sample " + boardBean.getName());
-        customPane.setVisible(true);
+        customizedBoardBean = boardTable.getSelectionModel().getSelectedItem();
+        if(statusLabel.getText().equals("available")){
+            customizeLabel.setText("Customize the following sample " + customizedBoardBean.getName());
+            customPane.setVisible(true);
+        }else{
+            boardBean = new BoardBean();
+            boardBean.setId(customizedBoardBean.getId());
+            loadBoardForOrder(customizedBoardBean);
+            orderPane.setVisible(true);
+        }
     }
 
     public void logOut() {
@@ -106,17 +145,20 @@ public class CustomerOrdersPageView {
         int warrantyMonths = warrantySpinner.getValue();
 
         CustomBoardBean customBoardBean = new CustomBoardBean();
-        customBoardBean.setName(boardBean.getName());
+        customBoardBean.setName(customizedBoardBean.getName());
         customBoardBean.setConcaveNose(noseConcave);
         customBoardBean.setConcaveTail(tailConcave);
         customBoardBean.setExtraPiles(extraPiles);
         customBoardBean.setGripTexture(gripTexture);
         customBoardBean.setWarrantyMonths(warrantyMonths);
 
-        newBoardBean = customOrderController.generateCustomBoard(customBoardBean);
-        boardPriceLabel.setText("Price " + newBoardBean.getPrice());
-        descriptionArea.setText(newBoardBean.getDescription());
+        customizedBoardBean = customOrderController.generateCustomBoard(customBoardBean);
+        boardPriceLabel.setText("Price " +customizedBoardBean.getPrice());
+        descriptionArea.setText(customizedBoardBean.getDescription());
+        pannelPane.setVisible(true);
     }
+
+
 
     public void goToHomePage() {
         SceneManager.getInstance().closeBro();
@@ -131,14 +173,12 @@ public class CustomerOrdersPageView {
         // implement if needed
     }
     public void orderBoard(){
-        sceneManager.loadMakeOrdersPage(customOrderController, newBoardBean);
+        sceneManager.loadMakeOrdersPage(customOrderController, boardBean);
     }
 
 
     public void back() {
-        customPane.setVisible(false);
-        boardPriceLabel.setText("");
-        descriptionArea.setText("");
+        initConf();
     }
 
     public void goToCompetitionsPage() {

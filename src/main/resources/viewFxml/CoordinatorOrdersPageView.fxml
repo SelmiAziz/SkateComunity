@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -46,9 +47,9 @@
                   <Image url="@../images/logo.png" />
                </image>
             </ImageView>
-            <Pane layoutX="40.0" layoutY="341.0" prefHeight="238.0" prefWidth="566.0">
+            <Pane layoutX="40.0" layoutY="341.0" prefHeight="272.0" prefWidth="566.0">
                <children>
-                  <Pane fx:id="postOrderPane" layoutX="20.0" layoutY="14.0" prefHeight="152.0" prefWidth="476.0">
+                  <Pane fx:id="postOrderPane" layoutX="20.0" layoutY="14.0" prefHeight="187.0" prefWidth="476.0">
                      <children>
                         <TextArea fx:id="noteArea" layoutX="3.0" layoutY="43.0" prefHeight="59.0" prefWidth="472.0" />
                         <Text fill="#00000087" layoutX="8.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a note:" />
@@ -58,9 +59,11 @@
                               <DropShadow height="5.0" radius="2.0" width="5.0" />
                            </effect>
                         </Button>
+                        <TextField fx:id="dateField" layoutX="61.0" layoutY="150.0" promptText="format dd/mm/aaaa" />
+                        <Text fill="#00000087" layoutX="9.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" />
                      </children>
                   </Pane>
-                  <Pane fx:id="acceptanceOrderPane" layoutX="20.0" layoutY="145.0" prefHeight="103.0" prefWidth="304.0">
+                  <Pane fx:id="acceptanceOrderPane" layoutX="20.0" layoutY="2.0" prefHeight="103.0" prefWidth="304.0">
                      <children>
                         <Button layoutX="6.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#acceptOrder" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="accept" textFill="WHITE">
                            <effect>

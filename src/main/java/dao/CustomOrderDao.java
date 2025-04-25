@@ -1,12 +1,12 @@
 package dao;
 
-import model.CustomOrder;
+import model.Order;
 
 import java.util.List;
 
 public interface CustomOrderDao {
-    public CustomOrder selectCustomOrderById(String id);
-    public List<CustomOrder> selectAllOpenOrder();
-    public void saveCustomOrder(CustomOrder customOrder); 
-    public void updateCustomOrder(CustomOrder customOrder);
+    public Order selectCustomOrderById(String id);
+    public List<Order> selectAllOpenOrder();
+    public void saveCustomOrder(Order customOrder);
+    public void updateCustomOrder(Order customOrder);
 }

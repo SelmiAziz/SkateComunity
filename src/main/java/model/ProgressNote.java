@@ -1,18 +1,17 @@
 package model;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 public class ProgressNote {
     private String comment;
-    private String date;
+    private LocalDate date;
 
-    public ProgressNote() {
-        this.comment = "Order chronology starts here!";
-        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    public ProgressNote(String comment) {
+        this.comment = comment;
+        this.date = LocalDate.now();
     }
 
-    public ProgressNote(String comment, String date) {
+    public ProgressNote(String comment, LocalDate date) {
         this.comment = comment;
         this.date = date;
     }
@@ -21,7 +20,7 @@ public class ProgressNote {
         return comment;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 }

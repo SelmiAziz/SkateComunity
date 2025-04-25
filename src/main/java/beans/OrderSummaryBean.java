@@ -1,6 +1,6 @@
 package beans;
 
-public class CustomOrderSummaryBean {
+public class OrderSummaryBean {
     private String id;
     private String creationDate;
     private String deliveryDate;
@@ -16,7 +16,7 @@ public class CustomOrderSummaryBean {
     private String status;
 
 
-    public CustomOrderSummaryBean(){};
+    public OrderSummaryBean(){};
 
     public void setId(String id) {
         this.id = id;
@@ -49,7 +49,7 @@ public class CustomOrderSummaryBean {
     }
 
     public void setCreationDate(String date) {
-        this.creationDate = this.deliveryDate;
+        this.creationDate = date;
     }
 
     public void setEstimatedDays(int estimatedDays) {this.estimatedDays = estimatedDays;}

@@ -1,7 +1,7 @@
 package view;
 
-import beans.CustomOrderBean;
-import beans.CustomOrderSummaryBean;
+import beans.OrderBean;
+import beans.OrderSummaryBean;
 import beans.ProgressNoteBean;
 import controls.CustomOrderController;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,10 +18,10 @@ public class CustomerAllOrdersPageView {
     public CustomOrderController customOrderController;
 
     @FXML
-    private TableView<CustomOrderBean> ordersTable;
-    @FXML private TableColumn<CustomOrderBean, String> colDescription;
-    @FXML private TableColumn<CustomOrderBean, String> colDate;
-    @FXML private TableColumn<CustomOrderBean, String>  colState;
+    private TableView<OrderSummaryBean> ordersTable;
+    @FXML private TableColumn<OrderSummaryBean, String> colDescription;
+    @FXML private TableColumn<OrderSummaryBean, String> colDate;
+    @FXML private TableColumn<OrderSummaryBean, String>  colState;
 
     @FXML private Label boardDetailsLabel;
     @FXML private Label boardDatesLabel;
@@ -35,7 +35,7 @@ public class CustomerAllOrdersPageView {
     @FXML private Button backButton;
     @FXML private Button notesButton;
 
-    CustomOrderSummaryBean customOrderBean;
+    OrderSummaryBean customOrderBean;
 
 
     public void initialize(){
@@ -89,13 +89,13 @@ public class CustomerAllOrdersPageView {
         this.customOrderController = customOrderController;
     }
 
-    public void setCustomOrderBean(CustomOrderSummaryBean customOrderBean){
+    public void setCustomOrderBean(OrderSummaryBean customOrderBean){
         this.customOrderBean = customOrderBean;
     }
 
 
     public void loadOrdersSubmitted(){
-        List<CustomOrderBean> customOrderBeanList = customOrderController.getOrdersSubmitted();
+        List<OrderSummaryBean> customOrderBeanList = customOrderController.getOrdersSubmitted();
         ordersTable.getItems().clear();
         ordersTable.getItems().addAll(customOrderBeanList);
     }

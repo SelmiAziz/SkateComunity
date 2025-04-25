@@ -2,11 +2,12 @@ package model;
 
 import model.decorator.Board;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomOrder {
+public class Order {
     String id;
     private Customer customer;
     private DeliveryDestination deliveryDestination;
@@ -15,11 +16,11 @@ public class CustomOrder {
     private OrderStatus orderStatus;
 
 
-    public CustomOrder(Customer customer, DeliveryDestination deliveryDestination, DeliveryPreferences deliveryPreferences, Board board){
+    public Order(Customer customer, DeliveryDestination deliveryDestination, DeliveryPreferences deliveryPreferences, Board board){
         this.deliveryDestination = deliveryDestination;
         this.board = board;
         this.customer = customer;
-        this.progressNoteList.add(new ProgressNote());
+        this.progressNoteList.add(new ProgressNote("Chronology Starts here!!"));
         this.orderStatus = OrderStatus.REQUESTED;
         this.id =  UUID.randomUUID().toString();
 
@@ -28,11 +29,11 @@ public class CustomOrder {
 
     }
 
-    public String creationDate() {
+    public LocalDate creationDate() {
         return progressNoteList.get(progressNoteList.size() - 1).getDate();
     }
 
-    public String deliveryDate() {
+    public LocalDate deliveryDate() {
         if(orderStatus == OrderStatus.COMPLETED){
             return progressNoteList.get(0).getDate();
         }

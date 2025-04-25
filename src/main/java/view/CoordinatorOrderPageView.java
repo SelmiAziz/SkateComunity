@@ -1,7 +1,7 @@
 package view;
 
-import beans.CustomOrderBean;
-import beans.CustomOrderSummaryBean;
+import beans.OrderBean;
+import beans.OrderSummaryBean;
 import beans.ProgressNoteBean;
 import controls.CustomOrderController;
 import exceptions.EmptyFieldException;
@@ -18,11 +18,11 @@ public class CoordinatorOrderPageView {
     public void setCustomOrderController(CustomOrderController customOrderController){
         this.customOrderController = customOrderController;
     }
-    CustomOrderBean customOrderBean;
-    @FXML private TableView<CustomOrderBean> ordersTable;
-    @FXML private TableColumn<CustomOrderBean, String> colDescription;
-    @FXML private TableColumn<CustomOrderBean, String> colDate;
-    @FXML private TableColumn<CustomOrderBean, String>  colState;
+    OrderSummaryBean orderSummaryBean;
+    @FXML private TableView<OrderSummaryBean> ordersTable;
+    @FXML private TableColumn<OrderSummaryBean, String> colDescription;
+    @FXML private TableColumn<OrderSummaryBean, String> colDate;
+    @FXML private TableColumn<OrderSummaryBean, String>  colState;
     @FXML private CheckBox checkComplete;
 
     @FXML private Label boardDetailsLabel;
@@ -35,6 +35,7 @@ public class CoordinatorOrderPageView {
     @FXML private Pane acceptanceOrderPane;
     @FXML private Pane postOrderPane;
     @FXML private TextArea noteArea;
+    @FXML private TextField dateField;
 
     public void initialize(){
         colDescription.setCellValueFactory(cellData ->
@@ -51,19 +52,18 @@ public class CoordinatorOrderPageView {
     }
 
     public void loadOrderS(){
-        List<CustomOrderBean> customOrderBeanList = customOrderController.getAllOrders();
-        System.out.println("La lunghezza è"+customOrderBeanList.size());
+        List<OrderSummaryBean> customOrderBeanList = customOrderController.getAllOrders();
         ordersTable.getItems().clear();
         ordersTable.getItems().addAll(customOrderBeanList);
     }
 
-    public void loadCustomOrderSummary(CustomOrderSummaryBean customOrderSummaryBean){
-        boardOrderStatusLabel.setText("Stato attuale dell'ordine "+customOrderSummaryBean.getStatus());
-        boardDatesLabel.setText("Data creazione dell'ordine "+customOrderBean.getCreationDate() + "Data di conclusione"+customOrderSummaryBean.getDeliveryDate());
-        boardDayEstimatedLabel.setText("Stima giorni lavorativi per la consegna "+customOrderSummaryBean.getEstimatedDays());
-        boardDetailsLabel.setText("Dettagli ordine " +customOrderSummaryBean.getNameBoard()+ " "+customOrderSummaryBean.getDescriptionBoard());
-        boardPriceLabel.setText("Costo totale dell'ordine " + customOrderSummaryBean.getTotalCost());
-        boardDestinationLabel.setText("Destinazione dell'ordine "+customOrderSummaryBean.getRegionDestination()+ " "+customOrderSummaryBean.getProvinceDestination()+" "+customOrderSummaryBean.getCityDestination()+" "+customOrderSummaryBean.getStreetAddersDestination());
+    public void loadCustomOrderSummary(OrderSummaryBean orderSummaryBean){
+        boardOrderStatusLabel.setText("Stato attuale dell'ordine "+orderSummaryBean.getStatus());
+        boardDatesLabel.setText("Data creazione dell'ordine "+orderSummaryBean.getCreationDate() + "Data di conclusione"+orderSummaryBean.getDeliveryDate());
+        boardDayEstimatedLabel.setText("Stima giorni lavorativi per la consegna "+orderSummaryBean.getEstimatedDays());
+        boardDetailsLabel.setText("Dettagli ordine " +orderSummaryBean.getNameBoard()+ " "+orderSummaryBean.getDescriptionBoard());
+        boardPriceLabel.setText("Costo totale dell'ordine " + orderSummaryBean.getTotalCost());
+        boardDestinationLabel.setText("Destinazione dell'ordine "+orderSummaryBean.getRegionDestination()+ " "+orderSummaryBean.getProvinceDestination()+" "+orderSummaryBean.getCityDestination()+" "+orderSummaryBean.getStreetAddersDestination());
     }
 
     public void confStart(){
@@ -78,25 +78,30 @@ public class CoordinatorOrderPageView {
     }
 
     public void acceptOrder(){
-        customOrderController.acceptCustomOrder(customOrderBean, true);
+        OrderBean orderBean = new OrderBean();
+        orderBean.setId(orderSummaryBean.getId());
+        customOrderController.acceptCustomOrder(orderBean, true);
         confStart();
+        loadOrderS();
     }
 
     public void rejectOrder(){
-        customOrderController.acceptCustomOrder(customOrderBean, false);
+        OrderBean orderBean = new OrderBean();
+        orderBean.setId(orderSummaryBean.getId());
+        customOrderController.acceptCustomOrder(orderBean, false);
         confStart();
+        loadOrderS();
     }
 
     @FXML
     public void onOrderSelected() {
-        customOrderBean = ordersTable.getSelectionModel().getSelectedItem();
-        CustomOrderSummaryBean customOrderSummaryBean = customOrderController.getMoreInfoOnOrder(customOrderBean);
-        loadCustomOrderSummary(customOrderSummaryBean);
-        if(customOrderSummaryBean.getStatus().equals("Requested")){
+        orderSummaryBean = ordersTable.getSelectionModel().getSelectedItem();
+        loadCustomOrderSummary(orderSummaryBean);
+        if(orderSummaryBean.getStatus().equals("Requested")){
             acceptanceOrderPane.setVisible(true);
-        }else if(customOrderSummaryBean.getStatus().equals("Processing")){
+        }else if(orderSummaryBean.getStatus().equals("Processing")){
             postOrderPane.setVisible(true);
-        }else if(customOrderSummaryBean.getStatus().equals("Completed")){
+        }else if(orderSummaryBean.getStatus().equals("Completed")){
 
         }else{
 
@@ -106,18 +111,23 @@ public class CoordinatorOrderPageView {
 
     public void postNote(){
         String comment = noteArea.getText();
+        String date = dateField.getText();
         try{
-            if(comment == null) {
+            if(comment == null || date == null) {
                 throw new EmptyFieldException("Inserisci una nota");
             }
             ProgressNoteBean progressNoteBean = new ProgressNoteBean();
             progressNoteBean.setComment(comment);
+            progressNoteBean.setDate(date);
+            OrderBean orderBean = new OrderBean();
+            orderBean.setId(orderSummaryBean.getId());
             if(checkComplete.isSelected()){
-                customOrderController.completeOrder( customOrderBean, progressNoteBean);
+                customOrderController.completeOrder( orderBean, progressNoteBean);
             }else{
-                customOrderController.writeNote(customOrderBean, progressNoteBean);
+                customOrderController.writeNote(orderBean, progressNoteBean);
             }
             confStart();
+            loadOrderS();
         }catch (EmptyFieldException e){
             errorLabel.setText(e.getMessage());
         }

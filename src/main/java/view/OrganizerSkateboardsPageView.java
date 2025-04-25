@@ -1,6 +1,6 @@
 package view;
 
-import beans.BoardBean;
+import beans.CustomizedBoardBean;
 import controls.CreateBoardController;
 import exceptions.EmptyFieldException;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,11 +18,11 @@ public class OrganizerSkateboardsPageView {
     @FXML private Spinner<String> sizeSpinner;
     @FXML private TextField skateboardNameField;
     @FXML private TextArea descriptionTextArea;
-    @FXML private TableView<BoardBean> skateboardTable;
-    @FXML private TableColumn<BoardBean, String> colSkateboardName;
-    @FXML private TableColumn<BoardBean, String> colDescription;
-    @FXML private TableColumn<BoardBean, String> colSize;
-    @FXML private TableColumn<BoardBean, String> colCost;
+    @FXML private TableView<CustomizedBoardBean> skateboardTable;
+    @FXML private TableColumn<CustomizedBoardBean, String> colSkateboardName;
+    @FXML private TableColumn<CustomizedBoardBean, String> colDescription;
+    @FXML private TableColumn<CustomizedBoardBean, String> colSize;
+    @FXML private TableColumn<CustomizedBoardBean, String> colCost;
     SceneManager sceneManager = SceneManager.getInstance();
     CreateBoardController createSkateboardController = new CreateBoardController();
 
@@ -50,9 +50,9 @@ public class OrganizerSkateboardsPageView {
 
 
     public void loadSkateboards(){
-        List<BoardBean> availableSkateboardsList = createSkateboardController.getStoredBoards();
+        List<CustomizedBoardBean> availableSkateboardsList = createSkateboardController.getStoredBoards();
         skateboardTable.getItems().clear();
-        for(BoardBean s: availableSkateboardsList){
+        for(CustomizedBoardBean s: availableSkateboardsList){
             System.out.println(s.getName());
         }
         skateboardTable.getItems().addAll(availableSkateboardsList);
@@ -68,7 +68,7 @@ public class OrganizerSkateboardsPageView {
           if(name == null || description == null){
               throw new EmptyFieldException("Inserire correttamente campi");
           }
-          createSkateboardController.createBoard( new BoardBean(name, description, size, cost));
+          createSkateboardController.createBoard( new CustomizedBoardBean(name, description, size, cost));
           loadSkateboards();
       }catch(EmptyFieldException e){
           errorLabel.setText(e.getMessage());

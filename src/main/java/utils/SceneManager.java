@@ -1,7 +1,8 @@
 package utils;
 
-import beans.CustomOrderSummaryBean;
 import beans.BoardBean;
+import beans.OrderSummaryBean;
+import beans.CustomizedBoardBean;
 import controls.CustomOrderController;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -64,7 +65,6 @@ public class SceneManager {
             viewController.setController(controller);
             viewController.setBoardBean(boardBean);
             openBro(controller);
-            viewController.initData();
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setResizable(false);
@@ -77,7 +77,7 @@ public class SceneManager {
     }
 
 
-    public void loadAllOrdersPage(CustomOrderController controller, CustomOrderSummaryBean customOrderBean) {
+    public void loadAllOrdersPage(CustomOrderController controller, OrderSummaryBean customOrderBean) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerAllOrdersPageView.fxml"));
             Parent root = loader.load();

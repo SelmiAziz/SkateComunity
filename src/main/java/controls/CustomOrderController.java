@@ -6,6 +6,7 @@ import dao.patternAbstractFactory.DaoFactory;
 
 import model.*;
 import model.decorator.*;
+import utils.DateConverter;
 import utils.SessionManager;
 import view.CoordinatorOrderPageView;
 import view.CustomerAllOrdersPageView;
@@ -20,6 +21,7 @@ public class CustomOrderController {
     private final ProgressNoteDao progressNoteDao = DaoFactory.getInstance().createProgressNoteDao();
     private CustomerAllOrdersPageView customerAllOrdersPageView;
     private CoordinatorOrderPageView  coordinatorOrderPageView;
+    private final DateConverter dateConverter = new DateConverter();
     private final PaymentController paymentController = new PaymentController();
 
     public void setCoordinatorOrderPageView(CoordinatorOrderPageView coordinatorOrderPageView) {
@@ -30,11 +32,11 @@ public class CustomOrderController {
         this.customerAllOrdersPageView = customerAllOrdersPageView;
     }
 
-    public List<BoardBean> getBoardSamples(){
-        List<BoardBean> boardBeanList = new ArrayList<>();
+    public List<CustomizedBoardBean> getBoardSamples(){
+        List<CustomizedBoardBean> boardBeanList = new ArrayList<>();
         List<Board> boardList = boardDao.selectAvailableBoards();
         for(Board board : boardList){
-            BoardBean boardBean = new BoardBean();
+            CustomizedBoardBean boardBean = new CustomizedBoardBean();
             boardBean.setName(board.name());
             boardBean.setDescription(board.description());
             boardBean.setPrice(board.price());
@@ -44,7 +46,7 @@ public class CustomOrderController {
         return boardBeanList;
     }
 
-    public BoardBean generateCustomBoard(CustomBoardBean customBoardBean){
+    public CustomizedBoardBean generateCustomBoard(CustomBoardBean customBoardBean){
         Board baseBoard = boardDao.selectBoardByName(customBoardBean.getName());
 
         GripTextureDecorator grip = new GripTextureDecorator(baseBoard, customBoardBean.getGripTexture());
@@ -53,8 +55,7 @@ public class CustomOrderController {
         WarrantyDecorator warranty = new WarrantyDecorator(tail, customBoardBean.getWarrantyMonths());
         ExtraPilesDecorator piles = new ExtraPilesDecorator(warranty, customBoardBean.getExtraPiles());
 
-        BoardBean boardBean = new BoardBean();
-        boardBean.setId(baseBoard.boardId());
+        CustomizedBoardBean boardBean = new CustomizedBoardBean();
         boardBean.setName(baseBoard.name());
         boardBean.setDescription(piles.description());
         boardBean.setSize(baseBoard.size());
@@ -63,19 +64,22 @@ public class CustomOrderController {
         return boardBean;
     }
 
-    public void saveCreatedCustomizedBoard(BoardBean boardBean){
+    public BoardBean saveCreatedCustomizedBoard(CustomizedBoardBean customizedBoardBean){
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
-        Board board = new BoardBase(boardBean.getId(),boardBean.getName(), boardBean.getDescription(), boardBean.getSize(), boardBean.getPrice());
+        Board board = new BoardBase(customizedBoardBean.getName(), customizedBoardBean.getDescription(), customizedBoardBean.getSize(), customizedBoardBean.getPrice());
         customer.addDesignBoard(board);
         boardDao.addBoard(board, customer.getUsername());
+        BoardBean boardBean = new BoardBean();
+        boardBean.setId(board.boardId());
+        return boardBean;
     }
 
 
-    public List<BoardBean> getCustomizedBoards(){
+    public List<CustomizedBoardBean> getCustomizedBoards(){
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
-        List<BoardBean> boardBeanList = new ArrayList<>();
+        List<CustomizedBoardBean> boardBeanList = new ArrayList<>();
         for(Board board : customer.customizedBoards()){
-            BoardBean boardBean = new BoardBean();
+            CustomizedBoardBean boardBean = new CustomizedBoardBean();
             boardBean.setId(board.boardId());
             boardBean.setDescription(board.description());
             boardBean.setName(board.name());
@@ -94,8 +98,8 @@ public class CustomOrderController {
         customerAllOrdersPageView.orderUpdate();
     }
 
-    public void acceptCustomOrder(CustomOrderBean customOrderBean, boolean accept){
-        CustomOrder customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+    public void acceptCustomOrder(OrderBean customOrderBean, boolean accept){
+        Order customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
         if(accept){
             customOrder.setOrderStatus(OrderStatus.PROCESSING);
         }else{
@@ -109,18 +113,18 @@ public class CustomOrderController {
     }
 
 
-    public void writeNote( CustomOrderBean customOrderBean, ProgressNoteBean progressNoteBean){
-        ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(), progressNoteBean.getDate());
+    public void writeNote(OrderBean customOrderBean, ProgressNoteBean progressNoteBean){
+        ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(),dateConverter.stringToLocalDate(progressNoteBean.getDate()));
 
-        CustomOrder customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+        Order customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
         customOrder.addProgressNoteOrder(progressNote);
         progressNoteDao.saveProgressNote(progressNote, customOrder.getId());
         notifyCustomer();
     }
 
-    public void completeOrder(CustomOrderBean customOrderBean, ProgressNoteBean progressNoteBean){
-        ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(), progressNoteBean.getDate());
-        CustomOrder customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+    public void completeOrder(OrderBean customOrderBean, ProgressNoteBean progressNoteBean){
+        ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(),dateConverter.stringToLocalDate( progressNoteBean.getDate()));
+        Order customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
         customOrder.addProgressNoteOrder(progressNote);
         progressNoteDao.saveProgressNote(progressNote, customOrder.getId());
         customOrder.setOrderStatus(OrderStatus.COMPLETED);
@@ -128,9 +132,7 @@ public class CustomOrderController {
         notifyCustomer();
     }
 
-    public CustomOrderSummaryBean elaborateOrder(DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean){
-       //provissori
-        saveCreatedCustomizedBoard(boardBean);
+    public OrderSummaryBean elaborateOrder(DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean){
 
         DeliveryDestination deliveryDestination = new DeliveryDestination(Region.fromString(deliveryDestinationBean.getRegion()),
                 deliveryDestinationBean.getProvince(),
@@ -144,7 +146,7 @@ public class CustomOrderController {
 
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
 
-        CustomOrder customOrder = new CustomOrder(customer,deliveryDestination,deliveryPreferences, board);
+        Order customOrder = new Order(customer,deliveryDestination,deliveryPreferences, board);
         customer.addSubmittedOrder(customOrder);
 
         int costCoins = customOrder.totalCost();
@@ -154,9 +156,9 @@ public class CustomOrderController {
         this.customOrderDao.saveCustomOrder(customOrder);
         notifyOrderCoordinator();
 
-        CustomOrderSummaryBean customOrderSummaryBean = new CustomOrderSummaryBean();
+        OrderSummaryBean customOrderSummaryBean = new OrderSummaryBean();
         customOrderSummaryBean.setId(customOrder.getId());
-        customOrderSummaryBean.setCreationDate(customOrder.creationDate());
+        customOrderSummaryBean.setCreationDate(dateConverter.localDateToString(customOrder.creationDate()));
         customOrderSummaryBean.setDescriptionBoard(customOrder.getBoard().description());
         customOrderSummaryBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
         customOrderSummaryBean.setStatus(customOrder.getOrderStatus().toString());
@@ -166,72 +168,61 @@ public class CustomOrderController {
     }
 
 
-    public List<CustomOrderBean> getAllOrders(){
-       List<CustomOrder> customOrderList = customOrderDao.selectAllOpenOrder();
-       List<CustomOrderBean> customOrderBeanList = new ArrayList<>();
-       for(CustomOrder customOrder:customOrderList){
-           CustomOrderBean customOrderBean = new CustomOrderBean();
-           customOrderBean.setId(customOrder.getId());
-           customOrderBean.setCreationDate(customOrder.creationDate());
-           customOrderBean.setDescriptionBoard(customOrder.getBoard().description());
-           customOrderBean.setStatus(customOrder.getOrderStatus().toString());
+    public List<OrderSummaryBean> getAllOrders(){
+       List<Order> orderList = customOrderDao.selectAllOpenOrder();
+       List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
+       for(Order order:orderList){
+           OrderSummaryBean customOrderBean = new OrderSummaryBean();
+           customOrderBean.setId(order.getId());
+           customOrderBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
+           customOrderBean.setDescriptionBoard(order.getBoard().description());
+           customOrderBean.setStatus(order.getOrderStatus().toString());
            customOrderBeanList.add(customOrderBean);
        }
         return customOrderBeanList;
     }
 
 
-    public List<CustomOrderBean> getOrdersSubmitted(){
+    public List<OrderSummaryBean> getOrdersSubmitted(){
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
-        List<CustomOrderBean> customOrderBeanList = new ArrayList<>();
-        for(CustomOrder customOrder: customer.customOrdersSubmitted()){
-            CustomOrderBean customOrderBean = new CustomOrderBean();
-            customOrderBean.setId(customOrder.getId());
-            customOrderBean.setCreationDate(customOrder.creationDate());
-            customOrderBean.setStatus(customOrder.getOrderStatus().toString());
-            customOrderBean.setDescriptionBoard(customOrder.getBoard().description());
+        List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
+        for(Order order: customer.customOrdersSubmitted()){
+            OrderSummaryBean customOrderBean = new OrderSummaryBean();
+            customOrderBean.setId(order.getId());
+            customOrderBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
+            customOrderBean.setStatus(order.getOrderStatus().toString());
+            customOrderBean.setDescriptionBoard(order.getBoard().description());
             customOrderBeanList.add(customOrderBean);
         }
         return customOrderBeanList;
     }
 
 
-    public List<CustomOrderBean> getOrdersAcquired(){
+    public List<OrderSummaryBean> getOrdersAcquired(){
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
-        List<CustomOrderBean> customOrderBeanList = new ArrayList<>();
-        for(CustomOrder customOrder: customer.customOrdersAcquired()){
-            CustomOrderBean customOrderBean = new CustomOrderBean();
-            customOrderBean.setId(customOrder.getId());
-            customOrderBean.setCreationDate(customOrder.creationDate());
-            customOrderBean.setStatus(customOrder.getOrderStatus().toString());
-            customOrderBean.setDescriptionBoard(customOrder.getBoard().description());
-            customOrderBeanList.add(customOrderBean);
+        List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
+        for(Order order: customer.customOrdersAcquired()){
+            OrderSummaryBean customOrderSummaryBean = new OrderSummaryBean();
+            customOrderSummaryBean.setId(order.getId());
+            customOrderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
+            customOrderSummaryBean.setStatus(order.getOrderStatus().toString());
+            customOrderSummaryBean.setDescriptionBoard(order.getBoard().description());
+            customOrderBeanList.add(customOrderSummaryBean);
         }
         return customOrderBeanList;
     }
 
-    public CustomOrderSummaryBean getMoreInfoOnOrder(CustomOrderBean customOrderBean){
-        CustomOrder customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
-        CustomOrderSummaryBean customOrderSummaryBean = new CustomOrderSummaryBean();
-        customOrderSummaryBean.setId(customOrder.getId());
-        customOrderSummaryBean.setCreationDate(customOrder.creationDate());
-        customOrderSummaryBean.setDescriptionBoard(customOrder.getBoard().description());
-        customOrderSummaryBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
-        customOrderSummaryBean.setStatus(customOrder.getOrderStatus().toString());
-        customOrderSummaryBean.setNameBoard(customOrder.getBoard().name());
-        customOrderSummaryBean.setTotalCost(customOrder.totalCost());
-        return customOrderSummaryBean;
-    }
 
 
-    public List<ProgressNoteBean> progressNoteBeanList(CustomOrderSummaryBean customOrderBean){
-        CustomOrder customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
-        List<ProgressNote> progressNoteList = customOrder.progressDetails();
+
+    public List<ProgressNoteBean> progressNoteBeanList(OrderSummaryBean customOrderBean){
+        Order order = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+        List<ProgressNote> progressNoteList = order.progressDetails();
         List<ProgressNoteBean> progressNoteBeanList = new ArrayList<>();
         for(ProgressNote progressNote: progressNoteList){
             ProgressNoteBean progressNoteBean = new ProgressNoteBean();
             progressNoteBean.setComment(progressNote.getComment());
-            progressNoteBean.setDate(progressNote.getDate());
+            progressNoteBean.setDate(dateConverter.localDateToString(progressNote.getDate()));
             progressNoteBeanList.add(progressNoteBean);
         }
         return progressNoteBeanList;

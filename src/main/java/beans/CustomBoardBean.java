@@ -10,14 +10,6 @@ public class CustomBoardBean {
 
     public CustomBoardBean(){};
 
-    public CustomBoardBean(String name, int extraPiles, float gripTexture, float concaveNose, float concaveTail, int warrantyMonths){
-        this.name = name;
-        this.extraPiles = extraPiles;
-        this.gripTexture = gripTexture;
-        this.concaveNose = concaveNose;
-        this.concaveTail = concaveTail;
-        this.warrantyMonths = warrantyMonths;
-    }
 
     public String getName() {
         return name;
