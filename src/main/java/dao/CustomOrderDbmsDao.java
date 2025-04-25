@@ -65,7 +65,7 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
                 DeliveryDestination deliveryDestination = new DeliveryDestination(Region.CALABRIA, "k", "m", "a");
                 Order order = new Order(customer,deliveryDestination, deliveryPreferences , board);
                 order.setId(id);
-                order.setOrderStatus(OrderStatus.valueOf(orderStatusStr));
+                order.setOrderStatus(OrderStatus.fromString(orderStatusStr));
 
                 this.customOrderList.add(order);
 
