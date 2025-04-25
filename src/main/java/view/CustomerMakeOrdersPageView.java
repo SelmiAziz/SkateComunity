@@ -102,11 +102,12 @@ public class CustomerMakeOrdersPageView {
             deliveryDestinationBean.setStreetAddress(address);
 
             DeliveryPreferencesBean deliveryPreferencesBean = new DeliveryPreferencesBean();
+            deliveryPreferencesBean.setComment(comment);
+            deliveryPreferencesBean.setPreferredTimeSlot(timeSlot);
 
             try {
-                System.out.println("Hell");
-                OrderSummaryBean customOrderBean = customOrderController.elaborateOrder(deliveryDestinationBean, deliveryPreferencesBean, boardBean);
-                sceneManager.loadAllOrdersPage(customOrderController, customOrderBean);
+                OrderSummaryBean orderSummaryBean = customOrderController.elaborateOrder(deliveryDestinationBean, deliveryPreferencesBean, boardBean);
+                sceneManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
             }catch(InsufficientCoinsException e){
                 errorLabel.setText(e.getMessage());
             }

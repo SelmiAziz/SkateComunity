@@ -11,6 +11,7 @@ public class Order {
     String id;
     private Customer customer;
     private DeliveryDestination deliveryDestination;
+    private DeliveryPreferences deliveryPreferences;
     private List<ProgressNote> progressNoteList = new ArrayList<>();
     private Board board;
     private OrderStatus orderStatus;
@@ -24,10 +25,11 @@ public class Order {
         this.orderStatus = OrderStatus.REQUESTED;
         this.id =  UUID.randomUUID().toString();
 
-        //CustomOrder compose deliveryPreferences
-
+        //order compose deliveryPreferences
+       this.deliveryPreferences = new DeliveryPreferences(deliveryPreferences.getPreferredTimeSlot(), deliveryPreferences.getComment());
 
     }
+
 
     public LocalDate creationDate() {
         return progressNoteList.get(progressNoteList.size() - 1).getDate();
@@ -38,6 +40,23 @@ public class Order {
             return progressNoteList.get(0).getDate();
         }
         return null;
+    }
+
+
+    public List<ProgressNote> progressDetails(){
+        return progressNoteList;
+    }
+
+    public void addProgressNoteOrder(ProgressNote progressNote) {
+        this.progressNoteList.add(progressNote);
+    }
+
+    public String commentOrderPreferences(){
+        return deliveryPreferences.getComment();
+    }
+
+    public String timeSlotOrderPreferences(){
+        return deliveryPreferences.getPreferredTimeSlot();
     }
 
     public int totalCost(){
@@ -55,16 +74,6 @@ public class Order {
     public String getId() {
         return id;
     }
-
-    public List<ProgressNote> progressDetails(){
-        return progressNoteList;
-    }
-
-    public void addProgressNoteOrder(ProgressNote progressNote) {
-        this.progressNoteList.add(progressNote);
-    }
-
-
 
     public Customer getCustomer() {
         return customer;

@@ -3,6 +3,7 @@ package dao;
 import dao.patternAbstractFactory.DaoFactory;
 import model.Customer;
 import model.Wallet;
+import model.decorator.Board;
 import utils.DbsConnector;
 import utils.SkaterLevel;
 
@@ -15,8 +16,9 @@ import java.util.List;
 
 public class CustomerDbmsDao implements CustomerDao{
     private static CustomerDbmsDao instance;
-    private final List<Customer> costumerList = new ArrayList<>();
+    private final List<Customer> customerList = new ArrayList<>();
     private final WalletDao walletDao = DaoFactory.getInstance().createWalletDao();
+    private final BoardDao boardDao = DaoFactory.getInstance().createBoardDao();
 
     public static synchronized CustomerDbmsDao getInstance(){
         if(instance == null){
@@ -28,19 +30,21 @@ public class CustomerDbmsDao implements CustomerDao{
     //this is not good you have to recover all the registrations
     @Override
     public Customer selectCustomerByUsername(String  profileName) {
-        for(Customer costumer:costumerList){
+        for(Customer costumer:customerList){
             if(costumer.getUsername().equals(profileName)){
                 return costumer;
             }
         }
-        String query = "SELECT u.username, u.password, u.dateOfBirth, w.walletId , c.skaterLevel, " +
-                "GROUP_CONCAT(r.idRegistration) AS registrationIds " +
+
+        String query = "SELECT u.username, u.password, u.dateOfBirth, w.walletId, c.skaterLevel, " +
+                "GROUP_CONCAT(b.id) AS boardsIds " +
                 "FROM users u " +
-                "LEFT JOIN registrations r ON r.customerUsername = u.username " +
                 "LEFT JOIN customers c ON u.username = c.customerUsername " +
                 "LEFT JOIN wallets w ON w.walletOwner = c.customerUsername " +
+                "LEFT JOIN boardDesigned b ON b.customerUsername = c.customerUsername " +
                 "WHERE u.username = ? " +
-                "GROUP BY u.username, u.password, u.dateOfBirth, w.walletId , c.skaterLevel";
+                "GROUP BY u.username, u.password, u.dateOfBirth, w.walletId, c.skaterLevel";
+
 
         Connection connection = DbsConnector.getInstance().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -53,15 +57,20 @@ public class CustomerDbmsDao implements CustomerDao{
                     SkaterLevel skaterLevelEn = skaterLevel.equals("Novice") ? SkaterLevel.NOVICE :
                                                 skaterLevel.equals("Advanced") ? SkaterLevel.ADVANCED : SkaterLevel.PROFICIENT;
                     String dateOfBirth = resultSet.getString("dateOfBirth");
-                    String registrationIdsStr = resultSet.getString("registrationIds");
                     int walletId = resultSet.getInt("walletId");
+
                     Wallet wallet = walletDao.selectWalletById(walletId);
-                    Customer costumer = new Customer(costumerUsername, password, dateOfBirth,skaterLevelEn , wallet);
-                    if(registrationIdsStr != null){
-                        String[] arrRegistrationIds = registrationIdsStr.split(",");
+                    Customer customer = new Customer(costumerUsername, password, dateOfBirth,skaterLevelEn , wallet);
+                    String boardIdsStr = resultSet.getString("boardsIds");
+                    for(String boardId:boardIdsStr.split(",")){
+                        Board board = boardDao.selectBoardById(boardId);
+                        customer.addDesignBoard(board);
+                        System.out.println("L'id corrispondente è "+ boardId);
                     }
-                    costumerList.add(costumer);
-                    return costumer;
+
+
+                    customerList.add(customer);
+                    return customer;
                 }
             }
         } catch (SQLException e) {
@@ -74,7 +83,7 @@ public class CustomerDbmsDao implements CustomerDao{
     @Override
     public void addCustomer(Customer customer) {
         //first adding the costumer in memory
-        costumerList.add(customer);
+        customerList.add(customer);
 
         UserDao userDao = DaoFactory.getInstance().createUserDao();
         userDao.addUser(customer);
