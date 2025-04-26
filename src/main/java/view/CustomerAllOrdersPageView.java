@@ -60,10 +60,11 @@ public class CustomerAllOrdersPageView {
 
     public void loadCustomOrderSummary(){
        boardOrderStatusLabel.setText("Stato attuale dell'ordine "+customOrderBean.getStatus());
-       boardDatesLabel.setText("Data creazione dell'ordine "+customOrderBean.getCreationDate() + "Data di conclusione"+customOrderBean.getDeliveryDate());
+       boardDatesLabel.setText("Data creazione dell'ordine "+customOrderBean.getCreationDate() + " Data di conclusione"+customOrderBean.getDeliveryDate());
        boardDayEstimatedLabel.setText("Stima giorni lavorativi per la consegna "+customOrderBean.getEstimatedDays());
        boardDetailsLabel.setText("Dettagli ordine " +customOrderBean.getNameBoard()+ " "+customOrderBean.getDescriptionBoard());
        boardPriceLabel.setText("Costo totale dell'ordine " + customOrderBean.getTotalCost());
+       System.out.println("Costo totale"+customOrderBean.getTotalCost());
        boardDestinationLabel.setText("Destinazione dell'ordine "+customOrderBean.getRegionDestination()+ " "+customOrderBean.getProvinceDestination()+" "+customOrderBean.getCityDestination()+" "+customOrderBean.getStreetAddersDestination());
     }
 

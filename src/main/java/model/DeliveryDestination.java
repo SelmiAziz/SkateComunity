@@ -1,12 +1,24 @@
 package model;
 
+import java.util.UUID;
+
 public class DeliveryDestination {
+    private String id;
     private Region region;
     private String province;
     private String city;
     private String streetAddress;
 
     public DeliveryDestination(Region region, String province, String city, String streetAddress){
+        this.id = UUID.randomUUID().toString();
+        this.region = region;
+        this.province = province;
+        this.city = city;
+        this.streetAddress = streetAddress;
+    }
+
+    public DeliveryDestination(String id, Region region, String province, String city, String streetAddress){
+        this.id = id;
         this.region = region;
         this.province = province;
         this.city = city;
@@ -15,6 +27,10 @@ public class DeliveryDestination {
 
     public int estimatedDeliveryDays(){
         return region.getEstimatedDays();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public void setStreetAddress(String streetAddress) {

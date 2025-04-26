@@ -2,6 +2,8 @@ package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
 import model.Customer;
+import model.Order;
+import model.OrderStatus;
 import model.Wallet;
 import model.decorator.Board;
 import utils.DbsConnector;
@@ -19,6 +21,7 @@ public class CustomerDbmsDao implements CustomerDao{
     private final List<Customer> customerList = new ArrayList<>();
     private final WalletDao walletDao = DaoFactory.getInstance().createWalletDao();
     private final BoardDao boardDao = DaoFactory.getInstance().createBoardDao();
+    private final CustomOrderDao orderDao = DaoFactory.getInstance().createCustomOrderDao();
 
     public static synchronized CustomerDbmsDao getInstance(){
         if(instance == null){
@@ -27,49 +30,68 @@ public class CustomerDbmsDao implements CustomerDao{
         return instance;
     }
 
-    //this is not good you have to recover all the registrations
     @Override
-    public Customer selectCustomerByUsername(String  profileName) {
-        for(Customer costumer:customerList){
-            if(costumer.getUsername().equals(profileName)){
-                return costumer;
+    public Customer selectCustomerByUsername(String username) {
+        for (Customer customer : this.customerList) {
+            if (customer.getUsername().equals(username)) {
+                return customer;
             }
         }
 
         String query = "SELECT u.username, u.password, u.dateOfBirth, w.walletId, c.skaterLevel, " +
-                "GROUP_CONCAT(b.id) AS boardsIds " +
+                "GROUP_CONCAT(DISTINCT b.id) AS boardsIds, " +
+                "GROUP_CONCAT(DISTINCT o.id) AS ordersIds " +
                 "FROM users u " +
                 "LEFT JOIN customers c ON u.username = c.customerUsername " +
                 "LEFT JOIN wallets w ON w.walletOwner = c.customerUsername " +
                 "LEFT JOIN boardDesigned b ON b.customerUsername = c.customerUsername " +
+                "LEFT JOIN orders o ON o.customerUsername = c.customerUsername " +
                 "WHERE u.username = ? " +
                 "GROUP BY u.username, u.password, u.dateOfBirth, w.walletId, c.skaterLevel";
 
-
         Connection connection = DbsConnector.getInstance().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, profileName);
+            preparedStatement.setString(1, username);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    String costumerUsername = resultSet.getString("username");
+                    String customerUsername = resultSet.getString("username");
                     String password = resultSet.getString("password");
                     String skaterLevel = resultSet.getString("skaterLevel");
                     SkaterLevel skaterLevelEn = skaterLevel.equals("Novice") ? SkaterLevel.NOVICE :
-                                                skaterLevel.equals("Advanced") ? SkaterLevel.ADVANCED : SkaterLevel.PROFICIENT;
+                            skaterLevel.equals("Advanced") ? SkaterLevel.ADVANCED : SkaterLevel.PROFICIENT;
                     String dateOfBirth = resultSet.getString("dateOfBirth");
                     int walletId = resultSet.getInt("walletId");
 
                     Wallet wallet = walletDao.selectWalletById(walletId);
-                    Customer customer = new Customer(costumerUsername, password, dateOfBirth,skaterLevelEn , wallet);
+                    Customer customer = new Customer(customerUsername, password, dateOfBirth, skaterLevelEn, wallet);
+
                     String boardIdsStr = resultSet.getString("boardsIds");
-                    for(String boardId:boardIdsStr.split(",")){
-                        Board board = boardDao.selectBoardById(boardId);
-                        customer.addDesignBoard(board);
-                        System.out.println("L'id corrispondente è "+ boardId);
+                    String orderIdsStr = resultSet.getString("ordersIds");
+
+                    if (boardIdsStr != null && !boardIdsStr.isEmpty()) {
+                        for (String boardId : boardIdsStr.split(",")) {
+                            boardId = boardId.trim();
+                            Board board = boardDao.selectBoardById(boardId);
+                            customer.addDesignBoard(board);
+                        }
                     }
 
+                    if (orderIdsStr != null && !orderIdsStr.isEmpty()) {
+                        for (String orderId : orderIdsStr.split(",")) {
+                            orderId = orderId.trim();
+                            Order order = orderDao.selectCustomOrderById(orderId);
+                            order.setCustomer(customer);
+                            if (order != null) {
+                                if (order.getOrderStatus() == OrderStatus.COMPLETED) {
+                                    customer.addAcquiredOrder(order);
+                                }
+                                customer.addSubmittedOrder(order);
+                                order.setCustomer(customer);
+                            }
+                        }
+                    }
 
-                    customerList.add(customer);
+                    this.customerList.add(customer);
                     return customer;
                 }
             }
@@ -80,9 +102,10 @@ public class CustomerDbmsDao implements CustomerDao{
     }
 
 
+
+
     @Override
     public void addCustomer(Customer customer) {
-        //first adding the costumer in memory
         customerList.add(customer);
 
         UserDao userDao = DaoFactory.getInstance().createUserDao();

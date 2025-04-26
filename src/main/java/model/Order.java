@@ -17,7 +17,7 @@ public class Order {
     private OrderStatus orderStatus;
 
 
-    public Order(Customer customer, DeliveryDestination deliveryDestination, DeliveryPreferences deliveryPreferences, Board board){
+    public Order( DeliveryDestination deliveryDestination, DeliveryPreferences deliveryPreferences, Board board){
         this.deliveryDestination = deliveryDestination;
         this.board = board;
         this.customer = customer;
@@ -77,6 +77,11 @@ public class Order {
 
     public void setId(String id){
         this.id = id;
+    }
+
+
+    public void setCustomer(Customer customer){
+        this.customer = customer;
     }
 
     public Customer getCustomer() {

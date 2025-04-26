@@ -16,8 +16,8 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
     private static CustomOrderDbmsDao instance;
     private final List<Order> customOrderList = new ArrayList<>();
     private final DeliveryDestinationDao deliveryDestinationDao = DaoFactory.getInstance().createDeliveryDestinationDao();
+    private final ProgressNoteDao progressNoteDao = DaoFactory.getInstance().createProgressNoteDao();
     private final BoardDao boardDao = DaoFactory.getInstance().createBoardDao();
-    private final CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
 
     public static synchronized CustomOrderDbmsDao getInstance(){
         if(instance == null){
@@ -25,58 +25,66 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
         }
         return instance;
     }
-
     @Override
-    public Order selectCustomOrderById(String id) {
-        for (Order order : this.customOrderList) {
-            if (order.getId().equals(id)) {
-                return order;
-            }
-        }
+    public List<Order> selectAllOpenOrder() {
+        List<Order> openCustomOrderList = new ArrayList<>();
 
         String sql = "SELECT o.id, " +
                 "o.customerUsername, " +
                 "o.boardId, " +
-                "o.comment, " +
                 "o.preferredTimeSlot, " +
-                "o.status " +
+                "o.status, " +
+                "dd.id AS deliveryDestinationId, " +
+                "GROUP_CONCAT(DISTINCT pn.id) AS progressNoteIds " +
                 "FROM orders o " +
-                "WHERE o.id = ?";
+                "LEFT JOIN delivery_destinations dd ON dd.order_id = o.id " +
+                "LEFT JOIN progress_notes pn ON pn.order_id = o.id " +
+                "WHERE o.status IN ('Requested', 'Processing') " +
+                "GROUP BY o.id, o.customerUsername, o.boardId, o.preferredTimeSlot, o.status, dd.id";
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                String customerUsername = rs.getString("customerUsername");
+            while (rs.next()) {
+                String id = rs.getString("id");
                 String boardId = rs.getString("boardId");
-                String comment = rs.getString("comment");
                 String preferredTimeSlot = rs.getString("preferredTimeSlot");
                 String orderStatusStr = rs.getString("status");
 
-                Customer customer = customerDao.selectCustomerByUsername(customerUsername);
-
                 Board board = boardDao.selectBoardById(boardId);
 
+                String deliveryDestinationId = rs.getString("deliveryDestinationId");
+                DeliveryDestination deliveryDestination = deliveryDestinationDao.selectDestinationById(deliveryDestinationId);
 
-                DeliveryPreferences deliveryPreferences = new DeliveryPreferences(comment, preferredTimeSlot);
-                DeliveryDestination deliveryDestination = new DeliveryDestination(Region.CALABRIA, "k", "m", "a");
-                Order order = new Order(customer,deliveryDestination, deliveryPreferences , board);
+                String progressNoteIdsStr = rs.getString("progressNoteIds");
+
+                DeliveryPreferences deliveryPreferences = new DeliveryPreferences("", preferredTimeSlot);
+                Order order = new Order(deliveryDestination, deliveryPreferences, board);
                 order.setId(id);
                 order.setOrderStatus(OrderStatus.fromString(orderStatusStr));
 
-                this.customOrderList.add(order);
+                if (progressNoteIdsStr != null && !progressNoteIdsStr.isEmpty()) {
+                    for (String progressNoteId : progressNoteIdsStr.split(",")) {
+                        progressNoteId = progressNoteId.trim();
+                        ProgressNote progressNote = progressNoteDao.selectProgressNoteById(progressNoteId);
+                        if (progressNote != null) {
+                            order.addProgressNoteOrder(progressNote);
+                        }
+                    }
+                }
 
-                return order;
+                openCustomOrderList.add(order);
             }
+
+            return openCustomOrderList;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return openCustomOrderList;
     }
+
 
 
 
@@ -106,59 +114,70 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
 
     }
 
+
     @Override
-    public List<Order> selectAllOpenOrder() {
-        List<Order> openCustomOrderList = new ArrayList<>();
-
-        for(Order customOrder : this.customOrderList) {
-            if(customOrder.getOrderStatus() == OrderStatus.REQUESTED || customOrder.getOrderStatus() == OrderStatus.PROCESSING) {
-                openCustomOrderList.add(customOrder);
+    public Order selectCustomOrderById(String id) {
+        for (Order order : this.customOrderList) {
+            if (order.getId().equals(id)) {
+                return order;
             }
-        }
-
-        if (!openCustomOrderList.isEmpty()) {
-            //return openCustomOrderList;
         }
 
         String sql = "SELECT o.id, " +
                 "o.customerUsername, " +
                 "o.boardId, " +
-                "o.comment, " +
                 "o.preferredTimeSlot, " +
-                "o.status " +
+                "o.status, " +
+                "dd.id AS deliveryDestinationId, " +
+                "GROUP_CONCAT(DISTINCT pn.id) AS progressNoteIds " +
                 "FROM orders o " +
-                "WHERE o.status IN ('Requested', 'Processing')";
+                "LEFT JOIN delivery_destinations dd ON dd.order_id = o.id " +
+                "LEFT JOIN progress_notes pn ON pn.order_id = o.id " +
+                "WHERE o.id = ? " +
+                "GROUP BY o.id, o.customerUsername, o.boardId, o.preferredTimeSlot, o.status, dd.id";
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                String id = rs.getString("id");
+            if (rs.next()) {
                 String customerUsername = rs.getString("customerUsername");
                 String boardId = rs.getString("boardId");
-                String comment = rs.getString("comment");
                 String preferredTimeSlot = rs.getString("preferredTimeSlot");
                 String orderStatusStr = rs.getString("status");
 
-                Customer customer = customerDao.selectCustomerByUsername(customerUsername);
                 Board board = boardDao.selectBoardById(boardId);
 
-                DeliveryPreferences deliveryPreferences = new DeliveryPreferences(comment, preferredTimeSlot);
-                DeliveryDestination deliveryDestination = new DeliveryDestination(Region.CALABRIA, "k", "m", "a");
+                String deliveryDestinationId = rs.getString("deliveryDestinationId");
+                DeliveryDestination deliveryDestination = deliveryDestinationDao.selectDestinationById(deliveryDestinationId);
 
-                Order order = new Order(customer, deliveryDestination, deliveryPreferences, board);
+                String progressNoteIdsStr = rs.getString("progressNoteIds");
+
+                DeliveryPreferences deliveryPreferences = new DeliveryPreferences("", preferredTimeSlot);
+                Order order = new Order(deliveryDestination, deliveryPreferences, board);
                 order.setId(id);
                 order.setOrderStatus(OrderStatus.fromString(orderStatusStr));
 
-                openCustomOrderList.add(order);
+                if (progressNoteIdsStr != null && !progressNoteIdsStr.isEmpty()) {
+                    for (String progressNoteId : progressNoteIdsStr.split(",")) {
+                        progressNoteId = progressNoteId.trim();
+                        ProgressNote progressNote = progressNoteDao.selectProgressNoteById(progressNoteId);
+                        if (progressNote != null) {
+                            order.addProgressNoteOrder(progressNote);
+                        }
+                    }
+                }
+
+                this.customOrderList.add(order);
+                return order;
             }
-            return openCustomOrderList;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return openCustomOrderList;
+        return null;
     }
 
 

@@ -146,7 +146,8 @@ public class CustomOrderController {
 
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
 
-        Order customOrder = new Order(customer,deliveryDestination,deliveryPreferences, board);
+        Order customOrder = new Order(deliveryDestination,deliveryPreferences, board);
+        customOrder.setCustomer(customer);
         customer.addSubmittedOrder(customOrder);
 
         int costCoins = customOrder.totalCost();
@@ -160,6 +161,10 @@ public class CustomOrderController {
         customOrderSummaryBean.setId(customOrder.getId());
         customOrderSummaryBean.setCreationDate(dateConverter.localDateToString(customOrder.creationDate()));
         customOrderSummaryBean.setDescriptionBoard(customOrder.getBoard().description());
+        customOrderSummaryBean.setRegionDestination(customOrder.getDeliveryDestination().getRegion().toString());
+        customOrderSummaryBean.setProvinceDestination(customOrder.getDeliveryDestination().getProvince());
+        customOrderSummaryBean.setCityDestination(customOrder.getDeliveryDestination().getCity());
+        customOrderSummaryBean.setStreetAddersDestination(customOrder.getDeliveryDestination().getStreetAddress());
         customOrderSummaryBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
         customOrderSummaryBean.setStatus(customOrder.getOrderStatus().toString());
         customOrderSummaryBean.setNameBoard(customOrder.getBoard().name());
@@ -172,12 +177,16 @@ public class CustomOrderController {
        List<Order> orderList = customOrderDao.selectAllOpenOrder();
        List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
        for(Order order:orderList){
-           OrderSummaryBean customOrderBean = new OrderSummaryBean();
-           customOrderBean.setId(order.getId());
-           customOrderBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
-           customOrderBean.setDescriptionBoard(order.getBoard().description());
-           customOrderBean.setStatus(order.getOrderStatus().toString());
-           customOrderBeanList.add(customOrderBean);
+           OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
+           orderSummaryBean.setId(order.getId());
+           orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
+           orderSummaryBean.setDescriptionBoard(order.getBoard().description());
+           orderSummaryBean.setStatus(order.getOrderStatus().toString());
+           orderSummaryBean.setRegionDestination(order.getDeliveryDestination().getRegion().toString());
+           orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
+           orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
+           orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
+           customOrderBeanList.add(orderSummaryBean);
        }
         return customOrderBeanList;
     }
@@ -187,12 +196,18 @@ public class CustomOrderController {
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
         List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
         for(Order order: customer.customOrdersSubmitted()){
-            OrderSummaryBean customOrderBean = new OrderSummaryBean();
-            customOrderBean.setId(order.getId());
-            customOrderBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
-            customOrderBean.setStatus(order.getOrderStatus().toString());
-            customOrderBean.setDescriptionBoard(order.getBoard().description());
-            customOrderBeanList.add(customOrderBean);
+            OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
+            orderSummaryBean.setId(order.getId());
+            orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
+            orderSummaryBean.setDeliveryDate(dateConverter.localDateToString(order.deliveryDate()));
+            orderSummaryBean.setStatus(order.getOrderStatus().toString());
+            orderSummaryBean.setTotalCost(order.totalCost());
+            orderSummaryBean.setDescriptionBoard(order.getBoard().description());
+            orderSummaryBean.setRegionDestination(order.getDeliveryDestination().getRegion().toString());
+            orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
+            orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
+            orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
+            customOrderBeanList.add(orderSummaryBean);
         }
         return customOrderBeanList;
     }
@@ -202,12 +217,17 @@ public class CustomOrderController {
         Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
         List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
         for(Order order: customer.customOrdersAcquired()){
-            OrderSummaryBean customOrderSummaryBean = new OrderSummaryBean();
-            customOrderSummaryBean.setId(order.getId());
-            customOrderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
-            customOrderSummaryBean.setStatus(order.getOrderStatus().toString());
-            customOrderSummaryBean.setDescriptionBoard(order.getBoard().description());
-            customOrderBeanList.add(customOrderSummaryBean);
+            OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
+            orderSummaryBean.setId(order.getId());
+            orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
+            orderSummaryBean.setDeliveryDate(dateConverter.localDateToString(order.deliveryDate()));
+            orderSummaryBean.setStatus(order.getOrderStatus().toString());
+            orderSummaryBean.setRegionDestination(order.getDeliveryDestination().getRegion().toString());
+            orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
+            orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
+            orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
+            orderSummaryBean.setDescriptionBoard(order.getBoard().description());
+            customOrderBeanList.add(orderSummaryBean);
         }
         return customOrderBeanList;
     }
@@ -234,6 +254,15 @@ public class CustomOrderController {
         WalletBean walletBean = new WalletBean();
         walletBean.setBalance(wallet.getBalance());
         return walletBean;
+    }
+
+    public CustomerBean getInfoCustomerOrder(OrderBean orderBean){
+        Order order = customOrderDao.selectCustomOrderById(orderBean.getId());
+        Customer customer = order.getCustomer();
+        CustomerBean customerBean = new CustomerBean();
+        customerBean.setSkillLevel(customer.getSkaterLevel().toString());
+        customerBean.setUsername(customer.getUsername());
+        return customerBean;
     }
 }
 
