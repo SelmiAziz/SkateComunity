@@ -6,7 +6,7 @@ import exceptions.EmptyFieldException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.SceneManager;
+import utils.WindowManager;
 import utils.SessionManager;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class OrganizerSkateboardsPageView {
     @FXML private TableColumn<CustomizedBoardBean, String> colDescription;
     @FXML private TableColumn<CustomizedBoardBean, String> colSize;
     @FXML private TableColumn<CustomizedBoardBean, String> colCost;
-    SceneManager sceneManager = SceneManager.getInstance();
+    WindowManager windowManager = WindowManager.getInstance();
     CreateBoardController createSkateboardController = new CreateBoardController();
 
     public void initialize(){
@@ -80,7 +80,7 @@ public class OrganizerSkateboardsPageView {
     @FXML
     public void goToTricksPage(){
         try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerTricksPageView.fxml");
+           windowManager.goToTricks();
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
@@ -88,9 +88,8 @@ public class OrganizerSkateboardsPageView {
 
     @FXML
     public void goToCompetitionsPage(){
-        SessionManager.getInstance().terminateSession();
         try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerCompetitionsPageView.fxml");
+            windowManager.goToOrganizerCompetitions();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -100,7 +99,7 @@ public class OrganizerSkateboardsPageView {
 
     public void goToHomePage() {
         try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
+            windowManager.goToOrganizerHomePage();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -109,9 +108,8 @@ public class OrganizerSkateboardsPageView {
 
 
     public void logOut()  {
-        //here you have to call the controller to logOut
         try {
-            sceneManager.loadScene("viewFxml/AccessView.fxml");
+            windowManager.logOut();
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }

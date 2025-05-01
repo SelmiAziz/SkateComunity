@@ -34,13 +34,12 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
                 "o.boardId, " +
                 "o.preferredTimeSlot, " +
                 "o.status, " +
-                "dd.id AS deliveryDestinationId, " +
+                "o.deliveryDestinationId, " +
                 "GROUP_CONCAT(DISTINCT pn.id) AS progressNoteIds " +
                 "FROM orders o " +
-                "LEFT JOIN delivery_destinations dd ON dd.order_id = o.id " +
-                "LEFT JOIN progress_notes pn ON pn.order_id = o.id " +
+                "LEFT JOIN progressNotes pn ON pn.orderId = o.id " +
                 "WHERE o.status IN ('Requested', 'Processing') " +
-                "GROUP BY o.id, o.customerUsername, o.boardId, o.preferredTimeSlot, o.status, dd.id";
+                "GROUP BY o.id, o.customerUsername, o.boardId, o.preferredTimeSlot, o.status, o.deliveryDestinationId";
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -94,8 +93,8 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
         customOrderList.add(order);
         deliveryDestinationDao.saveDeliveryDestination(order.getDeliveryDestination());
 
-        String sql = "INSERT INTO orders (id, customerUsername, comment, preferredTimeSlot, boardId, status) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO orders (id, customerUsername, comment, preferredTimeSlot, boardId, status, deliveryDestinationId) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DbsConnector.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -106,6 +105,7 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
             stmt.setString(4, order.timeSlotOrderPreferences());
             stmt.setString(5, order.getBoard().boardId());
             stmt.setString(6, order.getOrderStatus().toString());
+            stmt.setString(7, order.getDeliveryDestination().getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -128,13 +128,12 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
                 "o.boardId, " +
                 "o.preferredTimeSlot, " +
                 "o.status, " +
-                "dd.id AS deliveryDestinationId, " +
+                "o.deliveryDestinationId, " +
                 "GROUP_CONCAT(DISTINCT pn.id) AS progressNoteIds " +
                 "FROM orders o " +
-                "LEFT JOIN delivery_destinations dd ON dd.order_id = o.id " +
-                "LEFT JOIN progress_notes pn ON pn.order_id = o.id " +
+                "LEFT JOIN progressNotes pn ON pn.orderId = o.id " +
                 "WHERE o.id = ? " +
-                "GROUP BY o.id, o.customerUsername, o.boardId, o.preferredTimeSlot, o.status, dd.id";
+                "GROUP BY o.id, o.customerUsername, o.boardId, o.preferredTimeSlot, o.status, o.deliveryDestinationId";
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

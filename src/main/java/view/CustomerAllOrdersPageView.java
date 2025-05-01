@@ -1,6 +1,5 @@
 package view;
 
-import beans.OrderBean;
 import beans.OrderSummaryBean;
 import beans.ProgressNoteBean;
 import controls.CustomOrderController;
@@ -8,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.List;
 public class CustomerAllOrdersPageView {
 
     public CustomOrderController customOrderController;
+    public WindowManager windowManager = WindowManager.getInstance();
 
     @FXML
     private TableView<OrderSummaryBean> ordersTable;
@@ -48,6 +48,7 @@ public class CustomerAllOrdersPageView {
         colState.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getStatus()));
 
+
         backButton.setVisible(false);
         notesPane.setVisible(false);
 
@@ -58,13 +59,16 @@ public class CustomerAllOrdersPageView {
         loadOrdersSubmitted();
     }
 
+    public void initAfter2(){
+        loadOrdersSubmitted();
+    }
+
     public void loadCustomOrderSummary(){
        boardOrderStatusLabel.setText("Stato attuale dell'ordine "+customOrderBean.getStatus());
        boardDatesLabel.setText("Data creazione dell'ordine "+customOrderBean.getCreationDate() + " Data di conclusione"+customOrderBean.getDeliveryDate());
        boardDayEstimatedLabel.setText("Stima giorni lavorativi per la consegna "+customOrderBean.getEstimatedDays());
        boardDetailsLabel.setText("Dettagli ordine " +customOrderBean.getNameBoard()+ " "+customOrderBean.getDescriptionBoard());
        boardPriceLabel.setText("Costo totale dell'ordine " + customOrderBean.getTotalCost());
-       System.out.println("Costo totale"+customOrderBean.getTotalCost());
        boardDestinationLabel.setText("Destinazione dell'ordine "+customOrderBean.getRegionDestination()+ " "+customOrderBean.getProvinceDestination()+" "+customOrderBean.getCityDestination()+" "+customOrderBean.getStreetAddersDestination());
     }
 
@@ -101,6 +105,11 @@ public class CustomerAllOrdersPageView {
         ordersTable.getItems().addAll(customOrderBeanList);
     }
 
+    public void selectOrder(){
+        customOrderBean = ordersTable.getSelectionModel().getSelectedItem();
+        loadCustomOrderSummary();
+    }
+
 
     public void orderUpdate(){
         loadOrdersSubmitted();
@@ -108,22 +117,45 @@ public class CustomerAllOrdersPageView {
 
     public void back(){
         notesPane.setVisible(false);
+        backButton.setVisible(false);
         notesButton.setVisible(true);
     }
 
 
     public void goToHomePage(){
-        SceneManager.getInstance().closeBro();
+        windowManager.closeCoordinator();
         try {
-            SceneManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
-        } catch (IOException e) {
+            windowManager.goToHomePage();
+        }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
     }
 
-    public void goToTricksPage(){}
-    public void goToCompetitionsPage(){}
-    public void logOut(){}
+    public void goToTricksPage(){
+        windowManager.closeCoordinator();
+        try {
+            windowManager.goToTricks();
+        }catch(IOException e){
+            errorLabel.setText(e.getMessage());
+        }
+    }
+    public void goToCompetitionsPage(){
+        windowManager.closeCoordinator();
+        try {
+            windowManager.goToCustomerCompetitions();
+        }catch(IOException e){
+            errorLabel.setText(e.getMessage());
+        }
+    }
+    public void logOut(){
+        windowManager.closeCoordinator();
+        try {
+            windowManager.goToHomePage();
+        }catch(IOException e){
+            errorLabel.setText(e.getMessage());
+        }
+
+    }
 
 
 

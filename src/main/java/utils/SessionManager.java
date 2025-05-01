@@ -1,30 +1,55 @@
 package utils;
 
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+
 public class SessionManager {
     private static SessionManager instance;
-    private Session session;
+    private final List<Session> sessions;
 
-    private SessionManager(){}
+    private SessionManager() {
+        this.sessions = new ArrayList<>();
+    }
 
-    public synchronized static SessionManager getInstance(){
-        if(instance == null){
+    public synchronized static SessionManager getInstance() {
+        if (instance == null) {
             instance = new SessionManager();
         }
         return instance;
     }
-    public void createSession(Session session){
-        this.session = session;
+
+    public synchronized void createSession(Session session) {
+        sessions.add(session);
     }
 
-    public Session getSession(){
-        return this.session;
+    public synchronized Session getSessionByToken(String token) {
+        Iterator<Session> it = sessions.iterator();
+        while (it.hasNext()) {
+            Session s = it.next();
+            if (s.getToken().equals(token)) {
+                if (s.isExpired()) {
+                    it.remove();
+                    return null;
+                }
+                return s;
+            }
+        }
+        return null;
     }
 
-    public boolean validSession(){
-        return this.session != null;
+    public synchronized boolean validToken(String token) {
+        return getSessionByToken(token) != null;
     }
 
-    public void terminateSession(){
-        this.session = null;
+    public synchronized void terminateSession(String token) {
+        sessions.removeIf(s -> s.getToken().equals(token));
+    }
+
+    public synchronized void cleanupExpiredSessions() {
+        sessions.removeIf(Session::isExpired);
     }
 }
+

@@ -26,6 +26,7 @@ public class ProgressNote {
     }
 
     public ProgressNote(String comment, LocalDate date) {
+        this.id = UUID.randomUUID().toString();
         this.comment = comment;
         this.date = date;
     }

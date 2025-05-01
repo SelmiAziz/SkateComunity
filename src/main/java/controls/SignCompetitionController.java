@@ -1,14 +1,14 @@
 package controls;
 
-import beans.WalletBean;
-import beans.CompetitionRegistrationBean;
+import beans.*;
 import dao.*;
 import dao.patternAbstractFactory.DaoFactory;
-import beans.CompetitionBean;
 import exceptions.InsufficientCoinsException;
 import exceptions.NoAvailableSeats;
+import exceptions.SessionExpiredException;
 import exceptions.UserAlreadySignedCompetition;
 import model.*;
+import utils.Session;
 import utils.SessionManager;
 
 import java.util.ArrayList;
@@ -23,12 +23,20 @@ public class SignCompetitionController {
     private final PaymentController paymentController = new PaymentController();
 
 
-    public CompetitionBean competitionDetails(CompetitionBean competitionBean){
+    public CompetitionBean competitionDetails(CompetitionBean competitionBean, AuthTokenBean authTokenBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
         Competition competition = competitionDao.selectCompetitionByName(competitionBean.getName());
         return new CompetitionBean(competition.getName(), competition.getDescription(), competition.getParticipationFee(),(competition.getMaxRegistrations() - competition.getCurrentRegistrations()));
     }
 
-    public List<CompetitionBean> allAvailableCompetitions(){
+    public List<CompetitionBean> allAvailableCompetitions(AuthTokenBean authTokenBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
         List<Competition> competitionList = competitionDao.selectAvailableCompetitions();
         List<CompetitionBean> competitionBeanList = new ArrayList<>();
         for (Competition competition : competitionList){
@@ -38,11 +46,11 @@ public class SignCompetitionController {
     }
 
     //dummy function that generate a code
-    private String generateCode(String competitionName,int currentRegistrationNumber){
+    protected String generateCode(String competitionName,int currentRegistrationNumber){
         return "XX0" + competitionName+currentRegistrationNumber;
     }
 
-    private String findAvailableSpotForCompetition(int registrationNumber) {
+    protected String findAvailableSpotForCompetition(int registrationNumber) {
         int groupSize = 19;
         int groupIndex = (registrationNumber - 1) / groupSize;
         int number = ((registrationNumber - 1) % groupSize) + 1;
@@ -57,8 +65,12 @@ public class SignCompetitionController {
     }
 
 
-    public CompetitionRegistrationBean signToCompetition(CompetitionBean competitionBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats {
-        String customerName = sessionManager.getSession().getUsername();
+    public CompetitionRegistrationBean signToCompetition(CompetitionBean competitionBean, AuthTokenBean authTokenBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException {
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+        String customerName = sessionManager.getSessionByToken(authTokenBean.getToken()).getUsername();
         Customer currentCustomer = customerDao.selectCustomerByUsername(customerName);
         Competition competition = competitionDao.selectCompetitionByName(competitionBean.getName());
         List<CompetitionRegistration> participantsList = competition.getCompetitionRegistrations();
@@ -72,11 +84,7 @@ public class SignCompetitionController {
             throw new NoAvailableSeats("Non sono presenti più posti disponibili per tale competizione");
         }
 
-        try{
-            paymentController.payWithCoins(currentCustomer.getWallet(), competition.getParticipationFee());
-        }catch(InsufficientCoinsException e){
-            throw e;
-        }
+        paymentController.payWithCoins(currentCustomer.getWallet(), competition.getParticipationFee());
 
         int registrationNumber = competition.getCurrentRegistrations() +1;
         String registrationCode = generateCode(competition.getName(),competition.getCurrentRegistrations());
@@ -93,7 +101,11 @@ public class SignCompetitionController {
 
     }
 
-    public List<CompetitionBean> searchCompetitionByDateAndLocation(CompetitionBean competitionBean){
+    public List<CompetitionBean> searchCompetitionByDateAndLocation(CompetitionBean competitionBean, AuthTokenBean authTokenBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
         List<CompetitionBean> competitionBeanList = new ArrayList<>();
         List<Competition> competitionList = competitionDao.selectCompetitionsByDateAndLocation(competitionBean.getDate(), competitionBean.getLocation());
         for(Competition competition: competitionList){
@@ -102,9 +114,12 @@ public class SignCompetitionController {
         return competitionBeanList;
     }
 
-    public WalletBean customerInfo(){
-        String username = sessionManager.getSession().getUsername();
-        Customer customer = customerDao.selectCustomerByUsername(username);
+    public WalletBean customerInfo(AuthTokenBean authTokenBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
         Wallet wallet = customer.getWallet();
         WalletBean walletBean = new WalletBean(wallet.getBalance());
         return walletBean;

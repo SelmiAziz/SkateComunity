@@ -10,14 +10,14 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 public class RegisterView {
-    private final SceneManager sceneManager = SceneManager.getInstance();
+    private final WindowManager sceneManager = WindowManager.getInstance();
     private final LoginController loginController = new LoginController();
 
     @FXML private TextField usernameField;

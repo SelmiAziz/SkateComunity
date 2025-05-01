@@ -1,5 +1,6 @@
 package controls;
 
+import beans.AuthBean;
 import dao.CustomerDao;
 import dao.patternAbstractFactory.DaoFactory;
 import dao.OrganizerDao;
@@ -26,15 +27,16 @@ public class LoginController {
 
 
 
-    public LogUserBean logUser(LogUserBean loginBean) throws UserNotFoundException {
+    public AuthBean logUser(LogUserBean loginBean) throws UserNotFoundException {
         if (!userDao.checkUserByUsernameAndPassword(loginBean.getUsername(), loginBean.getPassword())) {
             throw new UserNotFoundException("Credenziali non valide");
         }
 
         User user = userDao.selectUserByUsername(loginBean.getUsername());
-        SessionManager.getInstance().createSession(new Session(user.getUsername(), user.getRole()));
+        Session session = new Session(user.getUsername(), user.getRole());
+        SessionManager.getInstance().createSession(session);
 
-        return new LogUserBean(user.getRole() == Role.COSTUMER ? "Costumer" : "Organizer");
+        return new AuthBean(session.getToken(),user.getRole() == Role.COSTUMER ? "Costumer" : "Organizer");
     }
 
 

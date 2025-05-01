@@ -14,14 +14,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import org.w3c.dom.Text;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 
 public class CustomerCompetitionsPageView {
     private final SignCompetitionController signCompetitionController = new SignCompetitionController();
-    private final SceneManager sceneManager = SceneManager.getInstance();
+    private final WindowManager windowManager = WindowManager.getInstance();
 
     @FXML private TableView<CompetitionBean> competitionTable;
     @FXML private TableColumn<CompetitionBean, String> colName;
@@ -62,7 +61,8 @@ public class CustomerCompetitionsPageView {
                 new SimpleStringProperty(cellData.getValue().getDate()));
 
         startConfig();
-        updateCustomerInfo();
+        loadCompetitions();
+        //updateCustomerInfo();
     }
 
     public void startConfig(){
@@ -199,7 +199,7 @@ public class CustomerCompetitionsPageView {
     public void submitSignToCompetition(){
         try {
             CompetitionBean selectedCompetitionBean = competitionTable.getSelectionModel().getSelectedItem();
-            CompetitionRegistrationBean competitionRegistrationBean = signCompetitionController.signToCompetition(selectedCompetitionBean);
+            CompetitionRegistrationBean competitionRegistrationBean = signCompetitionController.signToCompetition(selectedCompetitionBean, windowManager.getAuthBean());
             onCompetitionSelected();
             registrationCodeLabel.setText("Il codice della registrazione:" + competitionRegistrationBean.getRegistrationCode());
             assignedSeatLabel.setText("Il posto assegnato è:" + competitionRegistrationBean.getAssignedSeat());
@@ -209,10 +209,6 @@ public class CustomerCompetitionsPageView {
         updateCustomerInfo();
     }
 
-    @FXML
-    public void goToCompetitionsPage(){
-
-    }
 
     @FXML
     public void goToCommissionsPage(){
@@ -222,7 +218,7 @@ public class CustomerCompetitionsPageView {
     @FXML
     public void goToTricksPage(){
         try {
-            SceneManager.getInstance().loadScene("viewFxml/CustomerTricksPageView.fxml");
+            windowManager.goToTricks();
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
@@ -230,7 +226,7 @@ public class CustomerCompetitionsPageView {
 
     public void goToHomePage() {
         try {
-            sceneManager.loadScene("viewFxml/CustomerHomePageView.fxml");
+            windowManager.goToHomePage();
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
@@ -238,7 +234,7 @@ public class CustomerCompetitionsPageView {
 
     public void logOut(){
         try {
-            sceneManager.loadScene("viewFxml/AccessView.fxml");
+            windowManager.logOut();
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }

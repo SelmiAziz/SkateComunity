@@ -1,35 +1,45 @@
 package utils;
 
 import login.Role;
-
-import java.time.Instant;
+import java.util.UUID;
 
 public class Session {
-    private final String usernameUserLogged;
+    private final String username;
+    private final String token;
     private final Role role;
-    private final Instant loggTime;
+    private long expiryTime;
 
-    public Session(String usernameUserLogged, Role role){
-        this.usernameUserLogged = usernameUserLogged;
+    private static final long SESSION_DURATION = 30 * 60 * 1000;
+
+    public Session(String username, Role role) {
+        this.username = username;
         this.role = role;
-        this.loggTime = Instant.now();
-
+        this.token = UUID.randomUUID().toString();
+        this.expiryTime = System.currentTimeMillis() + SESSION_DURATION;
     }
 
-    public  String getUsername(){
-        return this.usernameUserLogged;
+    public String getUsername() {
+        return username;
     }
 
-
-    public Role getRole(){
-        return this.role;
+    public String getToken() {
+        return token;
     }
 
+    public Role getRole() {
+        return role;
+    }
 
+    public boolean isExpired() {
+        return System.currentTimeMillis() > expiryTime;
+    }
 
+    public void updateExpiryTime() {
+        this.expiryTime = System.currentTimeMillis() + SESSION_DURATION;
+    }
 
-
-    public Instant getLoggTime(){
-        return this.loggTime;
+    public long getExpiryTime() {
+        return expiryTime;
     }
 }
+

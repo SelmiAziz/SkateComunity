@@ -1,5 +1,6 @@
 package view;
 
+import beans.AuthBean;
 import beans.LogUserBean;
 import controls.LoginController;
 import exceptions.EmptyFieldException;
@@ -7,13 +8,12 @@ import exceptions.UserNotFoundException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import login.Role;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 
 public class LoginView {
-    private final SceneManager sceneManager = SceneManager.getInstance();
+    private final WindowManager sceneManager = WindowManager.getInstance();
     private LoginController loginController = new LoginController();
 
     @FXML private TextField usernameField;
@@ -35,13 +35,14 @@ public class LoginView {
 
         try {
             validateLogin(username, password);
-            LogUserBean logUserBean =  loginController.logUser(new LogUserBean(username, password));
+            AuthBean authBean =  loginController.logUser(new LogUserBean(username, password));
+            WindowManager.getInstance().setAuthBean(authBean);
             try{
 
-                if (logUserBean.getRole().equals("Costumer")){
-                    SceneManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
+                if (authBean.getRole().equals("Costumer")){
+                    WindowManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
                 }else {
-                    SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
+                    WindowManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
                 }
             }catch (IOException e){
                 errorLabel.setText("Errore di sistema. Riprova più tardi.");

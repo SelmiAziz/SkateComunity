@@ -4,9 +4,11 @@ import beans.*;
 import dao.*;
 import dao.patternAbstractFactory.DaoFactory;
 
+import exceptions.SessionExpiredException;
 import model.*;
 import model.decorator.*;
 import utils.DateConverter;
+import utils.Session;
 import utils.SessionManager;
 import view.CoordinatorOrderPageView;
 import view.CustomerAllOrdersPageView;
@@ -32,7 +34,12 @@ public class CustomOrderController {
         this.customerAllOrdersPageView = customerAllOrdersPageView;
     }
 
-    public List<CustomizedBoardBean> getBoardSamples(){
+    public List<CustomizedBoardBean> getBoardSamples(AuthTokenBean authTokenBean){
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+
         List<CustomizedBoardBean> boardBeanList = new ArrayList<>();
         List<Board> boardList = boardDao.selectAvailableBoards();
         for(Board board : boardList){
@@ -46,7 +53,12 @@ public class CustomOrderController {
         return boardBeanList;
     }
 
-    public CustomizedBoardBean generateCustomBoard(CustomBoardBean customBoardBean){
+    public CustomizedBoardBean generateCustomBoard(CustomBoardBean customBoardBean, AuthTokenBean authTokenBean){
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+
         Board baseBoard = boardDao.selectBoardByName(customBoardBean.getName());
 
         GripTextureDecorator grip = new GripTextureDecorator(baseBoard, customBoardBean.getGripTexture());
@@ -64,8 +76,12 @@ public class CustomOrderController {
         return boardBean;
     }
 
-    public BoardBean saveCreatedCustomizedBoard(CustomizedBoardBean customizedBoardBean){
-        Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
+    public BoardBean saveCreatedCustomizedBoard(CustomizedBoardBean customizedBoardBean, AuthTokenBean authTokenBean){
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
         Board board = new BoardBase(customizedBoardBean.getName(), customizedBoardBean.getDescription(), customizedBoardBean.getSize(), customizedBoardBean.getPrice());
         customer.addDesignBoard(board);
         boardDao.addBoard(board, customer.getUsername());
@@ -75,8 +91,12 @@ public class CustomOrderController {
     }
 
 
-    public List<CustomizedBoardBean> getCustomizedBoards(){
-        Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
+    public List<CustomizedBoardBean> getCustomizedBoards(AuthTokenBean authTokenBean){
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
         List<CustomizedBoardBean> boardBeanList = new ArrayList<>();
         for(Board board : customer.customizedBoards()){
             CustomizedBoardBean boardBean = new CustomizedBoardBean();
@@ -132,7 +152,11 @@ public class CustomOrderController {
         notifyCustomer();
     }
 
-    public OrderSummaryBean elaborateOrder(DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean){
+    public OrderSummaryBean elaborateOrder(DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean, AuthTokenBean authTokenBean){
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
 
         DeliveryDestination deliveryDestination = new DeliveryDestination(Region.fromString(deliveryDestinationBean.getRegion()),
                 deliveryDestinationBean.getProvince(),
@@ -144,7 +168,7 @@ public class CustomOrderController {
 
         DeliveryPreferences deliveryPreferences = new DeliveryPreferences(deliveryPreferencesBean.getComment(), deliveryPreferencesBean.getPreferredTimeSlot());
 
-        Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
+        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
 
         Order customOrder = new Order(deliveryDestination,deliveryPreferences, board);
         customOrder.setCustomer(customer);
@@ -192,8 +216,12 @@ public class CustomOrderController {
     }
 
 
-    public List<OrderSummaryBean> getOrdersSubmitted(){
-        Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
+    public List<OrderSummaryBean> getOrdersSubmitted(AuthTokenBean authTokenBean){
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
         List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
         for(Order order: customer.customOrdersSubmitted()){
             OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
@@ -213,8 +241,12 @@ public class CustomOrderController {
     }
 
 
-    public List<OrderSummaryBean> getOrdersAcquired(){
-        Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
+    public List<OrderSummaryBean> getOrdersAcquired(AuthTokenBean authTokenBean) throws SessionExpiredException {
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
         List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
         for(Order order: customer.customOrdersAcquired()){
             OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
@@ -235,7 +267,11 @@ public class CustomOrderController {
 
 
 
-    public List<ProgressNoteBean> progressNoteBeanList(OrderSummaryBean customOrderBean){
+    public List<ProgressNoteBean> progressNoteBeanList(OrderSummaryBean customOrderBean, AuthTokenBean authTokenBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
         Order order = customOrderDao.selectCustomOrderById(customOrderBean.getId());
         List<ProgressNote> progressNoteList = order.progressDetails();
         List<ProgressNoteBean> progressNoteBeanList = new ArrayList<>();
@@ -248,8 +284,12 @@ public class CustomOrderController {
         return progressNoteBeanList;
     }
 
-    public WalletBean walletDetails(){
-        Customer customer = customerDao.selectCustomerByUsername(SessionManager.getInstance().getSession().getUsername());
+    public WalletBean walletDetails(AuthTokenBean authTokenBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+        if(session == null){
+            throw new SessionExpiredException();
+        }
+        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
         Wallet wallet = customer.getWallet();
         WalletBean walletBean = new WalletBean();
         walletBean.setBalance(wallet.getBalance());

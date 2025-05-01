@@ -1,12 +1,12 @@
 package view;
 import javafx.fxml.FXML;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 
 public class AccessView {
     //Un disastro
-    SceneManager sceneManager = SceneManager.getInstance();
+    WindowManager sceneManager = WindowManager.getInstance();
 
     @FXML
     public void goToRegistrationPage (){

@@ -32,12 +32,12 @@ public class Order {
 
 
     public LocalDate creationDate() {
-        return progressNoteList.get(progressNoteList.size() - 1).getDate();
+        return progressNoteList.get(0).getDate();
     }
 
     public LocalDate deliveryDate() {
         if(orderStatus == OrderStatus.COMPLETED){
-            return progressNoteList.get(0).getDate();
+            return progressNoteList.get(progressNoteList.size() - 1).getDate();
         }
         return null;
     }

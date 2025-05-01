@@ -11,13 +11,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import utils.SceneManager;
+import utils.WindowManager;
 import utils.SessionManager;
 
 import java.io.IOException;
 import java.util.List;
 
 public class OrganizerTricksPageView {
+
+    WindowManager windowManager = WindowManager.getInstance();
+
     @FXML Label errorLabel;
     @FXML private TableView<TrickBean> trickTable;
     @FXML private TableColumn<TrickBean, String> colTrickName;
@@ -86,20 +89,7 @@ public class OrganizerTricksPageView {
     @FXML
     public void goToCompetitionsPage() {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerCompetitionsPageView.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-            OrganizerCompetitionsPageView organizerEventsPageView = loader.getController();
-            Scene scene = new Scene(root, 1200, 800);
-            stage = SceneManager.getInstance().getStage();
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-            Platform.runLater(organizerEventsPageView::loadCompetitions);
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
+
 
 
 
@@ -143,20 +133,17 @@ public class OrganizerTricksPageView {
 
     @FXML
     public void goToSkateboardsPage(){
-        SessionManager.getInstance().terminateSession();
         try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
+            windowManager.goToTricks();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
 
-    // Log out and navigate to the access view
     public void logOut() {
-        SessionManager.getInstance().terminateSession();
         try {
-            SceneManager.getInstance().loadScene("viewFxml/AccessView.fxml");
+            windowManager.logOut();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -165,7 +152,7 @@ public class OrganizerTricksPageView {
     // Navigate to the home page
     public void goToHomePage() {
         try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
+            windowManager.goToOrganizerHomePage();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }

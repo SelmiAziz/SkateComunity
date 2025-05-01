@@ -1,8 +1,8 @@
 package utils;
 
+import beans.AuthBean;
 import beans.BoardBean;
 import beans.OrderSummaryBean;
-import beans.CustomizedBoardBean;
 import controls.CustomOrderController;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -11,23 +11,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import view.CoordinatorOrderPageView;
-import view.CustomerAllOrdersPageView;
-import view.CustomerMakeOrdersPageView;
+import view.*;
 
 import java.io.IOException;
 
-public class SceneManager {
+public class WindowManager {
     private Stage stage;
     private Stage stageBr;
-    private static SceneManager instance;
+    private static WindowManager instance;
+    private AuthBean authBean;
 
-    private SceneManager() {} // Costruttore privato
+    private WindowManager() {} ;
 
-    //I didn't make it synchronized
-    public synchronized static SceneManager getInstance() {
+    public synchronized static WindowManager getInstance() {
         if (instance == null) {
-            instance = new SceneManager();
+            instance = new WindowManager();
         }
         return instance;
     }
@@ -36,6 +34,20 @@ public class SceneManager {
         if (this.stage == null) {
             this.stage = stage;
         }
+    }
+
+
+    public void setAuthBean(AuthBean authBean){
+        this.authBean = authBean;
+    }
+
+    public AuthBean getAuthBean(){
+        return authBean;
+    }
+
+
+    public void cleanAuthBean(){
+        this.authBean = null;
     }
 
     public Stage getStage(){
@@ -64,7 +76,7 @@ public class SceneManager {
             CustomerMakeOrdersPageView viewController = loader.getController();
             viewController.setController(controller);
             viewController.setBoardBean(boardBean);
-            openBro(controller);
+            openCoordinator(controller);
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setResizable(false);
@@ -76,6 +88,10 @@ public class SceneManager {
         }
     }
 
+
+    public void goToOrdersPage() throws IOException {
+        loadScene("viewFxml/CustomerOrdersPageView.fxml");
+    }
 
     public void loadAllOrdersPage(CustomOrderController controller, OrderSummaryBean customOrderBean) {
         try {
@@ -98,9 +114,29 @@ public class SceneManager {
         }
     }
 
+    public void loadPreviousOrdersPage(CustomOrderController controller){
 
-    public void openBro(CustomOrderController customOrderController) throws IOException {
-        // Se già aperto, non fare nulla
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerAllOrdersPageView.fxml"));
+            Parent root = loader.load();
+
+            CustomerAllOrdersPageView viewController = loader.getController();
+            viewController.setCustomOrderController(controller);
+            controller.setCustomAllOrdersPageView(viewController);
+
+            Scene scene = new Scene(root, 1200, 800);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+            viewController.initAfter2();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void openCoordinator(CustomOrderController customOrderController) throws IOException {
         if (stageBr != null && stageBr.isShowing()) {
             stageBr.toFront();
             return;
@@ -121,10 +157,9 @@ public class SceneManager {
 
 
         Platform.runLater(() -> {
-            // Minimizza la finestra principale per un istante
+
             stage.setIconified(true);
 
-            // Aspetta un attimo prima di ripristinarla
             PauseTransition delay = new PauseTransition(Duration.millis(1));
             delay.setOnFinished(e -> {
                 stage.setIconified(false);  // Ripristina la finestra principale
@@ -135,12 +170,60 @@ public class SceneManager {
         });
     }
 
-    public void closeBro() {
+    public void logOut() throws IOException {
+            loadScene("viewFxml/AccessView.fxml");
+
+    }
+
+
+    public void goToHomePage() throws IOException {
+        loadScene("viewFxml/CustomerHomePageView.fxml");
+    }
+
+    public void goToOrganizerHomePage() throws IOException {
+        loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
+    }
+
+    public void goToCustomerCompetitions() throws IOException {
+       loadScene("viewFxml/CustomerCompetitionsPageView.fxml");
+    }
+
+    public void goToOrganizerCompetitions() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerCompetitionsPageView.fxml"));
+        Parent root = null;
+        root = loader.load();
+        OrganizerCompetitionsPageView organizerEventsPageView = loader.getController();
+        Scene scene = new Scene(root, 1200, 800);
+        stage = WindowManager.getInstance().getStage();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        Platform.runLater(organizerEventsPageView::loadCompetitions);
+
+    }
+
+    public void goToSkateboards() throws IOException {
+        loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
+    }
+
+
+    public void goToLearn() throws IOException {
+        loadScene("viewFxml/CustomerTricksPageView.fxml");
+    }
+
+    public void goToTricks() throws IOException {
+        loadScene("viewFxml/OrganizerTricksPageView.fxml");
+    }
+
+
+    public void closeCoordinator() {
         if (stageBr != null) {
             stageBr.close();
-            stageBr = null; // resettiamo il riferimento
+            stageBr = null;
         }
     }
+
+
 
 }
 

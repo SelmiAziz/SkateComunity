@@ -5,12 +5,8 @@ import controls.LearnTrickController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import utils.SceneManager;
+import utils.WindowManager;
 import utils.SessionManager;
 
 import java.io.IOException;
@@ -27,7 +23,7 @@ public class CustomerTricksPageViewBasic {
     @FXML private ChoiceBox<String> choicePage;
 
 
-    SceneManager sceneManager = SceneManager.getInstance();
+    WindowManager windowManager = WindowManager.getInstance();
     LearnTrickController learnTrickController = new LearnTrickController();
 
     public void loadTricks(){
@@ -72,10 +68,9 @@ public class CustomerTricksPageViewBasic {
 
     @FXML
     public void logOut() {
-        SessionManager.getInstance().terminateSession();
         try {
-            SceneManager.getInstance().loadScene("viewFxmlBasic/LogPageBasicView.fxml");
-        } catch (IOException e) {
+            windowManager.logOut();
+        } catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
     }
@@ -87,19 +82,19 @@ public class CustomerTricksPageViewBasic {
         String page = choicePage.getValue();
         if(page.equals("Competitions")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml");
+                windowManager.goToCustomerCompetitions();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Commissions")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+                windowManager.goToCustomerCompetitions();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+                windowManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

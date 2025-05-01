@@ -1,6 +1,5 @@
 package view;
 
-import controls.LoginController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,14 +7,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 
 public class CustomerHomePageView {
+    private final WindowManager windowManager = WindowManager.getInstance();
     private Stage stage;
-    private final SceneManager sceneManager = SceneManager.getInstance();
-
 
 
     @FXML private Label errorLabel;
@@ -27,7 +25,7 @@ public class CustomerHomePageView {
     @FXML
     public void goToOrdersPage(){
         try {
-            SceneManager.getInstance().loadScene("viewFxml/CustomerOrdersPageView.fxml");
+            windowManager.goToOrdersPage();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -42,10 +40,11 @@ public class CustomerHomePageView {
             root = loader.load();
             CustomerCompetitionsPageView userEventsPageView = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
-            stage = sceneManager.getStage();
+            stage = windowManager.getStage();
             stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
+            System.out.println("Hello");
             Platform.runLater(userEventsPageView::loadCompetitions);
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
@@ -57,7 +56,7 @@ public class CustomerHomePageView {
     @FXML
     public void goToTricksPage(){
         try {
-            SceneManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
+           windowManager.goToLearn();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -66,7 +65,7 @@ public class CustomerHomePageView {
 
     public void logOut()  {
         try {
-            sceneManager.loadScene("viewFxml/AccessView.fxml");
+            windowManager.logOut();
         }catch (IOException e){
             errorLabel.setText(e.getMessage());
         }

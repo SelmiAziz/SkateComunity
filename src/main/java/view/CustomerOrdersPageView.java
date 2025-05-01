@@ -1,5 +1,6 @@
 package view;
 
+import beans.AuthTokenBean;
 import beans.BoardBean;
 import beans.CustomBoardBean;
 import beans.CustomizedBoardBean;
@@ -8,7 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,11 +45,11 @@ public class CustomerOrdersPageView {
     @FXML private Label statusLabel;
 
 
+    WindowManager windowManager = WindowManager.getInstance();
     CustomOrderController customOrderController = new CustomOrderController();
     CustomizedBoardBean customizedBoardBean;
     BoardBean boardBean;
 
-    SceneManager sceneManager = SceneManager.getInstance();
 
     public void initialize() {
         customPane.setVisible(false);
@@ -88,7 +89,9 @@ public class CustomerOrdersPageView {
     }
 
     public void displayAvailableBoardSamples() {
-        List<CustomizedBoardBean> availableBoardsList = customOrderController.getBoardSamples();
+        AuthTokenBean authTokenBean = new AuthTokenBean();
+        authTokenBean.setToken(windowManager.getAuthBean().getToken());
+        List<CustomizedBoardBean> availableBoardsList = customOrderController.getBoardSamples(authTokenBean);
         statusLabel.setText("available");
         boardTable.getItems().clear();
         boardTable.getItems().addAll(availableBoardsList);
@@ -97,7 +100,9 @@ public class CustomerOrdersPageView {
     }
 
     public void displayBoardsCustomizedByCustomer(){
-        List<CustomizedBoardBean> boardBeanList = customOrderController.getCustomizedBoards();
+        AuthTokenBean authTokenBean = new AuthTokenBean();
+        authTokenBean.setToken(windowManager.getAuthBean().getToken());
+        List<CustomizedBoardBean> boardBeanList = customOrderController.getCustomizedBoards(authTokenBean);
         statusLabel.setText("designed");
         boardTable.getItems().clear();
         boardTable.getItems().addAll(boardBeanList);
@@ -113,10 +118,16 @@ public class CustomerOrdersPageView {
         descriptionBoardLabel.setText("Description" + customizedBoardBean.getDescription());
     }
 
+    public void goPreviousOrders(){
+        WindowManager.getInstance().loadPreviousOrdersPage(customOrderController);
+    }
+
 
     public void saveDesignBoard(){
         loadBoardForOrder(customizedBoardBean);
-        boardBean = customOrderController.saveCreatedCustomizedBoard(customizedBoardBean);
+        AuthTokenBean authTokenBean = new AuthTokenBean();
+        authTokenBean.setToken(windowManager.getAuthBean().getToken());
+        boardBean = customOrderController.saveCreatedCustomizedBoard(customizedBoardBean,authTokenBean);
         orderPane.setVisible(true);
     }
 
@@ -152,7 +163,9 @@ public class CustomerOrdersPageView {
         customBoardBean.setGripTexture(gripTexture);
         customBoardBean.setWarrantyMonths(warrantyMonths);
 
-        customizedBoardBean = customOrderController.generateCustomBoard(customBoardBean);
+        AuthTokenBean authTokenBean = new AuthTokenBean();
+        authTokenBean.setToken(windowManager.getAuthBean().getToken());
+        customizedBoardBean = customOrderController.generateCustomBoard(customBoardBean,authTokenBean);
         boardPriceLabel.setText("Price " +customizedBoardBean.getPrice());
         descriptionArea.setText(customizedBoardBean.getDescription());
         pannelPane.setVisible(true);
@@ -161,19 +174,23 @@ public class CustomerOrdersPageView {
 
 
     public void goToHomePage() {
-        SceneManager.getInstance().closeBro();
+       windowManager.closeCoordinator();
         try {
-            SceneManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
+            windowManager.goToHomePage();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
     public void goToTricksPage() {
-        // implement if needed
+        try {
+            windowManager.goToLearn();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
     public void orderBoard(){
-        sceneManager.loadMakeOrdersPage(customOrderController, boardBean);
+        windowManager.loadMakeOrdersPage(customOrderController, boardBean);
     }
 
 
@@ -182,6 +199,10 @@ public class CustomerOrdersPageView {
     }
 
     public void goToCompetitionsPage() {
-        // implement if needed
+        try {
+            windowManager.goToCustomerCompetitions();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 }

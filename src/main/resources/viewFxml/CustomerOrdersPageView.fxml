@@ -81,6 +81,11 @@
                 </Button>
             <Label layoutX="41.0" layoutY="40.0" prefHeight="18.0" prefWidth="74.0" text="Displaying:" />
             <Label fx:id="statusLabel" layoutX="115.0" layoutY="40.0" prefHeight="18.0" prefWidth="59.0" text="available" />
+            <Label layoutX="46.0" layoutY="535.0" onMouseClicked="#goPreviousOrders" prefHeight="24.0" prefWidth="162.0" text="Previous orders." textFill="#1abc9c">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
             </children>
         </AnchorPane>
     </left>

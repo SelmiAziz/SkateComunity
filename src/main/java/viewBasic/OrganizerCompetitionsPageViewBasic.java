@@ -9,8 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.SceneManager;
-import utils.SessionManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,7 +30,7 @@ public class OrganizerCompetitionsPageViewBasic {
     @FXML private ChoiceBox<String> choicePage;
 
     private final CreateCompetitionController createCompetitionController = new CreateCompetitionController();
-    private final SceneManager sceneManager = SceneManager.getInstance();
+    private final WindowManager sceneManager = WindowManager.getInstance();
 
     public void initialize(){
         populatePageChoice();

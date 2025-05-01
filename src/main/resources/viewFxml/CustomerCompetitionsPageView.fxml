@@ -19,7 +19,7 @@
    <top>
       <AnchorPane prefHeight="116.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="384.0" layoutY="41.0" onMouseClicked="#goToCompetitionsPage" prefHeight="35.0" prefWidth="155.0" textFill="#1abc9c">
+            <Label layoutX="384.0" layoutY="41.0" prefHeight="35.0" prefWidth="155.0" textFill="#1abc9c">
                <font>
                   <Font size="24.0" />
                </font>
@@ -49,7 +49,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="goToCompetitionsPage" layoutX="241.0" layoutY="40.0" prefHeight="35.0" prefWidth="107.0" text="Compete" textFill="#1abc9c">
+                  <Label  layoutX="241.0" layoutY="40.0" prefHeight="35.0" prefWidth="107.0" text="Compete" textFill="#1abc9c">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -109,10 +109,10 @@
    </bottom>
    <center>
       <AnchorPane prefHeight="543.0" prefWidth="550.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
-         <children> <!-- Spostato più in basso -->
-            <Label fx:id="competitionNameLabel" layoutX="40.0" layoutY="198.0" prefHeight="18.0" prefWidth="380.0" /> <!-- Spostato più in basso -->
-            <Label fx:id="competitionDescriptionLabel" layoutX="40.0" layoutY="230.0" prefHeight="18.0" prefWidth="354.0" wrapText="true" /> <!-- Spostato più in basso -->
-            <Label fx:id="competitionCoinsLabel" layoutX="41.0" layoutY="264.0" prefHeight="18.0" prefWidth="387.0" /> <!-- Spostato più in basso -->
+         <children>
+            <Label fx:id="competitionNameLabel" layoutX="40.0" layoutY="198.0" prefHeight="18.0" prefWidth="380.0" />
+            <Label fx:id="competitionDescriptionLabel" layoutX="40.0" layoutY="230.0" prefHeight="18.0" prefWidth="354.0" wrapText="true" />
+            <Label fx:id="competitionCoinsLabel" layoutX="41.0" layoutY="264.0" prefHeight="18.0" prefWidth="387.0" />
             <Label fx:id="competitionSeatsAvailableLabel" layoutX="40.0" layoutY="294.0" prefHeight="18.0" prefWidth="433.0" />
             <Label fx:id="errorLabel" layoutX="27.0" layoutY="549.0" prefHeight="22.0" prefWidth="458.0" textFill="#208672">
                <font>
@@ -152,7 +152,7 @@
                <effect>
                   <DropShadow height="5.0" radius="2.0" width="5.0" />
                </effect>
-            </Button> <!-- Spostato più in basso -->
+            </Button>
          </children>
       </AnchorPane>
    </center>

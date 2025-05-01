@@ -8,13 +8,15 @@ import exceptions.WrongFormatException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.SceneManager;
+import utils.WindowManager;
 import utils.SessionManager;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class OrganizerCompetitionsPageView {
+   WindowManager windowManager = WindowManager.getInstance();
+
     @FXML private TextField competitionNameField;
     @FXML private TextField locationField;
     @FXML private TextField dateField;
@@ -123,10 +125,6 @@ public class OrganizerCompetitionsPageView {
         competitionTable.getItems().addAll(createCompetitionController.organizerCompetitions());
     }
 
-    @FXML
-    public void goToCompetitionsPage() {
-    }
-
     public void goToCommissionsPage(){
 
     }
@@ -135,16 +133,15 @@ public class OrganizerCompetitionsPageView {
     @FXML
     public void goToTricksPage() {
         try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerTricksPageView.fxml");
+            windowManager.goToTricks();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
     public void logOut() {
-        SessionManager.getInstance().terminateSession();
         try {
-            SceneManager.getInstance().loadScene("viewFxml/AccessView.fxml");
+            windowManager.logOut();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -152,16 +149,15 @@ public class OrganizerCompetitionsPageView {
 
     public void goToHomePage() {
         try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
+            windowManager.goToHomePage();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
     public void goToSkateboardsPage(){
-        SessionManager.getInstance().terminateSession();
         try {
-            SceneManager.getInstance().loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
+            windowManager.goToSkateboards();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }

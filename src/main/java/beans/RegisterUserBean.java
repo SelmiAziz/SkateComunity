@@ -17,15 +17,6 @@ public class RegisterUserBean {
 
     }
 
-    public RegisterUserBean(String username, String password, String role, String dateOfBirth){
-
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.dateOfBirth = dateOfBirth;
-
-    }
-
 
     public void setUsername(String username){this.username = username;}
 

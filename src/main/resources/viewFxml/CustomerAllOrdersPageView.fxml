@@ -89,7 +89,7 @@
                         <Image url="@../images/logo.png" />
                     </image>
                 </ImageView>
-            <TableView fx:id="ordersTable" layoutX="20.0" layoutY="71.0" prefHeight="368.0" prefWidth="591.0">
+            <TableView fx:id="ordersTable" onMouseClicked="#selectOrder" layoutX="20.0" layoutY="71.0" prefHeight="368.0" prefWidth="591.0">
                <columns>
                   <TableColumn fx:id="colDescription" prefWidth="197.0" text="Description" />
                   <TableColumn fx:id="colDate" prefWidth="190.0" text="Date" />

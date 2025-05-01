@@ -6,7 +6,7 @@ import exceptions.EmptyFieldException;
 import exceptions.InsufficientCoinsException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CustomerMakeOrdersPageView {
 
-    SceneManager sceneManager = SceneManager.getInstance();
+    WindowManager windowManager = WindowManager.getInstance();
     CustomOrderController customOrderController;
     BoardBean boardBean;
 
@@ -107,7 +107,7 @@ public class CustomerMakeOrdersPageView {
 
             try {
                 OrderSummaryBean orderSummaryBean = customOrderController.elaborateOrder(deliveryDestinationBean, deliveryPreferencesBean, boardBean);
-                sceneManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
+                windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
             }catch(InsufficientCoinsException e){
                 errorLabel.setText(e.getMessage());
             }
@@ -118,16 +118,33 @@ public class CustomerMakeOrdersPageView {
     }
 
     public void goToHomePage(){
-        SceneManager.getInstance().closeBro();
+        windowManager.closeCoordinator();
         try {
-            SceneManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
+            windowManager.goToHomePage();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
-    public void goToTricksPage(){}
-    public void back(){}
-    public void goToCompetitionsPage(){}
-    public void logOut(){}
+    public void goToTricksPage(){
+        try {
+            windowManager.goToLearn();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
+    }
+    public void goToCompetitionsPage(){
+        try{
+            windowManager.goToCustomerCompetitions();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
+    }
+    public void logOut(){
+        try {
+            windowManager.logOut();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
+    }
 }

@@ -12,8 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import utils.SceneManager;
-import utils.SessionManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -31,7 +30,7 @@ public class OrganizerTricksPageViewBasic {
     @FXML private TextField yearField;
     @FXML private ChoiceBox<String> choicePage;
     private Stage stage;
-    SceneManager sceneManager = SceneManager.getInstance();
+    WindowManager sceneManager = WindowManager.getInstance();
 
 
     LearnTrickController learnTrickController = new LearnTrickController();
@@ -72,7 +71,7 @@ public class OrganizerTricksPageViewBasic {
             root = loader.load();
             OrganizerCompetitionsPageViewBasic organizerEventsPageViewBasic = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
-            stage = SceneManager.getInstance().getStage();
+            stage = WindowManager.getInstance().getStage();
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();

@@ -7,7 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.SceneManager;
+import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class OrganizerSkateboardsPageViewBasic {
     @FXML private ListView<String> skateboardList;
     @FXML private ChoiceBox<String> choicePage;
 
-    SceneManager sceneManager = SceneManager.getInstance();
+    WindowManager sceneManager = WindowManager.getInstance();
     CreateBoardController createSkateboardController = new CreateBoardController();
 
     public void initialize(){
