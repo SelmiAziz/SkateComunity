@@ -80,7 +80,7 @@ public class OrganizerTricksPageView {
         difficultyLabel.setText(difficulty);
     }
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed();
+        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManager.getAuthBean().getToken());
         trickTable.getItems().clear();
         trickTable.getItems().addAll(availableTricksBean);
     }
@@ -123,7 +123,7 @@ public class OrganizerTricksPageView {
         }
         TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, trickCategory, date);
 
-        learnTrickController.RegisterTrick(newTrick);
+        learnTrickController.RegisterTrick(windowManager.getAuthBean().getToken(),newTrick);
         trickNameTextField.clear();
         descriptionTextArea.clear();
         datePicker.setValue(null);

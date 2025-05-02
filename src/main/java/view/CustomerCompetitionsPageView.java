@@ -62,7 +62,7 @@ public class CustomerCompetitionsPageView {
 
         startConfig();
         loadCompetitions();
-        //updateCustomerInfo();
+        updateCustomerInfo();
     }
 
     public void startConfig(){
@@ -78,14 +78,14 @@ public class CustomerCompetitionsPageView {
     }
 
     public void updateCustomerInfo(){
-        WalletBean walletBean = signCompetitionController.customerInfo();
+        WalletBean walletBean = signCompetitionController.customerInfo(windowManager.getAuthBean().getToken());
         welcomeLabel.setText("Gentile client nel suo saldo sono presenti:");
         coinsLabel.setText(""+walletBean.getBalance());
     }
 
     public void loadCompetitions() {
         competitionTable.getItems().clear();
-        competitionTable.getItems().addAll(signCompetitionController.allAvailableCompetitions());
+        competitionTable.getItems().addAll(signCompetitionController.allAvailableCompetitions(windowManager.getAuthBean().getToken()));
     }
 
     public void selectCompetition(){
@@ -129,7 +129,7 @@ public class CustomerCompetitionsPageView {
             String location = locationSearch.getText();
             CompetitionBean competitionBean = new CompetitionBean(date, location);
             competitionTable.getItems().clear();
-            competitionTable.getItems().addAll(signCompetitionController.searchCompetitionByDateAndLocation(competitionBean));
+            competitionTable.getItems().addAll(signCompetitionController.searchCompetitionByDateAndLocation(windowManager.getAuthBean().getToken(),competitionBean));
         }catch(WrongFormatException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -139,7 +139,7 @@ public class CustomerCompetitionsPageView {
     public void onCompetitionSelected() {
 
         CompetitionBean selected = competitionTable.getSelectionModel().getSelectedItem();
-        competitionBean = signCompetitionController.competitionDetails(selected);
+        competitionBean = signCompetitionController.competitionDetails(windowManager.getAuthBean().getToken(),selected);
         selectButton.setVisible(true);
     }
 
@@ -199,7 +199,7 @@ public class CustomerCompetitionsPageView {
     public void submitSignToCompetition(){
         try {
             CompetitionBean selectedCompetitionBean = competitionTable.getSelectionModel().getSelectedItem();
-            CompetitionRegistrationBean competitionRegistrationBean = signCompetitionController.signToCompetition(selectedCompetitionBean, windowManager.getAuthBean());
+            CompetitionRegistrationBean competitionRegistrationBean = signCompetitionController.signToCompetition(windowManager.getAuthBean().getToken(),selectedCompetitionBean);
             onCompetitionSelected();
             registrationCodeLabel.setText("Il codice della registrazione:" + competitionRegistrationBean.getRegistrationCode());
             assignedSeatLabel.setText("Il posto assegnato è:" + competitionRegistrationBean.getAssignedSeat());
@@ -211,14 +211,18 @@ public class CustomerCompetitionsPageView {
 
 
     @FXML
-    public void goToCommissionsPage(){
-
+    public void goToOrdersPage(){
+        try {
+            windowManager.goToOrdersPage();
+        }catch(IOException e){
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     @FXML
     public void goToTricksPage(){
         try {
-            windowManager.goToTricks();
+            windowManager.goToLearn();
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }

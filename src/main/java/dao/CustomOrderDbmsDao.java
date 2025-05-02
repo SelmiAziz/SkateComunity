@@ -68,7 +68,7 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
                         progressNoteId = progressNoteId.trim();
                         ProgressNote progressNote = progressNoteDao.selectProgressNoteById(progressNoteId);
                         if (progressNote != null) {
-                            order.addProgressNoteOrder(progressNote);
+                            order.addProgressNote(progressNote);
                         }
                     }
                 }
@@ -164,7 +164,7 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
                         progressNoteId = progressNoteId.trim();
                         ProgressNote progressNote = progressNoteDao.selectProgressNoteById(progressNoteId);
                         if (progressNote != null) {
-                            order.addProgressNoteOrder(progressNote);
+                            order.addProgressNote(progressNote);
                         }
                     }
                 }

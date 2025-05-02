@@ -1,15 +1,15 @@
 package beans;
 
-public class CustomizedBoardBean {
+public class BoardProfileBean {
     private String id;
     private String name;
     private String size;
     private int price;
     private String description;
 
-    public CustomizedBoardBean(){};
+    public BoardProfileBean(){};
 
-    public CustomizedBoardBean(String name, String description, String size, int price){
+    public BoardProfileBean(String name, String description, String size, int price){
         this.name = name;
         this.size = size;
         this.price = price;

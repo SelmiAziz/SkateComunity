@@ -38,7 +38,7 @@ public class CustomerCompetitionsPageViewBasic {
     @FXML private ChoiceBox<String> choicePage;
 
     public void initialize() {
-        List<CompetitionBean> availableCompetitionsBean =  signCompetitionController.allAvailableCompetitions();
+        List<CompetitionBean> availableCompetitionsBean =  signCompetitionController.allAvailableCompetitions("");
         loadCompetitions(availableCompetitionsBean);
         updateWalletInfo();
         confirmRegistrationButton.setVisible(false);
@@ -55,7 +55,7 @@ public class CustomerCompetitionsPageViewBasic {
 
 
     public void updateWalletInfo(){
-        WalletBean walletBean = signCompetitionController.customerInfo();
+        WalletBean walletBean = signCompetitionController.customerInfo("");
         coinsLabel.setText(""+walletBean.getBalance());
     }
 
@@ -64,7 +64,7 @@ public class CustomerCompetitionsPageViewBasic {
             String competitionName = competitionNameField.getText();
             if(competitionName.isEmpty()){throw new EmptyFieldException("Campo nome competizione risulta vuoto!!");}
             CompetitionBean competitionBean = new CompetitionBean(competitionName);
-            CompetitionBean competitionBeanDetailed = signCompetitionController.competitionDetails(competitionBean);
+            CompetitionBean competitionBeanDetailed = signCompetitionController.competitionDetails("",competitionBean);
             competitionNameLabel.setText(competitionBeanDetailed.getName());
             competitionCoinsLabel.setText(""+competitionBeanDetailed.getCoins());
             competitionDescriptionLabel.setText(competitionBeanDetailed.getDescription());
@@ -115,7 +115,7 @@ public class CustomerCompetitionsPageViewBasic {
             String date = formatValidateDate(monthField.getText(), dayField.getText(), yearField.getText());
             String location = locationSearch.getText();
             CompetitionBean competitionBean = new CompetitionBean(date, location);
-            List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation(competitionBean);
+            List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation("",competitionBean);
             loadCompetitions(filteredCompetitions);
         }catch(WrongFormatException e){
             errorLabel.setText(e.getMessage());
@@ -128,7 +128,7 @@ public class CustomerCompetitionsPageViewBasic {
             String competitionName = competitionNameField.getText();
             if(competitionName.isEmpty()) throw  new EmptyFieldException("Campo nome competizione risulta vuoto!!!");
             CompetitionBean competitionBean = new CompetitionBean(competitionName);
-            CompetitionRegistrationBean competitionRegistrationBean = signCompetitionController.signToCompetition(competitionBean, new AuthBean("fkfl", "fkfl"));
+            CompetitionRegistrationBean competitionRegistrationBean = signCompetitionController.signToCompetition("",competitionBean);
             assignedSeatLabel.setText("Ti è stato fornito il codice: " +competitionRegistrationBean.getRegistrationCode());
             generateCodeLabel.setText("Turno di gara: "+competitionRegistrationBean.getAssignedSeat());
         } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {

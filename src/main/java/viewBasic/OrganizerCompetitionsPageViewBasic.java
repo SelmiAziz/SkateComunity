@@ -47,7 +47,7 @@ public class OrganizerCompetitionsPageViewBasic {
 
 
     public void loadCompetitions(){
-        List<CompetitionBean> availableCompetitionsBean = createCompetitionController.organizerCompetitions();
+        List<CompetitionBean> availableCompetitionsBean = createCompetitionController.organizerCompetitions("");
         competitionList.getItems().clear();
         for (CompetitionBean competitionBean : availableCompetitionsBean) {
             String competitionDisplay = String.format(
@@ -109,7 +109,7 @@ public class OrganizerCompetitionsPageViewBasic {
             validateFields(name, description, date, location);
             coinsRequired = Integer.parseInt(coinsAmountField.getText());
             maxRegistrations = Integer.parseInt(maxRegistrationsField.getText());
-            createCompetitionController.createCompetition(new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
+            createCompetitionController.createCompetition("",new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
             loadCompetitions();
         } catch (NumberFormatException | EmptyFieldException | WrongFormatException |
                  CompetitionAlreadyExistsException | SQLException e) {

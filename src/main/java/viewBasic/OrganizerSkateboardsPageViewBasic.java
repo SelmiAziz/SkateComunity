@@ -1,6 +1,6 @@
 package viewBasic;
 
-import beans.CustomizedBoardBean;
+import beans.BoardProfileBean;
 import controls.CreateBoardController;
 import exceptions.EmptyFieldException;
 import javafx.collections.FXCollections;
@@ -42,9 +42,9 @@ public class OrganizerSkateboardsPageViewBasic {
     }
 
     public void loadSkateboards() {
-        List<CustomizedBoardBean> skateboards = createSkateboardController.getStoredBoards();
+        List<BoardProfileBean> skateboards = createSkateboardController.getStoredBoards("");
         skateboardList.getItems().clear();
-        for (CustomizedBoardBean bean : skateboards) {
+        for (BoardProfileBean bean : skateboards) {
             String display = String.format(
                     "<<Nome: %s>>-<<Description: %s>>-<<Size: %s>>-<<Cost: %d>>",
                     bean.getName(),
@@ -77,7 +77,7 @@ public class OrganizerSkateboardsPageViewBasic {
                 throw new EmptyFieldException("Inserire correttamente campi");
             }
             int cost = Integer.parseInt(costTextField.getText());
-            createSkateboardController.createBoard( new CustomizedBoardBean(name, description, size, cost));
+            createSkateboardController.createBoard( "",new BoardProfileBean(name, description, size, cost));
             loadSkateboards();
         }catch(NumberFormatException | EmptyFieldException e){
             errorLabel.setText(e.getMessage());

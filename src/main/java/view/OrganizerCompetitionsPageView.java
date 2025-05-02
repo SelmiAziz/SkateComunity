@@ -92,10 +92,6 @@ public class OrganizerCompetitionsPageView {
         }
     }
 
-    public void doN(){
-        coinsSpinner.setVisible(false);
-    }
-
 
 
 
@@ -113,7 +109,7 @@ public class OrganizerCompetitionsPageView {
         try {
             validaDate(date);
             validateFields(name, description, date, location);
-            createCompetitionController.createCompetition(new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
+            createCompetitionController.createCompetition(windowManager.getAuthBean().getToken(),new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
             loadCompetitions();
         } catch (WrongFormatException | CompetitionAlreadyExistsException | EmptyFieldException | SQLException e) {
             errorLabel.setText(e.getMessage());
@@ -122,18 +118,16 @@ public class OrganizerCompetitionsPageView {
 
     public void loadCompetitions() {
         competitionTable.getItems().clear();
-        competitionTable.getItems().addAll(createCompetitionController.organizerCompetitions());
+        competitionTable.getItems().addAll(createCompetitionController.organizerCompetitions(windowManager.getAuthBean().getToken()));
     }
 
-    public void goToCommissionsPage(){
 
-    }
 
 
     @FXML
     public void goToTricksPage() {
         try {
-            windowManager.goToTricks();
+            windowManager.goToLearn();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }

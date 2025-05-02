@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Spinner?>
@@ -136,31 +137,36 @@
                               </Button>
                      </children>
                   </Pane>
+                  <CheckBox fx:id="noseCheck" layoutX="478.0" layoutY="49.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" />
+                  <CheckBox fx:id="tailCheck" layoutX="478.0" layoutY="84.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" />
+                  <CheckBox fx:id="warrantyCheck" layoutX="479.0" layoutY="119.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" />
+                  <CheckBox fx:id="pilesCheck" layoutX="480.0" layoutY="154.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" />
+                  <CheckBox fx:id="gripCheck" layoutX="480.0" layoutY="191.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" />
+                  <Pane fx:id="orderPane" layoutX="1.0" layoutY="-1.0" prefHeight="511.0" prefWidth="525.0" style="-fx-background-color: #ffffff;">
+                     <children>
+                        <Label layoutX="14.0" layoutY="68.0" prefHeight="24.0" prefWidth="353.0" text="Order the board that you have designed:" textFill="#1abc9c">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="nameBoardLabel" layoutX="14.0" layoutY="120.0" prefHeight="18.0" prefWidth="325.0" text="A" />
+                        <Label fx:id="descriptionBoardLabel" layoutX="15.0" layoutY="155.0" prefHeight="18.0" prefWidth="333.0" text="B" />
+                        <Label fx:id="sizeBoardLabel" layoutX="14.0" layoutY="190.0" prefHeight="18.0" prefWidth="368.0" text="C" />
+                        <Label fx:id="priceBoardLabel" layoutX="14.0" layoutY="225.0" prefHeight="18.0" prefWidth="368.0" text="D" />
+                        <Button fx:id="orderButton" layoutX="15.0" layoutY="287.0" mnemonicParsing="false" onMouseClicked="#orderBoard" prefHeight="26.0" prefWidth="111.0" style="-fx-background-color: #1ABC9C;" text="Order it" textFill="WHITE">
+                           <effect>
+                              <DropShadow height="5.0" radius="2.0" width="5.0" />
+                           </effect>
+                        </Button>
+                        <Button fx:id="backButton1" layoutX="414.0" layoutY="287.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="26.0" prefWidth="103.0" style="-fx-background-color: #949494;" text="Back" textFill="WHITE">
+                           <effect>
+                              <DropShadow height="5.0" radius="2.0" width="5.0" />
+                           </effect>
+                        </Button>
+                     </children>
+                  </Pane>
                     </children>
                 </Pane>
-            <Pane fx:id="orderPane" layoutX="-3.0" layoutY="-1.0" prefHeight="511.0" prefWidth="525.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <Label layoutX="14.0" layoutY="68.0" prefHeight="24.0" prefWidth="353.0" text="Order the board that you have designed:" textFill="#1abc9c">
-                     <font>
-                        <Font size="17.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="nameBoardLabel" layoutX="14.0" layoutY="120.0" prefHeight="18.0" prefWidth="325.0" text="A" />
-                  <Label fx:id="descriptionBoardLabel" layoutX="15.0" layoutY="155.0" prefHeight="18.0" prefWidth="333.0" text="B" />
-                  <Label fx:id="sizeBoardLabel" layoutX="14.0" layoutY="190.0" prefHeight="18.0" prefWidth="368.0" text="C" />
-                  <Label fx:id="priceBoardLabel" layoutX="14.0" layoutY="225.0" prefHeight="18.0" prefWidth="368.0" text="D" />
-                  <Button fx:id="orderButton" layoutX="15.0" layoutY="287.0" mnemonicParsing="false" onMouseClicked="#orderBoard" prefHeight="26.0" prefWidth="111.0" style="-fx-background-color: #1ABC9C;" text="Order it" textFill="WHITE">
-                     <effect>
-                        <DropShadow height="5.0" radius="2.0" width="5.0" />
-                     </effect>
-                  </Button>
-                  <Button fx:id="backButton1" layoutX="414.0" layoutY="287.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="26.0" prefWidth="103.0" style="-fx-background-color: #949494;" text="Back" textFill="WHITE">
-                     <effect>
-                        <DropShadow height="5.0" radius="2.0" width="5.0" />
-                     </effect>
-                  </Button>
-               </children>
-            </Pane>
             </children>
         </AnchorPane>
     </right>

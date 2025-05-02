@@ -1,7 +1,6 @@
 package controls;
 
-import beans.AuthTokenBean;
-import beans.CustomizedBoardBean;
+import beans.BoardProfileBean;
 import dao.BoardDao;
 import dao.patternAbstractFactory.DaoFactory;
 import exceptions.SessionExpiredException;
@@ -16,8 +15,8 @@ import java.util.List;
 public class CreateBoardController {
     private final BoardDao boardDao = DaoFactory.getInstance().createBoardDao();
 
-    public void createBoard(CustomizedBoardBean boardBean, AuthTokenBean authTokenBean) throws SessionExpiredException {
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public void createBoard(String token, BoardProfileBean boardBean) throws SessionExpiredException {
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
@@ -25,15 +24,15 @@ public class CreateBoardController {
         boardDao.addBoard(board);
     }
 
-    public List<CustomizedBoardBean> getStoredBoards(AuthTokenBean authTokenBean) throws SessionExpiredException  {
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public List<BoardProfileBean> getStoredBoards(String token) throws SessionExpiredException  {
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        List<CustomizedBoardBean> boardBeanList = new ArrayList<>();
+        List<BoardProfileBean> boardBeanList = new ArrayList<>();
         List<Board> boardList = boardDao.selectAvailableBoards();
         for (Board board : boardList) {
-            CustomizedBoardBean boardBean = new CustomizedBoardBean(board.name(), board.description(), board.size(), board.price());
+            BoardProfileBean boardBean = new BoardProfileBean(board.name(), board.description(), board.size(), board.price());
             boardBeanList.add(boardBean);
         }
         return boardBeanList;

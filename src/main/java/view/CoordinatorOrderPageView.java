@@ -95,6 +95,7 @@ public class CoordinatorOrderPageView {
 
     @FXML
     public void onOrderSelected() {
+        confStart();
         orderSummaryBean = ordersTable.getSelectionModel().getSelectedItem();
         loadCustomOrderSummary(orderSummaryBean);
         if(orderSummaryBean.getStatus().equals("Requested")){

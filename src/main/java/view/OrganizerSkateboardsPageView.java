@@ -1,13 +1,12 @@
 package view;
 
-import beans.CustomizedBoardBean;
+import beans.BoardProfileBean;
 import controls.CreateBoardController;
 import exceptions.EmptyFieldException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
-import utils.SessionManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,11 +17,11 @@ public class OrganizerSkateboardsPageView {
     @FXML private Spinner<String> sizeSpinner;
     @FXML private TextField skateboardNameField;
     @FXML private TextArea descriptionTextArea;
-    @FXML private TableView<CustomizedBoardBean> skateboardTable;
-    @FXML private TableColumn<CustomizedBoardBean, String> colSkateboardName;
-    @FXML private TableColumn<CustomizedBoardBean, String> colDescription;
-    @FXML private TableColumn<CustomizedBoardBean, String> colSize;
-    @FXML private TableColumn<CustomizedBoardBean, String> colCost;
+    @FXML private TableView<BoardProfileBean> skateboardTable;
+    @FXML private TableColumn<BoardProfileBean, String> colSkateboardName;
+    @FXML private TableColumn<BoardProfileBean, String> colDescription;
+    @FXML private TableColumn<BoardProfileBean, String> colSize;
+    @FXML private TableColumn<BoardProfileBean, String> colCost;
     WindowManager windowManager = WindowManager.getInstance();
     CreateBoardController createSkateboardController = new CreateBoardController();
 
@@ -50,9 +49,9 @@ public class OrganizerSkateboardsPageView {
 
 
     public void loadSkateboards(){
-        List<CustomizedBoardBean> availableSkateboardsList = createSkateboardController.getStoredBoards();
+        List<BoardProfileBean> availableSkateboardsList = createSkateboardController.getStoredBoards(windowManager.getAuthBean().getToken());
         skateboardTable.getItems().clear();
-        for(CustomizedBoardBean s: availableSkateboardsList){
+        for(BoardProfileBean s: availableSkateboardsList){
             System.out.println(s.getName());
         }
         skateboardTable.getItems().addAll(availableSkateboardsList);
@@ -68,7 +67,7 @@ public class OrganizerSkateboardsPageView {
           if(name == null || description == null){
               throw new EmptyFieldException("Inserire correttamente campi");
           }
-          createSkateboardController.createBoard( new CustomizedBoardBean(name, description, size, cost));
+          createSkateboardController.createBoard(windowManager.getAuthBean().getToken(), new BoardProfileBean(name, description, size, cost));
           loadSkateboards();
       }catch(EmptyFieldException e){
           errorLabel.setText(e.getMessage());

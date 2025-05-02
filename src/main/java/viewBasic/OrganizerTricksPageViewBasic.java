@@ -36,7 +36,7 @@ public class OrganizerTricksPageViewBasic {
     LearnTrickController learnTrickController = new LearnTrickController();
 
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed();
+        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed("");
         eventListView.getItems().clear();
         for (TrickBean trick : availableTricksBean) {
             String trickDisplay = String.format("<<Nome Trick: %s>>   -   <<Categoria: %s>>   -   <<Difficoltà: %s>>   -   <<Descrizione: %s>>",
@@ -124,7 +124,7 @@ public class OrganizerTricksPageViewBasic {
 
         TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, category, date);
 
-        learnTrickController.RegisterTrick(newTrick);
+        learnTrickController.RegisterTrick("",newTrick);
 
         categoryChoiceBox.setValue("flat");
         difficultyChoiceBox.setValue("medium");

@@ -9,7 +9,9 @@ public class Session {
     private final Role role;
     private long expiryTime;
 
-    private static final long SESSION_DURATION = 30 * 60 * 1000;
+    private final long SESSION_DURATION = 30L * 60 * 1000; // 30 minuti in millisecondi
+
+
 
     public Session(String username, Role role) {
         this.username = username;

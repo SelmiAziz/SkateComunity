@@ -1,11 +1,13 @@
 package controls;
 
-import beans.AuthTokenBean;
 import beans.TrickBean;
 import dao.TrickDao;
 import dao.patternAbstractFactory.DaoFactory;
+import exceptions.SessionExpiredException;
 import model.Trick;
 import utils.DifficultyTrick;
+import utils.Session;
+import utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,11 @@ import java.util.List;
 public class LearnTrickController {
     TrickDao trickDao = DaoFactory.getInstance().createTrickDao();
 
-    public List<TrickBean> allAvailableTricksDetailed(AuthTokenBean authTokenBean){
+    public List<TrickBean> allAvailableTricksDetailed(String token) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(token);
+        if(session == null){
+            throw new SessionExpiredException();
+        }
         List<Trick> availableTricks = trickDao.selectAvailableTricks();
         List<TrickBean> availableTricksBean = new ArrayList<>();
         for(Trick trick:availableTricks){
@@ -25,7 +31,11 @@ public class LearnTrickController {
     }
 
 
-    public List<TrickBean> allAvailableTricks(AuthTokenBean authTokenBean){
+    public List<TrickBean> allAvailableTricks(String token) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(token);
+        if(session == null){
+            throw new SessionExpiredException();
+        }
         List<Trick> availableTricks = trickDao.selectAvailableTricks();
         List<TrickBean> availableTricksBean = new ArrayList<>();
         for(Trick trick:availableTricks){
@@ -37,14 +47,22 @@ public class LearnTrickController {
 
 
 
-    public void RegisterTrick(TrickBean trickBean, AuthTokenBean authTokenBean){
+    public void RegisterTrick(String token, TrickBean trickBean) throws SessionExpiredException {
+        Session session = SessionManager.getInstance().getSessionByToken(token);
+        if(session == null){
+            throw new SessionExpiredException();
+        }
         DifficultyTrick difficulty = DifficultyTrick.fromString(trickBean.getDifficulty());
         Trick trick = new Trick(trickBean.getNameTrick(), trickBean.getDescription(), difficulty, trickBean.getCategory(), trickBean.getDate());
         trickDao.addTrick(trick);
     }
 
 
-    public TrickBean detailsTrick(TrickBean trickBean, AuthTokenBean authTokenBean){
+    public TrickBean detailsTrick(String token ,TrickBean trickBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(token);
+        if(session == null){
+            throw new SessionExpiredException();
+        }
         Trick trick = trickDao.selectTrickByName(trickBean.getNameTrick());
         String difficulty = trick.getDifficultyTrick().name();
         TrickBean trickDetailedBean = new TrickBean(trick.getNameTrick(), trick.getDescription(), difficulty, trick.getCategory());

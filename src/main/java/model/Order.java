@@ -43,11 +43,11 @@ public class Order {
     }
 
 
-    public List<ProgressNote> progressDetails(){
+    public List<ProgressNote> progressNoteChronology(){
         return progressNoteList;
     }
 
-    public void addProgressNoteOrder(ProgressNote progressNote) {
+    public void addProgressNote(ProgressNote progressNote) {
         this.progressNoteList.add(progressNote);
     }
 

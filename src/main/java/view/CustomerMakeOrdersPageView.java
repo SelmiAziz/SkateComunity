@@ -106,7 +106,7 @@ public class CustomerMakeOrdersPageView {
             deliveryPreferencesBean.setPreferredTimeSlot(timeSlot);
 
             try {
-                OrderSummaryBean orderSummaryBean = customOrderController.elaborateOrder(deliveryDestinationBean, deliveryPreferencesBean, boardBean);
+                OrderSummaryBean orderSummaryBean = customOrderController.elaborateOrder(windowManager.getAuthBean().getToken(),deliveryDestinationBean, deliveryPreferencesBean, boardBean);
                 windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
             }catch(InsufficientCoinsException e){
                 errorLabel.setText(e.getMessage());

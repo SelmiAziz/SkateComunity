@@ -27,7 +27,7 @@ public class CustomerTricksPageViewBasic {
     LearnTrickController learnTrickController = new LearnTrickController();
 
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricks();
+        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricks("");
         eventListView.getItems().clear();
         for (TrickBean trick : availableTricksBean) {
             String trickDisplay = String.format("<<Nome Trick: %s>>",
@@ -57,7 +57,7 @@ public class CustomerTricksPageViewBasic {
     public void showTrick(){
         String trickName = trickNameTextField.getText();
         TrickBean trickBean = new TrickBean(trickName);
-        TrickBean detailedTrick = learnTrickController.detailsTrick(trickBean);
+        TrickBean detailedTrick = learnTrickController.detailsTrick("",trickBean);
         descriptionLabel.setText("Description: " + detailedTrick.getDescription());
         categoryLabel.setText("Category: " +detailedTrick.getCategory());
         difficultyLabel.setText("Difficulty: " +detailedTrick.getDifficulty().toLowerCase());

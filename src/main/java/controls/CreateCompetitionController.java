@@ -1,6 +1,5 @@
 package controls;
 
-import beans.AuthTokenBean;
 import dao.CompetitionDao;
 import dao.patternAbstractFactory.DaoFactory;
 import dao.OrganizerDao;
@@ -21,8 +20,8 @@ public class CreateCompetitionController {
     private final CompetitionDao competitionDao = daoFactory.createCompetitionDao();
     private final OrganizerDao organizerDao = daoFactory.createOrganizerDao();
 
-    public void createCompetition(CompetitionBean competitionBean, AuthTokenBean authTokenBean) throws CompetitionAlreadyExistsException, SQLException, SessionExpiredException {
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public void createCompetition(String token, CompetitionBean competitionBean) throws CompetitionAlreadyExistsException, SQLException, SessionExpiredException {
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
@@ -32,14 +31,14 @@ public class CreateCompetitionController {
             throw new CompetitionAlreadyExistsException("La competizione in questione esiste già");
         }
         Competition newCompetition = new Competition(competitionBean.getName(), competitionBean.getDescription(), competitionBean.getDate(), competitionBean.getLocation(), competitionBean.getCoins(),  competitionBean.getMaxRegistrations());
-        Organizer organizer = organizerDao.selectOrganizerByUsername(SessionManager.getInstance().getSessionByToken("flòg").getUsername());
+        Organizer organizer = organizerDao.selectOrganizerByUsername(session.getUsername());
         newCompetition.setOrganizer(organizer);
         organizer.addCompetition(newCompetition);
         competitionDao.addCompetition(newCompetition);
     }
 
-    public List<CompetitionBean> organizerCompetitions(AuthTokenBean authTokenBean) throws SessionExpiredException {
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public List<CompetitionBean> organizerCompetitions(String token) throws SessionExpiredException {
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }

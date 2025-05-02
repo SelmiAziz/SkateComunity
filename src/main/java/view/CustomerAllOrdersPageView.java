@@ -3,6 +3,7 @@ package view;
 import beans.OrderSummaryBean;
 import beans.ProgressNoteBean;
 import controls.CustomOrderController;
+import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -75,7 +76,7 @@ public class CustomerAllOrdersPageView {
 
     public void displayNotes(){
         notesPane.setVisible(true);
-        List<ProgressNoteBean>progressNoteBeanList = customOrderController.progressNoteBeanList(customOrderBean);
+        List<ProgressNoteBean>progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManager.getAuthBean().getToken(),customOrderBean);
         notesList.getItems().clear();
         for(ProgressNoteBean progressNoteBean: progressNoteBeanList){
             String note = String.format(
@@ -100,9 +101,13 @@ public class CustomerAllOrdersPageView {
 
 
     public void loadOrdersSubmitted(){
-        List<OrderSummaryBean> customOrderBeanList = customOrderController.getOrdersSubmitted();
-        ordersTable.getItems().clear();
-        ordersTable.getItems().addAll(customOrderBeanList);
+        try {
+            List<OrderSummaryBean> customOrderBeanList = customOrderController.getSubmittedOrders(windowManager.getAuthBean().getToken());
+            ordersTable.getItems().clear();
+            ordersTable.getItems().addAll(customOrderBeanList);
+        }catch(SessionExpiredException e){
+            errorLabel.setText("errore");
+        }
     }
 
     public void selectOrder(){

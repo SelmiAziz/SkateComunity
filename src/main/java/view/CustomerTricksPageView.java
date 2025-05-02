@@ -52,19 +52,23 @@ public class CustomerTricksPageView {
         try {
             windowManager.goToCustomerCompetitions();
         } catch (IOException e) {
-            //errorLabel.setText(e.getMessage());
+            errorLabel.setText(e.getMessage());
         }
     }
 
 
     @FXML
-    public void goToCommissionsPage(){
-
+    public void goToOrdersPage(){
+        try {
+            windowManager.goToOrdersPage();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
 
     public void showTrick(TrickBean trickBean){
-        TrickBean detailedTrick = learnTrickController.detailsTrick(trickBean);
+        TrickBean detailedTrick = learnTrickController.detailsTrick(windowManager.getAuthBean().getToken(),trickBean);
         descriptionLabel.setText("Description: " + detailedTrick.getDescription());
         categoryLabel.setText("Category: " +detailedTrick.getCategory());
         difficultyLabel.setText("Difficulty: " +detailedTrick.getDifficulty().toLowerCase());
@@ -72,7 +76,7 @@ public class CustomerTricksPageView {
 
 
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed();
+        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManager.getAuthBean().getToken());
         trickTable.getItems().clear();
         trickTable.getItems().addAll(availableTricksBean);
     }

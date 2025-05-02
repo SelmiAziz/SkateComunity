@@ -1,10 +1,10 @@
 package view;
 
-import beans.AuthTokenBean;
 import beans.BoardBean;
 import beans.CustomBoardBean;
-import beans.CustomizedBoardBean;
+import beans.BoardProfileBean;
 import controls.CustomOrderController;
+import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -27,17 +27,23 @@ public class CustomerOrdersPageView {
     @FXML private Spinner<Double> noseSpinner;
     @FXML private Spinner<Double> tailSpinner;
     @FXML private Label gripValueLabel;
-    @FXML private TableView<CustomizedBoardBean> boardTable;
-    @FXML private TableColumn<CustomizedBoardBean, String> colBoardName;
-    @FXML private TableColumn<CustomizedBoardBean, String> colDescription;
-    @FXML private TableColumn<CustomizedBoardBean, String> colSize;
-    @FXML private TableColumn<CustomizedBoardBean, String> colCost;
+    @FXML private TableView<BoardProfileBean> boardTable;
+    @FXML private TableColumn<BoardProfileBean, String> colBoardName;
+    @FXML private TableColumn<BoardProfileBean, String> colDescription;
+    @FXML private TableColumn<BoardProfileBean, String> colSize;
+    @FXML private TableColumn<BoardProfileBean, String> colCost;
     @FXML private Pane pannelPane;
     @FXML private Label priceBoardLabel;
     @FXML private Label sizeBoardLabel;
     @FXML private Label descriptionBoardLabel;
     @FXML private Label nameBoardLabel;
     @FXML private Pane orderPane;
+
+    @FXML private CheckBox noseCheck;
+    @FXML private CheckBox tailCheck;
+    @FXML private CheckBox pilesCheck;
+    @FXML private CheckBox warrantyCheck;
+    @FXML private CheckBox gripCheck;
 
     @FXML private Button availableButton;
     @FXML private Button designButton;
@@ -47,7 +53,7 @@ public class CustomerOrdersPageView {
 
     WindowManager windowManager = WindowManager.getInstance();
     CustomOrderController customOrderController = new CustomOrderController();
-    CustomizedBoardBean customizedBoardBean;
+    BoardProfileBean customizedBoardBean;
     BoardBean boardBean;
 
 
@@ -89,9 +95,7 @@ public class CustomerOrdersPageView {
     }
 
     public void displayAvailableBoardSamples() {
-        AuthTokenBean authTokenBean = new AuthTokenBean();
-        authTokenBean.setToken(windowManager.getAuthBean().getToken());
-        List<CustomizedBoardBean> availableBoardsList = customOrderController.getBoardSamples(authTokenBean);
+        List<BoardProfileBean> availableBoardsList = customOrderController.getBoardSamples(windowManager.getAuthBean().getToken());
         statusLabel.setText("available");
         boardTable.getItems().clear();
         boardTable.getItems().addAll(availableBoardsList);
@@ -99,19 +103,21 @@ public class CustomerOrdersPageView {
         availableButton.setStyle("-fx-background-color: #1ABC9C;");
     }
 
-    public void displayBoardsCustomizedByCustomer(){
-        AuthTokenBean authTokenBean = new AuthTokenBean();
-        authTokenBean.setToken(windowManager.getAuthBean().getToken());
-        List<CustomizedBoardBean> boardBeanList = customOrderController.getCustomizedBoards(authTokenBean);
-        statusLabel.setText("designed");
-        boardTable.getItems().clear();
-        boardTable.getItems().addAll(boardBeanList);
-        designButton.setStyle("-fx-background-color:  #1ABC9C;");
-        availableButton.setStyle("-fx-background-color:  #949494;");
+    public void displayBoardsCustomizedByCustomer() throws IOException {
+        try{
+            List<BoardProfileBean> boardBeanList = customOrderController.getCustomizedBoards(windowManager.getAuthBean().getToken());
+            statusLabel.setText("designed");
+            boardTable.getItems().clear();
+            boardTable.getItems().addAll(boardBeanList);
+            designButton.setStyle("-fx-background-color:  #1ABC9C;");
+            availableButton.setStyle("-fx-background-color:  #949494;");
+        }catch(SessionExpiredException e){
+            windowManager.logOut();
+        }
     }
 
 
-    public void loadBoardForOrder(CustomizedBoardBean customizedBoardBean){
+    public void loadBoardForOrder(BoardProfileBean customizedBoardBean){
         nameBoardLabel.setText("Board sample name: "+customizedBoardBean.getName());
         priceBoardLabel.setText("Price:  "+ customizedBoardBean.getPrice());
         sizeBoardLabel.setText("Size of the board: "+customizedBoardBean.getSize());
@@ -125,9 +131,7 @@ public class CustomerOrdersPageView {
 
     public void saveDesignBoard(){
         loadBoardForOrder(customizedBoardBean);
-        AuthTokenBean authTokenBean = new AuthTokenBean();
-        authTokenBean.setToken(windowManager.getAuthBean().getToken());
-        boardBean = customOrderController.saveCreatedCustomizedBoard(customizedBoardBean,authTokenBean);
+        boardBean = customOrderController.saveCreatedCustomizedBoard(windowManager.getAuthBean().getToken(),customizedBoardBean);
         orderPane.setVisible(true);
     }
 
@@ -145,7 +149,12 @@ public class CustomerOrdersPageView {
     }
 
     public void logOut() {
-        // implement if needed
+        windowManager.closeCoordinator();
+        try {
+            windowManager.logOut();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     public void generate() {
@@ -155,17 +164,42 @@ public class CustomerOrdersPageView {
         int extraPiles = pilesSpinner.getValue();
         int warrantyMonths = warrantySpinner.getValue();
 
+
         CustomBoardBean customBoardBean = new CustomBoardBean();
         customBoardBean.setName(customizedBoardBean.getName());
-        customBoardBean.setConcaveNose(noseConcave);
-        customBoardBean.setConcaveTail(tailConcave);
-        customBoardBean.setExtraPiles(extraPiles);
-        customBoardBean.setGripTexture(gripTexture);
-        customBoardBean.setWarrantyMonths(warrantyMonths);
+        if(noseCheck.isSelected()){
+            customBoardBean.setUseConcaveNose(true);
+            customBoardBean.setConcaveNose(noseConcave);
+        }else{
+            customBoardBean.setUseConcaveNose(false);
+        }
+        if(tailCheck.isSelected()){
+            customBoardBean.setConcaveTail(tailConcave);
+            customBoardBean.setUseConcaveTail(true);
+        }else{
+            customBoardBean.setUseConcaveTail(false);
+        }
+        if(pilesCheck.isSelected()){
+            customBoardBean.setExtraPiles(extraPiles);
+            customBoardBean.setUseExtraPiles(true);
+        }else{
+            customBoardBean.setUseExtraPiles(false);
+        }
+        if(gripCheck.isSelected()){
+            customBoardBean.setGripTexture(gripTexture);
+            customBoardBean.setUseGripTexture(true);
+        }else{
+            customBoardBean.setUseGripTexture(false);
+        }
+        if(warrantyCheck.isSelected()){
+            customBoardBean.setWarrantyMonths(warrantyMonths);
+            customBoardBean.setUseWarrantyMonths(true);
+        }else{
+            customBoardBean.setUseWarrantyMonths(false);
+        }
 
-        AuthTokenBean authTokenBean = new AuthTokenBean();
-        authTokenBean.setToken(windowManager.getAuthBean().getToken());
-        customizedBoardBean = customOrderController.generateCustomBoard(customBoardBean,authTokenBean);
+
+        customizedBoardBean = customOrderController.generateCustomBoard(windowManager.getAuthBean().getToken(), customBoardBean);
         boardPriceLabel.setText("Price " +customizedBoardBean.getPrice());
         descriptionArea.setText(customizedBoardBean.getDescription());
         pannelPane.setVisible(true);

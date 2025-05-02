@@ -23,8 +23,8 @@ public class SignCompetitionController {
     private final PaymentController paymentController = new PaymentController();
 
 
-    public CompetitionBean competitionDetails(CompetitionBean competitionBean, AuthTokenBean authTokenBean) throws SessionExpiredException{
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public CompetitionBean competitionDetails(String token, CompetitionBean competitionBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
@@ -32,8 +32,8 @@ public class SignCompetitionController {
         return new CompetitionBean(competition.getName(), competition.getDescription(), competition.getParticipationFee(),(competition.getMaxRegistrations() - competition.getCurrentRegistrations()));
     }
 
-    public List<CompetitionBean> allAvailableCompetitions(AuthTokenBean authTokenBean) throws SessionExpiredException{
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public List<CompetitionBean> allAvailableCompetitions(String token) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
@@ -65,13 +65,12 @@ public class SignCompetitionController {
     }
 
 
-    public CompetitionRegistrationBean signToCompetition(CompetitionBean competitionBean, AuthTokenBean authTokenBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException {
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public CompetitionRegistrationBean signToCompetition(String token, CompetitionBean competitionBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException {
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        String customerName = sessionManager.getSessionByToken(authTokenBean.getToken()).getUsername();
-        Customer currentCustomer = customerDao.selectCustomerByUsername(customerName);
+        Customer currentCustomer = customerDao.selectCustomerByUsername(session.getUsername());
         Competition competition = competitionDao.selectCompetitionByName(competitionBean.getName());
         List<CompetitionRegistration> participantsList = competition.getCompetitionRegistrations();
         for(CompetitionRegistration competitionParticipation : participantsList ){
@@ -85,6 +84,7 @@ public class SignCompetitionController {
         }
 
         paymentController.payWithCoins(currentCustomer.getWallet(), competition.getParticipationFee());
+        System.out.println("Andando avanti");
 
         int registrationNumber = competition.getCurrentRegistrations() +1;
         String registrationCode = generateCode(competition.getName(),competition.getCurrentRegistrations());
@@ -101,8 +101,8 @@ public class SignCompetitionController {
 
     }
 
-    public List<CompetitionBean> searchCompetitionByDateAndLocation(CompetitionBean competitionBean, AuthTokenBean authTokenBean) throws SessionExpiredException{
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public List<CompetitionBean> searchCompetitionByDateAndLocation(String token, CompetitionBean competitionBean) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
@@ -114,8 +114,8 @@ public class SignCompetitionController {
         return competitionBeanList;
     }
 
-    public WalletBean customerInfo(AuthTokenBean authTokenBean) throws SessionExpiredException{
-        Session session = SessionManager.getInstance().getSessionByToken(authTokenBean.getToken());
+    public WalletBean customerInfo(String token) throws SessionExpiredException{
+        Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
