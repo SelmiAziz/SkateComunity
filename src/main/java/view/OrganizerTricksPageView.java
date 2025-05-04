@@ -3,6 +3,8 @@ package view;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import exceptions.EmptyFieldException;
+import exceptions.WrongFormatException;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -32,9 +34,8 @@ public class OrganizerTricksPageView {
     @FXML private ToggleGroup trickGroup;
     @FXML private RadioButton flatRadio, grindRadio, rampRadio;
     @FXML private TextArea descriptionTextArea;
-    @FXML private DatePicker datePicker;
+    @FXML private TextField dateField;
     @FXML private Label difficultyLabel;
-    private Stage stage;
 
     LearnTrickController learnTrickController = new LearnTrickController();
 
@@ -73,7 +74,30 @@ public class OrganizerTricksPageView {
         return "beginner";
     }
 
+    public void validaDate(String data) throws WrongFormatException {
+        if (data == null || !data.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
+            throw new WrongFormatException("Formato non valido (deve essere dd/mm/yyyy)");
+        }
 
+        String[] parts = data.split("/");
+        int day = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        int year = Integer.parseInt(parts[2]);
+
+        if (month < 1 || month > 12) {
+            throw new WrongFormatException("Mese non valido: " + month);
+        }
+
+        int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+        if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))) {
+            daysInMonth[1] = 29;
+        }
+
+        if (day < 1 || day > daysInMonth[month - 1]) {
+            throw new WrongFormatException("Giorno non valido: " + day + " per il mese " + month);
+        }
+    }
 
     public void updateDifficultyLabel(){
         String difficulty =  getDifficultyStringFromSliderValue((int)difficultySlider.getValue());
@@ -88,15 +112,11 @@ public class OrganizerTricksPageView {
 
     @FXML
     public void goToCompetitionsPage() {
-
-
-
-
-
-    }
-    public String formatFromDataPicker(String date){
-        String[] parts = date.split("-");
-        return parts[2] + "-" + parts[1] + "-" + parts[0];
+        try {
+            windowManager.goToOrganizerCompetitions();
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     public String getCategory(){
@@ -113,22 +133,27 @@ public class OrganizerTricksPageView {
         // Get values from the form fields
         String trickName = trickNameTextField.getText();
         String trickCategory = getCategory();
-        String date = formatFromDataPicker( datePicker.getValue().toString());
+        String date = dateField.getText();
         String trickDescription = descriptionTextArea.getText();
         String difficulty = getDifficultyStringFromSliderValue((int)difficultySlider.getValue());
 
-        if (trickName.isEmpty() || trickCategory.isEmpty() || trickDescription.isEmpty()) {
-            errorLabel.setText("All fields must be filled.");
-            return;
-        }
-        TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, trickCategory, date);
+        try {
+            if (trickName.isEmpty() || trickCategory.isEmpty() || trickDescription.isEmpty()) {
+                    throw new EmptyFieldException("Rimpi tutti i campi");
+            }
 
-        learnTrickController.RegisterTrick(windowManager.getAuthBean().getToken(),newTrick);
-        trickNameTextField.clear();
-        descriptionTextArea.clear();
-        datePicker.setValue(null);
-        trickGroup.selectToggle(flatRadio);
-        loadTricks();
+            validaDate(date);
+            TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, trickCategory, date);
+
+            learnTrickController.RegisterTrick(windowManager.getAuthBean().getToken(), newTrick);
+            trickNameTextField.clear();
+            descriptionTextArea.clear();
+            dateField.clear();
+            trickGroup.selectToggle(flatRadio);
+            loadTricks();
+        }catch(EmptyFieldException | WrongFormatException e){
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     @FXML
@@ -149,7 +174,7 @@ public class OrganizerTricksPageView {
         }
     }
 
-    // Navigate to the home page
+
     public void goToHomePage() {
         try {
             windowManager.goToOrganizerHomePage();

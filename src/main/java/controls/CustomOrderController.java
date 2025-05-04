@@ -224,6 +224,8 @@ public class CustomOrderController {
            orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
            orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
            orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
+           orderSummaryBean.setTotalCost(order.totalCost());
+           orderSummaryBean.setEstimatedDays(order.getDeliveryDestination().estimatedDeliveryDays());
            customOrderBeanList.add(orderSummaryBean);
        }
         return customOrderBeanList;

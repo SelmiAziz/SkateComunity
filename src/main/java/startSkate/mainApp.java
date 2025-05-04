@@ -12,9 +12,9 @@ import static java.lang.Thread.sleep;
 public class mainApp extends Application {
 
     public void start(Stage primaryStage) throws IOException {
-        WindowManager sceneManager = WindowManager.getInstance();
-        sceneManager.setStage(primaryStage);
-        sceneManager.loadScene("viewFxml/AccessView.fxml");
+        WindowManager windowManager = WindowManager.getInstance();
+        windowManager.setStage(primaryStage);
+        windowManager.loadScene("viewFxml/AccessView.fxml");
     }
 
     public static void main(String[] args) {

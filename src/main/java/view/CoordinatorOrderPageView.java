@@ -25,7 +25,7 @@ public class CoordinatorOrderPageView {
     @FXML private TableColumn<OrderSummaryBean, String>  colState;
     @FXML private CheckBox checkComplete;
 
-    @FXML private Label boardDetailsLabel;
+    @FXML private TextArea detailsArea;
     @FXML private Label boardDatesLabel;
     @FXML private Label boardDayEstimatedLabel;
     @FXML private Label boardPriceLabel;
@@ -48,22 +48,24 @@ public class CoordinatorOrderPageView {
                 new SimpleStringProperty(cellData.getValue().getStatus()));
 
         confStart();
+        detailsArea.setEditable(false);
 
     }
 
-    public void loadOrderS(){
+    public void loadOrders(){
         List<OrderSummaryBean> customOrderBeanList = customOrderController.getAllOrders();
         ordersTable.getItems().clear();
         ordersTable.getItems().addAll(customOrderBeanList);
     }
 
     public void loadCustomOrderSummary(OrderSummaryBean orderSummaryBean){
-        boardOrderStatusLabel.setText("Stato attuale dell'ordine "+orderSummaryBean.getStatus());
-        boardDatesLabel.setText("Data creazione dell'ordine "+orderSummaryBean.getCreationDate() + "Data di conclusione"+orderSummaryBean.getDeliveryDate());
-        boardDayEstimatedLabel.setText("Stima giorni lavorativi per la consegna "+orderSummaryBean.getEstimatedDays());
-        boardDetailsLabel.setText("Dettagli ordine " +orderSummaryBean.getNameBoard()+ " "+orderSummaryBean.getDescriptionBoard());
-        boardPriceLabel.setText("Costo totale dell'ordine " + orderSummaryBean.getTotalCost());
-        boardDestinationLabel.setText("Destinazione dell'ordine "+orderSummaryBean.getRegionDestination()+ " "+orderSummaryBean.getProvinceDestination()+" "+orderSummaryBean.getCityDestination()+" "+orderSummaryBean.getStreetAddersDestination());
+        boardOrderStatusLabel.setText("Current order status: " + orderSummaryBean.getStatus());
+        boardDatesLabel.setText("Order creation date: " + orderSummaryBean.getCreationDate());
+        boardDayEstimatedLabel.setText("Estimated business days for delivery: " + orderSummaryBean.getEstimatedDays());
+        detailsArea.setText("Order details: " + orderSummaryBean.getNameBoard() + " " + orderSummaryBean.getDescriptionBoard());
+        boardPriceLabel.setText("Total order cost: " + orderSummaryBean.getTotalCost());
+        boardDestinationLabel.setText("Order destination: " + orderSummaryBean.getRegionDestination() + " " + orderSummaryBean.getProvinceDestination() + " " + orderSummaryBean.getCityDestination() + " " + orderSummaryBean.getStreetAddersDestination());
+
     }
 
     public void confStart(){
@@ -74,7 +76,8 @@ public class CoordinatorOrderPageView {
         boardDestinationLabel.setText("");
         boardPriceLabel.setText("");
         boardOrderStatusLabel.setText("");
-        boardDetailsLabel.setText("");
+        detailsArea.setText("");
+        detailsArea.setVisible(false);
     }
 
     public void acceptOrder(){
@@ -82,7 +85,7 @@ public class CoordinatorOrderPageView {
         orderBean.setId(orderSummaryBean.getId());
         customOrderController.acceptCustomOrder(orderBean, true);
         confStart();
-        loadOrderS();
+        loadOrders();
     }
 
     public void rejectOrder(){
@@ -90,7 +93,7 @@ public class CoordinatorOrderPageView {
         orderBean.setId(orderSummaryBean.getId());
         customOrderController.acceptCustomOrder(orderBean, false);
         confStart();
-        loadOrderS();
+        loadOrders();
     }
 
     @FXML
@@ -98,6 +101,7 @@ public class CoordinatorOrderPageView {
         confStart();
         orderSummaryBean = ordersTable.getSelectionModel().getSelectedItem();
         loadCustomOrderSummary(orderSummaryBean);
+        detailsArea.setVisible(true);
         if(orderSummaryBean.getStatus().equals("Requested")){
             acceptanceOrderPane.setVisible(true);
         }else if(orderSummaryBean.getStatus().equals("Processing")){
@@ -128,7 +132,9 @@ public class CoordinatorOrderPageView {
                 customOrderController.writeNote(orderBean, progressNoteBean);
             }
             confStart();
-            loadOrderS();
+            dateField.setText("");
+            noteArea.setText("");
+            loadOrders();
         }catch (EmptyFieldException e){
             errorLabel.setText(e.getMessage());
         }
@@ -139,6 +145,6 @@ public class CoordinatorOrderPageView {
 
 
     public void newOrder(){
-        loadOrderS();
+        loadOrders();
     }
 }

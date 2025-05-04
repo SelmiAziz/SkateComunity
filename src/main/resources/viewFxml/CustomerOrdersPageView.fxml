@@ -60,7 +60,7 @@
     <left>
         <AnchorPane prefHeight="685.0" prefWidth="583.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
             <children>
-                <TableView fx:id="boardTable" layoutX="43.0" layoutY="61.0" onMouseClicked="#onSampleSelected" prefHeight="356.0" prefWidth="497.0">
+                <TableView fx:id="boardTable" layoutX="43.0" layoutY="86.0" onMouseClicked="#onSampleSelected" prefHeight="356.0" prefWidth="497.0">
                     <columns>
                         <TableColumn fx:id="colBoardName" prefWidth="84.0" text="Model" />
                         <TableColumn fx:id="colDescription" prefWidth="221.0" text="Description" />
@@ -68,25 +68,40 @@
                         <TableColumn fx:id="colCost" prefWidth="113.0" text="cost" />
                     </columns>
                 </TableView>
-                <Label layoutX="416.0" layoutY="436.0" prefHeight="18.0" prefWidth="126.0" text="Click on a board !!!" />
+                <Label layoutX="416.0" layoutY="451.0" prefHeight="18.0" prefWidth="126.0" text="Click on a board !!!" />
                 <Label fx:id="errorLabel" layoutX="41.0" layoutY="580.0" prefHeight="18.0" prefWidth="501.0" />
-                <Button fx:id="availableButton" layoutX="177.0" layoutY="432.0" mnemonicParsing="false" onMouseClicked="#displayAvailableBoardSamples" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="available" textFill="WHITE">
+                <Button fx:id="availableButton" layoutX="177.0" layoutY="452.0" mnemonicParsing="false" onMouseClicked="#displayAvailableBoardSamples" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="available" textFill="WHITE">
                     <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                     </effect>
                 </Button>
-                <Button fx:id="designButton" layoutX="43.0" layoutY="432.0" mnemonicParsing="false" onMouseClicked="#displayBoardsCustomizedByCustomer" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #949494;" text="designed" textFill="WHITE">
+                <Button fx:id="designButton" layoutX="43.0" layoutY="453.0" mnemonicParsing="false" onMouseClicked="#displayBoardsCustomizedByCustomer" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #949494;" text="designed" textFill="WHITE">
                     <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                     </effect>
                 </Button>
-            <Label layoutX="41.0" layoutY="40.0" prefHeight="18.0" prefWidth="74.0" text="Displaying:" />
-            <Label fx:id="statusLabel" layoutX="115.0" layoutY="40.0" prefHeight="18.0" prefWidth="59.0" text="available" />
+            <Label layoutX="43.0" layoutY="65.0" prefHeight="18.0" prefWidth="74.0" text="Displaying:" />
+            <Label fx:id="statusLabel" layoutX="113.0" layoutY="66.0" prefHeight="18.0" prefWidth="59.0" text="available" />
             <Label layoutX="46.0" layoutY="535.0" onMouseClicked="#goPreviousOrders" prefHeight="24.0" prefWidth="162.0" text="Previous orders." textFill="#1abc9c">
                <font>
                   <Font size="11.0" />
                </font>
             </Label>
+            <Pane layoutX="137.0" layoutY="1.0" prefHeight="76.0" prefWidth="434.0">
+               <children>
+                  <ImageView fitHeight="65.0" fitWidth="72.0" layoutX="344.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/coins.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="coinsLabel" layoutX="317.0" layoutY="18.0" prefHeight="32.0" prefWidth="55.0" text="100" textAlignment="RIGHT" textFill="#1abc9c">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="welcomeLabel" layoutX="215.0" layoutY="26.0" prefHeight="18.0" prefWidth="103.0" text="Available Coins:" />
+               </children>
+            </Pane>
             </children>
         </AnchorPane>
     </left>

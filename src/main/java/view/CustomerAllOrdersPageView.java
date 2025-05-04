@@ -139,7 +139,7 @@ public class CustomerAllOrdersPageView {
     public void goToTricksPage(){
         windowManager.closeCoordinator();
         try {
-            windowManager.goToTricks();
+            windowManager.goToLearn();
         }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }

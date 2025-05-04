@@ -3,6 +3,7 @@ package view;
 import beans.BoardBean;
 import beans.CustomBoardBean;
 import beans.BoardProfileBean;
+import beans.WalletBean;
 import controls.CustomOrderController;
 import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
@@ -49,6 +50,7 @@ public class CustomerOrdersPageView {
     @FXML private Button designButton;
     @FXML private Button saveBoardButton;
     @FXML private Label statusLabel;
+    @FXML private Label coinsLabel;
 
 
     WindowManager windowManager = WindowManager.getInstance();
@@ -83,6 +85,7 @@ public class CustomerOrdersPageView {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice())));
         displayAvailableBoardSamples();
         initConf();
+        displayWallet();
     }
 
     public void initConf(){
@@ -139,6 +142,8 @@ public class CustomerOrdersPageView {
         customizedBoardBean = boardTable.getSelectionModel().getSelectedItem();
         if(statusLabel.getText().equals("available")){
             customizeLabel.setText("Customize the following sample " + customizedBoardBean.getName());
+            descriptionArea.setText("");
+            orderPane.setVisible(false);
             customPane.setVisible(true);
         }else{
             boardBean = new BoardBean();
@@ -225,6 +230,12 @@ public class CustomerOrdersPageView {
     }
     public void orderBoard(){
         windowManager.loadMakeOrdersPage(customOrderController, boardBean);
+    }
+
+
+    public void displayWallet(){
+        WalletBean walletBean = customOrderController.walletDetails(windowManager.getAuthBean().getToken());
+        coinsLabel.setText(""+walletBean.getBalance());
     }
 
 

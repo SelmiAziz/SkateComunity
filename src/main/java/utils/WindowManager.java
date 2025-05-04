@@ -149,6 +149,7 @@ public class WindowManager {
         CoordinatorOrderPageView coordinatorController = loader.getController();
         customOrderController.setCoordinatorOrderPageView(coordinatorController);
         coordinatorController.setCustomOrderController(customOrderController);
+        coordinatorController.loadOrders();
 
         stageBr.setResizable(false);
         stageBr.setScene(scene);

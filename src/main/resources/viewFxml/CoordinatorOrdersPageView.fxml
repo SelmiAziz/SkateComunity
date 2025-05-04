@@ -81,13 +81,13 @@
             </Pane>
             <Pane fx:id="detailsOrderPane" layoutX="57.0" layoutY="158.0" prefHeight="196.0" prefWidth="497.0">
                <children>
-                  <Label fx:id="boardDetailsLabel" layoutY="30.0" prefHeight="18.0" prefWidth="355.0" />
-                  <Label fx:id="boardDatesLabel" layoutY="55.0" prefHeight="18.0" prefWidth="322.0" />
-                  <Label fx:id="boardDayEstimatedLabel" layoutY="80.0" prefHeight="18.0" prefWidth="322.0" />
-                  <Label fx:id="boardDestinationLabel" layoutY="105.0" prefHeight="18.0" prefWidth="322.0" />
-                  <Label fx:id="boardOrderStatusLabel" layoutY="130.0" prefHeight="18.0" prefWidth="322.0" />
-                  <Label fx:id="boardPriceLabel" layoutY="155.0" prefHeight="18.0" prefWidth="339.0" />
+                  <Label fx:id="boardDatesLabel" layoutY="30.0" prefHeight="18.0" prefWidth="322.0" />
+                  <Label fx:id="boardDayEstimatedLabel" layoutY="55.0" prefHeight="18.0" prefWidth="322.0" />
+                  <Label fx:id="boardDestinationLabel" layoutY="80.0" prefHeight="18.0" prefWidth="322.0" />
+                  <Label fx:id="boardOrderStatusLabel" layoutY="105.0" prefHeight="18.0" prefWidth="322.0" />
+                  <Label fx:id="boardPriceLabel" layoutY="130.0" prefHeight="18.0" prefWidth="339.0" />
                   <Label layoutY="-1.0" prefHeight="18.0" prefWidth="195.0" text="Informazioni inerenti all'ordine" />
+                  <TextArea fx:id="detailsArea" layoutY="156.0" prefHeight="40.0" prefWidth="498.0" />
                </children>
             </Pane>
          </children>
