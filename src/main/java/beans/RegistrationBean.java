@@ -1,26 +1,23 @@
 package beans;
 
-public class CompetitionRegistrationBean {
+public class RegistrationBean {
     int currentRegistrationNumber;
     String assignedSeat;
     String registrationCode;
 
-    public CompetitionRegistrationBean(int currentRegistrationNumber, String registrationCode, String assignedSeat){
-        this.currentRegistrationNumber = currentRegistrationNumber;
-        this.assignedSeat = assignedSeat;
-        this.registrationCode = registrationCode;
-    }
+    public RegistrationBean(){}
 
     public String getRegistrationCode() {
         return registrationCode;
     }
 
+
     public int getCurrentRegistrationNumber() {
-        return currentRegistrationNumber;
+        return this.currentRegistrationNumber;
     }
 
     public String getAssignedSeat() {
-        return assignedSeat;
+        return this.assignedSeat;
     }
 
     public void setCurrentRegistrationNumber(int currentRegistrationNumber) {
@@ -34,4 +31,5 @@ public class CompetitionRegistrationBean {
     public void setAssignedSeat(String assignedSeat) {
         this.assignedSeat = assignedSeat;
     }
+
 }

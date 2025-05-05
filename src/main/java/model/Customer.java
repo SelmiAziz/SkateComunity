@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer extends User {
-    private List<CompetitionRegistration> competitionRegistrationList ;// a value of default
+    private List<Registration> competitionRegistrationList ;// a value of default
     private SkaterLevel skaterLevel;
     private List<Order> ordersSubmittedList;
     private List<Order> ordersAcquiredList;
@@ -32,7 +32,7 @@ public class Customer extends User {
 
 
 
-    public void addCompetitionRegistration(CompetitionRegistration competitionRegistration){this.competitionRegistrationList.add(competitionRegistration);}
+    public void addCompetitionRegistration(Registration competitionRegistration){this.competitionRegistrationList.add(competitionRegistration);}
 
 
 
@@ -54,7 +54,7 @@ public class Customer extends User {
     }
 
 
-    public List<CompetitionRegistration> getCompetitionRegistrationList() {
+    public List<Registration> getCompetitionRegistrationList() {
         return competitionRegistrationList;
     }
 

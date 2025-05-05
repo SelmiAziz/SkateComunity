@@ -1,8 +1,8 @@
 package dao;
 
-import model.CompetitionRegistration;
+import model.Registration;
 
 public interface CompetitionRegistrationDao {
-    CompetitionRegistration selectCompetitionRegistrationById(int id);
-    void addCompetitionRegistration(CompetitionRegistration competitionRegistration);
+    Registration selectCompetitionRegistrationById(int id);
+    void addCompetitionRegistration(Registration competitionRegistration);
 }

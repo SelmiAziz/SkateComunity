@@ -62,7 +62,7 @@
             <children>
                 <TableView fx:id="boardTable" layoutX="43.0" layoutY="86.0" onMouseClicked="#onSampleSelected" prefHeight="356.0" prefWidth="497.0">
                     <columns>
-                        <TableColumn fx:id="colBoardName" prefWidth="84.0" text="Model" />
+                        <TableColumn fx:id="colBoardName" prefWidth="84.0" text="base boarrd" />
                         <TableColumn fx:id="colDescription" prefWidth="221.0" text="Description" />
                         <TableColumn fx:id="colSize" prefWidth="77.0" text="size" />
                         <TableColumn fx:id="colCost" prefWidth="113.0" text="cost" />

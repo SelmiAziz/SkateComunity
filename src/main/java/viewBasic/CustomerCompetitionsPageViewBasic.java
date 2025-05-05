@@ -1,9 +1,9 @@
 package viewBasic;
 
-import beans.AuthBean;
+import beans.RegistrationBean;
+import beans.RegistrationRequestBean;
 import beans.WalletBean;
 import beans.CompetitionBean;
-import beans.CompetitionRegistrationBean;
 import controls.SignCompetitionController;
 import exceptions.*;
 import javafx.collections.FXCollections;
@@ -128,9 +128,9 @@ public class CustomerCompetitionsPageViewBasic {
             String competitionName = competitionNameField.getText();
             if(competitionName.isEmpty()) throw  new EmptyFieldException("Campo nome competizione risulta vuoto!!!");
             CompetitionBean competitionBean = new CompetitionBean(competitionName);
-            CompetitionRegistrationBean competitionRegistrationBean = signCompetitionController.signToCompetition("",competitionBean);
-            assignedSeatLabel.setText("Ti è stato fornito il codice: " +competitionRegistrationBean.getRegistrationCode());
-            generateCodeLabel.setText("Turno di gara: "+competitionRegistrationBean.getAssignedSeat());
+            RegistrationBean registrationBean = signCompetitionController.signToCompetition("",competitionBean, new RegistrationRequestBean());
+            assignedSeatLabel.setText("Ti è stato fornito il codice: " +registrationBean.getRegistrationCode());
+            generateCodeLabel.setText("Turno di gara: "+registrationBean.getAssignedSeat());
         } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
             errorLabel.setText(e.getMessage());
         } catch(EmptyFieldException e){

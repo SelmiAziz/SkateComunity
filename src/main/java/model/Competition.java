@@ -10,7 +10,7 @@ public class Competition {
     private final int participationFee;
     private final String location;
     private final Integer maxRegistrations;
-    private List<CompetitionRegistration> requestList;
+    private List<Registration> requestList;
     private  Organizer organizer;
 
     public Competition(String competitionName, String description, String date, String location, int participationFee, int maxRegistrations){
@@ -62,11 +62,11 @@ public class Competition {
 
 
 
-    public void addCompetitionRegistration(CompetitionRegistration competitionRegistration){
+    public void addCompetitionRegistration(Registration competitionRegistration){
         this.requestList.add(competitionRegistration);
     }
 
-    public  List<CompetitionRegistration> getCompetitionRegistrations(){
+    public  List<Registration> getCompetitionRegistrations(){
         return this.requestList;
     }
 

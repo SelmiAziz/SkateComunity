@@ -150,6 +150,7 @@ public class CustomerOrdersPageView {
             boardBean.setId(customizedBoardBean.getId());
             loadBoardForOrder(customizedBoardBean);
             orderPane.setVisible(true);
+            customPane.setVisible(true);
         }
     }
 

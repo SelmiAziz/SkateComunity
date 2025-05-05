@@ -2,7 +2,7 @@ package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
 import model.Competition;
-import model.CompetitionRegistration;
+import model.Registration;
 import model.Organizer;
 import utils.DbsConnector;
 
@@ -66,7 +66,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
                     String[] registrationIds = registrationIdsStr.split(",");
                     for (String id : registrationIds) {
                         int registrationId = Integer.parseInt(id);
-                        CompetitionRegistration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
+                        Registration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
                         competitionRegistration.setCompetition(competition);
                         competition.addCompetitionRegistration(competitionRegistration);
                     }
@@ -142,7 +142,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
                     for (String id : registrationIdsStr.split(",")) {
                         int registrationId = Integer.parseInt(id);
-                        CompetitionRegistration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
+                        Registration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
                         if (competitionRegistration != null) {
                             competitionRegistration.setCompetition(competition);
                             competition.addCompetitionRegistration(competitionRegistration);
@@ -255,7 +255,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
             if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
                 for (String id : registrationIdsStr.split(",")) {
                     int registrationId = Integer.parseInt(id);
-                    CompetitionRegistration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
+                    Registration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
                     if (competitionRegistration != null) {
                         competitionRegistration.setCompetition(competition);
                         competition.addCompetitionRegistration(competitionRegistration);
@@ -296,7 +296,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
 
             stmt.executeUpdate();
 
-            for (CompetitionRegistration competitionRegistration : competition.getCompetitionRegistrations()) {
+            for (Registration competitionRegistration : competition.getCompetitionRegistrations()) {
                 competitionRegistrationDao.addCompetitionRegistration(competitionRegistration);
             }
         }catch (SQLException e) {

@@ -65,15 +65,15 @@ public class SignCompetitionController {
     }
 
 
-    public CompetitionRegistrationBean signToCompetition(String token, CompetitionBean competitionBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException {
+    public RegistrationBean signToCompetition(String token, CompetitionBean competitionBean, RegistrationRequestBean registrationRequestBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
         Customer currentCustomer = customerDao.selectCustomerByUsername(session.getUsername());
         Competition competition = competitionDao.selectCompetitionByName(competitionBean.getName());
-        List<CompetitionRegistration> participantsList = competition.getCompetitionRegistrations();
-        for(CompetitionRegistration competitionParticipation : participantsList ){
+        List<Registration> participantsList = competition.getCompetitionRegistrations();
+        for(Registration competitionParticipation : participantsList ){
             if(competitionParticipation.getParticipant().getUsername().equals(currentCustomer.getUsername())){
                 throw new UserAlreadySignedCompetition("L'utente è già segnato a questa competizione");
             }
@@ -84,20 +84,22 @@ public class SignCompetitionController {
         }
 
         paymentController.payWithCoins(currentCustomer.getWallet(), competition.getParticipationFee());
-        System.out.println("Andando avanti");
 
         int registrationNumber = competition.getCurrentRegistrations() +1;
         String registrationCode = generateCode(competition.getName(),competition.getCurrentRegistrations());
         String availableSeatCode = findAvailableSpotForCompetition(registrationNumber);
 
-        CompetitionRegistration newCompetitionRegistration = new CompetitionRegistration(registrationNumber, registrationCode, availableSeatCode);
-        newCompetitionRegistration.setParticipant(currentCustomer);
-        newCompetitionRegistration.setCompetition(competition);
-        competition.addCompetitionRegistration(newCompetitionRegistration);
-        competitionRegistrationDao.addCompetitionRegistration(newCompetitionRegistration);
+        Registration registration = new Registration(registrationNumber, registrationCode, availableSeatCode, registrationRequestBean.getRegistrationName(), registrationRequestBean.getEmail());
+        registration.setParticipant(currentCustomer);
+        registration.setCompetition(competition);
+        competition.addCompetitionRegistration(registration);
+        competitionRegistrationDao.addCompetitionRegistration(registration);
 
-        CompetitionRegistrationBean competitionRegistrationBean = new CompetitionRegistrationBean(registrationNumber, registrationCode, availableSeatCode);
-        return competitionRegistrationBean;
+        RegistrationBean registrationBean = new RegistrationBean();
+        registrationBean.setCurrentRegistrationNumber(registrationNumber);
+        registrationBean.setRegistrationCode(registration.getRegistrationCode());
+        registrationBean.setAssignedSeat(availableSeatCode);
+        return registrationBean;
 
     }
 

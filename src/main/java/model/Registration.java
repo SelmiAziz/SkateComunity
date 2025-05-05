@@ -1,14 +1,16 @@
 package model;
 
-public class CompetitionRegistration {
+public class Registration {
     private int registrationId;
     private int participationNumber;
     private Customer participant;
     private Competition competition;
+    private String registrationName;
+    private String email;
     private String registrationCode;
     private String assignedTurn;
 
-    public CompetitionRegistration(int registrationId , int participationNumber, String registrationCode, String assignedTurn){
+    public Registration(int registrationId , int participationNumber, String registrationCode, String assignedTurn){
         this.registrationId = registrationId;
         this.participationNumber = participationNumber;
         this.registrationCode = registrationCode;
@@ -17,10 +19,12 @@ public class CompetitionRegistration {
 
 
 
-    public CompetitionRegistration(int participationNumber, String registrationCode, String assignedTurn){
+    public Registration(int participationNumber, String registrationCode, String assignedTurn, String registrationName, String email){
         this.participationNumber = participationNumber;
         this.registrationCode = registrationCode;
         this.assignedTurn = assignedTurn;
+        this.registrationName = registrationName;
+        this.email = email;
     }
 
 
@@ -70,5 +74,22 @@ public class CompetitionRegistration {
 
     public String getRegistrationCode() {
         return registrationCode;
+    }
+
+    public void setRegistrationName(String registrationName) {
+        this.registrationName = registrationName;
+    }
+
+    public String getRegistrationName() {
+        return registrationName;
+    }
+
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

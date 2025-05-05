@@ -1,13 +1,11 @@
 package view;
 
+import beans.RegistrationBean;
+import beans.RegistrationRequestBean;
 import beans.WalletBean;
 import beans.CompetitionBean;
-import beans.CompetitionRegistrationBean;
 import controls.SignCompetitionController;
-import exceptions.InsufficientCoinsException;
-import exceptions.NoAvailableSeats;
-import exceptions.UserAlreadySignedCompetition;
-import exceptions.WrongFormatException;
+import exceptions.*;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -28,6 +26,8 @@ public class CustomerCompetitionsPageView {
     @FXML private TableColumn<CompetitionBean, String> colDate;
     @FXML private TextField locationSearch;
     @FXML private TextField dateField;
+    @FXML private TextField registrationNameField;
+    @FXML private TextField emailField;
     @FXML private Label competitionDescriptionLabel;
     @FXML private Label competitionCoinsLabel;
     @FXML private Label competitionNameLabel;
@@ -42,6 +42,8 @@ public class CustomerCompetitionsPageView {
     @FXML private Button detailsButton;
     @FXML private Button backButton;
     @FXML private Button selectButton;
+    @FXML private Button registrationButton;
+    @FXML private Pane registrationPane;
     @FXML private Label stateLabel;
 
     CompetitionBean competitionBean;
@@ -71,6 +73,8 @@ public class CustomerCompetitionsPageView {
         detailsButton.setVisible(false);
         backButton.setVisible(false);
         selectButton.setVisible(false);
+        registrationButton.setVisible(false);
+        registrationPane.setVisible(false);
         competitionCoinsLabel.setText("");
         competitionNameLabel.setText("");
         competitionDescriptionLabel.setText("");
@@ -171,8 +175,14 @@ public class CustomerCompetitionsPageView {
     public void detailsInfoConf(){
         showCompetitionDetails();
         detailsButton.setVisible(false);
-        verifyButton.setVisible(true);
+        registrationButton.setVisible(true);
         startInactivityTimer();
+    }
+
+    public void startRegistration(){
+        registrationButton.setVisible(false);
+        registrationPane.setVisible(true);
+        verifyButton.setVisible(true);
     }
 
     public void backConf(){
@@ -198,12 +208,25 @@ public class CustomerCompetitionsPageView {
     @FXML
     public void submitSignToCompetition(){
         try {
-            CompetitionBean selectedCompetitionBean = competitionTable.getSelectionModel().getSelectedItem();
-            CompetitionRegistrationBean competitionRegistrationBean = signCompetitionController.signToCompetition(windowManager.getAuthBean().getToken(),selectedCompetitionBean);
-            onCompetitionSelected();
-            registrationCodeLabel.setText("Il codice della registrazione:" + competitionRegistrationBean.getRegistrationCode());
-            assignedSeatLabel.setText("Il posto assegnato è:" + competitionRegistrationBean.getAssignedSeat());
-        } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
+            String registrationName = registrationNameField.getText();
+            String email = emailField.getText();
+
+            if(registrationName == null || email == null){
+                throw new EmptyFieldException("Empty Field");
+            }
+            try {
+                RegistrationRequestBean registrationRequestBean = new RegistrationRequestBean();
+                registrationRequestBean.setRegistrationName(registrationName);
+                registrationRequestBean.setEmail(email);
+                CompetitionBean selectedCompetitionBean = competitionTable.getSelectionModel().getSelectedItem();
+                RegistrationBean registrationBean = signCompetitionController.signToCompetition(windowManager.getAuthBean().getToken(), selectedCompetitionBean, registrationRequestBean);
+                onCompetitionSelected();
+                registrationCodeLabel.setText("Il codice della registrazione:" + registrationBean.getRegistrationCode());
+                assignedSeatLabel.setText("Il posto assegnato è:" + registrationBean.getAssignedSeat());
+            } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
+                errorLabel.setText(e.getMessage());
+            }
+        }catch(EmptyFieldException e){
             errorLabel.setText(e.getMessage());
         }
         updateCustomerInfo();

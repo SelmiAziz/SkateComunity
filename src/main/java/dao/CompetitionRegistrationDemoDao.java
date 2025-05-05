@@ -1,13 +1,13 @@
 package dao;
 
-import model.CompetitionRegistration;
+import model.Registration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CompetitionRegistrationDemoDao implements CompetitionRegistrationDao {
     private static CompetitionRegistrationDemoDao instance = null;
-    private final List<CompetitionRegistration> competitionRegistrationList = new ArrayList<>();
+    private final List<Registration> competitionRegistrationList = new ArrayList<>();
 
     public static synchronized CompetitionRegistrationDemoDao getInstance(){
         if(instance == null){
@@ -17,13 +17,13 @@ public class CompetitionRegistrationDemoDao implements CompetitionRegistrationDa
     }
 
     @Override
-    public void addCompetitionRegistration(CompetitionRegistration competitionRegistration) {
+    public void addCompetitionRegistration(Registration competitionRegistration) {
         this.competitionRegistrationList.add(competitionRegistration);
     }
 
     @Override
-    public CompetitionRegistration selectCompetitionRegistrationById(int id) {
-        for(CompetitionRegistration competitionRegistration : competitionRegistrationList){
+    public Registration selectCompetitionRegistrationById(int id) {
+        for(Registration competitionRegistration : competitionRegistrationList){
             if(competitionRegistration.getRegistrationId() == id){
                 return competitionRegistration;
             }

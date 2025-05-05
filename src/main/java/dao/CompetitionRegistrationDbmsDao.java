@@ -2,7 +2,7 @@ package dao;
 
 import dao.patternAbstractFactory.DaoFactory;
 import model.Customer;
-import model.CompetitionRegistration;
+import model.Registration;
 import utils.DbsConnector;
 
 import java.sql.*;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CompetitionRegistrationDbmsDao implements CompetitionRegistrationDao {
     private final CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
-    private final List<CompetitionRegistration> competitionRegistrationList = new ArrayList<>();
+    private final List<Registration> competitionRegistrationList = new ArrayList<>();
     private static CompetitionRegistrationDbmsDao instance = null;
 
     public static synchronized CompetitionRegistrationDbmsDao getInstance(){
@@ -22,7 +22,7 @@ public class CompetitionRegistrationDbmsDao implements CompetitionRegistrationDa
     }
 
     @Override
-    public void addCompetitionRegistration(CompetitionRegistration competitionRegistration) {
+    public void addCompetitionRegistration(Registration competitionRegistration) {
         competitionRegistrationList.add(competitionRegistration);
 
         String sql = "INSERT INTO registrations (numberRegistration, customerUsername, competitionName, registrationCode, assignedSeat) " +
@@ -51,8 +51,8 @@ public class CompetitionRegistrationDbmsDao implements CompetitionRegistrationDa
     }
 
     @Override
-    public CompetitionRegistration selectCompetitionRegistrationById(int registrationId) {
-        for(CompetitionRegistration competitionRegistration: competitionRegistrationList){
+    public Registration selectCompetitionRegistrationById(int registrationId) {
+        for(Registration competitionRegistration: competitionRegistrationList){
             if(competitionRegistration.getRegistrationId() == registrationId){
                 return competitionRegistration;
             }
@@ -74,7 +74,7 @@ public class CompetitionRegistrationDbmsDao implements CompetitionRegistrationDa
                 String registrationCode = rs.getString("registrationCode");
                 String assignedSeat = rs.getString("assignedSeat");
 
-                CompetitionRegistration competitionRegistration = new CompetitionRegistration(registrationId, numberRegistration, registrationCode, assignedSeat);
+                Registration competitionRegistration = new Registration(registrationId, numberRegistration, registrationCode, assignedSeat);
                 Customer customer = customerDao.selectCustomerByUsername(customerName);
                 competitionRegistration.setParticipant(customer);
                 return competitionRegistration;
