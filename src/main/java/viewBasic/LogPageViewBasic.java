@@ -9,11 +9,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import utils.WindowManager;
+import utils.WindowManagerBasic;
 
 import java.io.IOException;
 
-public class LogPageBasicView {
-    private final WindowManager sceneManager = WindowManager.getInstance();
+public class LogPageViewBasic {
+    private final WindowManagerBasic windowManagerBasic = WindowManagerBasic.getInstance();
     private final LoginController loginController = new LoginController();
 
     @FXML private TextField usernameField;
@@ -148,12 +149,13 @@ public class LogPageBasicView {
 
         try {
             validateLogin(username, password);
-            AuthBean logUserBean = loginController.logUser(new LogUserBean(username, password));
+            AuthBean authBean = loginController.logUser(new LogUserBean(username, password));
+            windowManagerBasic.setAuthBean(authBean);
             try{
-                if (logUserBean.getRole().equals("Costumer")){
-                    WindowManager.getInstance().loadScene("viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml");
+                if (authBean.getRole().equals("Costumer")){
+                    WindowManagerBasic.getInstance().loadScene("viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml");
                 }else {
-                    WindowManager.getInstance().loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
+                    WindowManagerBasic.getInstance().loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
                 }
             }catch (IOException e){
                 resultLabel.setText("Errore di sistema. Riprova più tardi.");

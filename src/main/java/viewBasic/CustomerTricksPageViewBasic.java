@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
+import utils.WindowManagerBasic;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -22,11 +23,11 @@ public class CustomerTricksPageViewBasic {
     @FXML private ChoiceBox<String> choicePage;
 
 
-    WindowManager windowManager = WindowManager.getInstance();
+    WindowManagerBasic windowManagerBasic = WindowManagerBasic.getInstance();
     LearnTrickController learnTrickController = new LearnTrickController();
 
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricks("");
+        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricks(windowManagerBasic.getAuthBean().getToken());
         eventListView.getItems().clear();
         for (TrickBean trick : availableTricksBean) {
             String trickDisplay = String.format("<<Nome Trick: %s>>",
@@ -37,7 +38,7 @@ public class CustomerTricksPageViewBasic {
 
 
     private void populatePageChoice() {
-        List<String> list = Arrays.asList( "Commissions", "Competitions", "Log Out");
+        List<String> list = Arrays.asList( "Board", "Competitions", "Log Out");
         ObservableList<String> categories = FXCollections.observableArrayList(list);
         choicePage.setItems(categories);
         choicePage.setValue("Learn");
@@ -56,7 +57,7 @@ public class CustomerTricksPageViewBasic {
     public void showTrick(){
         String trickName = trickNameTextField.getText();
         TrickBean trickBean = new TrickBean(trickName);
-        TrickBean detailedTrick = learnTrickController.detailsTrick("",trickBean);
+        TrickBean detailedTrick = learnTrickController.detailsTrick(windowManagerBasic.getAuthBean().getToken(),trickBean);
         descriptionLabel.setText("Description: " + detailedTrick.getDescription());
         categoryLabel.setText("Category: " +detailedTrick.getCategory());
         difficultyLabel.setText("Difficulty: " +detailedTrick.getDifficulty().toLowerCase());
@@ -65,15 +66,6 @@ public class CustomerTricksPageViewBasic {
 
 
 
-    @FXML
-    public void logOut() {
-        try {
-            windowManager.logOut();
-        } catch(IOException e){
-            errorLabel.setText(e.getMessage());
-        }
-    }
-
 
 
     @FXML
@@ -81,19 +73,15 @@ public class CustomerTricksPageViewBasic {
         String page = choicePage.getValue();
         if(page.equals("Competitions")){
             try {
-                windowManager.goToCustomerCompetitions();
+                windowManagerBasic.goToCustomerCompetitions();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
-        }else if(page.equals("Commissions")){
-            try {
-                windowManager.goToCustomerCompetitions();
-            } catch(IOException e){
-                errorLabel.setText(e.getMessage());
-            }
+        }else if(page.equals("Board")){
+                windowManagerBasic.goToOrderPage();
         }else if(page.equals("Log Out")){
             try {
-                windowManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
+                windowManagerBasic.logOut();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

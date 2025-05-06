@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
+import utils.WindowManagerBasic;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,7 +31,7 @@ public class OrganizerCompetitionsPageViewBasic {
     @FXML private ChoiceBox<String> choicePage;
 
     private final CreateCompetitionController createCompetitionController = new CreateCompetitionController();
-    private final WindowManager sceneManager = WindowManager.getInstance();
+    private final WindowManagerBasic windowManagerBasic = WindowManagerBasic.getInstance();
 
     public void initialize(){
         populatePageChoice();
@@ -47,7 +48,7 @@ public class OrganizerCompetitionsPageViewBasic {
 
 
     public void loadCompetitions(){
-        List<CompetitionBean> availableCompetitionsBean = createCompetitionController.organizerCompetitions("");
+        List<CompetitionBean> availableCompetitionsBean = createCompetitionController.organizerCompetitions(windowManagerBasic.getAuthBean().getToken());
         competitionList.getItems().clear();
         for (CompetitionBean competitionBean : availableCompetitionsBean) {
             String competitionDisplay = String.format(
@@ -109,7 +110,7 @@ public class OrganizerCompetitionsPageViewBasic {
             validateFields(name, description, date, location);
             coinsRequired = Integer.parseInt(coinsAmountField.getText());
             maxRegistrations = Integer.parseInt(maxRegistrationsField.getText());
-            createCompetitionController.createCompetition("",new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
+            createCompetitionController.createCompetition(windowManagerBasic.getAuthBean().getToken(),new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
             loadCompetitions();
         } catch (NumberFormatException | EmptyFieldException | WrongFormatException |
                  CompetitionAlreadyExistsException | SQLException e) {
@@ -122,19 +123,19 @@ public class OrganizerCompetitionsPageViewBasic {
         String page = choicePage.getValue();
         if(page.equals("Tricks")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/OrganizerTricksPageViewBasic.fxml");
+                windowManagerBasic.goToTricks();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Skateboards")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/OrganizerSkateboardsPageViewBasic.fxml");
+                windowManagerBasic.goToSkateboards();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
+                windowManagerBasic.logOut();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

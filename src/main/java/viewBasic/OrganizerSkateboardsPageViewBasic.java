@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
+import utils.WindowManagerBasic;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +25,7 @@ public class OrganizerSkateboardsPageViewBasic {
     @FXML private ListView<String> skateboardList;
     @FXML private ChoiceBox<String> choicePage;
 
-    WindowManager sceneManager = WindowManager.getInstance();
+    WindowManagerBasic windowManagerBasic = WindowManagerBasic.getInstance();
     CreateBoardController createSkateboardController = new CreateBoardController();
 
     public void initialize(){
@@ -42,7 +43,7 @@ public class OrganizerSkateboardsPageViewBasic {
     }
 
     public void loadSkateboards() {
-        List<BoardProfileBean> skateboards = createSkateboardController.getStoredBoards("");
+        List<BoardProfileBean> skateboards = createSkateboardController.getStoredBoards(windowManagerBasic.getAuthBean().getToken());
         skateboardList.getItems().clear();
         for (BoardProfileBean bean : skateboards) {
             String display = String.format(
@@ -77,7 +78,7 @@ public class OrganizerSkateboardsPageViewBasic {
                 throw new EmptyFieldException("Inserire correttamente campi");
             }
             int cost = Integer.parseInt(costTextField.getText());
-            createSkateboardController.createBoard( "",new BoardProfileBean(name, description, size, cost));
+            createSkateboardController.createBoard( windowManagerBasic.getAuthBean().getToken(),new BoardProfileBean(name, description, size, cost));
             loadSkateboards();
         }catch(NumberFormatException | EmptyFieldException e){
             errorLabel.setText(e.getMessage());
@@ -91,19 +92,19 @@ public class OrganizerSkateboardsPageViewBasic {
         String page = choicePage.getValue();
         if(page.equals("Tricks")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/OrganizerTricksPageViewBasic.fxml");
+                windowManagerBasic.goToTricks();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Competitions")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
+                windowManagerBasic.goToOrganizerCompetitions();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
+                windowManagerBasic.logOut();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

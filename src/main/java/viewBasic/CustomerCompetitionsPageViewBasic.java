@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
+import utils.WindowManagerBasic;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class CustomerCompetitionsPageViewBasic {
     private final SignCompetitionController signCompetitionController = new SignCompetitionController();
-    private final WindowManager sceneManager = WindowManager.getInstance();
+    private WindowManagerBasic windowManagerBasic = WindowManagerBasic.getInstance();
 
     @FXML private TextField locationSearch;
     @FXML private TextField monthField;
@@ -39,7 +40,7 @@ public class CustomerCompetitionsPageViewBasic {
 
 
     public void initialize() {
-        List<CompetitionBean> availableCompetitionsBean =  signCompetitionController.allAvailableCompetitions("");
+        List<CompetitionBean> availableCompetitionsBean =  signCompetitionController.allAvailableCompetitions(windowManagerBasic.getAuthBean().getToken());
         loadCompetitions(availableCompetitionsBean);
         updateWalletInfo();
         confirmRegistrationButton.setVisible(false);
@@ -48,7 +49,7 @@ public class CustomerCompetitionsPageViewBasic {
 
 
     private void populatePageChoice() {
-        List<String> list = Arrays.asList( "Commissions", "Learn", "Log Out");
+        List<String> list = Arrays.asList( "Board", "Learn", "Log Out");
         ObservableList<String> categories = FXCollections.observableArrayList(list);
         choicePage.setItems(categories);
         choicePage.setValue("Competitions");
@@ -56,7 +57,7 @@ public class CustomerCompetitionsPageViewBasic {
 
 
     public void updateWalletInfo(){
-        WalletBean walletBean = signCompetitionController.customerInfo("");
+        WalletBean walletBean = signCompetitionController.customerInfo(windowManagerBasic.getAuthBean().getToken());
         coinsLabel.setText(""+walletBean.getBalance());
     }
 
@@ -65,7 +66,7 @@ public class CustomerCompetitionsPageViewBasic {
             String competitionName = competitionNameField.getText();
             if(competitionName.isEmpty()){throw new EmptyFieldException("Campo nome competizione risulta vuoto!!");}
             CompetitionBean competitionBean = new CompetitionBean(competitionName);
-            CompetitionBean competitionBeanDetailed = signCompetitionController.competitionDetails("",competitionBean);
+            CompetitionBean competitionBeanDetailed = signCompetitionController.competitionDetails(windowManagerBasic.getAuthBean().getToken(),competitionBean);
             competitionNameLabel.setText(competitionBeanDetailed.getName());
             competitionCoinsLabel.setText(""+competitionBeanDetailed.getCoins());
             competitionDescriptionLabel.setText(competitionBeanDetailed.getDescription());
@@ -116,7 +117,7 @@ public class CustomerCompetitionsPageViewBasic {
             String date = formatValidateDate(monthField.getText(), dayField.getText(), yearField.getText());
             String location = locationSearch.getText();
             CompetitionBean competitionBean = new CompetitionBean(date, location);
-            List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation("",competitionBean);
+            List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation(windowManagerBasic.getAuthBean().getToken(),competitionBean);
             loadCompetitions(filteredCompetitions);
         }catch(WrongFormatException e){
             errorLabel.setText(e.getMessage());
@@ -129,7 +130,7 @@ public class CustomerCompetitionsPageViewBasic {
             String competitionName = competitionNameField.getText();
             if(competitionName.isEmpty()) throw  new EmptyFieldException("Campo nome competizione risulta vuoto!!!");
             CompetitionBean competitionBean = new CompetitionBean(competitionName);
-            RegistrationBean registrationBean = signCompetitionController.signToCompetition("",competitionBean, new RegistrationRequestBean());
+            RegistrationBean registrationBean = signCompetitionController.signToCompetition(windowManagerBasic.getAuthBean().getToken(),competitionBean, new RegistrationRequestBean());
             assignedSeatLabel.setText("Ti è stato fornito il codice: " +registrationBean.getRegistrationCode());
             generateCodeLabel.setText("Turno di gara: "+registrationBean.getAssignedSeat());
         } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
@@ -144,31 +145,21 @@ public class CustomerCompetitionsPageViewBasic {
         String page = choicePage.getValue();
         if(page.equals("Learn")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/CustomerTricksPageViewBasic.fxml");
+                windowManagerBasic.goToLearn();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
-        }else if(page.equals("Commissions")){
-            try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
-            } catch(IOException e){
-                errorLabel.setText(e.getMessage());
-            }
+        }else if(page.equals("Board")){
+                windowManagerBasic.goToOrderPage();
         }else if(page.equals("Log Out")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
+                windowManagerBasic.logOut();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }
     }
 
-    public void logOut(){
-        try {
-            sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
-        } catch(IOException e){
-            errorLabel.setText(e.getMessage());
-        }
-    }
+
 }
 

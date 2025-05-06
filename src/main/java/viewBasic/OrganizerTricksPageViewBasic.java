@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import utils.WindowManager;
+import utils.WindowManagerBasic;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -30,13 +31,13 @@ public class OrganizerTricksPageViewBasic {
     @FXML private TextField yearField;
     @FXML private ChoiceBox<String> choicePage;
     private Stage stage;
-    WindowManager sceneManager = WindowManager.getInstance();
+    WindowManagerBasic windowManagerBasic = WindowManagerBasic.getInstance();
 
 
     LearnTrickController learnTrickController = new LearnTrickController();
 
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed("");
+        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManagerBasic.getAuthBean().getToken());
         eventListView.getItems().clear();
         for (TrickBean trick : availableTricksBean) {
             String trickDisplay = String.format("<<Nome Trick: %s>>   -   <<Categoria: %s>>   -   <<Difficoltà: %s>>   -   <<Descrizione: %s>>",
@@ -56,10 +57,10 @@ public class OrganizerTricksPageViewBasic {
 
 
     private void populatePageChoice() {
-        List<String> list = Arrays.asList( "Commissions", "Competitions", "Log Out");
+        List<String> list = Arrays.asList(  "Skateboards", "Competitions", "Log Out");
         ObservableList<String> categories = FXCollections.observableArrayList(list);
         choicePage.setItems(categories);
-        choicePage.setValue("Commissions");
+        choicePage.setValue("Tricks");
     }
 
     @FXML
@@ -124,7 +125,7 @@ public class OrganizerTricksPageViewBasic {
 
         TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, category, date);
 
-        learnTrickController.RegisterTrick("",newTrick);
+        learnTrickController.RegisterTrick(windowManagerBasic.getAuthBean().getToken(),newTrick);
 
         categoryChoiceBox.setValue("flat");
         difficultyChoiceBox.setValue("medium");
@@ -149,23 +150,23 @@ public class OrganizerTricksPageViewBasic {
 
 
     @FXML
-    public void changePage(){
+    public void changePage() {
         String page = choicePage.getValue();
-        if(page.equals("Competitions")){
+        if (page.equals("Competitions")) {
             try {
-                sceneManager.loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
-            } catch(IOException e){
+                windowManagerBasic.goToOrganizerCompetitions();
+            } catch (IOException e) {
                 errorLabel.setText(e.getMessage());
             }
-        }else if(page.equals("Commissions")){
-            try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
-            } catch(IOException e){
+        }else if(page.equals("Skateboards")){
+            try{
+                windowManagerBasic.goToSkateboards();
+            }catch (IOException e) {
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
+                windowManagerBasic.logOut();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

@@ -1,8 +1,6 @@
 package utils;
 
 import beans.AuthBean;
-import beans.BoardBean;
-import beans.OrderSummaryBean;
 import controls.CustomOrderController;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -70,7 +68,7 @@ public class WindowManagerBasic{
         stage.show();
     }
 
-    public void loadMakeOrdersPage( ) {
+    public void goToOrderPage( ) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/CustomerOrdersPageView.fxml"));
             Parent root = loader.load();
@@ -132,7 +130,7 @@ public class WindowManagerBasic{
     }
 
     public void logOut() throws IOException {
-        loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
+        loadScene("viewFxmlBasic/LogPageViewBasic.fxml");
 
     }
 
