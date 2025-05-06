@@ -8,12 +8,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import utils.CustomerOrderView;
 import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.List;
 
-public class CustomerAllOrdersPageView {
+public class CustomerAllOrdersPageView implements CustomerOrderView {
 
     public CustomOrderController customOrderController;
     public WindowManager windowManager = WindowManager.getInstance();
@@ -116,7 +117,8 @@ public class CustomerAllOrdersPageView {
     }
 
 
-    public void orderUpdate(){
+    @Override
+    public void orderUpdate() {
         loadOrdersSubmitted();
     }
 

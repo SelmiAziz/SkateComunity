@@ -16,7 +16,7 @@ import java.util.List;
 public class CompetitionDbmsDao implements CompetitionDao {
     private static CompetitionDbmsDao instance = null;
     private final OrganizerDao organizerDao = DaoFactory.getInstance().createOrganizerDao();
-    private final CompetitionRegistrationDao competitionRegistrationDao = DaoFactory.getInstance().createCompetitionRegistrationDao();
+    private final RegistrationDao competitionRegistrationDao = DaoFactory.getInstance().createRegistrationDao();
     private final List<Competition> competitionList = new ArrayList<>();
 
     public static synchronized CompetitionDbmsDao getInstance(){
@@ -66,7 +66,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
                     String[] registrationIds = registrationIdsStr.split(",");
                     for (String id : registrationIds) {
                         int registrationId = Integer.parseInt(id);
-                        Registration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
+                        Registration competitionRegistration = competitionRegistrationDao.selectRegistrationById(registrationId);
                         competitionRegistration.setCompetition(competition);
                         competition.addCompetitionRegistration(competitionRegistration);
                     }
@@ -93,7 +93,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
             return newCompetitionList;
         }
 
-        CompetitionRegistrationDao competitionRegistrationDao = DaoFactory.getInstance().createCompetitionRegistrationDao();
+        RegistrationDao competitionRegistrationDao = DaoFactory.getInstance().createRegistrationDao();
         List<Competition> competitions = new ArrayList<>();
         List<String> organizerUsernames = new ArrayList<>(); // Lista dei nomi degli organizzatori
         List<String> registrationIdsList = new ArrayList<>(); // Lista delle stringhe con ID registrazioni
@@ -142,7 +142,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
                     for (String id : registrationIdsStr.split(",")) {
                         int registrationId = Integer.parseInt(id);
-                        Registration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
+                        Registration competitionRegistration = competitionRegistrationDao.selectRegistrationById(registrationId);
                         if (competitionRegistration != null) {
                             competitionRegistration.setCompetition(competition);
                             competition.addCompetitionRegistration(competitionRegistration);
@@ -255,7 +255,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
             if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
                 for (String id : registrationIdsStr.split(",")) {
                     int registrationId = Integer.parseInt(id);
-                    Registration competitionRegistration = competitionRegistrationDao.selectCompetitionRegistrationById(registrationId);
+                    Registration competitionRegistration = competitionRegistrationDao.selectRegistrationById(registrationId);
                     if (competitionRegistration != null) {
                         competitionRegistration.setCompetition(competition);
                         competition.addCompetitionRegistration(competitionRegistration);
@@ -297,7 +297,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
             stmt.executeUpdate();
 
             for (Registration competitionRegistration : competition.getCompetitionRegistrations()) {
-                competitionRegistrationDao.addCompetitionRegistration(competitionRegistration);
+                competitionRegistrationDao.addRegistration(competitionRegistration);
             }
         }catch (SQLException e) {
             e.printStackTrace();

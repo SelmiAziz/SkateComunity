@@ -20,7 +20,7 @@ public class DaoDbmsFactory extends DaoFactory {
 
     public CompetitionDbmsDao createCompetitionDao(){ return CompetitionDbmsDao.getInstance();}
 
-    public CompetitionRegistrationDbmsDao createCompetitionRegistrationDao(){return CompetitionRegistrationDbmsDao.getInstance();};
+    public RegistrationDbmsDao createRegistrationDao(){return RegistrationDbmsDao.getInstance();};
 
     public TrickDbmsDao createTrickDao(){return TrickDbmsDao.getInstance();}
 

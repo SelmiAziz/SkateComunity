@@ -5,24 +5,24 @@ import model.Registration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompetitionRegistrationDemoDao implements CompetitionRegistrationDao {
-    private static CompetitionRegistrationDemoDao instance = null;
+public class RegistrationDemoDao implements RegistrationDao {
+    private static RegistrationDemoDao instance = null;
     private final List<Registration> competitionRegistrationList = new ArrayList<>();
 
-    public static synchronized CompetitionRegistrationDemoDao getInstance(){
+    public static synchronized RegistrationDemoDao getInstance(){
         if(instance == null){
-            instance = new CompetitionRegistrationDemoDao();
+            instance = new RegistrationDemoDao();
         }
         return instance;
     }
 
     @Override
-    public void addCompetitionRegistration(Registration competitionRegistration) {
+    public void addRegistration(Registration competitionRegistration) {
         this.competitionRegistrationList.add(competitionRegistration);
     }
 
     @Override
-    public Registration selectCompetitionRegistrationById(int id) {
+    public Registration selectRegistrationById(int id) {
         for(Registration competitionRegistration : competitionRegistrationList){
             if(competitionRegistration.getRegistrationId() == id){
                 return competitionRegistration;

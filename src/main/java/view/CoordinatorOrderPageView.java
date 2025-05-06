@@ -9,10 +9,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import utils.CoordinatorOrderView;
 
 import java.util.List;
 
-public class CoordinatorOrderPageView {
+public class CoordinatorOrderPageView implements CoordinatorOrderView {
     CustomOrderController customOrderController ;
 
     public void setCustomOrderController(CustomOrderController customOrderController){
@@ -142,8 +143,7 @@ public class CoordinatorOrderPageView {
     }
 
 
-
-
+    @Override
     public void newOrder(){
         loadOrders();
     }

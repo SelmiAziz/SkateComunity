@@ -10,11 +10,13 @@ public class Registration {
     private String registrationCode;
     private String assignedTurn;
 
-    public Registration(int registrationId , int participationNumber, String registrationCode, String assignedTurn){
+    public Registration(int registrationId , int participationNumber, String registrationCode, String assignedTurn, String registrationName, String email){
         this.registrationId = registrationId;
         this.participationNumber = participationNumber;
         this.registrationCode = registrationCode;
         this.assignedTurn = assignedTurn;
+        this.registrationName = registrationName;
+        this.email = email;
     }
 
 

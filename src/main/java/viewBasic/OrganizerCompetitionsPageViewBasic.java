@@ -134,7 +134,7 @@ public class OrganizerCompetitionsPageViewBasic {
             }
         }else if(page.equals("Log Out")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

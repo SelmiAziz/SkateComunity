@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
-import utils.SessionManager;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -94,7 +93,7 @@ public class CustomerTricksPageViewBasic {
             }
         }else if(page.equals("Log Out")){
             try {
-                windowManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+                windowManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

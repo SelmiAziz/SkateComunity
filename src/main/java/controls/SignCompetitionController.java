@@ -17,7 +17,7 @@ import java.util.List;
 public class SignCompetitionController {
     private final DaoFactory daoFactory = DaoFactory.getInstance();
     private final CompetitionDao competitionDao = daoFactory.createCompetitionDao();
-    private final CompetitionRegistrationDao competitionRegistrationDao = daoFactory.createCompetitionRegistrationDao();
+    private final RegistrationDao competitionRegistrationDao = daoFactory.createRegistrationDao();
     private final CustomerDao customerDao = daoFactory.createCostumerDao();
     private final SessionManager sessionManager = SessionManager.getInstance();
     private final PaymentController paymentController = new PaymentController();
@@ -93,7 +93,7 @@ public class SignCompetitionController {
         registration.setParticipant(currentCustomer);
         registration.setCompetition(competition);
         competition.addCompetitionRegistration(registration);
-        competitionRegistrationDao.addCompetitionRegistration(registration);
+        competitionRegistrationDao.addRegistration(registration);
 
         RegistrationBean registrationBean = new RegistrationBean();
         registrationBean.setCurrentRegistrationNumber(registrationNumber);

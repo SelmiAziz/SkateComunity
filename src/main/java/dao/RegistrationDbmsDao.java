@@ -9,24 +9,24 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompetitionRegistrationDbmsDao implements CompetitionRegistrationDao {
+public class RegistrationDbmsDao implements RegistrationDao {
     private final CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
     private final List<Registration> competitionRegistrationList = new ArrayList<>();
-    private static CompetitionRegistrationDbmsDao instance = null;
+    private static RegistrationDbmsDao instance = null;
 
-    public static synchronized CompetitionRegistrationDbmsDao getInstance(){
+    public static synchronized RegistrationDbmsDao getInstance(){
         if(instance == null){
-            instance = new CompetitionRegistrationDbmsDao();
+            instance = new RegistrationDbmsDao();
         }
         return instance;
     }
 
     @Override
-    public void addCompetitionRegistration(Registration competitionRegistration) {
+    public void addRegistration(Registration competitionRegistration) {
         competitionRegistrationList.add(competitionRegistration);
 
-        String sql = "INSERT INTO registrations (numberRegistration, customerUsername, competitionName, registrationCode, assignedSeat) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO registrations (numberRegistration, customerUsername, competitionName, registrationCode, assignedSeat, registrationName, email) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -35,6 +35,8 @@ public class CompetitionRegistrationDbmsDao implements CompetitionRegistrationDa
             stmt.setString(3, competitionRegistration.getCompetition().getName());
             stmt.setString(4, competitionRegistration.getRegistrationCode());
             stmt.setString(5, competitionRegistration.getAssignedTurn());
+            stmt.setString(6, competitionRegistration.getRegistrationName());
+            stmt.setString(7, competitionRegistration.getEmail());
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
@@ -51,14 +53,14 @@ public class CompetitionRegistrationDbmsDao implements CompetitionRegistrationDa
     }
 
     @Override
-    public Registration selectCompetitionRegistrationById(int registrationId) {
+    public Registration selectRegistrationById(int registrationId) {
         for(Registration competitionRegistration: competitionRegistrationList){
             if(competitionRegistration.getRegistrationId() == registrationId){
                 return competitionRegistration;
             }
         }
 
-        String sql = "SELECT er.numberRegistration, p.username, er.competitionName, er.registrationCode, er.assignedSeat " +
+        String sql = "SELECT er.numberRegistration, p.username, er.competitionName, er.registrationCode, er.assignedSeat, er.registrationName, er.email " +
                 "FROM registrations er " +
                 "JOIN users p ON er.customerUsername = p.username " +
                 "WHERE er.idRegistration = ?";
@@ -73,8 +75,10 @@ public class CompetitionRegistrationDbmsDao implements CompetitionRegistrationDa
                 String customerName = rs.getString("username");
                 String registrationCode = rs.getString("registrationCode");
                 String assignedSeat = rs.getString("assignedSeat");
+                String registrationName = rs.getString("registrationName");
+                String email = rs.getString("email");
 
-                Registration competitionRegistration = new Registration(registrationId, numberRegistration, registrationCode, assignedSeat);
+                Registration competitionRegistration = new Registration(registrationId, numberRegistration, registrationCode, assignedSeat, registrationName, email);
                 Customer customer = customerDao.selectCustomerByUsername(customerName);
                 competitionRegistration.setParticipant(customer);
                 return competitionRegistration;

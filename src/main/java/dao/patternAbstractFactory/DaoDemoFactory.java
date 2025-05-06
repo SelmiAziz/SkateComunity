@@ -23,7 +23,7 @@ public class DaoDemoFactory extends DaoFactory {
 
     public TrickDemoDao createTrickDao(){return TrickDemoDao.getInstance();}
 
-    public CompetitionRegistrationDemoDao createCompetitionRegistrationDao(){return CompetitionRegistrationDemoDao.getInstance();}
+    public RegistrationDemoDao createRegistrationDao(){return RegistrationDemoDao.getInstance();}
 
     public BoardDemoDao createBoardDao(){return BoardDemoDao.getInstance();}
 

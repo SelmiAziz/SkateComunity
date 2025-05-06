@@ -8,7 +8,7 @@ abstract public class DaoFactory {
     public abstract CustomerDao createCostumerDao();
     public abstract OrganizerDao createOrganizerDao();
     public abstract CompetitionDao createCompetitionDao();
-    public abstract CompetitionRegistrationDao createCompetitionRegistrationDao();
+    public abstract RegistrationDao createRegistrationDao();
     public abstract TrickDao createTrickDao();
     public abstract BoardDao createBoardDao();
     public abstract CustomOrderDao createCustomOrderDao();

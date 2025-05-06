@@ -149,13 +149,13 @@ public class CustomerCompetitionsPageViewBasic {
             }
         }else if(page.equals("Commissions")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
             try {
-                sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+                sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
@@ -164,7 +164,7 @@ public class CustomerCompetitionsPageViewBasic {
 
     public void logOut(){
         try {
-            sceneManager.loadScene("viewFxmlBasic/LogPageBasicView.fxml");
+            sceneManager.loadScene("viewFxmlBasic/LogPageBasicViewBasic.fxml");
         } catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
