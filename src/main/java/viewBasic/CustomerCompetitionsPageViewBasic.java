@@ -37,6 +37,7 @@ public class CustomerCompetitionsPageViewBasic {
     @FXML private Button confirmRegistrationButton;
     @FXML private ChoiceBox<String> choicePage;
 
+
     public void initialize() {
         List<CompetitionBean> availableCompetitionsBean =  signCompetitionController.allAvailableCompetitions("");
         loadCompetitions(availableCompetitionsBean);

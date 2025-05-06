@@ -7,11 +7,7 @@ import dao.patternAbstractFactory.DaoFactory;
 import exceptions.SessionExpiredException;
 import model.*;
 import model.decorator.*;
-import utils.DateConverter;
-import utils.Session;
-import utils.SessionManager;
-import view.CoordinatorOrderPageView;
-import view.CustomerAllOrdersPageView;
+import utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +17,16 @@ public class CustomOrderController {
     private final CustomOrderDao customOrderDao = DaoFactory.getInstance().createCustomOrderDao();
     private final CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
     private final ProgressNoteDao progressNoteDao = DaoFactory.getInstance().createProgressNoteDao();
-    private CustomerAllOrdersPageView customerAllOrdersPageView;
-    private CoordinatorOrderPageView  coordinatorOrderPageView;
+    private CustomerOrderView customerAllOrdersPageView;
+    private CoordinatorOrderView coordinatorOrderPageView;
     private final DateConverter dateConverter = new DateConverter();
     private final PaymentController paymentController = new PaymentController();
 
-    public void setCoordinatorOrderPageView(CoordinatorOrderPageView coordinatorOrderPageView) {
+    public void setCoordinatorOrderView(CoordinatorOrderView coordinatorOrderPageView) {
         this.coordinatorOrderPageView = coordinatorOrderPageView;
     }
 
-    public void setCustomAllOrdersPageView(CustomerAllOrdersPageView customerAllOrdersPageView) {
+    public void setCustomerOrderView(CustomerOrderView customerAllOrdersPageView) {
         this.customerAllOrdersPageView = customerAllOrdersPageView;
     }
 
@@ -311,7 +307,6 @@ public class CustomOrderController {
         walletBean.setBalance(wallet.getBalance());
         return walletBean;
     }
-
 
 }
 

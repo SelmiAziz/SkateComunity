@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import view.*;
+import viewBasic.CoordinatorOrderPageViewBasic;
 import viewBasic.CustomerOrdersPageViewBasic;
 
 import java.io.IOException;
@@ -75,6 +76,8 @@ public class WindowManagerBasic{
             Parent root = loader.load();
 
             CustomerOrdersPageViewBasic viewController = loader.getController();
+
+            CustomOrderController controller = new CustomOrderController();
             viewController.setController(controller);
             openCoordinator(controller);
 
@@ -89,30 +92,6 @@ public class WindowManagerBasic{
     }
 
 
-    public void goToOrdersPage() throws IOException {
-        loadScene("viewFxmlBasic/CustomerOrdersPageViewBasic.fxml");
-    }
-
-    public void loadAllOrdersPage(CustomOrderController controller, OrderSummaryBean customOrderBean) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerAllOrdersPageView.fxml"));
-            Parent root = loader.load();
-
-            CustomerAllOrdersPageView viewController = loader.getController();
-            viewController.setCustomOrderBean(customOrderBean);
-            viewController.setCustomOrderController(controller);
-            controller.setCustomAllOrdersPageView(viewController);
-
-            Scene scene = new Scene(root, 1200, 800);
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.show();
-            viewController.initAfter();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
 
@@ -124,13 +103,13 @@ public class WindowManagerBasic{
         }
 
         stageBr = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CoordinatorOrdersPageView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/CoordinatorOrdersPageViewBasic.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 1200, 800);
-        CoordinatorOrderPageView coordinatorController = loader.getController();
-        customOrderController.setCoordinatorOrderPageView(coordinatorController);
-        coordinatorController.setCustomOrderController(customOrderController);
-        coordinatorController.loadOrders();
+        CoordinatorOrderPageViewBasic coordinatorController = loader.getController();
+        customOrderController.setCoordinatorOrderView(coordinatorController);
+        coordinatorController.setController(customOrderController);
+        coordinatorController.displayOrders();
 
         stageBr.setResizable(false);
         stageBr.setScene(scene);

@@ -101,7 +101,7 @@ public class WindowManager {
             CustomerAllOrdersPageView viewController = loader.getController();
             viewController.setCustomOrderBean(customOrderBean);
             viewController.setCustomOrderController(controller);
-            controller.setCustomAllOrdersPageView(viewController);
+            controller.setCustomerOrderView(viewController);
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setResizable(false);
@@ -122,7 +122,7 @@ public class WindowManager {
 
             CustomerAllOrdersPageView viewController = loader.getController();
             viewController.setCustomOrderController(controller);
-            controller.setCustomAllOrdersPageView(viewController);
+            controller.setCustomerOrderView(viewController);
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setResizable(false);
@@ -147,8 +147,8 @@ public class WindowManager {
         Parent root = loader.load();
         Scene scene = new Scene(root, 1200, 800);
         CoordinatorOrderPageView coordinatorController = loader.getController();
-        customOrderController.setCoordinatorOrderPageView(coordinatorController);
-        coordinatorController.setCustomOrderController(customOrderController);
+        customOrderController.setCoordinatorOrderView(coordinatorController);
+        coordinatorController.setController(customOrderController);
         coordinatorController.loadOrders();
 
         stageBr.setResizable(false);

@@ -16,7 +16,7 @@ import java.util.List;
 public class CoordinatorOrderPageView implements CoordinatorOrderView {
     CustomOrderController customOrderController ;
 
-    public void setCustomOrderController(CustomOrderController customOrderController){
+    public void setController(CustomOrderController customOrderController){
         this.customOrderController = customOrderController;
     }
     OrderSummaryBean orderSummaryBean;
