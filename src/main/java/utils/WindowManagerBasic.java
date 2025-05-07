@@ -70,14 +70,15 @@ public class WindowManagerBasic{
 
     public void goToOrderPage( ) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/CustomerOrdersPageView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/CustomerOrdersPageViewBasic.fxml"));
             Parent root = loader.load();
 
             CustomerOrdersPageViewBasic viewController = loader.getController();
 
             CustomOrderController controller = new CustomOrderController();
             viewController.setController(controller);
-            openCoordinator(controller);
+            viewController.initializeAfter();
+            //openCoordinator(controller);
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setResizable(false);

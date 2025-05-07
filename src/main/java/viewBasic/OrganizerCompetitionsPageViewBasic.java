@@ -39,8 +39,8 @@ public class OrganizerCompetitionsPageViewBasic {
 
     private void populatePageChoice() {
         List<String> list = Arrays.asList( "Skateboards", "Tricks", "Log Out");
-        ObservableList<String> categories = FXCollections.observableArrayList(list);
-        choicePage.setItems(categories);
+        ObservableList<String> pages = FXCollections.observableArrayList(list);
+        choicePage.setItems(pages);
         choicePage.setValue("Competitions");
     }
 

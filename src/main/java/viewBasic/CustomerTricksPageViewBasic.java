@@ -39,8 +39,8 @@ public class CustomerTricksPageViewBasic {
 
     private void populatePageChoice() {
         List<String> list = Arrays.asList( "Board", "Competitions", "Log Out");
-        ObservableList<String> categories = FXCollections.observableArrayList(list);
-        choicePage.setItems(categories);
+        ObservableList<String> pages = FXCollections.observableArrayList(list);
+        choicePage.setItems(pages);
         choicePage.setValue("Learn");
     }
 

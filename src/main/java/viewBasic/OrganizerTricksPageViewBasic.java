@@ -136,8 +136,8 @@ public class OrganizerTricksPageViewBasic {
 
     private void populateCategoryChoiceBox() {
         List<String> categoryList = Arrays.asList("Flat", "Grind", "Ramp");
-        ObservableList<String> categories = FXCollections.observableArrayList(categoryList);
-        categoryChoiceBox.setItems(categories);
+        ObservableList<String> pages = FXCollections.observableArrayList(categoryList);
+        categoryChoiceBox.setItems(pages);
         categoryChoiceBox.setValue("flat");
     }
 

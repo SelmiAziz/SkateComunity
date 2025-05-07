@@ -10,7 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.WindowManager;
 import utils.WindowManagerBasic;
 
 import java.io.IOException;
@@ -50,8 +49,8 @@ public class CustomerCompetitionsPageViewBasic {
 
     private void populatePageChoice() {
         List<String> list = Arrays.asList( "Board", "Learn", "Log Out");
-        ObservableList<String> categories = FXCollections.observableArrayList(list);
-        choicePage.setItems(categories);
+        ObservableList<String> pages = FXCollections.observableArrayList(list);
+        choicePage.setItems(pages);
         choicePage.setValue("Competitions");
     }
 

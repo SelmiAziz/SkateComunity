@@ -1,5 +1,6 @@
 package view;
 
+import beans.OrderBean;
 import beans.OrderSummaryBean;
 import beans.ProgressNoteBean;
 import controls.CustomOrderController;
@@ -77,7 +78,9 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
 
     public void displayNotes(){
         notesPane.setVisible(true);
-        List<ProgressNoteBean>progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManager.getAuthBean().getToken(),customOrderBean);
+        OrderBean orderBean = new OrderBean();
+        orderBean.setId(customOrderBean.getId());
+        List<ProgressNoteBean>progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManager.getAuthBean().getToken(),orderBean);
         notesList.getItems().clear();
         for(ProgressNoteBean progressNoteBean: progressNoteBeanList){
             String note = String.format(

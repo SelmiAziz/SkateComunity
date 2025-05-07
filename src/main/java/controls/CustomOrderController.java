@@ -279,15 +279,16 @@ public class CustomOrderController {
 
 
 
-    public List<ProgressNoteBean> getProgressNotesOrder(String token, OrderSummaryBean customOrderBean) throws SessionExpiredException{
+    public List<ProgressNoteBean> getProgressNotesOrder(String token, OrderBean orderBean) throws SessionExpiredException{
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        Order order = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+        Order order = customOrderDao.selectCustomOrderById(orderBean.getId());
         List<ProgressNote> progressNoteList = order.progressNoteChronology();
         List<ProgressNoteBean> progressNoteBeanList = new ArrayList<>();
         for(ProgressNote progressNote: progressNoteList){
+            System.out.println("Girando");
             ProgressNoteBean progressNoteBean = new ProgressNoteBean();
             progressNoteBean.setComment(progressNote.getComment());
             progressNoteBean.setDate(dateConverter.localDateToString(progressNote.getDate()));
