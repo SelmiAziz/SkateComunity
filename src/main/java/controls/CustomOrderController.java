@@ -288,7 +288,6 @@ public class CustomOrderController {
         List<ProgressNote> progressNoteList = order.progressNoteChronology();
         List<ProgressNoteBean> progressNoteBeanList = new ArrayList<>();
         for(ProgressNote progressNote: progressNoteList){
-            System.out.println("Girando");
             ProgressNoteBean progressNoteBean = new ProgressNoteBean();
             progressNoteBean.setComment(progressNote.getComment());
             progressNoteBean.setDate(dateConverter.localDateToString(progressNote.getDate()));

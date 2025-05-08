@@ -65,8 +65,8 @@ public class CustomerOrdersPageView {
         gripSlider.setMax(0.75);
         gripSlider.setValue(0.6);
 
-        warrantySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, 0, 1));
-        pilesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 2, 1, 1));
+        warrantySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12, 0, 1));
+        pilesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 2, 1, 1));
         noseSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 50, 10, 1));
         tailSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 50, 10, 1));
 

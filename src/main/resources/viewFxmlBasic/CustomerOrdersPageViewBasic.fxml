@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,6 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ComboBox?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewBasic.CustomerOrdersPageViewBasic">
     <top>
         <AnchorPane prefHeight="95.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
@@ -29,7 +31,7 @@
         </AnchorPane>
     </top>
     <left>
-        <AnchorPane prefHeight="705.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;">
+        <AnchorPane fx:id="designBoard" prefHeight="705.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;">
             <children>
 
                 <Label fx:id="errorLabel" layoutX="20.0" layoutY="541.0" prefHeight="22.0" prefWidth="322.0" textFill="#208672">
@@ -38,28 +40,8 @@
                     </font>
                 </Label>
                 <ListView fx:id="allListView" layoutX="31.0" layoutY="64.0" prefHeight="376.0" prefWidth="622.0" />
-            <Button layoutX="31.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#designConf" prefHeight="26.0" prefWidth="116.0" style="-fx-background-color: #1ABC9C;" text="design" textFill="WHITE">
-               <effect>
-                  <DropShadow height="5.0" radius="2.0" width="5.0" />
-               </effect>
-            </Button>
-            <Button layoutX="166.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#ordersConf" prefHeight="26.0" prefWidth="116.0" style="-fx-background-color: #1ABC9C;" text="Orders" textFill="WHITE">
-               <effect>
-                  <DropShadow height="5.0" radius="2.0" width="5.0" />
-               </effect>
-            </Button>
-            <Pane fx:id="designPane" layoutX="31.0" layoutY="481.0" prefHeight="68.0" prefWidth="621.0" style="-fx-background-color: #ffffff;">
+            <Pane fx:id="designControlPane" layoutX="31.0" layoutY="503.0" prefHeight="68.0" prefWidth="621.0" style="-fx-background-color: #ffffff;">
                <children>
-                  <Button layoutY="21.0" mnemonicParsing="false" onMouseClicked="#displayDesignedBoards" prefHeight="26.0" prefWidth="110.0" style="-fx-background-color: #1ABC9C;" text="designed" textFill="WHITE">
-                     <effect>
-                        <DropShadow height="5.0" radius="2.0" width="5.0" />
-                     </effect>
-                  </Button>
-                  <Button layoutX="130.0" layoutY="21.0" mnemonicParsing="false" onMouseClicked="#displayAvailableBoards" prefHeight="26.0" prefWidth="104.0" style="-fx-background-color: #1ABC9C;" text="available" textFill="WHITE">
-                     <effect>
-                        <DropShadow height="5.0" radius="2.0" width="5.0" />
-                     </effect>
-                  </Button>
                       <TextField fx:id="numberBoardField" layoutX="443.0" layoutY="17.0" prefHeight="26.0" prefWidth="114.0" />
                       <Button layoutX="570.0" layoutY="17.0" mnemonicParsing="false" onMouseClicked="#displayBoard" style="-fx-background-color: #1ABC9C;" text="Learn" textFill="WHITE">
                           <effect>
@@ -67,19 +49,40 @@
                           </effect>
                       </Button>
                   <Label layoutX="294.0" layoutY="21.0" prefHeight="18.0" prefWidth="144.0" text="Insert number board:" />
-                  <Pane fx:id="designPane1" layoutX="-1.0" prefHeight="68.0" prefWidth="624.0" style="-fx-background-color: #ffffff;">
-                     <children>
-                        <TextField fx:id="numberOrderField" layoutX="443.0" layoutY="17.0" prefHeight="26.0" prefWidth="114.0" />
-                        <Button layoutX="570.0" layoutY="17.0" mnemonicParsing="false" onMouseClicked="#displayProgressNotes" style="-fx-background-color: #1ABC9C;" text="Learn" textFill="WHITE">
-                           <effect>
-                              <DropShadow height="5.0" radius="2.0" width="5.0" />
-                           </effect>
-                        </Button>
-                        <Label layoutX="294.0" layoutY="21.0" prefHeight="18.0" prefWidth="144.0" text="inser order number:" />
-                     </children>
-                  </Pane>
+                  <Button fx:id="designButton" layoutX="5.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#displayDesignedBoards" prefHeight="26.0" prefWidth="116.0" style="-fx-background-color: #1ABC9C;" text="Design" textFill="WHITE">
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
+                  </Button>
+                  <Button fx:id="availableButton" layoutX="155.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#displayAvailableBoards" prefHeight="26.0" prefWidth="116.0" style="-fx-background-color: #1ABC9C;" text="Available" textFill="WHITE">
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
+                  </Button>
                </children>
             </Pane>
+            <Button fx:id="boardButton" layoutX="31.0" layoutY="29.0" mnemonicParsing="false" onAction="#boardConf" style="-fx-background-color: #1ABC9C;" text="Board" textFill="WHITE">
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0" />
+               </effect>
+            </Button>
+            <Button fx:id="orderButton" layoutX="103.0" layoutY="29.0" mnemonicParsing="false" onAction="#orderConf" style="-fx-background-color: #1ABC9C;" text="Order" textFill="WHITE">
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0" />
+               </effect>
+            </Button>
+            <Pane fx:id="orderControlPane" layoutX="33.0" layoutY="501.0" prefHeight="68.0" prefWidth="621.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <TextField fx:id="numberOrderField" layoutX="443.0" layoutY="17.0" prefHeight="26.0" prefWidth="114.0" />
+                  <Button layoutX="570.0" layoutY="17.0" mnemonicParsing="false" onMouseClicked="#displayProgressNotes" style="-fx-background-color: #1ABC9C;" text="Learn" textFill="WHITE">
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
+                  </Button>
+                  <Label layoutX="294.0" layoutY="21.0" prefHeight="18.0" prefWidth="144.0" text="Insert number order:" />
+               </children>
+            </Pane>
+            <Pane fx:id="notesPane" layoutX="61.0" layoutY="143.0" prefHeight="527.0" prefWidth="499.0" />
             </children>
         </AnchorPane>
     </left>
@@ -89,29 +92,34 @@
     <center>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="descriptionLabel" layoutX="71.0" layoutY="193.0" prefHeight="18.0" prefWidth="394.0" textFill="#00000087" />
-                <Label fx:id="categoryLabel" layoutX="71.0" layoutY="144.0" prefHeight="18.0" prefWidth="391.0" textFill="#00000087" />
-                <Label fx:id="difficultyLabel" layoutX="71.0" layoutY="248.0" prefHeight="18.0" prefWidth="345.0" textFill="#00000087" />
-            <BorderPane fx:id="boardPane" layoutX="24.0" layoutY="64.0" prefHeight="523.0" prefWidth="499.0">
-               <center>
-                  <BorderPane fx:id="orderSubmitPane" prefHeight="523.0" prefWidth="499.0" BorderPane.alignment="CENTER">
-                     <center>
-                        <BorderPane fx:id="orderMonitorPane" prefHeight="523.0" prefWidth="499.0" BorderPane.alignment="CENTER">
-                           <top>
-                              <Pane fx:id="notesPane" prefHeight="527.0" prefWidth="499.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <ListView fx:id="notesListView" layoutX="-6.0" layoutY="52.0" prefHeight="424.0" prefWidth="511.0" />
-                                    <Label layoutX="22.0" layoutY="10.0" text="mAMMA" />
-                                    <Label layoutX="48.0" layoutY="495.0" text="Lungo" />
-                                 </children>
-                              </Pane>
-                           </top></BorderPane>
-                     </center>
-                  </BorderPane>
-               </center>
-            </BorderPane>
+            <Pane fx:id="boardPane" layoutX="35.0" layoutY="53.0" prefHeight="509.0" prefWidth="466.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="24.0" text="Customize your board" textFill="#1abc9c">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="noseCombo" layoutX="270.0" layoutY="60.0" prefWidth="150.0" />
+                  <ComboBox fx:id="tailCombo" layoutX="270.0" layoutY="110.0" prefWidth="150.0" />
+                  <ComboBox fx:id="warrantyCombo" layoutX="270.0" layoutY="160.0" prefWidth="150.0" />
+                  <ComboBox fx:id="pilesCombo" layoutX="270.0" layoutY="210.0" prefWidth="150.0" />
+                  <ComboBox fx:id="gripCombo" layoutX="270.0" layoutY="260.0" prefWidth="150.0" />
+                  <Label layoutX="14.0" layoutY="60.0" prefHeight="18.0" prefWidth="180.0" text="Insert mm nose concave:" />
+                  <Label layoutX="14.0" layoutY="110.0" prefHeight="18.0" prefWidth="177.0" text="Insert mm tail concave:" />
+                  <Label layoutX="14.0" layoutY="160.0" prefHeight="18.0" prefWidth="121.0" text="warranty months:" />
+                  <Label layoutX="14.0" layoutY="210.0" prefHeight="18.0" prefWidth="75.0" text="Extra piles:" />
+                  <Label layoutX="14.0" layoutY="260.0" prefHeight="18.0" prefWidth="93.0" text="board grip:" />
+                  <TextArea fx:id="resultArea" layoutY="356.0" prefHeight="109.0" prefWidth="466.0" />
+                  <Button layoutX="14.0" layoutY="309.0" mnemonicParsing="false" onAction="#process" style="-fx-background-color: #1ABC9C;" text="Process" textFill="WHITE">
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
+                  </Button>
+               </children>
+            </Pane>
+            <ListView fx:id="notesListView" layoutX="65.0" layoutY="564.0" prefHeight="424.0" prefWidth="511.0" />
 
-            </children>
+                  </children>
         </AnchorPane>
     </center>
 </BorderPane>
