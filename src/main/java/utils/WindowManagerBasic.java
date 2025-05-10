@@ -78,7 +78,7 @@ public class WindowManagerBasic{
             CustomOrderController controller = new CustomOrderController();
             viewController.setController(controller);
             viewController.initializeAfter();
-            //openCoordinator(controller);
+            openCoordinator(controller);
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setResizable(false);

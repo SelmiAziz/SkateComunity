@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewBasic.CoordinatorOrderPageViewBasic">
+    <bottom>
+        <AnchorPane prefHeight="20.0" prefWidth="1200.0" style="-fx-background-color: #1ABC9C;" BorderPane.alignment="CENTER" />
+    </bottom>
+    <left>
+        <AnchorPane prefHeight="780.0" prefWidth="563.0" BorderPane.alignment="CENTER">
+            <children>
+                <AnchorPane prefHeight="781.0" prefWidth="569.0" style="-fx-background-color: #ffffff;">
+                    <children>
+                        <Label layoutX="26.0" layoutY="125.0" prefHeight="18.0" prefWidth="113.0" text="List of orders" />
+                        <Label fx:id="errorLabel" layoutX="25.0" layoutY="675.0" prefHeight="18.0" prefWidth="322.0" />
+                  <ListView layoutX="25.0" layoutY="151.0" prefHeight="422.0" prefWidth="514.0" />
+                  <ComboBox layoutX="25.0" layoutY="621.0" prefWidth="150.0" />
+                  <Button layoutX="206.0" layoutY="621.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="accept" textFill="WHITE">
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
+                  </Button>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </left>
+    <center>
+        <AnchorPane prefHeight="780.0" prefWidth="508.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="361.0" layoutY="530.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.png" />
+                    </image>
+                </ImageView>
+                <Pane layoutX="40.0" layoutY="341.0" prefHeight="272.0" prefWidth="566.0">
+                    <children>
+                        <Pane fx:id="postOrderPane" layoutX="20.0" layoutY="14.0" prefHeight="223.0" prefWidth="476.0">
+                            <children>
+                                <TextArea fx:id="noteArea" layoutX="3.0" layoutY="43.0" prefHeight="59.0" prefWidth="472.0" />
+                                <Text fill="#00000087" layoutX="8.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a note:" />
+                                <Button layoutX="354.0" layoutY="170.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="post note" textFill="WHITE">
+                                    <effect>
+                                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                                    </effect>
+                                </Button>
+                                <TextField fx:id="dateField" layoutX="90.0" layoutY="177.0" prefHeight="26.0" prefWidth="47.0" />
+                                <Text fill="#00000087" layoutX="9.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" />
+                        <TextField fx:id="dateField1" layoutX="169.0" layoutY="175.0" prefHeight="26.0" prefWidth="46.0" />
+                        <TextField fx:id="dateField11" layoutX="257.0" layoutY="173.0" prefHeight="26.0" prefWidth="46.0" />
+                        <Button layoutX="101.0" layoutY="116.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="yes" textFill="WHITE">
+                           <effect>
+                              <DropShadow height="5.0" radius="2.0" width="5.0" />
+                           </effect>
+                        </Button>
+                        <Button layoutX="236.0" layoutY="116.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="no" textFill="WHITE">
+                           <effect>
+                              <DropShadow height="5.0" radius="2.0" width="5.0" />
+                           </effect>
+                        </Button>
+                        <Text fill="#00000087" layoutX="8.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="complete" />
+                            </children>
+                        </Pane>
+                        <Pane fx:id="acceptanceOrderPane" layoutX="96.0" layoutY="-78.0" prefHeight="103.0" prefWidth="304.0">
+                            <children>
+                                <Button layoutX="6.0" layoutY="39.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="accept" textFill="WHITE">
+                                    <effect>
+                                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                                    </effect>
+                                </Button>
+                                <Button layoutX="152.0" layoutY="39.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #949494;" text="reject" textFill="WHITE">
+                                    <effect>
+                                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                                    </effect>
+                                </Button>
+                            </children>
+                        </Pane>
+                    </children>
+                </Pane>
+                <Pane fx:id="detailsOrderPane" layoutX="57.0" layoutY="133.0" prefHeight="168.0" prefWidth="485.0">
+                    <children>
+                        <Label layoutY="-1.0" prefHeight="18.0" prefWidth="195.0" text="Informazioni inerenti all'ordine" />
+                        <TextArea fx:id="detailsArea" layoutY="21.0" prefHeight="138.0" prefWidth="485.0" />
+                    </children>
+                </Pane>
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

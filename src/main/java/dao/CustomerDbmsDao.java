@@ -72,7 +72,9 @@ public class CustomerDbmsDao implements CustomerDao{
                         for (String boardId : boardIdsStr.split(",")) {
                             boardId = boardId.trim();
                             Board board = boardDao.selectBoardById(boardId);
-                            customer.addDesignBoard(board);
+                            if(board != null){
+                                customer.addDesignBoard(board);
+                            }
                         }
                     }
 

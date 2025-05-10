@@ -1,10 +1,8 @@
 package viewBasic;
 
-import beans.BoardProfileBean;
-import beans.OrderBean;
-import beans.OrderSummaryBean;
-import beans.ProgressNoteBean;
+import beans.*;
 import controls.CustomOrderController;
+import exceptions.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,11 +27,28 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     @FXML private Pane orderControlPane;
     @FXML private Pane notesPane;
     @FXML private Pane boardPane;
-    //@FXML private Pane orderSubmitPane;
+    @FXML private Pane orderSubmitPane;
     @FXML private ListView<String> allListView;
     @FXML private ListView<String> notesListView;
-    @FXML private TextField numberBoardField;
-    @FXML private TextField numberOrderField;
+
+    @FXML private ComboBox boardsComboBox;
+    @FXML private ComboBox ordersComboBox;
+
+
+    @FXML private TextField regionField;
+    @FXML private TextField provinceField;
+    @FXML private TextField cityField;
+
+    @FXML private TextField addressField;
+    @FXML private TextField addressNumberField;
+
+    @FXML private ComboBox<String> comboSlot;
+    @FXML private TextArea preferenceArea;
+
+    BoardProfileBean boardProfileBean ;
+
+    BoardBean boardBean;
+    OrderSummaryBean orderSummaryBean;
 
 
     @FXML private Button orderButton;
@@ -54,6 +69,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
 
     @FXML private Label errorLabel;
 
+    private String boardTypology;
+
     public void initialize(){
         initGripCombo();
         initWarrantyCombo();
@@ -63,9 +80,22 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         populatePageChoice();
         resultArea.setEditable(false);
         confStart();
+        initSlotCombo();
         setButtonStyle(availableButton, "#1ABC9C");
         setButtonStyle(designButton, "B0B0B0");
+        setButtonStyle(boardButton, "#1ABC9C");
+        setButtonStyle(orderButton, "B0B0B0");
     }
+
+    private void initSlotCombo() {
+        List<String> slotValues = new ArrayList<>();
+        for (int hour = 8; hour <= 20; hour++) {
+            slotValues.add(String.format("%02d:00", hour));
+        }
+        comboSlot.setItems(FXCollections.observableArrayList(slotValues));
+        comboSlot.setValue("10:00");
+    }
+
 
 
     private void initGripCombo() {
@@ -74,7 +104,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             gripValues.add(String.format(Locale.US, "%.2f", val));
         }
         gripCombo.setItems(FXCollections.observableArrayList(gripValues));
-        gripCombo.setValue("0.60");
+        gripCombo.setValue("0.00");
     }
 
     private void initWarrantyCombo() {
@@ -90,7 +120,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         for (int i = 0; i <= 2; i++) {
             pilesCombo.getItems().add(String.valueOf(i));
         }
-        pilesCombo.setValue("1");
+        pilesCombo.setValue("0");
     }
 
     private void initNoseCombo() {
@@ -98,7 +128,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         for (int i = 0; i <= 50; i++) {
             noseCombo.getItems().add(String.valueOf(i));
         }
-        noseCombo.setValue("10");
+        noseCombo.setValue("0");
     }
 
     private void initTailCombo() {
@@ -106,7 +136,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         for (int i = 0; i <= 50; i++) {
             tailCombo.getItems().add(String.valueOf(i));
         }
-        tailCombo.setValue("10");
+        tailCombo.setValue("0");
     }
 
     public void setController(CustomOrderController customOrderController){
@@ -120,7 +150,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     }
 
     public void confStart(){
-        //orderSubmitPane.setVisible(false);
+        orderSubmitPane.setVisible(false);
         boardPane.setVisible(false);
         notesPane.setVisible(false);
         orderControlPane.setVisible(false);
@@ -129,6 +159,91 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
 
     private void setButtonStyle(Button button, String colorHex) {
         button.setStyle("-fx-background-color: " + colorHex + "; -fx-text-fill: white;");
+    }
+
+    public void saveBoard(){
+        boardBean = customOrderController.saveCreatedCustomizedBoard(windowManagerBasic.getAuthBean().getToken(),boardProfileBean);
+        boardPane.setVisible(false);
+        orderSubmitPane.setVisible(true);
+    }
+
+    public String formatAddress(String street, String number) {
+        return street.trim() + " " + number.trim();
+    }
+
+
+    public void validateNumber(String number) throws WrongFormatException {
+        try {
+            Integer.parseInt(number);
+        } catch (NumberFormatException e) {
+            throw new WrongFormatException("Address number has to be a number, please enter a number!!");
+        }
+    }
+
+
+    public void orderBoard(){
+        String comment = preferenceArea.getText();
+        String timeSlot = comboSlot.getValue();
+        String region = regionField.getText();
+        String province = provinceField.getText();
+        String city = cityField.getText();
+        String streetAddress = addressField.getText();
+        String number = addressNumberField.getText();
+
+        try{
+            if(comment == null || region == null || province == null || city == null || streetAddress == null || number == null){
+                throw new EmptyFieldException("EmptyField");
+            }
+            validateRegion(region);
+            validateNumber(number);
+
+            DeliveryPreferencesBean deliveryPreferencesBean = new DeliveryPreferencesBean();
+            deliveryPreferencesBean.setComment(comment);
+            deliveryPreferencesBean.setPreferredTimeSlot(timeSlot);
+
+            DeliveryDestinationBean deliveryDestinationBean = new DeliveryDestinationBean();
+            deliveryDestinationBean.setCity(city);
+            deliveryDestinationBean.setProvince(province);
+            deliveryDestinationBean.setRegion(formatRegion(region));
+            deliveryDestinationBean.setStreetAddress(formatAddress(streetAddress, number));
+            confStart();
+            try{
+                orderSummaryBean = customOrderController.elaborateOrder(windowManagerBasic.getAuthBean().getToken(), deliveryDestinationBean, deliveryPreferencesBean,  boardBean);
+            }catch(InsufficientCoinsException | SessionExpiredException e){
+                errorLabel.setText(e.getMessage());
+            }
+        }catch(EmptyFieldException | InvalidRegionException e){
+            errorLabel.setText(null);
+        }
+
+
+    }
+    public void validateRegion(String regione) throws InvalidRegionException {
+        Set<String> regioniValide = Set.of(
+                "Abruzzo", "Basilicata", "Calabria", "Campania", "Emilia-Romagna",
+                "Friuli-Venezia Giulia", "Lazio", "Liguria", "Lombardia", "Marche",
+                "Molise", "Piemonte", "Puglia", "Sardegna", "Sicilia",
+                "Toscana", "Trentino-Alto Adige", "Umbria", "Valle d'Aosta", "Veneto"
+        );
+
+        String regioneFormattata = formatRegion(regione.trim().toLowerCase());
+
+        if (!regioniValide.contains(regioneFormattata)) {
+            throw new InvalidRegionException();
+        }
+    }
+
+    private String formatRegion(String input) {
+        String[] words = input.split("[-\\s]");
+        StringJoiner joiner = new StringJoiner(" ");
+
+        for (String word : words) {
+            if (word.length() > 0) {
+                joiner.add(Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase());
+            }
+        }
+
+        return joiner.toString();
     }
 
 
@@ -175,7 +290,60 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     }
 
     public void process(){
+        double grip = Double.parseDouble(gripCombo.getValue());
+        double nose = Double.parseDouble(noseCombo.getValue());
+        double tail = Double.parseDouble(tailCombo.getValue());
+        int warranty = Integer.parseInt(warrantyCombo.getValue());
+        int piles = Integer.parseInt(pilesCombo.getValue());
 
+
+        CustomBoardBean customBoardBean = new CustomBoardBean();
+
+        customBoardBean.setName(boardIdMap.get(boardsComboBox.getValue()));
+        if(nose == 0){
+            customBoardBean.setUseConcaveNose(false);
+        }else{
+            customBoardBean.setUseConcaveNose(true);
+            customBoardBean.setConcaveNose(nose);
+        }
+
+        if(tail == 0){
+            customBoardBean.setUseConcaveTail(false);
+        }else{
+            customBoardBean.setUseConcaveTail(true);
+            customBoardBean.setConcaveTail(tail);
+        }
+
+        if(grip == 0){
+            customBoardBean.setUseGripTexture(false);
+        }else{
+            customBoardBean.setUseGripTexture(false);
+            customBoardBean.setGripTexture(grip);
+        }
+
+        if(warranty == 0){
+            customBoardBean.setUseWarrantyMonths(false);
+        }else{
+            customBoardBean.setUseWarrantyMonths(true);
+            customBoardBean.setWarrantyMonths(warranty);
+        }
+
+        if(piles == 0){
+            customBoardBean.setUseExtraPiles(false);
+        }else{
+            customBoardBean.setUseExtraPiles(true);
+            customBoardBean.setExtraPiles(piles);
+        }
+       try{
+           boardProfileBean = customOrderController.generateCustomBoard(windowManagerBasic.getAuthBean().getToken(),customBoardBean);
+
+           resultArea.setText(
+                   "Price: " + boardProfileBean.getPrice() + "\n\n" +
+                           boardProfileBean.getDescription()
+           );
+       }catch(SessionExpiredException e){
+           errorLabel.setText(e.getMessage());
+       }
     }
 
 
@@ -189,45 +357,63 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     }
 
     public void displayOrders() {
-        List<OrderSummaryBean> orders = customOrderController.getSubmittedOrders(windowManagerBasic.getAuthBean().getToken());
-        ObservableList<String> items = FXCollections.observableArrayList();
-        orderIdMap.clear();
-        int index = 1;
+        try {
+            List<OrderSummaryBean> orders = customOrderController.getSubmittedOrders(windowManagerBasic.getAuthBean().getToken());
+            ObservableList<String> items = FXCollections.observableArrayList();
+            orderIdMap.clear();
+            int index = 1;
 
-        for (OrderSummaryBean order : orders) {
-            String displayText = String.format(
-                    "[%d] %s - %s | €%d | Status: %s | Delivery: %s | Destination: %s, %s, %s, %s",
-                    index,
-                    order.getNameBoard(),
-                    order.getDescriptionBoard(),
-                    order.getTotalCost(),
-                    order.getStatus(),
-                    order.getDeliveryDate(),
-                    order.getStreetAddersDestination(),
-                    order.getCityDestination(),
-                    order.getProvinceDestination(),
-                    order.getRegionDestination()
-            );
+            for (OrderSummaryBean order : orders) {
+                String displayText = String.format(
+                        "[%d] %s - %s | €%d | Status: %s | Delivery: %s | Destination: %s, %s, %s, %s",
+                        index,
+                        order.getNameBoard(),
+                        order.getDescriptionBoard(),
+                        order.getTotalCost(),
+                        order.getStatus(),
+                        order.getDeliveryDate(),
+                        order.getStreetAddersDestination(),
+                        order.getCityDestination(),
+                        order.getProvinceDestination(),
+                        order.getRegionDestination()
+                );
 
-            items.add(displayText);
-            orderIdMap.put(index, order.getId());
-            index++;
+                items.add(displayText);
+                orderIdMap.put(index, order.getId());
+                index++;
+            }
+
+            allListView.setItems(items);
+
+            ObservableList<Integer> comboItems = FXCollections.observableArrayList();
+            for (int i = 1; i <= orders.size(); i++) {
+                comboItems.add(i);
+            }
+            ordersComboBox.setItems(comboItems);
+
+            if (!comboItems.isEmpty()) {
+                ordersComboBox.getSelectionModel().selectFirst();
+            }
+
+        } catch (SessionExpiredException e) {
+            errorLabel.setText(e.getMessage());
         }
-
-        allListView.setItems(items);
     }
+
 
     public void displayDesignedBoards() {
         List<BoardProfileBean> boards = customOrderController.getCustomizedBoards(windowManagerBasic.getAuthBean().getToken());
-        updateBoardList(boards, designButton, availableButton);
+        updateBoardList(boards, designButton, availableButton, false);
+        boardTypology = "designed";
     }
 
     public void displayAvailableBoards() {
         List<BoardProfileBean> boards = customOrderController.getBoardSamples(windowManagerBasic.getAuthBean().getToken());
-        updateBoardList(boards, availableButton, designButton);
+        updateBoardList(boards, availableButton, designButton, true);
+        boardTypology = "available";
     }
 
-    private void updateBoardList(List<BoardProfileBean> boards, Button active, Button inactive) {
+    private void updateBoardList(List<BoardProfileBean> boards, Button active, Button inactive, boolean saveNameInsteadOfId) {
         setButtonStyle(active, "#1ABC9C");
         setButtonStyle(inactive, "#B0B0B0");
 
@@ -244,18 +430,34 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                     board.getSize()
             );
             items.add(displayText);
-            boardIdMap.put(index, board.getId());
+
+            if (saveNameInsteadOfId) {
+                boardIdMap.put(index, board.getName());
+            } else {
+                boardIdMap.put(index, board.getId());
+            }
+
             index++;
         }
 
         allListView.setItems(items);
+
+        ObservableList<Integer> comboItems = FXCollections.observableArrayList();
+        for (int i = 1; i <= boards.size(); i++) {
+            comboItems.add(i);
+        }
+        boardsComboBox.setItems(comboItems);
+
+
+        if (!comboItems.isEmpty()) {
+            boardsComboBox.getSelectionModel().selectFirst();
+        }
     }
 
 
     public void displayProgressNotes() {
         ObservableList<String> items = FXCollections.observableArrayList();
-        int n = Integer.parseInt(numberOrderField.getText());
-        String orderId = orderIdMap.get(n);
+        String orderId = orderIdMap.get(ordersComboBox.getValue());
         OrderBean orderBean = new  OrderBean();
         orderBean.setId(orderId);
         List<ProgressNoteBean> progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManagerBasic.getAuthBean().getToken(), orderBean);
@@ -274,14 +476,17 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
 
 
     public void displayBoard(){
-        int n = Integer.parseInt(numberBoardField.getText());
-        boardPane.setVisible(true);
-        //resultArea.setText(
-               // "Price: " + customizedBoardBean.getPrice() + "\n\n" +
-                   //     customizedBoardBean.getDescription()
-        //);
+        if(boardTypology.equals("designed")){
+            boardBean = new BoardBean();
+            boardBean.setId(boardIdMap.get(boardsComboBox.getValue()));
+            orderSubmitPane.setVisible(true);
+        }else{
+            boardPane.setVisible(true);
+        }
 
     }
+
+
 
 
 }

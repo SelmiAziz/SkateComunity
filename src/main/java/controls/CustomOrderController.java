@@ -57,6 +57,8 @@ public class CustomOrderController {
 
         Board board = boardDao.selectBoardByName(customBoardBean.getName());
 
+        System.out.println(board);
+
         if(customBoardBean.getUseGripTexture()){
             board = new GripTextureDecorator(board, customBoardBean.getGripTexture());
         }
@@ -121,7 +123,7 @@ public class CustomOrderController {
     }
 
     protected void notifyOrderCoordinator() {
-        coordinatorOrderPageView.newOrder();
+        //coordinatorOrderPageView.newOrder();
     }
 
     protected void notifyCustomer(){

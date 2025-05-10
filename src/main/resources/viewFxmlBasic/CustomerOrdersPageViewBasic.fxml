@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
@@ -12,7 +13,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.ComboBox?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewBasic.CustomerOrdersPageViewBasic">
     <top>
         <AnchorPane prefHeight="95.0" prefWidth="1200.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
@@ -34,21 +34,19 @@
         <AnchorPane fx:id="designBoard" prefHeight="705.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;">
             <children>
 
-                <Label fx:id="errorLabel" layoutX="20.0" layoutY="541.0" prefHeight="22.0" prefWidth="322.0" textFill="#208672">
+                                                          <Label fx:id="errorLabel" layoutX="20.0" layoutY="541.0" prefHeight="22.0" prefWidth="322.0" textFill="#208672">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Label>
                 <ListView fx:id="allListView" layoutX="31.0" layoutY="64.0" prefHeight="376.0" prefWidth="622.0" />
-            <Pane fx:id="designControlPane" layoutX="31.0" layoutY="503.0" prefHeight="68.0" prefWidth="621.0" style="-fx-background-color: #ffffff;">
+            <Pane fx:id="designControlPane" layoutX="31.0" layoutY="497.0" prefHeight="68.0" prefWidth="621.0" style="-fx-background-color: #ffffff;">
                <children>
-                      <TextField fx:id="numberBoardField" layoutX="443.0" layoutY="17.0" prefHeight="26.0" prefWidth="114.0" />
-                      <Button layoutX="570.0" layoutY="17.0" mnemonicParsing="false" onMouseClicked="#displayBoard" style="-fx-background-color: #1ABC9C;" text="Learn" textFill="WHITE">
+                      <Button layoutX="570.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#displayBoard" style="-fx-background-color: #1ABC9C;" text="Learn" textFill="WHITE">
                           <effect>
                               <DropShadow height="5.0" radius="2.0" width="5.0" />
                           </effect>
                       </Button>
-                  <Label layoutX="294.0" layoutY="21.0" prefHeight="18.0" prefWidth="144.0" text="Insert number board:" />
                   <Button fx:id="designButton" layoutX="5.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#displayDesignedBoards" prefHeight="26.0" prefWidth="116.0" style="-fx-background-color: #1ABC9C;" text="Design" textFill="WHITE">
                      <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
@@ -59,30 +57,30 @@
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                      </effect>
                   </Button>
+                  <ComboBox fx:id="boardsComboBox" layoutX="404.0" layoutY="13.0" prefWidth="150.0" />
                </children>
             </Pane>
-            <Button fx:id="boardButton" layoutX="31.0" layoutY="29.0" mnemonicParsing="false" onAction="#boardConf" style="-fx-background-color: #1ABC9C;" text="Board" textFill="WHITE">
+            <Button fx:id="boardButton" layoutX="31.0" layoutY="29.0" mnemonicParsing="false" onAction="#boardConf" style="-fx-background-color: #1ABC9C;" text="Boards" textFill="WHITE">
                <effect>
                   <DropShadow height="5.0" radius="2.0" width="5.0" />
                </effect>
             </Button>
-            <Button fx:id="orderButton" layoutX="103.0" layoutY="29.0" mnemonicParsing="false" onAction="#orderConf" style="-fx-background-color: #1ABC9C;" text="Order" textFill="WHITE">
+            <Button fx:id="orderButton" layoutX="103.0" layoutY="29.0" mnemonicParsing="false" onAction="#orderConf" style="-fx-background-color: #1ABC9C;" text="Orders" textFill="WHITE">
                <effect>
                   <DropShadow height="5.0" radius="2.0" width="5.0" />
                </effect>
             </Button>
-            <Pane fx:id="orderControlPane" layoutX="33.0" layoutY="501.0" prefHeight="68.0" prefWidth="621.0" style="-fx-background-color: #ffffff;">
+            <Pane fx:id="orderControlPane" layoutX="32.0" layoutY="484.0" prefHeight="68.0" prefWidth="621.0" style="-fx-background-color: #ffffff;">
                <children>
-                  <TextField fx:id="numberOrderField" layoutX="443.0" layoutY="17.0" prefHeight="26.0" prefWidth="114.0" />
                   <Button layoutX="570.0" layoutY="17.0" mnemonicParsing="false" onMouseClicked="#displayProgressNotes" style="-fx-background-color: #1ABC9C;" text="Learn" textFill="WHITE">
                      <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                      </effect>
                   </Button>
-                  <Label layoutX="294.0" layoutY="21.0" prefHeight="18.0" prefWidth="144.0" text="Insert number order:" />
+                  <Label layoutX="244.0" layoutY="21.0" prefHeight="18.0" prefWidth="144.0" text="Insert number order:" />
+                  <ComboBox fx:id="ordersComboBox" layoutX="404.0" layoutY="17.0" prefWidth="150.0" />
                </children>
             </Pane>
-            <Pane fx:id="notesPane" layoutX="61.0" layoutY="143.0" prefHeight="527.0" prefWidth="499.0" />
             </children>
         </AnchorPane>
     </left>
@@ -90,9 +88,9 @@
         <AnchorPane prefHeight="20.0" prefWidth="1200.0" style="-fx-background-color: #1ABC9C;" BorderPane.alignment="CENTER" />
     </bottom>
     <center>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="988.0" prefWidth="544.0" BorderPane.alignment="CENTER">
             <children>
-            <Pane fx:id="boardPane" layoutX="35.0" layoutY="53.0" prefHeight="509.0" prefWidth="466.0">
+            <Pane fx:id="boardPane" layoutX="65.0" layoutY="85.0" prefHeight="509.0" prefWidth="466.0">
                <children>
                   <Label layoutX="14.0" layoutY="24.0" text="Customize your board" textFill="#1abc9c">
                      <font>
@@ -115,9 +113,46 @@
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                      </effect>
                   </Button>
+                  <Button layoutX="14.0" layoutY="469.0" mnemonicParsing="false" onAction="#saveBoard" prefWidth="75.0" style="-fx-background-color: #1ABC9C;" text="Save" textFill="WHITE">
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
+                  </Button>
                </children>
             </Pane>
-            <ListView fx:id="notesListView" layoutX="65.0" layoutY="564.0" prefHeight="424.0" prefWidth="511.0" />
+            <Pane fx:id="orderSubmitPane" layoutX="29.0" layoutY="103.0" prefHeight="498.0" prefWidth="516.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Label layoutX="14.0" layoutY="26.0" prefHeight="24.0" prefWidth="275.0" text="Do you wanna order that board? " textFill="#1abc9c">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="14.0" layoutY="60.0" prefHeight="18.0" prefWidth="197.0" text="Order destination" textFill="#00000087" />
+                  <Label layoutX="14.0" layoutY="120.0" prefHeight="18.0" prefWidth="53.0" text="Region" />
+                  <Label layoutX="14.0" layoutY="180.0" prefHeight="18.0" prefWidth="53.0" text="City" />
+                  <Label layoutX="14.0" layoutY="210.0" prefHeight="18.0" prefWidth="98.0" text="Street address" />
+                  <TextField fx:id="addressField" layoutX="137.0" layoutY="210.0" />
+                  <Label layoutX="327.0" layoutY="210.0" prefHeight="18.0" prefWidth="98.0" text="number" />
+                  <TextField fx:id="addressNumberField" layoutX="408.0" layoutY="201.0" prefHeight="26.0" prefWidth="99.0" />
+                  <TextField fx:id="cityField" layoutX="137.0" layoutY="180.0" prefHeight="0.0" prefWidth="161.0" />
+                  <TextField fx:id="provinceField" layoutX="137.0" layoutY="150.0" prefHeight="0.0" prefWidth="161.0" />
+                  <TextField fx:id="regionField" layoutX="137.0" layoutY="120.0" prefHeight="0.0" prefWidth="161.0" />
+                  <Button layoutX="13.0" layoutY="428.0" mnemonicParsing="false" onAction="#orderBoard" style="-fx-background-color: #1ABC9C;" text="order" textFill="WHITE">
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
+                  </Button>
+                  <TextArea fx:id="preferenceArea" layoutX="10.0" layoutY="305.0" prefHeight="87.0" prefWidth="501.0" />
+                  <Label layoutX="14.0" layoutY="282.0" prefHeight="18.0" prefWidth="113.0" text="Order Preferences" />
+                  <Label layoutX="14.0" layoutY="240.0" prefHeight="18.0" prefWidth="124.0" text="Preferred time slots" />
+                  <ComboBox fx:id="comboSlot" layoutX="137.0" layoutY="240.0" prefHeight="26.0" prefWidth="162.0" />
+                  <Label layoutX="14.0" layoutY="150.0" prefHeight="18.0" prefWidth="53.0" text="Province" />
+               </children>
+            </Pane>
+            <Pane fx:id="notesPane" layoutX="12.0" layoutY="420.0" prefHeight="527.0" prefWidth="499.0">
+               <children>
+                  <ListView fx:id="notesListView" layoutX="14.0" layoutY="-286.0" prefHeight="424.0" prefWidth="511.0" />
+               </children></Pane>
 
                   </children>
         </AnchorPane>
