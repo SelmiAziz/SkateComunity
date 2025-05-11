@@ -17,17 +17,17 @@ public class CustomOrderController {
     private final CustomOrderDao customOrderDao = DaoFactory.getInstance().createCustomOrderDao();
     private final CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
     private final ProgressNoteDao progressNoteDao = DaoFactory.getInstance().createProgressNoteDao();
-    private CustomerOrderView customerAllOrdersPageView;
-    private CoordinatorOrderView coordinatorOrderPageView;
+    private CustomerOrderView customerOrderView;
+    private CoordinatorOrderView coordinatorOrderView;
     private final DateConverter dateConverter = new DateConverter();
     private final PaymentController paymentController = new PaymentController();
 
     public void setCoordinatorOrderView(CoordinatorOrderView coordinatorOrderPageView) {
-        this.coordinatorOrderPageView = coordinatorOrderPageView;
+        this.coordinatorOrderView = coordinatorOrderPageView;
     }
 
     public void setCustomerOrderView(CustomerOrderView customerAllOrdersPageView) {
-        this.customerAllOrdersPageView = customerAllOrdersPageView;
+        this.customerOrderView = customerAllOrdersPageView;
     }
 
     public List<BoardProfileBean> getBoardSamples(String token){
@@ -123,11 +123,11 @@ public class CustomOrderController {
     }
 
     protected void notifyOrderCoordinator() {
-        //coordinatorOrderPageView.newOrder();
+        coordinatorOrderView.newOrder();
     }
 
     protected void notifyCustomer(){
-        customerAllOrdersPageView.orderUpdate();
+        customerOrderView.orderUpdate();
     }
 
     public void acceptCustomOrder(OrderBean customOrderBean, boolean accept){

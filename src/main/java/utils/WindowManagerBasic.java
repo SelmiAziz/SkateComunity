@@ -77,6 +77,7 @@ public class WindowManagerBasic{
 
             CustomOrderController controller = new CustomOrderController();
             viewController.setController(controller);
+            controller.setCustomerOrderView(viewController);
             viewController.initializeAfter();
             openCoordinator(controller);
 
@@ -168,7 +169,7 @@ public class WindowManagerBasic{
     }
 
 
-    public void closeCoordinator() {
+    public void cleanOrderPage() {
         if (stageBr != null) {
             stageBr.close();
             stageBr = null;

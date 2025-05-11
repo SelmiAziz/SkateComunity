@@ -92,10 +92,10 @@
                 <Label layoutX="35.0" layoutY="137.0" text="Coins richiesti:" /> <!-- Spostato più in basso -->
                 <Label fx:id="competitionCoinsLabel" layoutX="174.0" layoutY="137.0" />
 
-                <Label layoutX="36.0" layoutY="172.0" text="Posti disponibili:" /> <!-- Spostato più in basso -->
+                <Label layoutX="35.0" layoutY="172.0" text="Posti disponibili:" /> <!-- Spostato più in basso -->
                 <Label fx:id="competitionSeatsAvailableLabel" layoutX="178.0" layoutY="172.0" />
 
-                <Button fx:id="confirmRegistrationButton" layoutX="35.0" layoutY="239.0" onMouseClicked="#submitSignToCompetition" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
+                <Button fx:id="confirmRegistrationButton" layoutX="35.0" layoutY="349.0" onMouseClicked="#submitSignToCompetition" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #1ABC9C;" text="Iscriviti" textFill="WHITE">
                     <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                     </effect></Button>
@@ -112,7 +112,11 @@
             <TextField fx:id="competitionNameField" layoutX="34.0" layoutY="16.0" prefHeight="26.0" prefWidth="180.0" promptText="Competition name for more info" />
             <Label fx:id="generateCodeLabel" layoutX="36.0" layoutY="492.0" prefHeight="18.0" prefWidth="323.0" />
             <Label fx:id="assignedSeatLabel" layoutX="36.0" layoutY="533.0" prefHeight="18.0" prefWidth="312.0" /> <!-- Spostato più in basso -->
-                <Label fx:id="competitionDescriptionLabel" layoutX="205.0" layoutY="98.0" prefHeight="18.0" prefWidth="193.0" wrapText="true" /> <!-- Spostato più in basso -->
+                <Label fx:id="competitionDescriptionLabel" layoutX="205.0" layoutY="98.0" prefHeight="18.0" prefWidth="193.0" wrapText="true" />
+            <TextField fx:id="emailField" layoutX="148.0" layoutY="264.0" />
+            <TextField fx:id="registrationNameField" layoutX="148.0" layoutY="302.0" />
+            <Label layoutX="36.0" layoutY="271.0" text="Email:" />
+            <Label layoutX="36.0" layoutY="308.0" text="Registaion name:" /> <!-- Spostato più in basso -->
             </children>
         </AnchorPane>
    </center>

@@ -167,6 +167,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         orderSubmitPane.setVisible(true);
     }
 
+
     public String formatAddress(String street, String number) {
         return street.trim() + " " + number.trim();
     }
@@ -256,6 +257,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
 
     @Override
     public void orderUpdate() {
+        confStart();
+        orderConf();
         displayOrders();
     }
 
@@ -264,18 +267,21 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         if(page.equals("Competitions")){
             try {
                 windowManagerBasic.goToCustomerCompetitions();
+                windowManagerBasic.cleanOrderPage();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Learn")){
             try{
                 windowManagerBasic.goToLearn();
+                windowManagerBasic.cleanOrderPage();
             }catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
             try {
                 windowManagerBasic.logOut();
+                windowManagerBasic.cleanOrderPage();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }

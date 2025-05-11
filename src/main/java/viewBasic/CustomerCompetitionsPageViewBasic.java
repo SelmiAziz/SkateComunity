@@ -36,6 +36,8 @@ public class CustomerCompetitionsPageViewBasic {
     @FXML private ListView<String> competitionList;
     @FXML private Button confirmRegistrationButton;
     @FXML private ChoiceBox<String> choicePage;
+    @FXML private TextField emailField;
+    @FXML private TextField registrationNameField;
 
 
     public void initialize() {
@@ -127,9 +129,16 @@ public class CustomerCompetitionsPageViewBasic {
     public void submitSignToCompetition(){
         try {
             String competitionName = competitionNameField.getText();
-            if(competitionName.isEmpty()) throw  new EmptyFieldException("Campo nome competizione risulta vuoto!!!");
+            String email = emailField.getText();
+            String registrationName = registrationNameField.getText();
+        if(competitionName == null || email == null || registrationName == null){
+            throw new EmptyFieldException("Compila tutti i campi correttamente");
+        }
             CompetitionBean competitionBean = new CompetitionBean(competitionName);
-            RegistrationBean registrationBean = signCompetitionController.signToCompetition(windowManagerBasic.getAuthBean().getToken(),competitionBean, new RegistrationRequestBean());
+            RegistrationRequestBean registrationRequestBean = new RegistrationRequestBean();
+            registrationRequestBean.setRegistrationName(registrationName);
+            registrationRequestBean.setEmail(email);
+            RegistrationBean registrationBean = signCompetitionController.signToCompetition(windowManagerBasic.getAuthBean().getToken(),competitionBean, registrationRequestBean);
             assignedSeatLabel.setText("Ti è stato fornito il codice: " +registrationBean.getRegistrationCode());
             generateCodeLabel.setText("Turno di gara: "+registrationBean.getAssignedSeat());
         } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
