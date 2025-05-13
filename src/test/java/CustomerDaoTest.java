@@ -4,10 +4,10 @@ import model.Customer;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CustomerDaoTest {
+class CustomerDaoTest {
 
     @Test
-    public void testAddCustomer() {
+    void testAddCustomer() {
         CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
         Customer customer = new Customer("testUsername");
 

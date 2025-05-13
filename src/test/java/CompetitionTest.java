@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class CompetitionTest {
+class CompetitionTest {
     @Test
     void testAddCompetitionRegistration(){
         Competition competition = new Competition();
