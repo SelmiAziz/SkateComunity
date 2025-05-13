@@ -7,7 +7,7 @@ public class RegistrationRequestBean {
 
     public RegistrationRequestBean(){
         //empty
-    };
+    }
 
     public void setRegistrationName(String registrationName){
         this.registrationName = registrationName;

@@ -1,8 +1,8 @@
 package beans;
 
 public class CustomerBean {
-    public String username;
-    public String skillLevel;
+    private String username;
+    private String skillLevel;
 
 
     public String getUsername() {

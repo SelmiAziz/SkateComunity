@@ -5,7 +5,7 @@ public class OrderBean {
 
     public OrderBean(){
         //empty
-    };
+    }
 
     public void setId(String id) {
         this.id = id;
