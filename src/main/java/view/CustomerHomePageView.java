@@ -44,7 +44,6 @@ public class CustomerHomePageView {
             stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
-            System.out.println("Hello");
             Platform.runLater(userEventsPageView::loadCompetitions);
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
@@ -63,13 +62,8 @@ public class CustomerHomePageView {
     }
 
 
-    public void logOut()  {
-        try {
-            windowManager.logOut();
-        }catch (IOException e){
-            errorLabel.setText(e.getMessage());
-        }
+    public void logOut() {
+        windowManager.logOut();
     }
-
 
 }

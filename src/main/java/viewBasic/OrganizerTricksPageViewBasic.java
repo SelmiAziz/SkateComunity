@@ -2,6 +2,8 @@ package viewBasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import exceptions.EmptyFieldException;
+import exceptions.SessionExpiredException;
 import exceptions.WrongFormatException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -37,12 +39,16 @@ public class OrganizerTricksPageViewBasic {
     LearnTrickController learnTrickController = new LearnTrickController();
 
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManagerBasic.getAuthBean().getToken());
-        eventListView.getItems().clear();
-        for (TrickBean trick : availableTricksBean) {
-            String trickDisplay = String.format("<<Nome Trick: %s>>   -   <<Categoria: %s>>   -   <<Difficoltà: %s>>   -   <<Descrizione: %s>>",
-                    trick.getNameTrick(), trick.getCategory(), trick.getDifficulty(), trick.getDescription());
-            eventListView.getItems().add(trickDisplay);
+        try {
+            List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManagerBasic.getAuthBean().getToken());
+            eventListView.getItems().clear();
+            for (TrickBean trick : availableTricksBean) {
+                String trickDisplay = String.format("<<Nome Trick: %s>>   -   <<Categoria: %s>>   -   <<Difficoltà: %s>>   -   <<Descrizione: %s>>",
+                        trick.getNameTrick(), trick.getCategory(), trick.getDifficulty(), trick.getDescription());
+                eventListView.getItems().add(trickDisplay);
+            }
+        }catch(SessionExpiredException e){
+            windowManagerBasic.logOut();
         }
     }
 
@@ -114,24 +120,30 @@ public class OrganizerTricksPageViewBasic {
         String day = dayField.getText();
         String year = yearField.getText();
 
-        String date = formatValidateDate(month,day,year);
+        try {
+            String date = formatValidateDate(month, day, year);
 
 
-        if (trickName.isEmpty() || category.isEmpty() || trickDescription.isEmpty() || date.isEmpty()) {
-            errorLabel.setText("All fields must be filled.");
-            return;
+            if (trickName.isEmpty() || category.isEmpty() || trickDescription.isEmpty() || date.isEmpty()) {
+                throw new EmptyFieldException("Compila i campi correttamente");
+            }
+
+
+            TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, category, date);
+            try {
+                learnTrickController.RegisterTrick(windowManagerBasic.getAuthBean().getToken(), newTrick);
+
+                categoryChoiceBox.setValue("flat");
+                difficultyChoiceBox.setValue("medium");
+                trickNameTextField.clear();
+                descriptionTextArea.clear();
+                loadTricks();
+            }catch(SessionExpiredException e){
+                windowManagerBasic.logOut();
+            }
+        }catch(EmptyFieldException e){
+            errorLabel.setText(e.getMessage());
         }
-
-
-        TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, category, date);
-
-        learnTrickController.RegisterTrick(windowManagerBasic.getAuthBean().getToken(),newTrick);
-
-        categoryChoiceBox.setValue("flat");
-        difficultyChoiceBox.setValue("medium");
-        trickNameTextField.clear();
-        descriptionTextArea.clear();
-        loadTricks();
     }
 
     private void populateCategoryChoiceBox() {
@@ -165,11 +177,8 @@ public class OrganizerTricksPageViewBasic {
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
-            try {
-                windowManagerBasic.logOut();
-            } catch(IOException e){
-                errorLabel.setText(e.getMessage());
-            }
+            windowManagerBasic.logOut();
+
         }
     }
 

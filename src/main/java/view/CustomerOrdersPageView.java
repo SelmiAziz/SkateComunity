@@ -59,7 +59,7 @@ public class CustomerOrdersPageView {
     BoardBean boardBean;
 
 
-    public void initialize() {
+    public void initialize()  {
         customPane.setVisible(false);
         gripSlider.setMin(0.4);
         gripSlider.setMax(0.75);
@@ -97,16 +97,20 @@ public class CustomerOrdersPageView {
         descriptionArea.setText("");
     }
 
-    public void displayAvailableBoardSamples() {
-        List<BoardProfileBean> availableBoardsList = customOrderController.getBoardSamples(windowManager.getAuthBean().getToken());
-        statusLabel.setText("available");
-        boardTable.getItems().clear();
-        boardTable.getItems().addAll(availableBoardsList);
-        designButton.setStyle("-fx-background-color:  #949494;");
-        availableButton.setStyle("-fx-background-color: #1ABC9C;");
+    public void displayAvailableBoardSamples()  {
+        try {
+            List<BoardProfileBean> availableBoardsList = customOrderController.getBoardSamples(windowManager.getAuthBean().getToken());
+            statusLabel.setText("available");
+            boardTable.getItems().clear();
+            boardTable.getItems().addAll(availableBoardsList);
+            designButton.setStyle("-fx-background-color:  #949494;");
+            availableButton.setStyle("-fx-background-color: #1ABC9C;");
+        }catch(SessionExpiredException e ){
+            windowManager.logOut();
+        }
     }
 
-    public void displayBoardsCustomizedByCustomer() throws IOException {
+    public void displayBoardsCustomizedByCustomer()  {
         try{
             List<BoardProfileBean> boardBeanList = customOrderController.getCustomizedBoards(windowManager.getAuthBean().getToken());
             statusLabel.setText("designed");
@@ -132,10 +136,14 @@ public class CustomerOrdersPageView {
     }
 
 
-    public void saveDesignBoard(){
-        loadBoardForOrder(customizedBoardBean);
-        boardBean = customOrderController.saveCreatedCustomizedBoard(windowManager.getAuthBean().getToken(),customizedBoardBean);
-        orderPane.setVisible(true);
+    public void saveDesignBoard() {
+        try {
+            loadBoardForOrder(customizedBoardBean);
+            boardBean = customOrderController.saveCreatedCustomizedBoard(windowManager.getAuthBean().getToken(), customizedBoardBean);
+            orderPane.setVisible(true);
+        }catch(SessionExpiredException e ){
+            windowManager.logOut();
+        }
     }
 
     public void onSampleSelected() {
@@ -156,14 +164,11 @@ public class CustomerOrdersPageView {
 
     public void logOut() {
         windowManager.closeCoordinator();
-        try {
-            windowManager.logOut();
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
+        windowManager.logOut();
+
     }
 
-    public void generate() {
+    public void generate()  {
         double noseConcave = noseSpinner.getValue();
         double tailConcave = tailSpinner.getValue();
         double gripTexture = Math.floor(gripSlider.getValue() * 100) / 100.0;
@@ -204,11 +209,14 @@ public class CustomerOrdersPageView {
             customBoardBean.setUseWarrantyMonths(false);
         }
 
-
-        customizedBoardBean = customOrderController.generateCustomBoard(windowManager.getAuthBean().getToken(), customBoardBean);
-        boardPriceLabel.setText("Price " +customizedBoardBean.getPrice());
-        descriptionArea.setText(customizedBoardBean.getDescription());
-        pannelPane.setVisible(true);
+        try {
+            customizedBoardBean = customOrderController.generateCustomBoard(windowManager.getAuthBean().getToken(), customBoardBean);
+            boardPriceLabel.setText("Price " + customizedBoardBean.getPrice());
+            descriptionArea.setText(customizedBoardBean.getDescription());
+            pannelPane.setVisible(true);
+        }catch(SessionExpiredException e ){
+            windowManager.logOut();
+        }
     }
 
 
@@ -235,8 +243,12 @@ public class CustomerOrdersPageView {
 
 
     public void displayWallet(){
-        WalletBean walletBean = customOrderController.walletDetails(windowManager.getAuthBean().getToken());
-        coinsLabel.setText(""+walletBean.getBalance());
+        try {
+            WalletBean walletBean = customOrderController.walletDetails(windowManager.getAuthBean().getToken());
+            coinsLabel.setText("" + walletBean.getBalance());
+        }catch(SessionExpiredException e){
+            windowManager.logOut();
+        }
     }
 
 

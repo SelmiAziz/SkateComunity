@@ -57,12 +57,12 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
 
     }
 
-    public void initAfter(){
+    public void initAfter() {
         loadCustomOrderSummary();
         loadOrdersSubmitted();
     }
 
-    public void initAfter2(){
+    public void initAfter2() {
         loadOrdersSubmitted();
     }
 
@@ -76,23 +76,27 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
     }
 
 
-    public void displayNotes(){
+    public void displayNotes()  {
         notesPane.setVisible(true);
         OrderBean orderBean = new OrderBean();
         orderBean.setId(customOrderBean.getId());
-        List<ProgressNoteBean>progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManager.getAuthBean().getToken(),orderBean);
-        notesList.getItems().clear();
-        for(ProgressNoteBean progressNoteBean: progressNoteBeanList){
-            String note = String.format(
-                    "<<Comment: %s Date: %s",
-                    progressNoteBean.getComment(),
-                    progressNoteBean.getDate()
-            );
-            notesList.getItems().add(note);
+        try {
+            List<ProgressNoteBean> progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManager.getAuthBean().getToken(), orderBean);
+            notesList.getItems().clear();
+            for (ProgressNoteBean progressNoteBean : progressNoteBeanList) {
+                String note = String.format(
+                        "<<Comment: %s Date: %s",
+                        progressNoteBean.getComment(),
+                        progressNoteBean.getDate()
+                );
+                notesList.getItems().add(note);
 
+            }
+            backButton.setVisible(true);
+            notesButton.setVisible(false);
+        }catch(SessionExpiredException e){
+            windowManager.logOut();
         }
-        backButton.setVisible(true);
-        notesButton.setVisible(false);
     }
 
     public void setCustomOrderController(CustomOrderController customOrderController) {
@@ -104,13 +108,13 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
     }
 
 
-    public void loadOrdersSubmitted(){
+    public void loadOrdersSubmitted()  {
         try {
             List<OrderSummaryBean> customOrderBeanList = customOrderController.getSubmittedOrders(windowManager.getAuthBean().getToken());
             ordersTable.getItems().clear();
             ordersTable.getItems().addAll(customOrderBeanList);
         }catch(SessionExpiredException e){
-            errorLabel.setText("errore");
+            windowManager.logOut();
         }
     }
 

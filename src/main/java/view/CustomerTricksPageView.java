@@ -3,16 +3,12 @@ package view;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
-import javafx.application.Platform;
+import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import utils.WindowManager;
-import utils.SessionManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +30,7 @@ public class CustomerTricksPageView {
     LearnTrickController learnTrickController = new LearnTrickController();
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
 
         colTrickName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getNameTrick()));
@@ -75,10 +71,14 @@ public class CustomerTricksPageView {
     }
 
 
-    public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManager.getAuthBean().getToken());
-        trickTable.getItems().clear();
-        trickTable.getItems().addAll(availableTricksBean);
+    public void loadTricks() throws IOException {
+        try {
+            List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManager.getAuthBean().getToken());
+            trickTable.getItems().clear();
+            trickTable.getItems().addAll(availableTricksBean);
+        }catch(SessionExpiredException e){
+            windowManager.logOut();
+        }
     }
 
 
@@ -90,7 +90,7 @@ public class CustomerTricksPageView {
         }
     }
 
-    // Navigate to the home page
+
     public void goToHomePage() {
         try {
             windowManager.goToHomePage();

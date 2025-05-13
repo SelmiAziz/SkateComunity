@@ -55,6 +55,7 @@ public class LoginController {
                                     : registerUserBean.getSkillLevel().equals("Proficient") ? SkaterLevel.PROFICIENT
                                     : SkaterLevel.ADVANCED;
             Wallet wallet = new Wallet();
+            wallet.depositCoins(400); //a registration bonus
             Customer costumer =  new Customer(username,password,dateOfBirth,skillLevel, wallet);
             costumerDao.addCustomer(costumer);
             user = costumer;

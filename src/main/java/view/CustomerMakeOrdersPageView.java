@@ -4,6 +4,7 @@ import beans.*;
 import controls.CustomOrderController;
 import exceptions.EmptyFieldException;
 import exceptions.InsufficientCoinsException;
+import exceptions.SessionExpiredException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
@@ -110,6 +111,9 @@ public class CustomerMakeOrdersPageView {
                 windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
             }catch(InsufficientCoinsException e){
                 errorLabel.setText(e.getMessage());
+            }catch(SessionExpiredException e){
+                windowManager.closeCoordinator();
+                windowManager.logOut();
             }
 
         }catch(EmptyFieldException e){
@@ -140,11 +144,8 @@ public class CustomerMakeOrdersPageView {
             errorLabel.setText(e.getMessage());
         }
     }
-    public void logOut(){
-        try {
-            windowManager.logOut();
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
+    public void logOut() {
+        windowManager.closeCoordinator();
+        windowManager.logOut();
     }
 }

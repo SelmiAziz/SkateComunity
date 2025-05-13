@@ -6,6 +6,10 @@ public class User {
     private String dateOfBirth;
     protected Role role;
 
+    public User(String username){
+        this.username = username;
+    }
+
     public User( String username, String password, String dateOfBirth, Role role){
 
         this.username = username;

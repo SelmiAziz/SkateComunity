@@ -3,6 +3,7 @@ package view;
 import beans.BoardProfileBean;
 import controls.CreateBoardController;
 import exceptions.EmptyFieldException;
+import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -49,12 +50,16 @@ public class OrganizerSkateboardsPageView {
 
 
     public void loadSkateboards(){
-        List<BoardProfileBean> availableSkateboardsList = createSkateboardController.getStoredBoards(windowManager.getAuthBean().getToken());
-        skateboardTable.getItems().clear();
-        for(BoardProfileBean s: availableSkateboardsList){
-            System.out.println(s.getName());
+        try {
+            List<BoardProfileBean> availableSkateboardsList = createSkateboardController.getStoredBoards(windowManager.getAuthBean().getToken());
+            skateboardTable.getItems().clear();
+            for (BoardProfileBean s : availableSkateboardsList) {
+                System.out.println(s.getName());
+            }
+            skateboardTable.getItems().addAll(availableSkateboardsList);
+        }catch(SessionExpiredException e){
+            windowManager.logOut();
         }
-        skateboardTable.getItems().addAll(availableSkateboardsList);
     }
 
 
@@ -67,8 +72,12 @@ public class OrganizerSkateboardsPageView {
           if(name == null || description == null){
               throw new EmptyFieldException("Inserire correttamente campi");
           }
-          createSkateboardController.createBoard(windowManager.getAuthBean().getToken(), new BoardProfileBean(name, description, size, cost));
-          loadSkateboards();
+          try {
+              createSkateboardController.createBoard(windowManager.getAuthBean().getToken(), new BoardProfileBean(name, description, size, cost));
+              loadSkateboards();
+          }catch(SessionExpiredException e ){
+              windowManager.logOut();
+          }
       }catch(EmptyFieldException e){
           errorLabel.setText(e.getMessage());
       }
@@ -106,12 +115,9 @@ public class OrganizerSkateboardsPageView {
 
 
 
-    public void logOut()  {
-        try {
-            windowManager.logOut();
-        }catch(IOException e){
-            errorLabel.setText(e.getMessage());
-        }
+    public void logOut() {
+        windowManager.logOut();
+
     }
 
 }

@@ -2,11 +2,11 @@ package viewBasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import exceptions.SessionExpiredException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.WindowManager;
 import utils.WindowManagerBasic;
 
 import java.io.IOException;
@@ -27,12 +27,16 @@ public class CustomerTricksPageViewBasic {
     LearnTrickController learnTrickController = new LearnTrickController();
 
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricks(windowManagerBasic.getAuthBean().getToken());
-        eventListView.getItems().clear();
-        for (TrickBean trick : availableTricksBean) {
-            String trickDisplay = String.format("<<Nome Trick: %s>>",
-                    trick.getNameTrick());
-            eventListView.getItems().add(trickDisplay);
+        try {
+            List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricks(windowManagerBasic.getAuthBean().getToken());
+            eventListView.getItems().clear();
+            for (TrickBean trick : availableTricksBean) {
+                String trickDisplay = String.format("<<Nome Trick: %s>>",
+                        trick.getNameTrick());
+                eventListView.getItems().add(trickDisplay);
+            }
+        }catch(SessionExpiredException e ){
+            windowManagerBasic.logOut();
         }
     }
 
@@ -57,10 +61,14 @@ public class CustomerTricksPageViewBasic {
     public void showTrick(){
         String trickName = trickNameTextField.getText();
         TrickBean trickBean = new TrickBean(trickName);
-        TrickBean detailedTrick = learnTrickController.detailsTrick(windowManagerBasic.getAuthBean().getToken(),trickBean);
-        descriptionLabel.setText("Description: " + detailedTrick.getDescription());
-        categoryLabel.setText("Category: " +detailedTrick.getCategory());
-        difficultyLabel.setText("Difficulty: " +detailedTrick.getDifficulty().toLowerCase());
+        try {
+            TrickBean detailedTrick = learnTrickController.detailsTrick(windowManagerBasic.getAuthBean().getToken(), trickBean);
+            descriptionLabel.setText("Description: " + detailedTrick.getDescription());
+            categoryLabel.setText("Category: " + detailedTrick.getCategory());
+            difficultyLabel.setText("Difficulty: " + detailedTrick.getDifficulty().toLowerCase());
+        }catch(SessionExpiredException e ){
+            windowManagerBasic.logOut();
+        }
     }
 
 
@@ -80,11 +88,7 @@ public class CustomerTricksPageViewBasic {
         }else if(page.equals("Board")){
                 windowManagerBasic.goToOrderPage();
         }else if(page.equals("Log Out")){
-            try {
-                windowManagerBasic.logOut();
-            } catch(IOException e){
-                errorLabel.setText(e.getMessage());
-            }
+            windowManagerBasic.logOut();
         }
     }
 

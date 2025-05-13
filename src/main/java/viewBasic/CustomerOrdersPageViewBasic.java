@@ -162,9 +162,14 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     }
 
     public void saveBoard(){
-        boardBean = customOrderController.saveCreatedCustomizedBoard(windowManagerBasic.getAuthBean().getToken(),boardProfileBean);
-        boardPane.setVisible(false);
-        orderSubmitPane.setVisible(true);
+        try {
+            boardBean = customOrderController.saveCreatedCustomizedBoard(windowManagerBasic.getAuthBean().getToken(), boardProfileBean);
+            boardPane.setVisible(false);
+            orderSubmitPane.setVisible(true);
+        }catch(SessionExpiredException e ){
+            windowManagerBasic.cleanOrderPage();
+            windowManagerBasic.logOut();
+        }
     }
 
 
@@ -210,8 +215,11 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             confStart();
             try{
                 orderSummaryBean = customOrderController.elaborateOrder(windowManagerBasic.getAuthBean().getToken(), deliveryDestinationBean, deliveryPreferencesBean,  boardBean);
-            }catch(InsufficientCoinsException | SessionExpiredException e){
+            }catch(InsufficientCoinsException e){
                 errorLabel.setText(e.getMessage());
+            }catch(SessionExpiredException e2){
+                windowManagerBasic.cleanOrderPage();
+                windowManagerBasic.logOut();
             }
         }catch(EmptyFieldException | InvalidRegionException e){
             errorLabel.setText(null);
@@ -279,12 +287,9 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
-            try {
+            windowManagerBasic.cleanOrderPage();
                 windowManagerBasic.logOut();
-                windowManagerBasic.cleanOrderPage();
-            } catch(IOException e){
-                errorLabel.setText(e.getMessage());
-            }
+
         }
     }
 
@@ -348,7 +353,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                            boardProfileBean.getDescription()
            );
        }catch(SessionExpiredException e){
-           errorLabel.setText(e.getMessage());
+          windowManagerBasic.cleanOrderPage();
+          windowManagerBasic.logOut();
        }
     }
 
@@ -402,21 +408,32 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             }
 
         } catch (SessionExpiredException e) {
-            errorLabel.setText(e.getMessage());
+            windowManagerBasic.cleanOrderPage();
+            windowManagerBasic.logOut();
         }
     }
 
 
     public void displayDesignedBoards() {
-        List<BoardProfileBean> boards = customOrderController.getCustomizedBoards(windowManagerBasic.getAuthBean().getToken());
-        updateBoardList(boards, designButton, availableButton, false);
-        boardTypology = "designed";
+        try {
+            List<BoardProfileBean> boards = customOrderController.getCustomizedBoards(windowManagerBasic.getAuthBean().getToken());
+            updateBoardList(boards, designButton, availableButton, false);
+            boardTypology = "designed";
+        }catch(SessionExpiredException e){
+            windowManagerBasic.cleanOrderPage();
+            windowManagerBasic.logOut();
+        }
     }
 
     public void displayAvailableBoards() {
-        List<BoardProfileBean> boards = customOrderController.getBoardSamples(windowManagerBasic.getAuthBean().getToken());
-        updateBoardList(boards, availableButton, designButton, true);
-        boardTypology = "available";
+        try {
+            List<BoardProfileBean> boards = customOrderController.getBoardSamples(windowManagerBasic.getAuthBean().getToken());
+            updateBoardList(boards, availableButton, designButton, true);
+            boardTypology = "available";
+        }catch(SessionExpiredException e){
+            windowManagerBasic.cleanOrderPage();
+            windowManagerBasic.logOut();
+        }
     }
 
     private void updateBoardList(List<BoardProfileBean> boards, Button active, Button inactive, boolean saveNameInsteadOfId) {
@@ -462,21 +479,25 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
 
 
     public void displayProgressNotes() {
-        ObservableList<String> items = FXCollections.observableArrayList();
-        String orderId = orderIdMap.get(ordersComboBox.getValue());
-        OrderBean orderBean = new  OrderBean();
-        orderBean.setId(orderId);
-        List<ProgressNoteBean> progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManagerBasic.getAuthBean().getToken(), orderBean);
+        try {
+            ObservableList<String> items = FXCollections.observableArrayList();
+            String orderId = orderIdMap.get(ordersComboBox.getValue());
+            OrderBean orderBean = new OrderBean();
+            orderBean.setId(orderId);
+            List<ProgressNoteBean> progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManagerBasic.getAuthBean().getToken(), orderBean);
 
-        for (ProgressNoteBean progressNoteBean : progressNoteBeanList) {
-            String displayText = String.format("%s | %s",
-                    progressNoteBean.getDate(),
-                    progressNoteBean.getComment()
-            );
-            items.add(displayText);
+            for (ProgressNoteBean progressNoteBean : progressNoteBeanList) {
+                String displayText = String.format("%s | %s",
+                        progressNoteBean.getDate(),
+                        progressNoteBean.getComment()
+                );
+                items.add(displayText);
+            }
+
+            notesListView.setItems(items);
+        }catch(SessionExpiredException e){
+            windowManagerBasic.logOut();
         }
-
-        notesListView.setItems(items);
     }
 
 

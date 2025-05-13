@@ -4,6 +4,7 @@ package view;
 import beans.TrickBean;
 import controls.LearnTrickController;
 import exceptions.EmptyFieldException;
+import exceptions.SessionExpiredException;
 import exceptions.WrongFormatException;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -104,9 +105,13 @@ public class OrganizerTricksPageView {
         difficultyLabel.setText(difficulty);
     }
     public void loadTricks(){
-        List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManager.getAuthBean().getToken());
-        trickTable.getItems().clear();
-        trickTable.getItems().addAll(availableTricksBean);
+        try {
+            List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManager.getAuthBean().getToken());
+            trickTable.getItems().clear();
+            trickTable.getItems().addAll(availableTricksBean);
+        }catch(SessionExpiredException e ){
+            windowManager.logOut();
+        }
     }
 
 
@@ -145,12 +150,16 @@ public class OrganizerTricksPageView {
             validaDate(date);
             TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, trickCategory, date);
 
-            learnTrickController.RegisterTrick(windowManager.getAuthBean().getToken(), newTrick);
-            trickNameTextField.clear();
-            descriptionTextArea.clear();
-            dateField.clear();
-            trickGroup.selectToggle(flatRadio);
-            loadTricks();
+            try {
+                learnTrickController.RegisterTrick(windowManager.getAuthBean().getToken(), newTrick);
+                trickNameTextField.clear();
+                descriptionTextArea.clear();
+                dateField.clear();
+                trickGroup.selectToggle(flatRadio);
+                loadTricks();
+            }catch(SessionExpiredException e){
+                windowManager.logOut();
+            }
         }catch(EmptyFieldException | WrongFormatException e){
             errorLabel.setText(e.getMessage());
         }
@@ -167,11 +176,7 @@ public class OrganizerTricksPageView {
 
 
     public void logOut() {
-        try {
-            windowManager.logOut();
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
+        windowManager.logOut();
     }
 
 

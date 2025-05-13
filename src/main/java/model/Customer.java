@@ -16,6 +16,10 @@ public class Customer extends User {
     private List<Board> boardDesignedList;
     private Wallet wallet;
 
+   public Customer(String username){
+       super(username);
+   }
+
     public Customer(String username, String password, String dateOfBirth, SkaterLevel skaterLevel, Wallet wallet){
         super(username,password,dateOfBirth);
         this.role = Role.COSTUMER;

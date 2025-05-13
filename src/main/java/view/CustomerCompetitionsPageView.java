@@ -53,7 +53,7 @@ public class CustomerCompetitionsPageView {
     private int timeDurationMinutes = 10;
 
 
-    public void initialize() {
+    public void initialize() throws IOException {
         colName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getName()));
 
@@ -83,15 +83,23 @@ public class CustomerCompetitionsPageView {
         competitionSeatsAvailableLabel.setText("");
     }
 
-    public void updateCustomerInfo(){
-        WalletBean walletBean = signCompetitionController.customerInfo(windowManager.getAuthBean().getToken());
-        welcomeLabel.setText("Gentile client nel suo saldo sono presenti:");
-        coinsLabel.setText(""+walletBean.getBalance());
+    public void updateCustomerInfo() {
+        try {
+            WalletBean walletBean = signCompetitionController.customerInfo(windowManager.getAuthBean().getToken());
+            welcomeLabel.setText("Gentile client nel suo saldo sono presenti:");
+            coinsLabel.setText("" + walletBean.getBalance());
+        }catch(SessionExpiredException e ){
+            windowManager.logOut();
+        }
     }
 
     public void loadCompetitions() {
-        competitionTable.getItems().clear();
-        competitionTable.getItems().addAll(signCompetitionController.allAvailableCompetitions(windowManager.getAuthBean().getToken()));
+        try {
+            competitionTable.getItems().clear();
+            competitionTable.getItems().addAll(signCompetitionController.allAvailableCompetitions(windowManager.getAuthBean().getToken()));
+        }catch(SessionExpiredException e){
+            windowManager.logOut();
+        }
     }
 
     public void selectCompetition(){
@@ -134,19 +142,26 @@ public class CustomerCompetitionsPageView {
             validaDate(date);
             String location = locationSearch.getText();
             CompetitionBean competitionBean = new CompetitionBean(date, location);
-            competitionTable.getItems().clear();
-            competitionTable.getItems().addAll(signCompetitionController.searchCompetitionByDateAndLocation(windowManager.getAuthBean().getToken(),competitionBean));
+            try {
+                competitionTable.getItems().clear();
+                competitionTable.getItems().addAll(signCompetitionController.searchCompetitionByDateAndLocation(windowManager.getAuthBean().getToken(), competitionBean));
+            }catch(SessionExpiredException e){
+                windowManager.logOut();
+            }
         }catch(WrongFormatException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
     @FXML
-    public void onCompetitionSelected() {
-
-        CompetitionBean selected = competitionTable.getSelectionModel().getSelectedItem();
-        competitionBean = signCompetitionController.competitionDetails(windowManager.getAuthBean().getToken(),selected);
-        selectButton.setVisible(true);
+    public void onCompetitionSelected() throws IOException {
+        try {
+            CompetitionBean selected = competitionTable.getSelectionModel().getSelectedItem();
+            competitionBean = signCompetitionController.competitionDetails(windowManager.getAuthBean().getToken(), selected);
+            selectButton.setVisible(true);
+        }catch(SessionExpiredException e ){
+            windowManager.logOut();
+        }
     }
 
 
@@ -208,7 +223,7 @@ public class CustomerCompetitionsPageView {
     }
 
     @FXML
-    public void submitSignToCompetition(){
+    public void submitSignToCompetition() throws IOException {
         try {
             String registrationName = registrationNameField.getText();
             String email = emailField.getText();
@@ -229,8 +244,10 @@ public class CustomerCompetitionsPageView {
                 summaryPane.setVisible(true);
             } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
                 errorLabel.setText(e.getMessage());
+            }catch(SessionExpiredException e){
+                windowManager.logOut();
             }
-        }catch(EmptyFieldException e){
+        }catch(EmptyFieldException | IOException e){
             errorLabel.setText(e.getMessage());
         }
         updateCustomerInfo();
@@ -263,11 +280,7 @@ public class CustomerCompetitionsPageView {
         }
     }
 
-    public void logOut(){
-        try {
-            windowManager.logOut();
-        }catch(IOException e){
-            errorLabel.setText(e.getMessage());
-        }
+    public void logOut() {
+        windowManager.logOut();
     }
 }

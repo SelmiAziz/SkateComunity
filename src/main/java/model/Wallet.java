@@ -11,7 +11,7 @@ public class Wallet {
 
 
     public Wallet(){
-        this.balance = 100;
+
     }
 
 

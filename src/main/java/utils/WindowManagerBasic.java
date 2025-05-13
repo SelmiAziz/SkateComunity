@@ -131,8 +131,12 @@ public class WindowManagerBasic{
         });
     }
 
-    public void logOut() throws IOException {
-        loadScene("viewFxmlBasic/LogPageViewBasic.fxml");
+    public void logOut() {
+        try {
+            loadScene("viewFxmlBasic/LogPageViewBasic.fxml");
+        }catch(IOException e){
+
+        }
 
     }
 

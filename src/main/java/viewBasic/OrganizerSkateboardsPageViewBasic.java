@@ -3,11 +3,11 @@ package viewBasic;
 import beans.BoardProfileBean;
 import controls.CreateBoardController;
 import exceptions.EmptyFieldException;
+import exceptions.SessionExpiredException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.WindowManager;
 import utils.WindowManagerBasic;
 
 import java.io.IOException;
@@ -43,17 +43,21 @@ public class OrganizerSkateboardsPageViewBasic {
     }
 
     public void loadSkateboards() {
-        List<BoardProfileBean> skateboards = createSkateboardController.getStoredBoards(windowManagerBasic.getAuthBean().getToken());
-        skateboardList.getItems().clear();
-        for (BoardProfileBean bean : skateboards) {
-            String display = String.format(
-                    "<<Nome: %s>>-<<Description: %s>>-<<Size: %s>>-<<Cost: %d>>",
-                    bean.getName(),
-                    bean.getDescription(),
-                    bean.getSize(),
-                    bean.getPrice()
-            );
-            skateboardList.getItems().add(display);
+        try {
+            List<BoardProfileBean> skateboards = createSkateboardController.getStoredBoards(windowManagerBasic.getAuthBean().getToken());
+            skateboardList.getItems().clear();
+            for (BoardProfileBean bean : skateboards) {
+                String display = String.format(
+                        "<<Nome: %s>>-<<Description: %s>>-<<Size: %s>>-<<Cost: %d>>",
+                        bean.getName(),
+                        bean.getDescription(),
+                        bean.getSize(),
+                        bean.getPrice()
+                );
+                skateboardList.getItems().add(display);
+            }
+        }catch(SessionExpiredException e){
+            windowManagerBasic.logOut();
         }
     }
 
@@ -78,8 +82,12 @@ public class OrganizerSkateboardsPageViewBasic {
                 throw new EmptyFieldException("Inserire correttamente campi");
             }
             int cost = Integer.parseInt(costTextField.getText());
-            createSkateboardController.createBoard( windowManagerBasic.getAuthBean().getToken(),new BoardProfileBean(name, description, size, cost));
-            loadSkateboards();
+            try {
+                createSkateboardController.createBoard(windowManagerBasic.getAuthBean().getToken(), new BoardProfileBean(name, description, size, cost));
+                loadSkateboards();
+            }catch(SessionExpiredException e){
+                windowManagerBasic.logOut();
+            }
         }catch(NumberFormatException | EmptyFieldException e){
             errorLabel.setText(e.getMessage());
         }
@@ -103,11 +111,7 @@ public class OrganizerSkateboardsPageViewBasic {
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
-            try {
-                windowManagerBasic.logOut();
-            } catch(IOException e){
-                errorLabel.setText(e.getMessage());
-            }
+            windowManagerBasic.logOut();
         }
     }
 

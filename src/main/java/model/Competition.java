@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Competition {
-    private final String competitionName;
-    private final String description;
-    private final String date;
-    private final int participationFee;
-    private final String location;
-    private final Integer maxRegistrations;
+    private  String competitionName;
+    private  String description;
+    private  String date;
+    private  int participationFee;
+    private String location;
+    private Integer maxRegistrations;
     private List<Registration> requestList;
     private  Organizer organizer;
 
@@ -23,6 +23,8 @@ public class Competition {
         this.requestList = new ArrayList<>();
     }
 
+
+    public Competition(){}
 
 
     public void setOrganizer(Organizer organizer){
@@ -56,7 +58,7 @@ public class Competition {
         return this.maxRegistrations;
     }
 
-    public Integer getCurrentRegistrations(){
+    public Integer getRegistrationsNumber(){
         return requestList.toArray().length;
     }
 

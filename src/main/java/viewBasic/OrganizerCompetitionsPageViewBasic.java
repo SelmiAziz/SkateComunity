@@ -4,11 +4,13 @@ import beans.CompetitionBean;
 import controls.CreateCompetitionController;
 import exceptions.EmptyFieldException;
 import exceptions.CompetitionAlreadyExistsException;
+import exceptions.SessionExpiredException;
 import exceptions.WrongFormatException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import utils.Session;
 import utils.WindowManager;
 import utils.WindowManagerBasic;
 
@@ -48,20 +50,24 @@ public class OrganizerCompetitionsPageViewBasic {
 
 
     public void loadCompetitions(){
-        List<CompetitionBean> availableCompetitionsBean = createCompetitionController.organizerCompetitions(windowManagerBasic.getAuthBean().getToken());
-        competitionList.getItems().clear();
-        for (CompetitionBean competitionBean : availableCompetitionsBean) {
-            String competitionDisplay = String.format(
-                    "<<Name Competition: %s>>-<<Description: %s>>-<<Date: %s>>-<<Location: %s>>-<<Coins Required: %d>>-<<CurrentRegistration: %d>>-<<MaxRegistration: %d>>",
-                    competitionBean.getName(),
-                    competitionBean.getDescription(),
-                    competitionBean.getDate(),
-                    competitionBean.getLocation(),
-                    competitionBean.getCoins(),
-                    competitionBean.getCurrentRegistrations(),
-                    competitionBean.getMaxRegistrations()
-            );
-            competitionList.getItems().add(competitionDisplay);
+        try {
+            List<CompetitionBean> availableCompetitionsBean = createCompetitionController.organizerCompetitions(windowManagerBasic.getAuthBean().getToken());
+            competitionList.getItems().clear();
+            for (CompetitionBean competitionBean : availableCompetitionsBean) {
+                String competitionDisplay = String.format(
+                        "<<Name Competition: %s>>-<<Description: %s>>-<<Date: %s>>-<<Location: %s>>-<<Coins Required: %d>>-<<CurrentRegistration: %d>>-<<MaxRegistration: %d>>",
+                        competitionBean.getName(),
+                        competitionBean.getDescription(),
+                        competitionBean.getDate(),
+                        competitionBean.getLocation(),
+                        competitionBean.getCoins(),
+                        competitionBean.getCurrentRegistrations(),
+                        competitionBean.getMaxRegistrations()
+                );
+                competitionList.getItems().add(competitionDisplay);
+            }
+        }catch(SessionExpiredException e ){
+            windowManagerBasic.logOut();
         }
     }
 
@@ -110,8 +116,12 @@ public class OrganizerCompetitionsPageViewBasic {
             validateFields(name, description, date, location);
             coinsRequired = Integer.parseInt(coinsAmountField.getText());
             maxRegistrations = Integer.parseInt(maxRegistrationsField.getText());
-            createCompetitionController.createCompetition(windowManagerBasic.getAuthBean().getToken(),new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
-            loadCompetitions();
+            try {
+                createCompetitionController.createCompetition(windowManagerBasic.getAuthBean().getToken(), new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
+                loadCompetitions();
+            }catch(SessionExpiredException e){
+                windowManagerBasic.logOut();
+            }
         } catch (NumberFormatException | EmptyFieldException | WrongFormatException |
                  CompetitionAlreadyExistsException | SQLException e) {
             errorLabel.setText(e.getMessage());
@@ -134,11 +144,7 @@ public class OrganizerCompetitionsPageViewBasic {
                 errorLabel.setText(e.getMessage());
             }
         }else if(page.equals("Log Out")){
-            try {
-                windowManagerBasic.logOut();
-            } catch(IOException e){
-                errorLabel.setText(e.getMessage());
-            }
+            windowManagerBasic.logOut();
         }
     }
 

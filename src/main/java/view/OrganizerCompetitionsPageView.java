@@ -4,12 +4,12 @@ import beans.CompetitionBean;
 import controls.CreateCompetitionController;
 import exceptions.EmptyFieldException;
 import exceptions.CompetitionAlreadyExistsException;
+import exceptions.SessionExpiredException;
 import exceptions.WrongFormatException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
-import utils.SessionManager;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -97,7 +97,7 @@ public class OrganizerCompetitionsPageView {
 
 
     @FXML
-    private void createCompetition() {
+    private void createCompetition() throws IOException {
         String name = competitionNameField.getText();
         String description = competitionDescriptionArea.getText();
         String location = locationField.getText();
@@ -113,12 +113,19 @@ public class OrganizerCompetitionsPageView {
             loadCompetitions();
         } catch (WrongFormatException | CompetitionAlreadyExistsException | EmptyFieldException | SQLException e) {
             errorLabel.setText(e.getMessage());
+        }catch(SessionExpiredException e ){
+            windowManager.logOut();
+
         }
     }
 
     public void loadCompetitions() {
-        competitionTable.getItems().clear();
-        competitionTable.getItems().addAll(createCompetitionController.organizerCompetitions(windowManager.getAuthBean().getToken()));
+        try {
+            competitionTable.getItems().clear();
+            competitionTable.getItems().addAll(createCompetitionController.organizerCompetitions(windowManager.getAuthBean().getToken()));
+        }catch(SessionExpiredException e1){
+                windowManager.logOut();
+        }
     }
 
 
@@ -134,11 +141,7 @@ public class OrganizerCompetitionsPageView {
     }
 
     public void logOut() {
-        try {
-            windowManager.logOut();
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
+        windowManager.logOut();
     }
 
     public void goToHomePage() {

@@ -41,13 +41,22 @@ public class CustomerCompetitionsPageViewBasic {
 
 
     public void initialize() {
-        List<CompetitionBean> availableCompetitionsBean =  signCompetitionController.allAvailableCompetitions(windowManagerBasic.getAuthBean().getToken());
-        loadCompetitions(availableCompetitionsBean);
-        updateWalletInfo();
-        confirmRegistrationButton.setVisible(false);
-        populatePageChoice();
+            loadAvailableCompetitions();
+            updateWalletInfo();
+            confirmRegistrationButton.setVisible(false);
+            populatePageChoice();
     }
 
+
+    public void loadAvailableCompetitions(){
+        try {
+            List<CompetitionBean> availableCompetitionsBean = signCompetitionController.allAvailableCompetitions(windowManagerBasic.getAuthBean().getToken());
+            loadCompetitions(availableCompetitionsBean);
+        }catch(SessionExpiredException e){
+            windowManagerBasic.cleanOrderPage();
+            windowManagerBasic.logOut();
+        }
+    }
 
     private void populatePageChoice() {
         List<String> list = Arrays.asList( "Board", "Learn", "Log Out");
@@ -58,8 +67,13 @@ public class CustomerCompetitionsPageViewBasic {
 
 
     public void updateWalletInfo(){
-        WalletBean walletBean = signCompetitionController.customerInfo(windowManagerBasic.getAuthBean().getToken());
-        coinsLabel.setText(""+walletBean.getBalance());
+        try {
+            WalletBean walletBean = signCompetitionController.customerInfo(windowManagerBasic.getAuthBean().getToken());
+            coinsLabel.setText("" + walletBean.getBalance());
+        }catch(SessionExpiredException e){
+            windowManagerBasic.cleanOrderPage();
+            windowManagerBasic.logOut();
+        }
     }
 
     public void competitionDetails(){
@@ -67,12 +81,17 @@ public class CustomerCompetitionsPageViewBasic {
             String competitionName = competitionNameField.getText();
             if(competitionName.isEmpty()){throw new EmptyFieldException("Campo nome competizione risulta vuoto!!");}
             CompetitionBean competitionBean = new CompetitionBean(competitionName);
-            CompetitionBean competitionBeanDetailed = signCompetitionController.competitionDetails(windowManagerBasic.getAuthBean().getToken(),competitionBean);
-            competitionNameLabel.setText(competitionBeanDetailed.getName());
-            competitionCoinsLabel.setText(""+competitionBeanDetailed.getCoins());
-            competitionDescriptionLabel.setText(competitionBeanDetailed.getDescription());
-            competitionSeatsAvailableLabel.setText(""+competitionBeanDetailed.getAvailableRegistrations());
-            confirmRegistrationButton.setVisible(true);
+            try {
+                CompetitionBean competitionBeanDetailed = signCompetitionController.competitionDetails(windowManagerBasic.getAuthBean().getToken(), competitionBean);
+                competitionNameLabel.setText(competitionBeanDetailed.getName());
+                competitionCoinsLabel.setText("" + competitionBeanDetailed.getCoins());
+                competitionDescriptionLabel.setText(competitionBeanDetailed.getDescription());
+                competitionSeatsAvailableLabel.setText("" + competitionBeanDetailed.getAvailableRegistrations());
+                confirmRegistrationButton.setVisible(true);
+            }catch(SessionExpiredException e ){
+                windowManagerBasic.cleanOrderPage();
+                windowManagerBasic.logOut();
+            }
         } catch(EmptyFieldException e){
             errorLabel.setText(e.getMessage());
         }
@@ -118,8 +137,13 @@ public class CustomerCompetitionsPageViewBasic {
             String date = formatValidateDate(monthField.getText(), dayField.getText(), yearField.getText());
             String location = locationSearch.getText();
             CompetitionBean competitionBean = new CompetitionBean(date, location);
-            List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation(windowManagerBasic.getAuthBean().getToken(),competitionBean);
-            loadCompetitions(filteredCompetitions);
+            try {
+                List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation(windowManagerBasic.getAuthBean().getToken(), competitionBean);
+                loadCompetitions(filteredCompetitions);
+            }catch(SessionExpiredException e){
+                windowManagerBasic.cleanOrderPage();
+                windowManagerBasic.logOut();
+            }
         }catch(WrongFormatException e){
             errorLabel.setText(e.getMessage());
         }
@@ -138,9 +162,14 @@ public class CustomerCompetitionsPageViewBasic {
             RegistrationRequestBean registrationRequestBean = new RegistrationRequestBean();
             registrationRequestBean.setRegistrationName(registrationName);
             registrationRequestBean.setEmail(email);
-            RegistrationBean registrationBean = signCompetitionController.signToCompetition(windowManagerBasic.getAuthBean().getToken(),competitionBean, registrationRequestBean);
-            assignedSeatLabel.setText("Ti è stato fornito il codice: " +registrationBean.getRegistrationCode());
-            generateCodeLabel.setText("Turno di gara: "+registrationBean.getAssignedSeat());
+            try {
+                RegistrationBean registrationBean = signCompetitionController.signToCompetition(windowManagerBasic.getAuthBean().getToken(), competitionBean, registrationRequestBean);
+                assignedSeatLabel.setText("Ti è stato fornito il codice: " + registrationBean.getRegistrationCode());
+                generateCodeLabel.setText("Turno di gara: " + registrationBean.getAssignedSeat());
+            }catch(SessionExpiredException e ){
+                windowManagerBasic.cleanOrderPage();
+                windowManagerBasic.logOut();
+            }
         } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
             errorLabel.setText(e.getMessage());
         } catch(EmptyFieldException e){
@@ -160,11 +189,8 @@ public class CustomerCompetitionsPageViewBasic {
         }else if(page.equals("Board")){
                 windowManagerBasic.goToOrderPage();
         }else if(page.equals("Log Out")){
-            try {
                 windowManagerBasic.logOut();
-            } catch(IOException e){
-                errorLabel.setText(e.getMessage());
-            }
+
         }
     }
 

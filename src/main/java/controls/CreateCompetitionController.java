@@ -46,7 +46,7 @@ public class CreateCompetitionController {
         List<Competition> competitionList = organizer.getCompetitionCreatedList();
         List<CompetitionBean> competitionBeanList = new ArrayList<>();
         for (Competition competition : competitionList) {
-            competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getDescription(), competition.getDate(), competition.getLocation(), competition.getParticipationFee(), competition.getCurrentRegistrations(), competition.getMaxRegistrations()));
+            competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getDescription(), competition.getDate(), competition.getLocation(), competition.getParticipationFee(), competition.getRegistrationsNumber(), competition.getMaxRegistrations()));
         }
         return competitionBeanList;
     }

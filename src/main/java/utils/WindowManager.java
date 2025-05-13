@@ -171,9 +171,11 @@ public class WindowManager {
         });
     }
 
-    public void logOut() throws IOException {
+    public void logOut()  {
+        try {
             loadScene("viewFxml/AccessView.fxml");
-
+        }catch(IOException e){
+        }
     }
 
 
@@ -199,6 +201,7 @@ public class WindowManager {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+
         Platform.runLater(organizerEventsPageView::loadCompetitions);
 
     }
