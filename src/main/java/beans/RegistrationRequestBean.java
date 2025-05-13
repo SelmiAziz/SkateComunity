@@ -5,7 +5,9 @@ public class RegistrationRequestBean {
     private String email;
 
 
-    public RegistrationRequestBean(){};
+    public RegistrationRequestBean(){
+        //empty
+    };
 
     public void setRegistrationName(String registrationName){
         this.registrationName = registrationName;

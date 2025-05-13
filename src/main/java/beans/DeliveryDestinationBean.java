@@ -7,7 +7,9 @@ public class DeliveryDestinationBean {
     private String streetAddress;
 
 
-    public DeliveryDestinationBean(){}
+    public DeliveryDestinationBean(){
+        //empty
+    }
 
     public String getCity() {
         return city;

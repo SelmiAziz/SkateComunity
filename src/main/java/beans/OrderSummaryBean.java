@@ -16,7 +16,9 @@ public class OrderSummaryBean {
     private String status;
 
 
-    public OrderSummaryBean(){};
+    public OrderSummaryBean(){
+        //empty
+    };
 
     public void setId(String id) {
         this.id = id;

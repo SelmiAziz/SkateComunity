@@ -5,7 +5,9 @@ public class RegistrationBean {
     String assignedSeat;
     String registrationCode;
 
-    public RegistrationBean(){}
+    public RegistrationBean(){
+        //empty
+    }
 
     public String getRegistrationCode() {
         return registrationCode;

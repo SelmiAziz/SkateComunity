@@ -4,7 +4,9 @@ public class DeliveryPreferencesBean {
     private String comment;
     private String preferredTimeSlot;
 
-    public DeliveryPreferencesBean(){}
+    public DeliveryPreferencesBean(){
+        //empty
+    }
 
 
     public String getPreferredTimeSlot() {

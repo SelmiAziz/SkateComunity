@@ -14,7 +14,9 @@ public class CustomBoardBean {
     private int warrantyMonths;
     private boolean useWarrantyMonths;
 
-    public CustomBoardBean() {}
+    public CustomBoardBean() {
+        //empty
+    }
 
     public String getName() {
         return name;

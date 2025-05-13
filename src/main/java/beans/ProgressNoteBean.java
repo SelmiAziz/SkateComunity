@@ -5,7 +5,9 @@ public class ProgressNoteBean {
     private String date;
 
 
-    public ProgressNoteBean(){}
+    public ProgressNoteBean(){
+        //empty
+    }
 
     public void setDate(String date) {
         this.date = date;
