@@ -1,3 +1,5 @@
+package CompetitionTest;
+
 import model.Competition;
 import model.Registration;
 import org.junit.jupiter.api.Test;

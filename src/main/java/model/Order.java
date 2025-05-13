@@ -20,7 +20,6 @@ public class Order {
     public Order( DeliveryDestination deliveryDestination, DeliveryPreferences deliveryPreferences, Board board){
         this.deliveryDestination = deliveryDestination;
         this.board = board;
-        this.customer = customer;
         this.progressNoteList.add(new ProgressNote("Chronology Starts here!!"));
         this.orderStatus = OrderStatus.REQUESTED;
         this.id =  UUID.randomUUID().toString();

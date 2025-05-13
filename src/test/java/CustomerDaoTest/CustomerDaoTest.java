@@ -1,3 +1,5 @@
+package CustomerDaoTest;
+
 import dao.CustomerDao;
 import dao.patternAbstractFactory.DaoFactory;
 import model.Customer;
