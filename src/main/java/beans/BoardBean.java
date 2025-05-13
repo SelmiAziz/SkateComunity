@@ -1,7 +1,7 @@
 package beans;
 
 public class BoardBean{
-    public String id;
+    private String id;
 
     public String getId() {
         return id;

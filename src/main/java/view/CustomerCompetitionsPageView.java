@@ -88,7 +88,7 @@ public class CustomerCompetitionsPageView {
             WalletBean walletBean = signCompetitionController.customerInfo(windowManager.getAuthBean().getToken());
             welcomeLabel.setText("Gentile client nel suo saldo sono presenti:");
             coinsLabel.setText("" + walletBean.getBalance());
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManager.logOut();
         }
     }
@@ -97,7 +97,7 @@ public class CustomerCompetitionsPageView {
         try {
             competitionTable.getItems().clear();
             competitionTable.getItems().addAll(signCompetitionController.allAvailableCompetitions(windowManager.getAuthBean().getToken()));
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }
     }
@@ -145,7 +145,7 @@ public class CustomerCompetitionsPageView {
             try {
                 competitionTable.getItems().clear();
                 competitionTable.getItems().addAll(signCompetitionController.searchCompetitionByDateAndLocation(windowManager.getAuthBean().getToken(), competitionBean));
-            }catch(SessionExpiredException e){
+            }catch(SessionExpiredException _){
                 windowManager.logOut();
             }
         }catch(WrongFormatException e) {
@@ -159,7 +159,7 @@ public class CustomerCompetitionsPageView {
             CompetitionBean selected = competitionTable.getSelectionModel().getSelectedItem();
             competitionBean = signCompetitionController.competitionDetails(windowManager.getAuthBean().getToken(), selected);
             selectButton.setVisible(true);
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManager.logOut();
         }
     }
@@ -244,7 +244,7 @@ public class CustomerCompetitionsPageView {
                 summaryPane.setVisible(true);
             } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
                 errorLabel.setText(e.getMessage());
-            }catch(SessionExpiredException e){
+            }catch(SessionExpiredException _){
                 windowManager.logOut();
             }
         }catch(EmptyFieldException | IOException e){

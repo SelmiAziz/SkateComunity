@@ -94,7 +94,7 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
             }
             backButton.setVisible(true);
             notesButton.setVisible(false);
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }
     }
@@ -113,7 +113,7 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
             List<OrderSummaryBean> customOrderBeanList = customOrderController.getSubmittedOrders(windowManager.getAuthBean().getToken());
             ordersTable.getItems().clear();
             ordersTable.getItems().addAll(customOrderBeanList);
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }
     }

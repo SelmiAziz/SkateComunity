@@ -10,8 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import utils.Session;
-import utils.WindowManager;
 import utils.WindowManagerBasic;
 
 import java.io.IOException;
@@ -66,7 +64,7 @@ public class OrganizerCompetitionsPageViewBasic {
                 );
                 competitionList.getItems().add(competitionDisplay);
             }
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManagerBasic.logOut();
         }
     }
@@ -119,7 +117,7 @@ public class OrganizerCompetitionsPageViewBasic {
             try {
                 createCompetitionController.createCompetition(windowManagerBasic.getAuthBean().getToken(), new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
                 loadCompetitions();
-            }catch(SessionExpiredException e){
+            }catch(SessionExpiredException _){
                 windowManagerBasic.logOut();
             }
         } catch (NumberFormatException | EmptyFieldException | WrongFormatException |

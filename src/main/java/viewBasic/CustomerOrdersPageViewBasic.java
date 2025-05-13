@@ -166,7 +166,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             boardBean = customOrderController.saveCreatedCustomizedBoard(windowManagerBasic.getAuthBean().getToken(), boardProfileBean);
             boardPane.setVisible(false);
             orderSubmitPane.setVisible(true);
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
         }
@@ -217,7 +217,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                 orderSummaryBean = customOrderController.elaborateOrder(windowManagerBasic.getAuthBean().getToken(), deliveryDestinationBean, deliveryPreferencesBean,  boardBean);
             }catch(InsufficientCoinsException e){
                 errorLabel.setText(e.getMessage());
-            }catch(SessionExpiredException e2){
+            }catch(SessionExpiredException _){
                 windowManagerBasic.cleanOrderPage();
                 windowManagerBasic.logOut();
             }
@@ -352,7 +352,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                    "Price: " + boardProfileBean.getPrice() + "\n\n" +
                            boardProfileBean.getDescription()
            );
-       }catch(SessionExpiredException e){
+       }catch(SessionExpiredException _){
           windowManagerBasic.cleanOrderPage();
           windowManagerBasic.logOut();
        }
@@ -407,7 +407,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                 ordersComboBox.getSelectionModel().selectFirst();
             }
 
-        } catch (SessionExpiredException e) {
+        } catch (SessionExpiredException _) {
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
         }
@@ -419,7 +419,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             List<BoardProfileBean> boards = customOrderController.getCustomizedBoards(windowManagerBasic.getAuthBean().getToken());
             updateBoardList(boards, designButton, availableButton, false);
             boardTypology = "designed";
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
         }
@@ -430,7 +430,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             List<BoardProfileBean> boards = customOrderController.getBoardSamples(windowManagerBasic.getAuthBean().getToken());
             updateBoardList(boards, availableButton, designButton, true);
             boardTypology = "available";
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
         }
@@ -495,7 +495,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             }
 
             notesListView.setItems(items);
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManagerBasic.logOut();
         }
     }

@@ -7,7 +7,9 @@ public class BoardProfileBean {
     private int price;
     private String description;
 
-    public BoardProfileBean(){};
+    public BoardProfileBean(){
+        //empty
+    }
 
     public BoardProfileBean(String name, String description, String size, int price){
         this.name = name;

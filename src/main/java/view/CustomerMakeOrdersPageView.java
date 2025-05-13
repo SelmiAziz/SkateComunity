@@ -111,7 +111,7 @@ public class CustomerMakeOrdersPageView {
                 windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
             }catch(InsufficientCoinsException e){
                 errorLabel.setText(e.getMessage());
-            }catch(SessionExpiredException e){
+            }catch(SessionExpiredException _){
                 windowManager.closeCoordinator();
                 windowManager.logOut();
             }

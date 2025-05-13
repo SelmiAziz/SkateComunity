@@ -113,7 +113,7 @@ public class OrganizerCompetitionsPageView {
             loadCompetitions();
         } catch (WrongFormatException | CompetitionAlreadyExistsException | EmptyFieldException | SQLException e) {
             errorLabel.setText(e.getMessage());
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManager.logOut();
 
         }
@@ -123,7 +123,7 @@ public class OrganizerCompetitionsPageView {
         try {
             competitionTable.getItems().clear();
             competitionTable.getItems().addAll(createCompetitionController.organizerCompetitions(windowManager.getAuthBean().getToken()));
-        }catch(SessionExpiredException e1){
+        }catch(SessionExpiredException _){
                 windowManager.logOut();
         }
     }

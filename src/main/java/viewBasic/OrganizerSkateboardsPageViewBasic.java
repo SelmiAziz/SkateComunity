@@ -56,7 +56,7 @@ public class OrganizerSkateboardsPageViewBasic {
                 );
                 skateboardList.getItems().add(display);
             }
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManagerBasic.logOut();
         }
     }
@@ -85,7 +85,7 @@ public class OrganizerSkateboardsPageViewBasic {
             try {
                 createSkateboardController.createBoard(windowManagerBasic.getAuthBean().getToken(), new BoardProfileBean(name, description, size, cost));
                 loadSkateboards();
-            }catch(SessionExpiredException e){
+            }catch(SessionExpiredException _){
                 windowManagerBasic.logOut();
             }
         }catch(NumberFormatException | EmptyFieldException e){

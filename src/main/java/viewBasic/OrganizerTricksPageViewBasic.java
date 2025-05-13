@@ -47,7 +47,7 @@ public class OrganizerTricksPageViewBasic {
                         trick.getNameTrick(), trick.getCategory(), trick.getDifficulty(), trick.getDescription());
                 eventListView.getItems().add(trickDisplay);
             }
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManagerBasic.logOut();
         }
     }
@@ -138,7 +138,7 @@ public class OrganizerTricksPageViewBasic {
                 trickNameTextField.clear();
                 descriptionTextArea.clear();
                 loadTricks();
-            }catch(SessionExpiredException e){
+            }catch(SessionExpiredException _){
                 windowManagerBasic.logOut();
             }
         }catch(EmptyFieldException e){

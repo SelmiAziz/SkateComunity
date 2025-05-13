@@ -57,7 +57,7 @@ public class OrganizerSkateboardsPageView {
                 System.out.println(s.getName());
             }
             skateboardTable.getItems().addAll(availableSkateboardsList);
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }
     }
@@ -75,7 +75,7 @@ public class OrganizerSkateboardsPageView {
           try {
               createSkateboardController.createBoard(windowManager.getAuthBean().getToken(), new BoardProfileBean(name, description, size, cost));
               loadSkateboards();
-          }catch(SessionExpiredException e ){
+          }catch(SessionExpiredException _ ){
               windowManager.logOut();
           }
       }catch(EmptyFieldException e){

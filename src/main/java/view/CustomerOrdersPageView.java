@@ -105,7 +105,7 @@ public class CustomerOrdersPageView {
             boardTable.getItems().addAll(availableBoardsList);
             designButton.setStyle("-fx-background-color:  #949494;");
             availableButton.setStyle("-fx-background-color: #1ABC9C;");
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManager.logOut();
         }
     }
@@ -118,7 +118,7 @@ public class CustomerOrdersPageView {
             boardTable.getItems().addAll(boardBeanList);
             designButton.setStyle("-fx-background-color:  #1ABC9C;");
             availableButton.setStyle("-fx-background-color:  #949494;");
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }
     }
@@ -141,7 +141,7 @@ public class CustomerOrdersPageView {
             loadBoardForOrder(customizedBoardBean);
             boardBean = customOrderController.saveCreatedCustomizedBoard(windowManager.getAuthBean().getToken(), customizedBoardBean);
             orderPane.setVisible(true);
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManager.logOut();
         }
     }
@@ -214,7 +214,7 @@ public class CustomerOrdersPageView {
             boardPriceLabel.setText("Price " + customizedBoardBean.getPrice());
             descriptionArea.setText(customizedBoardBean.getDescription());
             pannelPane.setVisible(true);
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }
     }
@@ -246,7 +246,7 @@ public class CustomerOrdersPageView {
         try {
             WalletBean walletBean = customOrderController.walletDetails(windowManager.getAuthBean().getToken());
             coinsLabel.setText("" + walletBean.getBalance());
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }
     }

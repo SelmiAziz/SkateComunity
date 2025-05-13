@@ -52,7 +52,7 @@ public class CustomerCompetitionsPageViewBasic {
         try {
             List<CompetitionBean> availableCompetitionsBean = signCompetitionController.allAvailableCompetitions(windowManagerBasic.getAuthBean().getToken());
             loadCompetitions(availableCompetitionsBean);
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
         }
@@ -70,7 +70,7 @@ public class CustomerCompetitionsPageViewBasic {
         try {
             WalletBean walletBean = signCompetitionController.customerInfo(windowManagerBasic.getAuthBean().getToken());
             coinsLabel.setText("" + walletBean.getBalance());
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
         }
@@ -88,7 +88,7 @@ public class CustomerCompetitionsPageViewBasic {
                 competitionDescriptionLabel.setText(competitionBeanDetailed.getDescription());
                 competitionSeatsAvailableLabel.setText("" + competitionBeanDetailed.getAvailableRegistrations());
                 confirmRegistrationButton.setVisible(true);
-            }catch(SessionExpiredException e ){
+            }catch(SessionExpiredException _ ){
                 windowManagerBasic.cleanOrderPage();
                 windowManagerBasic.logOut();
             }
@@ -140,7 +140,7 @@ public class CustomerCompetitionsPageViewBasic {
             try {
                 List<CompetitionBean> filteredCompetitions = signCompetitionController.searchCompetitionByDateAndLocation(windowManagerBasic.getAuthBean().getToken(), competitionBean);
                 loadCompetitions(filteredCompetitions);
-            }catch(SessionExpiredException e){
+            }catch(SessionExpiredException _){
                 windowManagerBasic.cleanOrderPage();
                 windowManagerBasic.logOut();
             }

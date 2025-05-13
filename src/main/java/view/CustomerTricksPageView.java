@@ -76,18 +76,14 @@ public class CustomerTricksPageView {
             List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManager.getAuthBean().getToken());
             trickTable.getItems().clear();
             trickTable.getItems().addAll(availableTricksBean);
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }
     }
 
 
     public void logOut() {
-        try {
-            windowManager.logOut();
-        }catch(IOException e){
-            errorLabel.setText(e.getMessage());
-        }
+        windowManager.logOut();
     }
 
 

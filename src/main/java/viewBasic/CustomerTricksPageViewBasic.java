@@ -35,7 +35,7 @@ public class CustomerTricksPageViewBasic {
                         trick.getNameTrick());
                 eventListView.getItems().add(trickDisplay);
             }
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManagerBasic.logOut();
         }
     }
@@ -66,7 +66,7 @@ public class CustomerTricksPageViewBasic {
             descriptionLabel.setText("Description: " + detailedTrick.getDescription());
             categoryLabel.setText("Category: " + detailedTrick.getCategory());
             difficultyLabel.setText("Difficulty: " + detailedTrick.getDifficulty().toLowerCase());
-        }catch(SessionExpiredException e ){
+        }catch(SessionExpiredException _ ){
             windowManagerBasic.logOut();
         }
     }
