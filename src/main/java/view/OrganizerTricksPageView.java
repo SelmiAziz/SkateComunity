@@ -145,7 +145,7 @@ public class OrganizerTricksPageView {
             TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, trickCategory, date);
 
             try {
-                learnTrickController.RegisterTrick(windowManager.getAuthBean().getToken(), newTrick);
+                learnTrickController.registerTrick(windowManager.getAuthBean().getToken(), newTrick);
                 trickNameTextField.clear();
                 descriptionTextArea.clear();
                 dateField.clear();

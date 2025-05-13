@@ -50,10 +50,26 @@ public class LoginController {
         String dateOfBirth = registerUserBean.getDateOfBirth();
         Role role =  registerUserBean.getRole().equals("Organizer") ? Role.ORGANIZER : Role.COSTUMER;
         User user;
+        SkaterLevel skillLevel = null;
         if(role == Role.COSTUMER){
-            SkaterLevel skillLevel = registerUserBean.getSkillLevel().equals("Novice") ? SkaterLevel.NOVICE
-                                    : registerUserBean.getSkillLevel().equals("Proficient") ? SkaterLevel.PROFICIENT
-                                    : SkaterLevel.ADVANCED;
+            if (role == Role.COSTUMER) {
+                String skill = registerUserBean.getSkillLevel();
+
+                switch (skill) {
+                    case "Novice":
+                        skillLevel = SkaterLevel.NOVICE;
+                        break;
+                    case "Proficient":
+                        skillLevel = SkaterLevel.PROFICIENT;
+                        break;
+                    default:
+                        skillLevel = SkaterLevel.ADVANCED;
+                        break;
+                }
+
+                // Usa skillLevel come preferisci
+            }
+
             Wallet wallet = new Wallet();
             wallet.depositCoins(400); //a registration bonus
             Customer costumer =  new Customer(username,password,dateOfBirth,skillLevel, wallet);

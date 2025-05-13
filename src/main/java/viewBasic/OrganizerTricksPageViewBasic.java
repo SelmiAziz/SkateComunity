@@ -131,7 +131,7 @@ public class OrganizerTricksPageViewBasic {
 
             TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, category, date);
             try {
-                learnTrickController.RegisterTrick(windowManagerBasic.getAuthBean().getToken(), newTrick);
+                learnTrickController.registerTrick(windowManagerBasic.getAuthBean().getToken(), newTrick);
 
                 categoryChoiceBox.setValue("flat");
                 difficultyChoiceBox.setValue("medium");

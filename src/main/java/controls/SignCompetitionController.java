@@ -29,7 +29,7 @@ public class SignCompetitionController {
             throw new SessionExpiredException();
         }
         Competition competition = competitionDao.selectCompetitionByName(competitionBean.getName());
-        return new CompetitionBean(competition.getName(), competition.getDescription(), competition.getParticipationFee(),(competition.getMaxRegistrations() - competition.getCurrentRegistrations()));
+        return new CompetitionBean(competition.getName(), competition.getDescription(), competition.getParticipationFee(),(competition.getMaxRegistrations() - competition.getRegistrationsNumber()));
     }
 
     public List<CompetitionBean> allAvailableCompetitions(String token) throws SessionExpiredException{
@@ -55,15 +55,14 @@ public class SignCompetitionController {
         int groupIndex = (registrationNumber - 1) / groupSize;
         int number = ((registrationNumber - 1) % groupSize) + 1;
 
-        String letter = "";
+        StringBuilder letterBuilder = new StringBuilder();
         do {
-            letter = (char) ('A' + (groupIndex % 26)) + letter;
+            letterBuilder.insert(0, (char) ('A' + (groupIndex % 26)));
             groupIndex = groupIndex / 26 - 1;
         } while (groupIndex >= 0);
 
-        return letter + number;
+        return letterBuilder.append(number).toString();
     }
-
 
     public RegistrationBean signToCompetition(String token, CompetitionBean competitionBean, RegistrationRequestBean registrationRequestBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
@@ -79,14 +78,14 @@ public class SignCompetitionController {
             }
         }
 
-        if(competition.getMaxRegistrations() - competition.getCurrentRegistrations() <= 0){
+        if(competition.getMaxRegistrations() - competition.getRegistrationsNumber() <= 0){
             throw new NoAvailableSeats("Non sono presenti più posti disponibili per tale competizione");
         }
 
         paymentController.payWithCoins(currentCustomer.getWallet(), competition.getParticipationFee());
 
-        int registrationNumber = competition.getCurrentRegistrations() +1;
-        String registrationCode = generateCode(competition.getName(),competition.getCurrentRegistrations());
+        int registrationNumber = competition.getRegistrationsNumber() +1;
+        String registrationCode = generateCode(competition.getName(),competition.getRegistrationsNumber());
         String availableSeatCode = findAvailableSpotForCompetition(registrationNumber);
 
         Registration registration = new Registration(registrationNumber, registrationCode, availableSeatCode, registrationRequestBean.getRegistrationName(), registrationRequestBean.getEmail());
@@ -123,8 +122,7 @@ public class SignCompetitionController {
         }
         Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
         Wallet wallet = customer.getWallet();
-        WalletBean walletBean = new WalletBean(wallet.getBalance());
-        return walletBean;
+        return new WalletBean(wallet.getBalance());
     }
 
 }

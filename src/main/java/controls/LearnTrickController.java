@@ -47,7 +47,7 @@ public class LearnTrickController {
 
 
 
-    public void RegisterTrick(String token, TrickBean trickBean) throws SessionExpiredException {
+    public void registerTrick(String token, TrickBean trickBean) throws SessionExpiredException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
@@ -65,7 +65,6 @@ public class LearnTrickController {
         }
         Trick trick = trickDao.selectTrickByName(trickBean.getNameTrick());
         String difficulty = trick.getDifficultyTrick().name();
-        TrickBean trickDetailedBean = new TrickBean(trick.getNameTrick(), trick.getDescription(), difficulty, trick.getCategory());
-        return trickDetailedBean;
+        return new TrickBean(trick.getNameTrick(), trick.getDescription(), difficulty, trick.getCategory());
     }
 }

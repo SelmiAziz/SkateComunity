@@ -57,7 +57,6 @@ public class CustomOrderController {
 
         Board board = boardDao.selectBoardByName(customBoardBean.getName());
 
-        System.out.println(board);
 
         if(customBoardBean.getUseGripTexture()){
             board = new GripTextureDecorator(board, customBoardBean.getGripTexture());
