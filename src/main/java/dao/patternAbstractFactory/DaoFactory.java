@@ -11,7 +11,7 @@ abstract public class DaoFactory {
     public abstract RegistrationDao createRegistrationDao();
     public abstract TrickDao createTrickDao();
     public abstract BoardDao createBoardDao();
-    public abstract CustomOrderDao createCustomOrderDao();
+    public abstract OrderDao createCustomOrderDao();
     public abstract ProgressNoteDao createProgressNoteDao();
     public abstract DeliveryDestinationDao createDeliveryDestinationDao();
 

@@ -27,7 +27,7 @@ public class DaoDemoFactory extends DaoFactory {
 
     public BoardDemoDao createBoardDao(){return BoardDemoDao.getInstance();}
 
-    public CustomOrderDao createCustomOrderDao(){return CustomOrderDemoDao.getInstance();}
+    public OrderDao createCustomOrderDao(){return OrderDemoDao.getInstance();}
 
     public ProgressNoteDao createProgressNoteDao(){return ProgressNoteDemoDao.getInstance();}
 

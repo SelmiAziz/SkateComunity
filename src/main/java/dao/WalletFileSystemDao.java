@@ -5,12 +5,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WalletFileSystemDao implements WalletDao {
+
+public class WalletFileSystemDao implements  WalletDao {
+
+    private static final String FILE_PATH = "src/main/resources/csv/wallets.csv";
     private static WalletFileSystemDao instance;
     private List<Wallet> walletList;
-    private final String fd = "src/main/resources/csv/wallets.csv";
 
-    WalletFileSystemDao() {
+    private WalletFileSystemDao() {
         this.walletList = new ArrayList<>();
     }
 
@@ -21,83 +23,81 @@ public class WalletFileSystemDao implements WalletDao {
         return instance;
     }
 
-    @Override
-    public Wallet selectWalletById(int walletId) {
-        for (Wallet wallet : walletList) {
-            if (wallet.getWalletId() == walletId) {
-                return wallet;
-            }
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(fd))) {
+    private List<String> readFile() throws IOException {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+        return lines;
+    }
+
+    private void writeFile(List<String> lines) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+    }
+
+    @Override
+    public Wallet selectWalletById(int walletId) {
+        try {
+            for (Wallet wallet : walletList) {
+                if (wallet.getWalletId() == walletId) {
+                    return wallet;
+                }
+            }
+
+            List<String> lines = readFile();
+            for (String line : lines) {
                 String[] arr = line.split(",");
                 if (Integer.parseInt(arr[0]) == walletId) {
                     return new Wallet(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]));
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error reading the file", e);
         }
         return null;
     }
 
     public void updateWallet(Wallet wallet) {
-        File tempFile = new File("tempFile.csv");
-        File originalFile = new File(fd);
-        boolean walletUpdated = false;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] arr = line.split(",");
+        try {
+            List<String> lines = readFile();
+            boolean walletUpdated = false;
+            for (int i = 0; i < lines.size(); i++) {
+                String[] arr = lines.get(i).split(",");
                 int walletId = Integer.parseInt(arr[0]);
-
                 if (walletId == wallet.getWalletId()) {
-                    line = arr[0] + "," + wallet.getBalance() + "," + arr[2];
+                    lines.set(i, arr[0] + "," + wallet.getBalance() + "," + arr[2]);
                     walletUpdated = true;
                 }
-                writer.write(line);
-                writer.newLine();
+            }
+            if (walletUpdated) {
+                writeFile(lines);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (walletUpdated) {
-            if (!originalFile.delete()) {
-                throw new RuntimeException("Failed to delete original file");
-            }
-            if (!tempFile.renameTo(originalFile)) {
-                throw new RuntimeException("Failed to rename temp file");
-            }
+            throw new RuntimeException("Error updating the wallet", e);
         }
     }
 
     @Override
     public void addWallet(Wallet wallet, String walletOwner) {
-        walletList.add(wallet);
-        try (BufferedReader reader = new BufferedReader(new FileReader(fd))) {
-            String line;
-            int maxId = 0;
-            while ((line = reader.readLine()) != null) {
-                String[] arr = line.split(",");
-                maxId = Math.max(maxId, Integer.parseInt(arr[0]));
-            }
-            maxId++;
+        try {
+            List<String> lines = readFile();
+            int maxId = lines.stream()
+                    .map(line -> Integer.parseInt(line.split(",")[0]))
+                    .max(Integer::compareTo)
+                    .orElse(0) + 1;
             wallet.setWalletId(maxId);
+            lines.add(wallet.toCsvString() + "," + walletOwner);
+            writeFile(lines);
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fd, true))) {
-            writer.write(wallet.toCsvString() + "," + walletOwner);
-            writer.newLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error adding wallet", e);
         }
     }
 }

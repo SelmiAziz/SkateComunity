@@ -12,16 +12,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomOrderDbmsDao implements CustomOrderDao {
-    private static CustomOrderDbmsDao instance;
+public class OrderDbmsDao implements OrderDao {
+    private static OrderDbmsDao instance;
     private final List<Order> customOrderList = new ArrayList<>();
     private final DeliveryDestinationDao deliveryDestinationDao = DaoFactory.getInstance().createDeliveryDestinationDao();
     private final ProgressNoteDao progressNoteDao = DaoFactory.getInstance().createProgressNoteDao();
     private final BoardDao boardDao = DaoFactory.getInstance().createBoardDao();
 
-    public static synchronized CustomOrderDbmsDao getInstance(){
+    public static synchronized OrderDbmsDao getInstance(){
         if(instance == null){
-            instance = new CustomOrderDbmsDao();
+            instance = new OrderDbmsDao();
         }
         return instance;
     }
@@ -142,7 +142,6 @@ public class CustomOrderDbmsDao implements CustomOrderDao {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String customerUsername = rs.getString("customerUsername");
                 String boardId = rs.getString("boardId");
                 String preferredTimeSlot = rs.getString("preferredTimeSlot");
                 String orderStatusStr = rs.getString("status");

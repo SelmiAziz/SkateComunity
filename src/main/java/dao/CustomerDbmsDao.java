@@ -21,7 +21,7 @@ public class CustomerDbmsDao implements CustomerDao{
     private final List<Customer> customerList = new ArrayList<>();
     private final WalletDao walletDao = DaoFactory.getInstance().createWalletDao();
     private final BoardDao boardDao = DaoFactory.getInstance().createBoardDao();
-    private final CustomOrderDao orderDao = DaoFactory.getInstance().createCustomOrderDao();
+    private final OrderDao orderDao = DaoFactory.getInstance().createCustomOrderDao();
 
     public static synchronized CustomerDbmsDao getInstance(){
         if(instance == null){

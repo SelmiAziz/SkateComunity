@@ -4,7 +4,7 @@ import model.Order;
 
 import java.util.List;
 
-public interface CustomOrderDao {
+public interface OrderDao {
     public Order selectCustomOrderById(String id);
     public List<Order> selectAllOpenOrder();
     public void saveCustomOrder(Order customOrder);

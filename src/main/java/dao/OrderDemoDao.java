@@ -7,15 +7,15 @@ import model.OrderStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomOrderDemoDao implements CustomOrderDao{
-    private static CustomOrderDemoDao instance;
+public class OrderDemoDao implements OrderDao {
+    private static OrderDemoDao instance;
     private final List<Order> customOrderList = new ArrayList<>();
     private final DeliveryDestinationDao deliveryDestinationDao = DaoFactory.getInstance().createDeliveryDestinationDao();
 
 
-    public static synchronized CustomOrderDemoDao getInstance(){
+    public static synchronized OrderDemoDao getInstance(){
         if(instance == null){
-            instance = new CustomOrderDemoDao();
+            instance = new OrderDemoDao();
         }
         return instance;
     }
