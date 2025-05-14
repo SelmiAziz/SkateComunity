@@ -2,8 +2,10 @@ package dao;
 
 import model.Wallet;
 
+import java.io.IOException;
+
 public interface WalletDao {
-    void addWallet(Wallet wallet, String walletOwner);
-    Wallet selectWalletById(int walletId);
-    void updateWallet(Wallet wallet);
+    void addWallet(Wallet wallet, String walletOwner) throws IOException;
+    Wallet selectWalletById(int walletId) throws IOException;
+    void updateWallet(Wallet wallet) throws IOException;
 }
