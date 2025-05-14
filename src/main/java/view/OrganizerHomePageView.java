@@ -55,11 +55,8 @@ public class OrganizerHomePageView {
 
 
     public void logOut()  {
-        try {
            windowManager.logOut();
-        }catch(IOException e){
-            errorLabel.setText(e.getMessage());
-        }
+
     }
 
 

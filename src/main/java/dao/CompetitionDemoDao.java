@@ -40,7 +40,7 @@ public class CompetitionDemoDao implements CompetitionDao {
     public List<Competition> selectAvailableCompetitions() {
         List<Competition> competitionList = new ArrayList<>();
         for(Competition competition: this.competitionList){
-            if(competition.getCurrentRegistrations() < competition.getMaxRegistrations()){
+            if(competition.getRegistrationsNumber() < competition.getMaxRegistrations()){
                 competitionList.add(competition);
             }
         }

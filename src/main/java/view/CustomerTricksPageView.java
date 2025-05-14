@@ -7,7 +7,6 @@ import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import utils.WindowManager;
 
 import java.io.IOException;
@@ -16,13 +15,11 @@ import java.util.List;
 public class CustomerTricksPageView {
 
     private WindowManager windowManager = WindowManager.getInstance();
-    private Stage stage;
     @FXML Label errorLabel;
     @FXML private TableView<TrickBean> trickTable;
     @FXML private TableColumn<TrickBean, String> colTrickName;
 
 
-    @FXML private TextField trickNameTextField;
     @FXML private Label categoryLabel;
     @FXML private Label difficultyLabel;
     @FXML private Label descriptionLabel;
@@ -71,7 +68,7 @@ public class CustomerTricksPageView {
     }
 
 
-    public void loadTricks() throws IOException {
+    public void loadTricks()  {
         try {
             List<TrickBean> availableTricksBean = learnTrickController.allAvailableTricksDetailed(windowManager.getAuthBean().getToken());
             trickTable.getItems().clear();

@@ -8,7 +8,6 @@ import dao.UserDao;
 import beans.LogUserBean;
 import beans.RegisterUserBean;
 import exceptions.UserNameAlreadyUsedException;
-import exceptions.UserAlreadyExistsException;
 import exceptions.UserNotFoundException;
 import login.User;
 import login.Role;
@@ -40,49 +39,61 @@ public class LoginController {
     }
 
 
+    private String generateSuggestedUsername(String baseUsername) {
+        String suggestedUsername = baseUsername;
+        int suffix = 1;
 
-    public void registerUser(RegisterUserBean registerUserBean) throws UserAlreadyExistsException, UserNameAlreadyUsedException {
-        if (userDao.checkUserByUsername(registerUserBean.getUsername())){
-           throw new UserAlreadyExistsException("L'utente è già presente nel sistema");
+        while (userDao.checkUserByUsername(suggestedUsername)) {
+            suggestedUsername = baseUsername + suffix;
+            suffix++;
         }
-        String username = registerUserBean.getUsername();
+
+        return suggestedUsername;
+    }
+
+
+
+    public void registerUser(RegisterUserBean registerUserBean) throws UserNameAlreadyUsedException {
+        String baseUsername = registerUserBean.getUsername();
+
+        if (userDao.checkUserByUsername(baseUsername)) {
+            String suggestion = generateSuggestedUsername(baseUsername);
+            throw new UserNameAlreadyUsedException("Lo username è già utilizzato", suggestion);
+        }
+
         String password = registerUserBean.getPassword();
         String dateOfBirth = registerUserBean.getDateOfBirth();
-        Role role =  registerUserBean.getRole().equals("Organizer") ? Role.ORGANIZER : Role.COSTUMER;
+        Role role = registerUserBean.getRole().equals("Organizer") ? Role.ORGANIZER : Role.COSTUMER;
         User user;
         SkaterLevel skillLevel = null;
-        if(role == Role.COSTUMER){
-            if (role == Role.COSTUMER) {
-                String skill = registerUserBean.getSkillLevel();
 
-                switch (skill) {
-                    case "Novice":
-                        skillLevel = SkaterLevel.NOVICE;
-                        break;
-                    case "Proficient":
-                        skillLevel = SkaterLevel.PROFICIENT;
-                        break;
-                    default:
-                        skillLevel = SkaterLevel.ADVANCED;
-                        break;
-                }
-
-                // Usa skillLevel come preferisci
+        if (role == Role.COSTUMER) {
+            String skill = registerUserBean.getSkillLevel();
+            switch (skill) {
+                case "Novice":
+                    skillLevel = SkaterLevel.NOVICE;
+                    break;
+                case "Proficient":
+                    skillLevel = SkaterLevel.PROFICIENT;
+                    break;
+                default:
+                    skillLevel = SkaterLevel.ADVANCED;
+                    break;
             }
 
             Wallet wallet = new Wallet();
-            wallet.depositCoins(400); //a registration bonus
-            Customer costumer =  new Customer(username,password,dateOfBirth,skillLevel, wallet);
+            wallet.depositCoins(400); // bonus di registrazione
+            Customer costumer = new Customer(baseUsername, password, dateOfBirth, skillLevel, wallet);
             costumerDao.addCustomer(costumer);
             user = costumer;
-        }else{
-            Organizer organizer = new Organizer(username, password,dateOfBirth);
+        } else {
+            Organizer organizer = new Organizer(baseUsername, password, dateOfBirth);
             organizerDao.addOrganizer(organizer);
             user = organizer;
         }
+
         SessionManager.getInstance().createSession(new Session(user.getUsername(), user.getRole()));
     }
-
 
 
 }

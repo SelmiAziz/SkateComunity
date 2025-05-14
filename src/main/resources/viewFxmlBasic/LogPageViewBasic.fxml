@@ -59,7 +59,7 @@
             <Label layoutX="256.0" layoutY="322.0" text="DD" />
             <TextField fx:id="monthField" layoutX="345.0" layoutY="318.0" prefHeight="26.0" prefWidth="31.0" />
             <TextField fx:id="yearField" layoutX="412.0" layoutY="318.0" prefHeight="26.0" prefWidth="31.0" />
-                <Label fx:id="resultLabel" layoutX="67.0" layoutY="599.0" prefHeight="22.0" prefWidth="378.0" textFill="#208672" wrapText="true">
+                <Label fx:id="resultLabel" layoutX="10.0" layoutY="599.0" prefHeight="22.0" prefWidth="509.0" textFill="#208672" wrapText="true">
                     <font>
                         <Font size="16.0" />
                     </font>

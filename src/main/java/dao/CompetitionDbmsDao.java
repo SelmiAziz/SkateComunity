@@ -84,7 +84,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
     public List<Competition> selectAvailableCompetitions() {
         List<Competition> newCompetitionList = new ArrayList<>();
         for(Competition competition : this.competitionList){
-            if(competition.getCurrentRegistrations() < competition.getMaxRegistrations()){
+            if(competition.getRegistrationsNumber() < competition.getMaxRegistrations()){
                 newCompetitionList.add(competition);
             }
         }
@@ -290,7 +290,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
             stmt.setString(3, competition.getDescription());
             stmt.setString(4, competition.getDate());
             stmt.setInt(5, competition.getMaxRegistrations());
-            stmt.setInt(6, competition.getCurrentRegistrations()); // Aggiunto currentRegistration
+            stmt.setInt(6, competition.getRegistrationsNumber()); // Aggiunto currentRegistration
             stmt.setString(7, competition.getOrganizer().getUsername());
             stmt.setString(8, competition.getLocation());
 

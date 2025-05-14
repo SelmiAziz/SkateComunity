@@ -115,25 +115,30 @@ public class LogPageViewBasic {
             validateRegistration(username, password, passwordConfirmation, selected);
 
             try {
+                RegisterUserBean userBean = new RegisterUserBean(username, password, role, dateOfBirth, skaterLevel);
+                loginController.registerUser(userBean);
 
-                loginController.registerUser(new RegisterUserBean(username, password, role, dateOfBirth, skaterLevel));
+                // Pulizia campi
                 usernameField.setText("");
                 passwordField.setText("");
                 passwordConfirmationField.setText("");
                 monthField.setText("");
                 dayField.setText("");
                 yearField.setText("");
+
                 resultLabel.setText("Registrazione avvenuta con successo!!");
 
-
-            } catch (UserNameAlreadyUsedException | UserAlreadyExistsException e) {
-                resultLabel.setText(e.getMessage());
+            } catch (UserNameAlreadyUsedException e) {
+                String suggestion = e.getSuggestedUsername();
+                resultLabel.setText(e.getMessage() + " Suggerimento: " + suggestion);
+                usernameField.setText(suggestion);
             }
-        }catch(EmptyFieldException | PasswordConfirmationException |
-                NoUserTypeSelectedException  | WrongFormatException e){
+        } catch(EmptyFieldException | PasswordConfirmationException |
+                NoUserTypeSelectedException | WrongFormatException e){
             resultLabel.setText(e.getMessage());
         }
     }
+
 
     public void validateLogin(String username, String password) throws EmptyFieldException {
         if (username.isEmpty() || password.isEmpty()) {
