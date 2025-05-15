@@ -11,6 +11,7 @@ import model.*;
 import utils.Session;
 import utils.SessionManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class SignCompetitionController {
         return letterBuilder.append(number).toString();
     }
 
-    public RegistrationBean signToCompetition(String token, CompetitionBean competitionBean, RegistrationRequestBean registrationRequestBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException {
+    public RegistrationBean signToCompetition(String token, CompetitionBean competitionBean, RegistrationRequestBean registrationRequestBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException, IOException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();

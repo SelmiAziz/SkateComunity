@@ -114,6 +114,8 @@ public class CustomerMakeOrdersPageView {
             }catch(SessionExpiredException _){
                 windowManager.closeCoordinator();
                 windowManager.logOut();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
         }catch(EmptyFieldException e){

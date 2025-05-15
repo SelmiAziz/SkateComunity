@@ -77,7 +77,7 @@ public class CustomerFileSystemDao implements CustomerDao {
     }
 
     @Override
-    public void addCustomer(Customer customer) {
+    public void addCustomer(Customer customer) throws IOException {
         this.customerList.add(customer);
         userDao.addUser(customer);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fdCustomer, true))) {

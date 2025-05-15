@@ -5,6 +5,8 @@ import dao.patternAbstractFactory.DaoFactory;
 import exceptions.InsufficientCoinsException;
 import model.Wallet;
 
+import java.io.IOException;
+
 public class PaymentController {
     private WalletDao walletDao = DaoFactory.getInstance().createWalletDao();
 
@@ -13,7 +15,7 @@ public class PaymentController {
     //This is an INCLUDE for singEventController and CommissionController
 
     //NOTE: this is an INCLUDE so it has parameters as entity and not beans !!!!
-    public void payWithCoins (Wallet wallet, int coinsPayed) throws InsufficientCoinsException {
+    public void payWithCoins (Wallet wallet, int coinsPayed) throws InsufficientCoinsException, IOException {
         if(wallet.getBalance()- coinsPayed < 0){
             throw new InsufficientCoinsException("Numero di coins insufficiente!!!");
         }

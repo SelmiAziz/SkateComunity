@@ -9,6 +9,7 @@ import model.decorator.Board;
 import utils.DbsConnector;
 import utils.SkaterLevel;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,6 +97,8 @@ public class CustomerDbmsDao implements CustomerDao{
                     this.customerList.add(customer);
                     return customer;
                 }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,7 +110,7 @@ public class CustomerDbmsDao implements CustomerDao{
 
 
     @Override
-    public void addCustomer(Customer customer) {
+    public void addCustomer(Customer customer) throws IOException {
         customerList.add(customer);
 
         UserDao userDao = DaoFactory.getInstance().createUserDao();

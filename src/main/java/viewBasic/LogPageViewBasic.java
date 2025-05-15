@@ -132,6 +132,8 @@ public class LogPageViewBasic {
                 String suggestion = e.getSuggestedUsername();
                 resultLabel.setText(e.getMessage() + " Suggerimento: " + suggestion);
                 usernameField.setText(suggestion);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         } catch(EmptyFieldException | PasswordConfirmationException |
                 NoUserTypeSelectedException | WrongFormatException e){

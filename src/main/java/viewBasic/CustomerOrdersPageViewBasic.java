@@ -220,6 +220,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             }catch(SessionExpiredException _){
                 windowManagerBasic.cleanOrderPage();
                 windowManagerBasic.logOut();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }catch(EmptyFieldException | InvalidRegionException e){
             errorLabel.setText(null);

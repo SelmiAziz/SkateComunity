@@ -152,6 +152,8 @@ public class CustomerCompetitionsPageViewBasic {
             }catch(SessionExpiredException e ){
                 windowManagerBasic.cleanOrderPage();
                 windowManagerBasic.logOut();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
             errorLabel.setText(e.getMessage());

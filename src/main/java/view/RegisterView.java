@@ -82,6 +82,8 @@ public class RegisterView {
             } catch (UserNameAlreadyUsedException e) {
                 resultLabel.setText(e.getMessage() + ". Prova con: " + e.getSuggestedUsername());
                 usernameField.setText(e.getSuggestedUsername()); // opzionale: precompila il campo
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         } catch (WrongFormatException | EmptyFieldException | PasswordConfirmationException | NoUserTypeSelectedException e) {
             resultLabel.setText(e.getMessage());

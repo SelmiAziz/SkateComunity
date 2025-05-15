@@ -18,6 +18,8 @@ import utils.Session;
 import utils.SessionManager;
 import utils.SkaterLevel;
 
+import java.io.IOException;
+
 
 public class LoginController {
     private final CustomerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
@@ -53,7 +55,7 @@ public class LoginController {
 
 
 
-    public void registerUser(RegisterUserBean registerUserBean) throws UserNameAlreadyUsedException {
+    public void registerUser(RegisterUserBean registerUserBean) throws UserNameAlreadyUsedException, IOException {
         String baseUsername = registerUserBean.getUsername();
 
         if (userDao.checkUserByUsername(baseUsername)) {

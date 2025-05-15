@@ -9,6 +9,7 @@ import model.*;
 import model.decorator.*;
 import utils.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,7 +164,7 @@ public class CustomOrderController {
         notifyCustomer();
     }
 
-    public OrderSummaryBean elaborateOrder(String token, DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean){
+    public OrderSummaryBean elaborateOrder(String token, DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean) throws IOException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
