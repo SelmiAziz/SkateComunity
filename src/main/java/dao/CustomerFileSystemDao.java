@@ -13,9 +13,9 @@ public class CustomerFileSystemDao implements CustomerDao {
     private static CustomerFileSystemDao instance;
     private final UserDao userDao = DaoFactory.getInstance().createUserDao();
     private final List<Customer> customerList;
-    private final String fdCustomer = "src/main/resources/csv/customers.csv";
-    private final String fdUser = "src/main/resources/csv/users.csv";
-    private final String fdWallet = "src/main/resources/csv/wallets.csv";
+    private String fdCustomer = "src/main/resources/csv/customers.csv";
+    private  String fdUser = "src/main/resources/csv/users.csv";
+    private String fdWallet = "src/main/resources/csv/wallets.csv";
 
     CustomerFileSystemDao() {
         this.customerList = new ArrayList<>();
@@ -56,7 +56,6 @@ public class CustomerFileSystemDao implements CustomerDao {
                     try (BufferedReader customerReader = new BufferedReader(new FileReader(fdCustomer))) {
                         while ((line = customerReader.readLine()) != null) {
                             String[] arro = line.split(",");
-                            System.out.println(arr[0]+arr[1]);
                             if (arro[0].equals(username)) {
                                 SkaterLevel skaterLevel = SkaterLevel.valueOf(arro[1].toUpperCase());
                                 WalletDao walletDao = DaoFactory.getInstance().createWalletDao();
