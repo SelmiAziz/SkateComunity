@@ -117,7 +117,6 @@ public class LogPageViewBasic {
                 RegisterUserBean userBean = new RegisterUserBean(username, password, role, dateOfBirth, skaterLevel);
                 loginController.registerUser(userBean);
 
-                // Pulizia campi
                 usernameField.setText("");
                 passwordField.setText("");
                 passwordConfirmationField.setText("");

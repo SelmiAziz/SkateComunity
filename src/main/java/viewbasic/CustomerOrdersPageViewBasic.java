@@ -181,7 +181,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     public void validateNumber(String number) throws WrongFormatException {
         try {
             Integer.parseInt(number);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new WrongFormatException("Address number has to be a number, please enter a number!!");
         }
     }
@@ -215,15 +215,13 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             confStart();
             try{
                 orderSummaryBean = customOrderController.elaborateOrder(windowManagerBasic.getAuthBean().getToken(), deliveryDestinationBean, deliveryPreferencesBean,  boardBean);
-            }catch(InsufficientCoinsException e){
+            }catch(InsufficientCoinsException |  IOException e){
                 errorLabel.setText(e.getMessage());
-            }catch(SessionExpiredException _){
+            }catch(SessionExpiredException _) {
                 windowManagerBasic.cleanOrderPage();
                 windowManagerBasic.logOut();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
-        }catch(EmptyFieldException | InvalidRegionException e){
+        }catch(EmptyFieldException | InvalidRegionException _){
             errorLabel.setText(null);
         }
 
@@ -249,7 +247,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         StringJoiner joiner = new StringJoiner(" ");
 
         for (String word : words) {
-            if (word.length() > 0) {
+            if (!word.isEmpty()) {
                 joiner.add(Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase());
             }
         }
