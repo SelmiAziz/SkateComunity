@@ -76,7 +76,7 @@ public class CustomerMakeOrdersPageView {
             String region = regioni.get(i);
             MenuItem item = new MenuItem(region);
             item.setOnAction(e -> {
-                menuRegions.setText(region);;
+                menuRegions.setText(region);
             });
             menuRegions.getItems().add(item);
         }
@@ -109,13 +109,11 @@ public class CustomerMakeOrdersPageView {
             try {
                 OrderSummaryBean orderSummaryBean = customOrderController.elaborateOrder(windowManager.getAuthBean().getToken(),deliveryDestinationBean, deliveryPreferencesBean, boardBean);
                 windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
-            }catch(InsufficientCoinsException e){
+            }catch(InsufficientCoinsException | IOException e){
                 errorLabel.setText(e.getMessage());
             }catch(SessionExpiredException _){
                 windowManager.closeCoordinator();
                 windowManager.logOut();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
 
         }catch(EmptyFieldException e){

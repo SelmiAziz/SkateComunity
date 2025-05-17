@@ -54,7 +54,7 @@ public class CustomerCompetitionsPageView {
     private int timeDurationMinutes = 10;
 
 
-    public void initialize() throws IOException {
+    public void initialize()  {
         colName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getName()));
 
@@ -118,10 +118,10 @@ public class CustomerCompetitionsPageView {
             String date = dateField.getText();
             dateValidator.validaDate(date);
             String location = locationSearch.getText();
-            CompetitionBean competitionBean = new CompetitionBean(date, location);
+            CompetitionBean competitionBeanSearch = new CompetitionBean(date, location);
             try {
                 competitionTable.getItems().clear();
-                competitionTable.getItems().addAll(signCompetitionController.searchCompetitionByDateAndLocation(windowManager.getAuthBean().getToken(), competitionBean));
+                competitionTable.getItems().addAll(signCompetitionController.searchCompetitionByDateAndLocation(windowManager.getAuthBean().getToken(), competitionBeanSearch));
             }catch(SessionExpiredException _){
                 windowManager.logOut();
             }
@@ -131,7 +131,7 @@ public class CustomerCompetitionsPageView {
     }
 
     @FXML
-    public void onCompetitionSelected() throws IOException {
+    public void onCompetitionSelected()  {
         try {
             CompetitionBean selected = competitionTable.getSelectionModel().getSelectedItem();
             competitionBean = signCompetitionController.competitionDetails(windowManager.getAuthBean().getToken(), selected);

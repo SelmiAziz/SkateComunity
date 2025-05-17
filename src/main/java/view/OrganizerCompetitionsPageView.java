@@ -73,11 +73,12 @@ public class OrganizerCompetitionsPageView {
 
 
     @FXML
-    private void createCompetition() throws IOException {
+    private void createCompetition() {
         String name = competitionNameField.getText();
         String description = competitionDescriptionArea.getText();
         String location = locationField.getText();
-        int coinsRequired, maxRegistrations;
+        int coinsRequired;
+        int maxRegistrations;
         String date = dateField.getText();
         coinsRequired = coinsSpinner.getValue();
         maxRegistrations = maxRegistrationsSpinner.getValue();

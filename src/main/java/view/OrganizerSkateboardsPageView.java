@@ -53,9 +53,6 @@ public class OrganizerSkateboardsPageView {
         try {
             List<BoardProfileBean> availableSkateboardsList = createSkateboardController.getStoredBoards(windowManager.getAuthBean().getToken());
             skateboardTable.getItems().clear();
-            for (BoardProfileBean s : availableSkateboardsList) {
-                System.out.println(s.getName());
-            }
             skateboardTable.getItems().addAll(availableSkateboardsList);
         }catch(SessionExpiredException _){
             windowManager.logOut();

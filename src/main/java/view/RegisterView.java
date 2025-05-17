@@ -68,7 +68,7 @@ public class RegisterView {
             validateRegistration(username, password, passwordConfirmation, selected);
 
             String role = (selected == btnCostumer) ? "Costumer" : "Organizer";
-            String skillLevel = levelChoice.getValue().toString();
+            String skillLevel = levelChoice.getValue();
 
             RegisterUserBean userBean = new RegisterUserBean(username, password, role, dateOfBirth, skillLevel);
 
@@ -82,8 +82,8 @@ public class RegisterView {
             } catch (UserNameAlreadyUsedException e) {
                 resultLabel.setText(e.getMessage() + ". Prova con: " + e.getSuggestedUsername());
                 usernameField.setText(e.getSuggestedUsername()); // opzionale: precompila il campo
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException _) {
+               // has tto be developed
             }
         } catch (WrongFormatException | EmptyFieldException | PasswordConfirmationException | NoUserTypeSelectedException e) {
             resultLabel.setText(e.getMessage());
@@ -130,8 +130,7 @@ public class RegisterView {
     public void goBack() {
         try {
             sceneManager.loadScene("viewFxml/AccessView.fxml");
-        }catch(IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
+        }catch(IOException _){
             resultLabel.setText("Errore di sistema. Riprova più tardi.");
         }
     }
@@ -140,8 +139,7 @@ public class RegisterView {
     public void goLogin(){
         try {
             sceneManager.loadScene("viewFxml/LoginView.fxml");
-        }catch(IOException e){
-            System.err.println("Errore di I/O: " + e.getMessage());
+        }catch(IOException _){
             resultLabel.setText("Errore di sistema. Riprova più tardi.");
         }
     }

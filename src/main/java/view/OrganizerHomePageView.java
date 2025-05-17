@@ -1,14 +1,8 @@
 package view;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import utils.WindowManager;
-import utils.SessionManager;
 
 import java.io.IOException;
 

@@ -28,7 +28,9 @@ public class OrganizerTricksPageView {
     @FXML private Slider difficultySlider;
     @FXML private TextField trickNameTextField;
     @FXML private ToggleGroup trickGroup;
-    @FXML private RadioButton flatRadio, grindRadio, rampRadio;
+    @FXML private RadioButton flatRadio;
+    @FXML private RadioButton grindRadio;
+    @FXML private RadioButton    rampRadio;
     @FXML private TextArea descriptionTextArea;
     @FXML private TextField dateField;
     @FXML private Label difficultyLabel;

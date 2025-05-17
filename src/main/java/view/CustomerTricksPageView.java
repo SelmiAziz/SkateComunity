@@ -27,7 +27,7 @@ public class CustomerTricksPageView {
     LearnTrickController learnTrickController = new LearnTrickController();
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize(){
 
         colTrickName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getNameTrick()));

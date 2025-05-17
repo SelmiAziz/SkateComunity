@@ -44,7 +44,7 @@ public class LoginView {
                 }else {
                     WindowManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
                 }
-            }catch (IOException e){
+            }catch (IOException _){
                 errorLabel.setText("Errore di sistema. Riprova più tardi.");
             }
 
@@ -60,7 +60,7 @@ public class LoginView {
     public void goBack() {
         try {
             sceneManager.loadScene("viewFxml/AccessView.fxml");
-        } catch (IOException e) {
+        } catch (IOException _) {
             errorLabel.setText("Errore di sistema. Riprova più tardi.");
         }
     }
@@ -69,7 +69,7 @@ public class LoginView {
     public void goRegistration() {
         try {
             sceneManager.loadScene("viewFxml/RegisterView.fxml");
-        } catch (IOException e) {
+        } catch (IOException _) {
             errorLabel.setText("Errore di sistema. Riprova più tardi.");
         }
     }

@@ -3,7 +3,6 @@ package startSkate;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import utils.WindowManager;
 import utils.WindowManagerBasic;
 
 import java.io.IOException;
