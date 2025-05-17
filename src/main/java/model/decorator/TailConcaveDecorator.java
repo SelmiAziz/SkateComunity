@@ -2,7 +2,6 @@ package model.decorator;
 
 public class TailConcaveDecorator extends BoardDecorator {
 
-    private Board board;
     private double concaveDepthMm;
     private double costMultiplier;
     private double maxDepth;
@@ -10,7 +9,6 @@ public class TailConcaveDecorator extends BoardDecorator {
 
     public TailConcaveDecorator(Board board, double concaveDepthMm) {
         super(board);
-        this.board = board;
         this.concaveDepthMm = concaveDepthMm;
         setCostMultiplier(1.0);
         setMinDepth(3.0);

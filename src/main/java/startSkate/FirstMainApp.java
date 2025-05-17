@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import static java.lang.Thread.sleep;
 
-public class mainApp extends Application {
+public class FirstMainApp extends Application {
 
     public void start(Stage primaryStage) throws IOException {
         WindowManager windowManager = WindowManager.getInstance();

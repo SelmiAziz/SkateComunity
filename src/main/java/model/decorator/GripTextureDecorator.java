@@ -2,7 +2,6 @@ package model.decorator;
 
 public class GripTextureDecorator extends BoardDecorator {
 
-    private Board board;
     private double costMultiplier;
     private double gripValue;
     private double maxGrip;
@@ -14,7 +13,6 @@ public class GripTextureDecorator extends BoardDecorator {
         setCostMultiplier(10);
         setMaxGrip(0.7);
         setMinGrip(0.4);
-        this.board = board;
     }
 
 
@@ -36,7 +34,6 @@ public class GripTextureDecorator extends BoardDecorator {
         int v = super.price();
         double g = Math.max(this.minGrip, Math.min(this.maxGrip, this.gripValue));
         double norm = (g - this.minGrip) / (this.maxGrip - this.minGrip);
-        System.out.println(norm +" " + g);
         int curvedCost = (int)Math.round(Math.pow(norm, 2.2) * this.costMultiplier);
         return v+curvedCost;
     }

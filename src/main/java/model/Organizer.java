@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Organizer extends User {
-    public List<Competition> competitionCreatedList;
+    private  List<Competition> competitionCreatedList;
 
     public Organizer(String username, String password,String dateOfBirth){
         super(username,password,dateOfBirth);

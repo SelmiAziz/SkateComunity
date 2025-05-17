@@ -4,7 +4,7 @@ public abstract class BoardDecorator implements Board {
 
     private Board board;
 
-    public BoardDecorator(Board skateboard){
+    protected BoardDecorator(Board skateboard){
         this.board = skateboard;
     }
 

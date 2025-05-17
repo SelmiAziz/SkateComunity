@@ -2,7 +2,6 @@ package model.decorator;
 
 public class ExtraPilesDecorator extends BoardDecorator {
 
-    private Board board;
     private int extraPiles; // 1 o 2
     private int minExtra;
     private int maxExtra;
@@ -11,12 +10,11 @@ public class ExtraPilesDecorator extends BoardDecorator {
 
     public ExtraPilesDecorator(Board board, int extraPiles) {
         super(board);
-        this.board = board;
         this.extraPiles = extraPiles;
         setMinExtra(0);
         setMaxExtra(2);
-        setCostForOne(7);  // se aggiungi una sola pile
-        setCostForTwo(18); // se ne aggiungi due, è più costoso
+        setCostForOne(7);
+        setCostForTwo(18);
     }
 
     public void setMinExtra(int minExtra) {

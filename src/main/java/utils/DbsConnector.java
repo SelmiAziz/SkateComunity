@@ -27,19 +27,12 @@ public class DbsConnector {
             this.password = p.getProperty("password");
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.connection = DriverManager.getConnection(connectionUrl, user, password);
-        }catch(RuntimeException e){
-            //
-        }catch(SQLException e){
-            //
-        }catch(ClassNotFoundException e){
-            //
-        }catch(IOException e){
+        }catch(RuntimeException | SQLException |ClassNotFoundException |IOException _){
             //
         }
 
     }
 
-    // Metodo statico per ottenere l'istanza unica
     public static synchronized DbsConnector getInstance() {
         if (instance == null) {
             instance = new DbsConnector();
@@ -60,12 +53,10 @@ public class DbsConnector {
 
 
 
-    // Metodo per chiudere la connessione
     public void closeConnection() {
         try {
             if (connection != null) {
                 connection.close();
-                System.out.println("Connessione chiusa.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
