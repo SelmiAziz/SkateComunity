@@ -10,8 +10,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import view.*;
-import viewBasic.CoordinatorOrderPageViewBasic;
-import viewBasic.CustomerOrdersPageViewBasic;
+import viewbasic.CoordinatorOrderPageViewBasic;
+import viewbasic.CustomerOrdersPageViewBasic;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package viewBasic;
+package viewbasic;
 
 import beans.OrderBean;
 import beans.OrderSummaryBean;
@@ -31,7 +31,7 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
     @FXML private TextField monthField;
     @FXML private TextField yearField;
     @FXML private ListView<String> ordersList;
-    @FXML private ComboBox<String> ordersComboBox;
+    @FXML private ComboBox<Integer> ordersComboBox;
     @FXML private Label errorLabel;
 
     public void initialize(){
@@ -176,7 +176,7 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
     }
 
     public void selectOrder() {
-        Integer selectedIndex = (Integer) ordersComboBox.getValue();
+        Integer selectedIndex = ordersComboBox.getValue();
 
         OrderSummaryBean selected = ordersMap.get(selectedIndex);
 

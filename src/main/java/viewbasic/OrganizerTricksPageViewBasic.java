@@ -1,4 +1,4 @@
-package viewBasic;
+package viewbasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
@@ -31,7 +31,6 @@ public class OrganizerTricksPageViewBasic {
     @FXML private TextField dayField;
     @FXML private TextField yearField;
     @FXML private ChoiceBox<String> choicePage;
-    private Stage stage;
     private final  WindowManagerBasic windowManagerBasic = WindowManagerBasic.getInstance();
     private final DateValidatorFormatter dateValidatorFormatter = new DateValidatorFormatter();
 
@@ -71,19 +70,9 @@ public class OrganizerTricksPageViewBasic {
 
     @FXML
     public void goToCompetitionsPage() {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-            OrganizerCompetitionsPageViewBasic organizerEventsPageViewBasic = loader.getController();
-            Scene scene = new Scene(root, 1200, 800);
-            stage = WindowManager.getInstance().getStage();
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-            Platform.runLater(organizerEventsPageViewBasic::loadCompetitions);
-        } catch (IOException e) {
+        try{
+            windowManagerBasic.goToCustomerCompetitions();
+        }catch(IOException e){
             errorLabel.setText(e.getMessage());
         }
 

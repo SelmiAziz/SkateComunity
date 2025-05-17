@@ -1,4 +1,4 @@
-package viewBasic;
+package viewbasic;
 
 import beans.BoardProfileBean;
 import controls.CreateBoardController;

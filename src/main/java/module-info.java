@@ -9,7 +9,7 @@ module startSkate {
     requires transitive mysql.connector.j;
 
     opens view to javafx.fxml;
-    opens viewBasic to javafx.fxml;
+    opens viewbasic to javafx.fxml;
     exports startskate;
 
 }

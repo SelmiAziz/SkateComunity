@@ -1,4 +1,4 @@
-package viewBasic;
+package viewbasic;
 
 import beans.AuthBean;
 import beans.LogUserBean;
@@ -8,7 +8,6 @@ import exceptions.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import utils.WindowManager;
 import utils.WindowManagerBasic;
 
 import java.io.IOException;
@@ -132,8 +131,8 @@ public class LogPageViewBasic {
                 String suggestion = e.getSuggestedUsername();
                 resultLabel.setText(e.getMessage() + " Suggerimento: " + suggestion);
                 usernameField.setText(suggestion);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException _) {
+                //has to be developed
             }
         } catch(EmptyFieldException | PasswordConfirmationException |
                 NoUserTypeSelectedException | WrongFormatException e){
@@ -164,7 +163,7 @@ public class LogPageViewBasic {
                 }else {
                     WindowManagerBasic.getInstance().loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
                 }
-            }catch (IOException e){
+            }catch (IOException _){
                 resultLabel.setText("Errore di sistema. Riprova più tardi.");
             }
 

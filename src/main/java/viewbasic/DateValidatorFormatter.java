@@ -1,4 +1,4 @@
-package viewBasic;
+package viewbasic;
 
 import exceptions.WrongFormatException;
 

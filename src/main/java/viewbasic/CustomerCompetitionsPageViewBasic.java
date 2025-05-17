@@ -1,4 +1,4 @@
-package viewBasic;
+package viewbasic;
 
 import beans.RegistrationBean;
 import beans.RegistrationRequestBean;
@@ -149,15 +149,13 @@ public class CustomerCompetitionsPageViewBasic {
                 RegistrationBean registrationBean = signCompetitionController.signToCompetition(windowManagerBasic.getAuthBean().getToken(), competitionBean, registrationRequestBean);
                 assignedSeatLabel.setText("Ti è stato fornito il codice: " + registrationBean.getRegistrationCode());
                 generateCodeLabel.setText("Turno di gara: " + registrationBean.getAssignedSeat());
-            }catch(SessionExpiredException e ){
+            }catch(SessionExpiredException _ ){
                 windowManagerBasic.cleanOrderPage();
                 windowManagerBasic.logOut();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+               errorLabel.setText(e.getMessage());
             }
-        } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
-            errorLabel.setText(e.getMessage());
-        } catch(EmptyFieldException e){
+        } catch (EmptyFieldException | UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
             errorLabel.setText(e.getMessage());
         }
     }

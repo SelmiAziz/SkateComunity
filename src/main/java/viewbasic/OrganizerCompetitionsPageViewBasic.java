@@ -1,4 +1,4 @@
-package viewBasic;
+package viewbasic;
 
 import beans.CompetitionBean;
 import controls.CreateCompetitionController;
@@ -88,7 +88,8 @@ public class OrganizerCompetitionsPageViewBasic {
         String day = dayField.getText();
         String year = yearField.getText();
         String location = locationField.getText();
-        int coinsRequired, maxRegistrations;
+        int coinsRequired;
+        int maxRegistrations;
 
         try{
             String date = dateValidatorFormatter.formatValidateDate(month, day, year);

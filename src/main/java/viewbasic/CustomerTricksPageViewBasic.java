@@ -1,4 +1,4 @@
-package viewBasic;
+package viewbasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
