@@ -111,7 +111,6 @@ public class CustomerCompetitionsPageView {
 
 
 
-
     @FXML
     public void searchCompetitions() {
         try {
@@ -119,16 +118,25 @@ public class CustomerCompetitionsPageView {
             dateValidator.validaDate(date);
             String location = locationSearch.getText();
             CompetitionBean competitionBeanSearch = new CompetitionBean(date, location);
-            try {
-                competitionTable.getItems().clear();
-                competitionTable.getItems().addAll(signCompetitionController.searchCompetitionByDateAndLocation(windowManager.getAuthBean().getToken(), competitionBeanSearch));
-            }catch(SessionExpiredException _){
-                windowManager.logOut();
-            }
-        }catch(WrongFormatException e) {
+            loadCompetitions(competitionBeanSearch);
+        } catch (WrongFormatException e) {
             errorLabel.setText(e.getMessage());
         }
     }
+
+    private void loadCompetitions(CompetitionBean competitionBeanSearch) {
+        try {
+            competitionTable.getItems().clear();
+            competitionTable.getItems().addAll(
+                    signCompetitionController.searchCompetitionByDateAndLocation(
+                            windowManager.getAuthBean().getToken(), competitionBeanSearch
+                    )
+            );
+        } catch (SessionExpiredException _) {
+            windowManager.logOut();
+        }
+    }
+
 
     @FXML
     public void onCompetitionSelected()  {
@@ -199,37 +207,55 @@ public class CustomerCompetitionsPageView {
         backConf();
     }
 
+
     @FXML
-    public void submitSignToCompetition() throws IOException {
+    public void submitSignToCompetition() {
         try {
             String registrationName = registrationNameField.getText();
             String email = emailField.getText();
 
-            if(registrationName == null || email == null){
+            if (registrationName == null || email == null) {
                 throw new EmptyFieldException("Empty Field");
             }
-            try {
-                RegistrationRequestBean registrationRequestBean = new RegistrationRequestBean();
-                registrationRequestBean.setRegistrationName(registrationName);
-                registrationRequestBean.setEmail(email);
-                CompetitionBean selectedCompetitionBean = competitionTable.getSelectionModel().getSelectedItem();
-                RegistrationBean registrationBean = signCompetitionController.signToCompetition(windowManager.getAuthBean().getToken(), selectedCompetitionBean, registrationRequestBean);
-                onCompetitionSelected();
-                registrationCodeLabel.setText("Il codice della registrazione: " + registrationBean.getRegistrationCode());
-                assignedSeatLabel.setText("Il posto assegnato è: " + registrationBean.getAssignedSeat());
-                startConfig();
-                summaryPane.setVisible(true);
-            } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
-                errorLabel.setText(e.getMessage());
-            }catch(SessionExpiredException _){
-                windowManager.logOut();
-            }
-        }catch(EmptyFieldException | IOException e){
+
+            submitRegistration(registrationName, email);
+
+        } catch (EmptyFieldException e) {
             errorLabel.setText(e.getMessage());
         }
+
         updateCustomerInfo();
     }
 
+    private void submitRegistration(String registrationName, String email) {
+        try {
+            RegistrationRequestBean registrationRequestBean = new RegistrationRequestBean();
+            registrationRequestBean.setRegistrationName(registrationName);
+            registrationRequestBean.setEmail(email);
+
+            CompetitionBean selectedCompetitionBean = competitionTable.getSelectionModel().getSelectedItem();
+
+            RegistrationBean registrationBean = signCompetitionController.signToCompetition(
+                    windowManager.getAuthBean().getToken(),
+                    selectedCompetitionBean,
+                    registrationRequestBean
+            );
+
+            onCompetitionSelected();
+
+            registrationCodeLabel.setText("Il codice della registrazione: " + registrationBean.getRegistrationCode());
+            assignedSeatLabel.setText("Il posto assegnato è: " + registrationBean.getAssignedSeat());
+
+            startConfig();
+
+            summaryPane.setVisible(true);
+
+        } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
+            errorLabel.setText(e.getMessage());
+        } catch (SessionExpiredException | IOException _) {
+            windowManager.logOut();
+        }
+    }
 
     @FXML
     public void goToOrdersPage(){

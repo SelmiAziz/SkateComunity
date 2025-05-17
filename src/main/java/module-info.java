@@ -10,5 +10,6 @@ module startSkate {
 
     opens view to javafx.fxml;
     opens viewBasic to javafx.fxml;
-    exports startSkate;
+    exports startskate;
+
 }

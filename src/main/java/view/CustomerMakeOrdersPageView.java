@@ -75,16 +75,15 @@ public class CustomerMakeOrdersPageView {
         for (int i = 0; i < regioni.size(); i++) {
             String region = regioni.get(i);
             MenuItem item = new MenuItem(region);
-            item.setOnAction(e -> {
-                menuRegions.setText(region);
-            });
+            item.setOnAction(e -> menuRegions.setText(region));
+
             menuRegions.getItems().add(item);
         }
         menuRegions.setText(regioni.get(0));
     }
 
 
-    public void order(){
+    public void order() {
         String region = menuRegions.getText();
         String province = provinceTextField.getText();
         String city = cityTextField.getText();
@@ -92,10 +91,11 @@ public class CustomerMakeOrdersPageView {
         String comment = commentArea.getText();
         String timeSlot = timeSlotSpinner.getValue();
 
-        try{
-            if(province == null || city == null || address == null || comment == null){
+        try {
+            if (province == null || city == null || address == null || comment == null) {
                 throw new EmptyFieldException("Inserisci i campi correttamente");
             }
+
             DeliveryDestinationBean deliveryDestinationBean = new DeliveryDestinationBean();
             deliveryDestinationBean.setRegion(region);
             deliveryDestinationBean.setProvince(province);
@@ -106,18 +106,28 @@ public class CustomerMakeOrdersPageView {
             deliveryPreferencesBean.setComment(comment);
             deliveryPreferencesBean.setPreferredTimeSlot(timeSlot);
 
-            try {
-                OrderSummaryBean orderSummaryBean = customOrderController.elaborateOrder(windowManager.getAuthBean().getToken(),deliveryDestinationBean, deliveryPreferencesBean, boardBean);
-                windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
-            }catch(InsufficientCoinsException | IOException e){
-                errorLabel.setText(e.getMessage());
-            }catch(SessionExpiredException _){
-                windowManager.closeCoordinator();
-                windowManager.logOut();
-            }
+            processOrder(deliveryDestinationBean, deliveryPreferencesBean);
 
-        }catch(EmptyFieldException e){
+        } catch (EmptyFieldException e) {
             errorLabel.setText(e.getMessage());
+        }
+    }
+
+    private void processOrder(DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean) {
+        try {
+            OrderSummaryBean orderSummaryBean = customOrderController.elaborateOrder(
+                    windowManager.getAuthBean().getToken(),
+                    deliveryDestinationBean,
+                    deliveryPreferencesBean,
+                    boardBean
+            );
+            windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
+
+        } catch (InsufficientCoinsException | IOException e) {
+            errorLabel.setText(e.getMessage());
+        } catch (SessionExpiredException _) {
+            windowManager.closeCoordinator();
+            windowManager.logOut();
         }
     }
 

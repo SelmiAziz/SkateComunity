@@ -105,12 +105,8 @@ public class CoordinatorOrderPageView implements CoordinatorOrderView {
         detailsArea.setVisible(true);
         if(orderSummaryBean.getStatus().equals("Requested")){
             acceptanceOrderPane.setVisible(true);
-        }else if(orderSummaryBean.getStatus().equals("Processing")){
+        }else if(orderSummaryBean.getStatus().equals("Processing")) {
             postOrderPane.setVisible(true);
-        }else if(orderSummaryBean.getStatus().equals("Completed")){
-
-        }else{
-
         }
     }
 

@@ -35,23 +35,26 @@ public class LoginView {
 
         try {
             validateLogin(username, password);
-            AuthBean authBean =  loginController.logUser(new LogUserBean(username, password));
+            AuthBean authBean = loginController.logUser(new LogUserBean(username, password));
             WindowManager.getInstance().setAuthBean(authBean);
-            try{
-
-                if (authBean.getRole().equals("Costumer")){
-                    WindowManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
-                }else {
-                    WindowManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
-                }
-            }catch (IOException _){
-                errorLabel.setText("Errore di sistema. Riprova più tardi.");
-            }
-
-        } catch (EmptyFieldException  | UserNotFoundException e) {
+            loadHomePage(authBean);
+        } catch (EmptyFieldException | UserNotFoundException e) {
             errorLabel.setText(e.getMessage());
         }
     }
+
+    private void loadHomePage(AuthBean authBean) {
+        try {
+            if ("Costumer".equals(authBean.getRole())) {
+                WindowManager.getInstance().loadScene("viewFxml/CustomerHomePageView.fxml");
+            } else {
+                WindowManager.getInstance().loadScene("viewFxml/OrganizerHomePageView.fxml");
+            }
+        } catch (IOException _) {
+            errorLabel.setText("Errore di sistema. Riprova più tardi.");
+        }
+    }
+
 
 
 

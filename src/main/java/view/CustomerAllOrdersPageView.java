@@ -17,8 +17,8 @@ import java.util.List;
 
 public class CustomerAllOrdersPageView implements CustomerOrderView {
 
-    public CustomOrderController customOrderController;
-    public WindowManager windowManager = WindowManager.getInstance();
+    private CustomOrderController customOrderController;
+    private WindowManager windowManager = WindowManager.getInstance();
 
     @FXML
     private TableView<OrderSummaryBean> ordersTable;
@@ -163,11 +163,8 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
     }
     public void logOut(){
         windowManager.closeCoordinator();
-        try {
-            windowManager.goToHomePage();
-        }catch(IOException e){
-            errorLabel.setText(e.getMessage());
-        }
+        windowManager.logOut();
+
 
     }
 

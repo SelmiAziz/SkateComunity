@@ -14,15 +14,15 @@ public class OrganizerHomePageView {
     @FXML private Label errorLabel;
 
 
-    public void initialize(){
-
-    }
-
 
 
     @FXML
     public void goToCompetitionsPage() {
-
+        try{
+            windowManager.goToCustomerCompetitions();
+        }catch (IOException e){
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     @FXML

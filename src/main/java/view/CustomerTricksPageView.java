@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utils.WindowManager;
 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class CustomerTricksPageView {
     LearnTrickController learnTrickController = new LearnTrickController();
 
     @FXML
-    public void initialize(){
+    public void initialize() {
 
         colTrickName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getNameTrick()));

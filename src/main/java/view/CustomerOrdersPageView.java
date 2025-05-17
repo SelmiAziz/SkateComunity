@@ -70,9 +70,11 @@ public class CustomerOrdersPageView {
         noseSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 50, 10, 1));
         tailSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 50, 10, 1));
 
-        gripSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            gripValueLabel.setText(String.format("Grip: %.2f", newValue.doubleValue()));
-        });
+
+        gripSlider.valueProperty().addListener((observable, oldValue, newValue) ->
+                gripValueLabel.setText(String.format("Grip: %.2f", newValue.doubleValue()))
+        );
+
         gripValueLabel.setText(String.format("Grip: %.2f", gripSlider.getValue()));
 
         colBoardName.setCellValueFactory(cellData ->

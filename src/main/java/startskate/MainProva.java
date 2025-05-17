@@ -1,4 +1,4 @@
-package startSkate;
+package startskate;
 
 
 import javafx.application.Application;

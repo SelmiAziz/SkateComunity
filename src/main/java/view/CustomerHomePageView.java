@@ -13,14 +13,12 @@ import java.io.IOException;
 
 public class CustomerHomePageView {
     private final WindowManager windowManager = WindowManager.getInstance();
-    private Stage stage;
 
 
     @FXML private Label errorLabel;
 
-    public void initialize(){
 
-    }
+
 
     @FXML
     public void goToOrdersPage(){
@@ -40,6 +38,7 @@ public class CustomerHomePageView {
             root = loader.load();
             CustomerCompetitionsPageView userEventsPageView = loader.getController();
             Scene scene = new Scene(root, 1200, 800);
+            Stage stage;
             stage = windowManager.getStage();
             stage.setResizable(false);
             stage.setScene(scene);
