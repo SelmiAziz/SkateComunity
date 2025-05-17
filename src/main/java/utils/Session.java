@@ -9,7 +9,7 @@ public class Session {
     private final Role role;
     private long expiryTime;
 
-    private  long SESSION_DURATION = 30L * 60 * 1000; // 30 minuti in millisecondi
+    private  static final long SESSION_DURATION = 30L * 60 * 1000; // 30 minuti in millisecondi
 
 
 

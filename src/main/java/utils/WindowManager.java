@@ -21,9 +21,9 @@ public class WindowManager {
     private static WindowManager instance;
     private AuthBean authBean;
 
-    private WindowManager() {} ;
+    private WindowManager() {}
 
-    public synchronized static WindowManager getInstance() {
+    public  static synchronized  WindowManager getInstance() {
         if (instance == null) {
             instance = new WindowManager();
         }
@@ -174,7 +174,8 @@ public class WindowManager {
     public void logOut()  {
         try {
             loadScene("viewFxml/AccessView.fxml");
-        }catch(IOException e){
+        }catch(IOException _){
+            //has to be developed
         }
     }
 

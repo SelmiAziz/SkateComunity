@@ -42,7 +42,7 @@ public class WarrantyDecorator extends BoardDecorator {
     @Override
     public int price() {
         int base = super.price();
-        int validMonths = Math.max(minWarrantyMonths, Math.min(warrantyMonths, maxWarrantyMonths));
+        int validMonths = Math.clamp(warrantyMonths, minWarrantyMonths, maxWarrantyMonths);
         int firstPeriod = Math.min(validMonths, firstPeriodMonths);
         int secondPeriod = Math.max(0, validMonths - firstPeriodMonths);
 

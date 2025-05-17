@@ -32,7 +32,7 @@ public class GripTextureDecorator extends BoardDecorator {
     @Override
     public int price() {
         int v = super.price();
-        double g = Math.max(this.minGrip, Math.min(this.maxGrip, this.gripValue));
+        double g = Math.clamp(gripValue, minGrip, maxGrip);
         double norm = (g - this.minGrip) / (this.maxGrip - this.minGrip);
         int curvedCost = (int)Math.round(Math.pow(norm, 2.2) * this.costMultiplier);
         return v+curvedCost;

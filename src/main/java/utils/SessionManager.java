@@ -14,7 +14,7 @@ public class SessionManager {
         this.sessions = new ArrayList<>();
     }
 
-    public synchronized static SessionManager getInstance() {
+    public static synchronized SessionManager getInstance() {
         if (instance == null) {
             instance = new SessionManager();
         }

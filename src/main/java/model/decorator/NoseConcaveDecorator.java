@@ -30,7 +30,7 @@ public class NoseConcaveDecorator extends BoardDecorator {
     @Override
     public int price() {
         int base = super.price();
-        double d = Math.max(minDepth, Math.min(maxDepth, concaveDepthMm));
+        double d = Math.clamp(concaveDepthMm, minDepth, maxDepth);
         int cost = (int) Math.round(d * costMultiplier);
         return base + cost;
     }

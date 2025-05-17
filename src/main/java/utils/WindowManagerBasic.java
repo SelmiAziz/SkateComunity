@@ -21,9 +21,9 @@ public class WindowManagerBasic{
     private static WindowManagerBasic instance;
     private AuthBean authBean;
 
-    private WindowManagerBasic() {} ;
+    private WindowManagerBasic() {}
 
-    public synchronized static WindowManagerBasic getInstance() {
+    public static synchronized  WindowManagerBasic getInstance() {
         if (instance == null) {
             instance = new WindowManagerBasic();
         }
@@ -134,8 +134,8 @@ public class WindowManagerBasic{
     public void logOut() {
         try {
             loadScene("viewFxmlBasic/LogPageViewBasic.fxml");
-        }catch(IOException e){
-
+        }catch(IOException _){
+            //has to be developed
         }
 
     }
