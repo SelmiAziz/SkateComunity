@@ -1,18 +1,12 @@
 package dao;
 
-import dao.patternAbstractFactory.DaoFactory;
-import login.Role;
 import login.User;
-import model.Customer;
-import model.Organizer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDemoDao implements UserDao {
     private static UserDemoDao instance;
-    private final OrganizerDao organizerDao = DaoFactory.getInstance().createOrganizerDao();
-    private final CustomerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
     private final List<User> userList;
 
     public UserDemoDao() {

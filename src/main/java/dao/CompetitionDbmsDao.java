@@ -93,7 +93,6 @@ public class CompetitionDbmsDao implements CompetitionDao {
             return newCompetitionList;
         }
 
-        RegistrationDao competitionRegistrationDao = DaoFactory.getInstance().createRegistrationDao();
         List<Competition> competitions = new ArrayList<>();
         List<String> organizerUsernames = new ArrayList<>(); // Lista dei nomi degli organizzatori
         List<String> registrationIdsList = new ArrayList<>(); // Lista delle stringhe con ID registrazioni

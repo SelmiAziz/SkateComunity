@@ -55,8 +55,7 @@ public class WalletDbmsDao implements  WalletDao{
             if (rs.next()) {
                 int balance = rs.getInt("balance");
 
-                Wallet wallet = new Wallet(walletId, balance);
-                return wallet;
+                return new Wallet(walletId, balance);
             }
         } catch (SQLException e) {
             e.printStackTrace();

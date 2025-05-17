@@ -37,6 +37,10 @@ public class LogPageViewBasic {
     @FXML private TextField usernameFieldLog;
     @FXML private TextField passwordFieldLog;
 
+    private static final String SELECTED_COLOR = "-fx-background-color: #1ABC9C;";
+    private static final String UNSELECTED_COLOR = "-fx-background-color: lightgray;";
+
+
     public void initialize(){
         skillGroup = new ToggleGroup();
         noviceRadio.setToggleGroup(skillGroup);
@@ -113,30 +117,39 @@ public class LogPageViewBasic {
             String dateOfBirth = formatValidateDate(month, day, year);
             validateRegistration(username, password, passwordConfirmation, selected);
 
-            try {
-                RegisterUserBean userBean = new RegisterUserBean(username, password, role, dateOfBirth, skaterLevel);
-                loginController.registerUser(userBean);
+            processRegistration(username, password, role, dateOfBirth, skaterLevel);
 
-                usernameField.setText("");
-                passwordField.setText("");
-                passwordConfirmationField.setText("");
-                monthField.setText("");
-                dayField.setText("");
-                yearField.setText("");
-
-                resultLabel.setText("Registrazione avvenuta con successo!!");
-
-            } catch (UserNameAlreadyUsedException e) {
-                String suggestion = e.getSuggestedUsername();
-                resultLabel.setText(e.getMessage() + " Suggerimento: " + suggestion);
-                usernameField.setText(suggestion);
-            } catch (IOException _) {
-                //has to be developed
-            }
-        } catch(EmptyFieldException | PasswordConfirmationException |
-                NoUserTypeSelectedException | WrongFormatException e){
+        } catch (EmptyFieldException | PasswordConfirmationException |
+                 NoUserTypeSelectedException | WrongFormatException e) {
             resultLabel.setText(e.getMessage());
         }
+    }
+
+    private void processRegistration(String username, String password, String role,
+                                     String dateOfBirth, String skaterLevel) {
+        try {
+            RegisterUserBean userBean = new RegisterUserBean(username, password, role, dateOfBirth, skaterLevel);
+            loginController.registerUser(userBean);
+
+            clearRegistrationFields();
+            resultLabel.setText("Registrazione avvenuta con successo!!");
+
+        } catch (UserNameAlreadyUsedException e) {
+            String suggestion = e.getSuggestedUsername();
+            resultLabel.setText(e.getMessage() + " Suggerimento: " + suggestion);
+            usernameField.setText(suggestion);
+        } catch (IOException _) {
+            resultLabel.setText("Errore durante la registrazione. Riprova più tardi.");
+        }
+    }
+
+    private void clearRegistrationFields() {
+        usernameField.setText("");
+        passwordField.setText("");
+        passwordConfirmationField.setText("");
+        monthField.setText("");
+        dayField.setText("");
+        yearField.setText("");
     }
 
 
@@ -156,44 +169,48 @@ public class LogPageViewBasic {
             validateLogin(username, password);
             AuthBean authBean = loginController.logUser(new LogUserBean(username, password));
             windowManagerBasic.setAuthBean(authBean);
-            try{
-                if (authBean.getRole().equals("Costumer")){
-                    WindowManagerBasic.getInstance().loadScene("viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml");
-                }else {
-                    WindowManagerBasic.getInstance().loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
-                }
-            }catch (IOException _){
-                resultLabel.setText("Errore di sistema. Riprova più tardi.");
-            }
-
-        } catch (EmptyFieldException  | UserNotFoundException e) {
+            loadHomeScene(authBean.getRole());
+        } catch (EmptyFieldException | UserNotFoundException e) {
             resultLabel.setText(e.getMessage());
+        }
+    }
+
+    private void loadHomeScene(String role) {
+        try {
+            if ("Costumer".equals(role)) {
+                WindowManagerBasic.getInstance().loadScene("viewFxmlBasic/CustomerCompetitionsPageViewBasic.fxml");
+            } else {
+                WindowManagerBasic.getInstance().loadScene("viewFxmlBasic/OrganizerCompetitionsPageViewBasic.fxml");
+            }
+        } catch (IOException _) {
+            resultLabel.setText("Errore di sistema. Riprova più tardi.");
         }
     }
 
     @FXML
     public void handleBtnCostumer() {
         if (btnCostumer.isSelected()) {
-            btnCostumer.setStyle("-fx-background-color:  #1ABC9C;");
-            btnOrganizer.setStyle("-fx-background-color: lightgray;");
+            btnCostumer.setStyle(SELECTED_COLOR);
+            btnOrganizer.setStyle(UNSELECTED_COLOR);
             skillLevelShow(true);
         } else {
-            btnCostumer.setStyle("-fx-background-color: lightgray;");
+            btnCostumer.setStyle(UNSELECTED_COLOR);
             skillLevelShow(false);
         }
     }
 
     @FXML
-    public void handleBtnOrganizer(){
+    public void handleBtnOrganizer() {
         if (btnOrganizer.isSelected()) {
-            btnOrganizer.setStyle("-fx-background-color:  #1ABC9C;");
-            btnCostumer.setStyle("-fx-background-color: lightgray;");
+            btnOrganizer.setStyle(SELECTED_COLOR);
+            btnCostumer.setStyle(UNSELECTED_COLOR);
             skillLevelShow(false);
         } else {
-            btnOrganizer.setStyle("-fx-background-color: lightgray;");
+            btnOrganizer.setStyle(UNSELECTED_COLOR);
             skillLevelShow(false);
         }
     }
+
 
 
 

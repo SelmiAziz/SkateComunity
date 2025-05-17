@@ -1,11 +1,8 @@
 package dao;
 
 
-import dao.patternAbstractFactory.DaoFactory;
 import login.Role;
 import login.User;
-import model.Customer;
-import model.Organizer;
 import utils.DbsConnector;
 
 import java.sql.*;
@@ -44,10 +41,6 @@ public class UserDbmsDao implements UserDao {
                     User user = new User(uName,password,dateOfBirth, role.equals("Organizer") ? Role.ORGANIZER: Role.COSTUMER);
                     userList.add(user);
                     return user;
-                } else {
-
-
-
                 }
             }
         } catch (SQLException e) {

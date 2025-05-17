@@ -50,7 +50,7 @@ public class TrickDbmsDao implements TrickDao{
     @Override
     public Trick selectTrickByName(String trickName) {
         for(Trick trick:this.trickList){
-            if(trick.equals(trickName)){
+            if(trick.getNameTrick().equals(trickName)){
                 return trick;
             }
         }
@@ -65,7 +65,7 @@ public class TrickDbmsDao implements TrickDao{
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                Trick trick = new Trick(
+                return new Trick(
                         rs.getString("trickName"),
                         rs.getString("description"),
                         DifficultyTrick.valueOf(rs.getString("difficulty")),
@@ -73,7 +73,6 @@ public class TrickDbmsDao implements TrickDao{
                         rs.getString("date")
                 );
 
-                return trick;
             }
 
         } catch (SQLException e) {
