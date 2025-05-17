@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import utils.CoordinatorOrderView;
-import utils.WindowManagerBasic;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.Map;
 
 public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
     private CustomOrderController customOrderController;
-    private WindowManagerBasic windowManagerBasic = WindowManagerBasic.getInstance();
 
     private final Map<Integer, OrderSummaryBean> ordersMap = new HashMap<>();
 
@@ -32,8 +30,8 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
     @FXML private TextField dayField;
     @FXML private TextField monthField;
     @FXML private TextField yearField;
-    @FXML private ListView ordersList;
-    @FXML private ComboBox ordersComboBox;
+    @FXML private ListView<String> ordersList;
+    @FXML private ComboBox<String> ordersComboBox;
     @FXML private Label errorLabel;
 
     public void initialize(){
