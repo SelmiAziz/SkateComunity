@@ -19,6 +19,13 @@ public class CompetitionDbmsDao implements CompetitionDao {
     private final RegistrationDao competitionRegistrationDao = DaoFactory.getInstance().createRegistrationDao();
     private final List<Competition> competitionList = new ArrayList<>();
 
+    private  static final String DESCRIPTION = "description";
+    private  static final String LOCATION = "location";
+    private  static final String COINSREQUIRE = "coinsRequired";
+    private static final String MAXREGISTRATIONNUMBER = "MaxRegistrationNumber";
+    private static final String DATE = "date";
+    private static final String REGISTRATIONIDS = "registrationIds";
+
     public static synchronized CompetitionDbmsDao getInstance(){
         if(instance == null){
             instance = new CompetitionDbmsDao();
@@ -54,14 +61,14 @@ public class CompetitionDbmsDao implements CompetitionDao {
             if (rs.next()) {
                 Competition competition = new Competition(
                         competitionName,
-                        rs.getString("description"),
-                        rs.getString("date"),
-                        rs.getString("location"),
-                        rs.getInt("coinsRequired"),
-                        rs.getInt("MaxRegistrationNumber")
+                        rs.getString(DESCRIPTION),
+                        rs.getString(DATE),
+                        rs.getString(LOCATION),
+                        rs.getInt(COINSREQUIRE),
+                        rs.getInt(MAXREGISTRATIONNUMBER)
                 );
 
-                String registrationIdsStr = rs.getString("registrationIds");
+                String registrationIdsStr = rs.getString(REGISTRATIONIDS);
                 if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
                     String[] registrationIds = registrationIdsStr.split(",");
                     for (String id : registrationIds) {
@@ -116,16 +123,16 @@ public class CompetitionDbmsDao implements CompetitionDao {
             while (rs.next()) {
                 Competition competition = new Competition(
                         rs.getString("competitionName"),
-                        rs.getString("description"),
-                        rs.getString("date"),
-                        rs.getString("location"),
-                        rs.getInt("coinsRequired"),
-                        rs.getInt("MaxRegistrationNumber")
+                        rs.getString(DESCRIPTION),
+                        rs.getString(DATE),
+                        rs.getString(LOCATION),
+                        rs.getInt(COINSREQUIRE),
+                        rs.getInt(MAXREGISTRATIONNUMBER)
                 );
                 this.competitionList.add(competition);
                 competitions.add(competition);
                 organizerUsernames.add(rs.getString("organizerUsername"));
-                registrationIdsList.add(rs.getString("registrationIds"));
+                registrationIdsList.add(rs.getString(REGISTRATIONIDS));
             }
 
             for (int i = 0; i < competitions.size(); i++) {
@@ -185,7 +192,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
     public List<Competition> selectCompetitionsByDateAndLocation(String date, String location) {
         List<Competition> newCompetitionList = new ArrayList<>();
 
-        //first I look in memory
+
         for (Competition competition : this.competitionList) {
             if (competition.getDate().equals(date) && competition.getLocation().equals(location)) {
                 newCompetitionList.add(competition);
@@ -195,7 +202,6 @@ public class CompetitionDbmsDao implements CompetitionDao {
             return newCompetitionList;
         }
 
-        // Query if there is nothing in memory
         String sql = "SELECT e.competitionName, " +
                 "e.description, " +
                 "e.coinsRequired, " +
@@ -222,17 +228,17 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 while (rs.next()) {
                     Competition competition = new Competition(
                             rs.getString("competitionName"),
-                            rs.getString("description"),
-                            rs.getString("date"),
-                            rs.getString("location"),
-                            rs.getInt("coinsRequired"),
-                            rs.getInt("MaxRegistrationNumber")
+                            rs.getString(DESCRIPTION),
+                            rs.getString(DATE),
+                            rs.getString(LOCATION),
+                            rs.getInt(COINSREQUIRE),
+                            rs.getInt(MAXREGISTRATIONNUMBER)
                     );
 
                     competitions.add(competition);
                     this.competitionList.add(competition);
                     organizerUsernames.add(rs.getString("organizerUsername"));
-                    registrationIdsList.add(rs.getString("registrationIds"));
+                    registrationIdsList.add(rs.getString(REGISTRATIONIDS));
                 }
             }
         } catch (SQLException e) {
