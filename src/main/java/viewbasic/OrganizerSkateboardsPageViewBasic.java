@@ -74,25 +74,32 @@ public class OrganizerSkateboardsPageViewBasic {
 
     public void submitSkateboard(){
         String size = sizeChoiceBox.getValue();
-
         String name = skateboardNameField.getText();
         String description = descriptionTextArea.getText();
-        try{
+
+        try {
             if(name == null || description == null){
                 throw new EmptyFieldException("Inserire correttamente campi");
             }
             int cost = Integer.parseInt(costTextField.getText());
-            try {
-                createSkateboardController.createBoard(windowManagerBasic.getAuthBean().getToken(), new BoardProfileBean(name, description, size, cost));
-                loadSkateboards();
-            }catch(SessionExpiredException _){
-                windowManagerBasic.logOut();
-            }
-        }catch(NumberFormatException | EmptyFieldException e){
+            createSkateboard(name, description, size, cost);
+
+        } catch(NumberFormatException | EmptyFieldException e) {
             errorLabel.setText(e.getMessage());
         }
-
     }
+
+    private void createSkateboard(String name, String description, String size, int cost) {
+        try {
+            createSkateboardController.createBoard(
+                    windowManagerBasic.getAuthBean().getToken(),
+                    new BoardProfileBean(name, description, size, cost));
+            loadSkateboards();
+        } catch (SessionExpiredException _) {
+            windowManagerBasic.logOut();
+        }
+    }
+
 
 
     @FXML

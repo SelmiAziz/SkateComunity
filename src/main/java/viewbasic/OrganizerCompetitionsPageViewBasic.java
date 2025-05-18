@@ -79,7 +79,6 @@ public class OrganizerCompetitionsPageViewBasic {
 
 
 
-
     @FXML
     private void createCompetition() {
         String name = competitionNameField.getText();
@@ -91,20 +90,28 @@ public class OrganizerCompetitionsPageViewBasic {
         int coinsRequired;
         int maxRegistrations;
 
-        try{
+        try {
             String date = dateValidatorFormatter.formatValidateDate(month, day, year);
             validateFields(name, description, date, location);
             coinsRequired = Integer.parseInt(coinsAmountField.getText());
             maxRegistrations = Integer.parseInt(maxRegistrationsField.getText());
-            try {
-                createCompetitionController.createCompetition(windowManagerBasic.getAuthBean().getToken(), new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
-                loadCompetitions();
-            }catch(SessionExpiredException _){
-                windowManagerBasic.logOut();
-            }
+
+            tryCreateCompetition(name, description, date, location, coinsRequired, maxRegistrations);
+
         } catch (NumberFormatException | EmptyFieldException | WrongFormatException |
-                 CompetitionAlreadyExistsException | SQLException e) {
+                 CompetitionAlreadyExistsException  e) {
             errorLabel.setText(e.getMessage());
+        }
+    }
+
+    private void tryCreateCompetition(String name, String description, String date, String location, int coinsRequired, int maxRegistrations) {
+        try {
+            createCompetitionController.createCompetition(
+                    windowManagerBasic.getAuthBean().getToken(),
+                    new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
+            loadCompetitions();
+        } catch (SessionExpiredException | SQLException _) {
+            windowManagerBasic.logOut();
         }
     }
 

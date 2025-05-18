@@ -4,16 +4,10 @@ import beans.TrickBean;
 import controls.LearnTrickController;
 import exceptions.EmptyFieldException;
 import exceptions.SessionExpiredException;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import utils.WindowManager;
 import utils.WindowManagerBasic;
 
 import java.io.IOException;

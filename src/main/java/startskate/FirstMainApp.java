@@ -7,7 +7,6 @@ import utils.WindowManager;
 
 import java.io.IOException;
 
-import static java.lang.Thread.sleep;
 
 public class FirstMainApp extends Application {
 

@@ -19,15 +19,15 @@ public class CompetitionDbmsDao implements CompetitionDao {
     private final RegistrationDao competitionRegistrationDao = DaoFactory.getInstance().createRegistrationDao();
     private final List<Competition> competitionList = new ArrayList<>();
 
-    private  static final String DESCRIPTION = "description";
-    private  static final String LOCATION = "location";
-    private  static final String COINSREQUIRE = "coinsRequired";
+    private static final String DESCRIPTION = "description";
+    private static final String LOCATION = "location";
+    private static final String COINSREQUIRE = "coinsRequired";
     private static final String MAXREGISTRATIONNUMBER = "MaxRegistrationNumber";
     private static final String DATE = "date";
     private static final String REGISTRATIONIDS = "registrationIds";
 
-    public static synchronized CompetitionDbmsDao getInstance(){
-        if(instance == null){
+    public static synchronized CompetitionDbmsDao getInstance() {
+        if (instance == null) {
             instance = new CompetitionDbmsDao();
         }
         return instance;
@@ -35,8 +35,8 @@ public class CompetitionDbmsDao implements CompetitionDao {
 
     @Override
     public Competition selectCompetitionByName(String competitionName) {
-        for(Competition competition: this.competitionList){
-            if(competition.getName().equals(competitionName)){
+        for (Competition competition : this.competitionList) {
+            if (competition.getName().equals(competitionName)) {
                 return competition;
             }
         }
@@ -54,7 +54,6 @@ public class CompetitionDbmsDao implements CompetitionDao {
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, competitionName);
             ResultSet rs = stmt.executeQuery();
 
@@ -89,20 +88,23 @@ public class CompetitionDbmsDao implements CompetitionDao {
     }
 
     public List<Competition> selectAvailableCompetitions() {
-        List<Competition> newCompetitionList = new ArrayList<>();
-        for(Competition competition : this.competitionList){
-            if(competition.getRegistrationsNumber() < competition.getMaxRegistrations()){
-                newCompetitionList.add(competition);
+        List<Competition> availableCompetitions = new ArrayList<>();
+        for (Competition competition : this.competitionList) {
+            if (competition.getRegistrationsNumber() < competition.getMaxRegistrations()) {
+                availableCompetitions.add(competition);
             }
         }
 
-        if(!newCompetitionList.isEmpty()){
-            return newCompetitionList;
+        if (!availableCompetitions.isEmpty()) {
+            return availableCompetitions;
         }
 
+        return loadAvailableCompetitionsFromDb();
+    }
+
+    private List<Competition> loadAvailableCompetitionsFromDb() {
         List<Competition> competitions = new ArrayList<>();
-        List<String> organizerUsernames = new ArrayList<>(); // Lista dei nomi degli organizzatori
-        List<String> registrationIdsList = new ArrayList<>(); // Lista delle stringhe con ID registrazioni
+
         String sql = "SELECT e.competitionName, " +
                 "e.description, " +
                 "e.coinsRequired, " +
@@ -113,48 +115,20 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 "GROUP_CONCAT(r.idRegistration) AS registrationIds " +
                 "FROM competitions e " +
                 "LEFT JOIN registrations r ON e.competitionName = r.competitionName " +
-                "GROUP BY e.competitionName, e.description, e.coinsRequired, e.date, e.location, e.MaxRegistrationNumber, e.organizerUsername " +
+                "GROUP BY e.competitionName, e.description, e.coinsRequired, e.date, e.location, " +
+                "e.MaxRegistrationNumber, e.organizerUsername " +
                 "HAVING COUNT(r.idRegistration) < e.MaxRegistrationNumber";
+
         try (
                 Connection conn = DbsConnector.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
-
+                ResultSet rs = stmt.executeQuery()
+        ) {
             while (rs.next()) {
-                Competition competition = new Competition(
-                        rs.getString("competitionName"),
-                        rs.getString(DESCRIPTION),
-                        rs.getString(DATE),
-                        rs.getString(LOCATION),
-                        rs.getInt(COINSREQUIRE),
-                        rs.getInt(MAXREGISTRATIONNUMBER)
-                );
+                Competition competition = buildCompetitionFromResultSet(rs);
+                setOrganizerAndRegistrations(competition, rs);
                 this.competitionList.add(competition);
                 competitions.add(competition);
-                organizerUsernames.add(rs.getString("organizerUsername"));
-                registrationIdsList.add(rs.getString(REGISTRATIONIDS));
-            }
-
-            for (int i = 0; i < competitions.size(); i++) {
-                Competition competition = competitions.get(i);
-                String organizerUsername = organizerUsernames.get(i);
-                if (organizerUsername != null) {
-                    Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
-                    if (organizer != null) {
-                        competition.setOrganizer(organizer);
-                    }
-                }
-                String registrationIdsStr = registrationIdsList.get(i);
-                if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
-                    for (String id : registrationIdsStr.split(",")) {
-                        int registrationId = Integer.parseInt(id);
-                        Registration competitionRegistration = competitionRegistrationDao.selectRegistrationById(registrationId);
-                        if (competitionRegistration != null) {
-                            competitionRegistration.setCompetition(competition);
-                            competition.addCompetitionRegistration(competitionRegistration);
-                        }
-                    }
-                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,10 +137,43 @@ public class CompetitionDbmsDao implements CompetitionDao {
         return competitions;
     }
 
+    private Competition buildCompetitionFromResultSet(ResultSet rs) throws SQLException {
+        return new Competition(
+                rs.getString("competitionName"),
+                rs.getString(DESCRIPTION),
+                rs.getString(DATE),
+                rs.getString(LOCATION),
+                rs.getInt(COINSREQUIRE),
+                rs.getInt(MAXREGISTRATIONNUMBER)
+        );
+    }
+
+    private void setOrganizerAndRegistrations(Competition competition, ResultSet rs) throws SQLException {
+        String organizerUsername = rs.getString("organizerUsername");
+        if (organizerUsername != null) {
+            Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
+            if (organizer != null) {
+                competition.setOrganizer(organizer);
+            }
+        }
+
+        String registrationIdsStr = rs.getString(REGISTRATIONIDS);
+        if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
+            for (String id : registrationIdsStr.split(",")) {
+                int registrationId = Integer.parseInt(id);
+                Registration registration = competitionRegistrationDao.selectRegistrationById(registrationId);
+                if (registration != null) {
+                    registration.setCompetition(competition);
+                    competition.addCompetitionRegistration(registration);
+                }
+            }
+        }
+    }
+
     @Override
     public boolean checkCompetition(String competitionName) {
-        for(Competition competition:competitionList){
-            if(competition.getName().equals(competitionName)){
+        for (Competition competition : competitionList) {
+            if (competition.getName().equals(competitionName)) {
                 return true;
             }
         }
@@ -190,37 +197,46 @@ public class CompetitionDbmsDao implements CompetitionDao {
 
     @Override
     public List<Competition> selectCompetitionsByDateAndLocation(String date, String location) {
-        List<Competition> newCompetitionList = new ArrayList<>();
+        List<Competition> competitionsFound = searchCompetitionsInList(date, location);
+        if (!competitionsFound.isEmpty()) {
+            return competitionsFound;
+        }
 
+        List<Competition> competitions = new ArrayList<>();
+        List<String> organizers = new ArrayList<>();
+        List<String> registrations = new ArrayList<>();
 
-        for (Competition competition : this.competitionList) {
-            if (competition.getDate().equals(date) && competition.getLocation().equals(location)) {
-                newCompetitionList.add(competition);
+        loadCompetitionsFromDatabase(date, location, competitions, organizers, registrations);
+        associateOrganizersAndRegistrations(competitions, organizers, registrations);
+
+        return competitions;
+    }
+
+    private List<Competition> searchCompetitionsInList(String date, String location) {
+        List<Competition> found = new ArrayList<>();
+        for (Competition c : this.competitionList) {
+            if (c.getDate().equals(date) && c.getLocation().equals(location)) {
+                found.add(c);
             }
         }
-        if (!newCompetitionList.isEmpty()) {
-            return newCompetitionList;
-        }
+        return found;
+    }
 
-        String sql = "SELECT e.competitionName, " +
-                "e.description, " +
-                "e.coinsRequired, " +
-                "e.date, " +
-                "e.location, " +
-                "e.organizerUsername, " +
-                "e.MaxRegistrationNumber, " +
-                "GROUP_CONCAT(r.idRegistration) AS registrationIds " +
+    private void loadCompetitionsFromDatabase(String date, String location,
+                                              List<Competition> competitions,
+                                              List<String> organizers,
+                                              List<String> registrations) {
+        String sql = "SELECT e.competitionName, e.description, e.coinsRequired, e.date, e.location, " +
+                "e.organizerUsername, e.MaxRegistrationNumber, GROUP_CONCAT(r.idRegistration) AS registrationIds " +
                 "FROM competitions e " +
                 "LEFT JOIN registrations r ON e.competitionName = r.competitionName " +
                 "WHERE e.date = ? AND e.location = ? " +
-                "GROUP BY e.competitionName, e.description, e.coinsRequired, e.date, e.location, e.MaxRegistrationNumber, e.organizerUsername";
+                "GROUP BY e.competitionName, e.description, e.coinsRequired, e.date, e.location, " +
+                "e.MaxRegistrationNumber, e.organizerUsername";
 
-        List<Competition> competitions = new ArrayList<>();
-        List<String> organizerUsernames = new ArrayList<>();
-        List<String> registrationIdsList = new ArrayList<>();
+        try (Connection conn = DbsConnector.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        Connection conn = DbsConnector.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, date);
             stmt.setString(2, location);
 
@@ -237,76 +253,84 @@ public class CompetitionDbmsDao implements CompetitionDao {
 
                     competitions.add(competition);
                     this.competitionList.add(competition);
-                    organizerUsernames.add(rs.getString("organizerUsername"));
-                    registrationIdsList.add(rs.getString(REGISTRATIONIDS));
+                    organizers.add(rs.getString("organizerUsername"));
+                    registrations.add(rs.getString(REGISTRATIONIDS));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    private void associateOrganizersAndRegistrations(List<Competition> competitions,
+                                                     List<String> organizers,
+                                                     List<String> registrations) {
         for (int i = 0; i < competitions.size(); i++) {
             Competition competition = competitions.get(i);
+            assignOrganizerToCompetition(competition, organizers.get(i));
+            assignRegistrationsToCompetition(competition, registrations.get(i));
+        }
+    }
 
-            String organizerUsername = organizerUsernames.get(i);
-            if (organizerUsername != null) {
-                Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
-                if (organizer != null) {
-                    competition.setOrganizer(organizer);
-                }
-            }
-
-            String registrationIdsStr = registrationIdsList.get(i);
-            if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
-                for (String id : registrationIdsStr.split(",")) {
-                    int registrationId = Integer.parseInt(id);
-                    Registration competitionRegistration = competitionRegistrationDao.selectRegistrationById(registrationId);
-                    if (competitionRegistration != null) {
-                        competitionRegistration.setCompetition(competition);
-                        competition.addCompetitionRegistration(competitionRegistration);
-                    }
-                }
-            }
+    private void assignOrganizerToCompetition(Competition competition, String organizerUsername) {
+        if (organizerUsername == null) {
+            return;
         }
 
-        return competitions;
+        Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
+        if (organizer != null) {
+            competition.setOrganizer(organizer);
+        }
+    }
+
+    private void assignRegistrationsToCompetition(Competition competition, String registrationIds) {
+        if (registrationIds == null || registrationIds.isEmpty()) {
+            return;
+        }
+
+        for (String id : registrationIds.split(",")) {
+            int regId = Integer.parseInt(id);
+            Registration r = competitionRegistrationDao.selectRegistrationById(regId);
+            if (r != null) {
+                r.setCompetition(competition);
+                competition.addCompetitionRegistration(r);
+            }
+
+        }
     }
 
     @Override
     public void addCompetition(Competition competition) {
-        this.competitionList.add(competition);
+        if (checkCompetition(competition.getName())) {
+            return ;
+        }
 
-        String sql = "INSERT INTO competitions " +
-                "(competitionName, " +
-                "coinsRequired, " +
-                "description, " +
-                "date, " +
-                "MaxRegistrationNumber, " +
-                "currentRegistrationNumber, " +
-                "organizerUsername, " +
-                "location) " +
+        String sql = "INSERT INTO competitions (competitionName, description, date, location, coinsRequired, MaxRegistrationNumber, currentRegistrationNumber, organizerUsername) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        Connection connection = DbsConnector.getInstance().getConnection();
+        try (Connection conn = DbsConnector.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, competition.getName());
-            stmt.setInt(2, competition.getParticipationFee());
-            stmt.setString(3, competition.getDescription());
-            stmt.setString(4, competition.getDate());
-            stmt.setInt(5, competition.getMaxRegistrations());
-            stmt.setInt(6, competition.getRegistrationsNumber()); // Aggiunto currentRegistration
-            stmt.setString(7, competition.getOrganizer().getUsername());
-            stmt.setString(8, competition.getLocation());
+            stmt.setString(2, competition.getDescription());
+            stmt.setString(3, competition.getDate());
+            stmt.setString(4, competition.getLocation());
+            stmt.setInt(5, competition.getParticipationFee());
+            stmt.setInt(6, competition.getMaxRegistrations());
+            stmt.setInt(7, competition.getRegistrationsNumber());
+            stmt.setString(8, competition.getOrganizer() != null ? competition.getOrganizer().getUsername() : null);
 
-            stmt.executeUpdate();
+            int rowsInserted = stmt.executeUpdate();
 
-            for (Registration competitionRegistration : competition.getCompetitionRegistrations()) {
-                competitionRegistrationDao.addRegistration(competitionRegistration);
+            if (rowsInserted > 0) {
+                this.competitionList.add(competition);
             }
-        }catch (SQLException e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-}
 
+    }
+
+
+}

@@ -31,8 +31,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     @FXML private ListView<String> allListView;
     @FXML private ListView<String> notesListView;
 
-    @FXML private ComboBox boardsComboBox;
-    @FXML private ComboBox ordersComboBox;
+    @FXML private ComboBox<Integer> boardsComboBox;
+    @FXML private ComboBox<Integer> ordersComboBox;
 
 
     @FXML private TextField regionField;
@@ -71,6 +71,9 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
 
     private String boardTypology;
 
+
+    private static final String COLOR1 = "1ABC9C";
+    private static final String COLOR2 = "B0B0B0";
     public void initialize(){
         initGripCombo();
         initWarrantyCombo();
@@ -81,10 +84,10 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         resultArea.setEditable(false);
         confStart();
         initSlotCombo();
-        setButtonStyle(availableButton, "#1ABC9C");
-        setButtonStyle(designButton, "B0B0B0");
-        setButtonStyle(boardButton, "#1ABC9C");
-        setButtonStyle(orderButton, "B0B0B0");
+        setButtonStyle(availableButton, COLOR1);
+        setButtonStyle(designButton, COLOR2);
+        setButtonStyle(boardButton, COLOR1);
+        setButtonStyle(orderButton, COLOR2);
     }
 
     private void initSlotCombo() {
@@ -186,47 +189,69 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         }
     }
 
+    public void orderBoard() {
+        try {
+            validateInputFields();
+            DeliveryPreferencesBean deliveryPreferencesBean = prepareDeliveryPreferences();
+            DeliveryDestinationBean deliveryDestinationBean = prepareDeliveryDestination();
 
-    public void orderBoard(){
+            confStart();
+
+            elaborateOrder(deliveryDestinationBean, deliveryPreferencesBean);
+
+        } catch (EmptyFieldException | InvalidRegionException e) {
+            errorLabel.setText(e.getMessage());
+        }
+    }
+
+    private void validateInputFields() throws EmptyFieldException, InvalidRegionException {
         String comment = preferenceArea.getText();
-        String timeSlot = comboSlot.getValue();
         String region = regionField.getText();
         String province = provinceField.getText();
         String city = cityField.getText();
         String streetAddress = addressField.getText();
         String number = addressNumberField.getText();
 
-        try{
-            if(comment == null || region == null || province == null || city == null || streetAddress == null || number == null){
-                throw new EmptyFieldException("EmptyField");
-            }
-            validateRegion(region);
-            validateNumber(number);
-
-            DeliveryPreferencesBean deliveryPreferencesBean = new DeliveryPreferencesBean();
-            deliveryPreferencesBean.setComment(comment);
-            deliveryPreferencesBean.setPreferredTimeSlot(timeSlot);
-
-            DeliveryDestinationBean deliveryDestinationBean = new DeliveryDestinationBean();
-            deliveryDestinationBean.setCity(city);
-            deliveryDestinationBean.setProvince(province);
-            deliveryDestinationBean.setRegion(formatRegion(region));
-            deliveryDestinationBean.setStreetAddress(formatAddress(streetAddress, number));
-            confStart();
-            try{
-                orderSummaryBean = customOrderController.elaborateOrder(windowManagerBasic.getAuthBean().getToken(), deliveryDestinationBean, deliveryPreferencesBean,  boardBean);
-            }catch(InsufficientCoinsException |  IOException e){
-                errorLabel.setText(e.getMessage());
-            }catch(SessionExpiredException _) {
-                windowManagerBasic.cleanOrderPage();
-                windowManagerBasic.logOut();
-            }
-        }catch(EmptyFieldException | InvalidRegionException _){
-            errorLabel.setText(null);
+        if (comment == null || region == null || province == null || city == null || streetAddress == null || number == null) {
+            throw new EmptyFieldException("EmptyField");
         }
 
-
+        validateRegion(region);
+        validateNumber(number);
     }
+
+    private DeliveryPreferencesBean prepareDeliveryPreferences() {
+        DeliveryPreferencesBean deliveryPreferencesBean = new DeliveryPreferencesBean();
+        deliveryPreferencesBean.setComment(preferenceArea.getText());
+        deliveryPreferencesBean.setPreferredTimeSlot(comboSlot.getValue());
+        return deliveryPreferencesBean;
+    }
+
+    private DeliveryDestinationBean prepareDeliveryDestination() {
+        DeliveryDestinationBean deliveryDestinationBean = new DeliveryDestinationBean();
+        deliveryDestinationBean.setCity(cityField.getText());
+        deliveryDestinationBean.setProvince(provinceField.getText());
+        deliveryDestinationBean.setRegion(formatRegion(regionField.getText()));
+        deliveryDestinationBean.setStreetAddress(formatAddress(addressField.getText(), addressNumberField.getText()));
+        return deliveryDestinationBean;
+    }
+
+    private void elaborateOrder(DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean) {
+        try {
+            orderSummaryBean = customOrderController.elaborateOrder(
+                    windowManagerBasic.getAuthBean().getToken(),
+                    deliveryDestinationBean,
+                    deliveryPreferencesBean,
+                    boardBean
+            );
+        } catch (InsufficientCoinsException | IOException e) {
+            errorLabel.setText(e.getMessage());
+        } catch (SessionExpiredException _) {
+            windowManagerBasic.cleanOrderPage();
+            windowManagerBasic.logOut();
+        }
+    }
+
     public void validateRegion(String regione) throws InvalidRegionException {
         Set<String> regioniValide = Set.of(
                 "Abruzzo", "Basilicata", "Calabria", "Campania", "Emilia-Romagna",
@@ -294,8 +319,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     }
 
     public void boardConf(){
-        setButtonStyle(boardButton,"#1ABC9C" );
-        setButtonStyle(orderButton, "B0B0B0");
+        setButtonStyle(boardButton,COLOR1 );
+        setButtonStyle(orderButton, COLOR2);
         confStart();
         displayAvailableBoards();
     }
@@ -360,8 +385,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
 
 
     public void orderConf(){
-        setButtonStyle(orderButton,"#1ABC9C" );
-        setButtonStyle(boardButton, "B0B0B0");
+        setButtonStyle(orderButton,COLOR1);
+        setButtonStyle(boardButton, COLOR2);
         notesPane.setVisible(true);
         designControlPane.setVisible(false);
         orderControlPane.setVisible(true);
@@ -437,8 +462,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     }
 
     private void updateBoardList(List<BoardProfileBean> boards, Button active, Button inactive, boolean saveNameInsteadOfId) {
-        setButtonStyle(active, "#1ABC9C");
-        setButtonStyle(inactive, "#B0B0B0");
+        setButtonStyle(active, COLOR1);
+        setButtonStyle(inactive, COLOR2);
 
         ObservableList<String> items = FXCollections.observableArrayList();
         boardIdMap.clear();
