@@ -1,4 +1,4 @@
-package dao.patternAbstractFactory;
+package dao.patternabstractfactory;
 
 import dao.*;
 
@@ -20,7 +20,7 @@ public class DaoDbmsFactory extends DaoFactory {
 
     public CompetitionDbmsDao createCompetitionDao(){ return CompetitionDbmsDao.getInstance();}
 
-    public RegistrationDbmsDao createRegistrationDao(){return RegistrationDbmsDao.getInstance();};
+    public RegistrationDbmsDao createRegistrationDao(){return RegistrationDbmsDao.getInstance();}
 
     public TrickDbmsDao createTrickDao(){return TrickDbmsDao.getInstance();}
 

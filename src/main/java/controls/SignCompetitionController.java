@@ -2,7 +2,7 @@ package controls;
 
 import beans.*;
 import dao.*;
-import dao.patternAbstractFactory.DaoFactory;
+import dao.patternabstractfactory.DaoFactory;
 import exceptions.InsufficientCoinsException;
 import exceptions.NoAvailableSeats;
 import exceptions.SessionExpiredException;

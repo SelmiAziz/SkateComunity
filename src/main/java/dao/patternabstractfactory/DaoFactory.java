@@ -1,8 +1,8 @@
-package dao.patternAbstractFactory;
+package dao.patternabstractfactory;
 
 import dao.*;
 
-abstract public class DaoFactory {
+public abstract class DaoFactory {
     public abstract WalletDao createWalletDao();
     public abstract UserDao createUserDao();
     public abstract CustomerDao createCostumerDao();
@@ -17,7 +17,7 @@ abstract public class DaoFactory {
 
     private static DaoFactory instance;
 
-    public synchronized static DaoFactory getInstance(){
+    public static synchronized  DaoFactory getInstance(){
             if(instance == null){
 
                 instance = new DaoDbmsFactory();

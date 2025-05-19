@@ -1,6 +1,6 @@
 package dao;
 
-import dao.patternAbstractFactory.DaoFactory;
+import dao.patternabstractfactory.DaoFactory;
 import model.Order;
 import model.OrderStatus;
 

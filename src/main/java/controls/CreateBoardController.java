@@ -2,7 +2,7 @@ package controls;
 
 import beans.BoardProfileBean;
 import dao.BoardDao;
-import dao.patternAbstractFactory.DaoFactory;
+import dao.patternabstractfactory.DaoFactory;
 import exceptions.SessionExpiredException;
 import model.BoardBase;
 import model.decorator.Board;

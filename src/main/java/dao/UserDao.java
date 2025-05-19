@@ -1,7 +1,6 @@
 package dao;
 
 import login.User;
-import login.Role;
 
 public interface UserDao {
      User selectUserByUsername(String username);

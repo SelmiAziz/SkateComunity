@@ -1,4 +1,4 @@
-package dao.patternAbstractFactory;
+package dao.patternabstractfactory;
 
 
 import dao.*;

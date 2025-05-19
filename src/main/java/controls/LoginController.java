@@ -2,7 +2,7 @@ package controls;
 
 import beans.AuthBean;
 import dao.CustomerDao;
-import dao.patternAbstractFactory.DaoFactory;
+import dao.patternabstractfactory.DaoFactory;
 import dao.OrganizerDao;
 import dao.UserDao;
 import beans.LogUserBean;

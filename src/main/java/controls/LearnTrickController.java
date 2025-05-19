@@ -2,7 +2,7 @@ package controls;
 
 import beans.TrickBean;
 import dao.TrickDao;
-import dao.patternAbstractFactory.DaoFactory;
+import dao.patternabstractfactory.DaoFactory;
 import exceptions.SessionExpiredException;
 import model.Trick;
 import utils.DifficultyTrick;

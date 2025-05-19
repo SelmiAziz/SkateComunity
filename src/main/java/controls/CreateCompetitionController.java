@@ -1,7 +1,7 @@
 package controls;
 
 import dao.CompetitionDao;
-import dao.patternAbstractFactory.DaoFactory;
+import dao.patternabstractfactory.DaoFactory;
 import dao.OrganizerDao;
 import beans.CompetitionBean;
 import exceptions.CompetitionAlreadyExistsException;

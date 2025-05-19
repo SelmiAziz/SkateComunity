@@ -1,7 +1,7 @@
 package controls;
 
 import dao.WalletDao;
-import dao.patternAbstractFactory.DaoFactory;
+import dao.patternabstractfactory.DaoFactory;
 import exceptions.InsufficientCoinsException;
 import model.Wallet;
 

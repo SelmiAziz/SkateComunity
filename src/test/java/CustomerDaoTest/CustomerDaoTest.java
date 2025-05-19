@@ -1,7 +1,7 @@
 package CustomerDaoTest;
 
 import dao.CustomerDao;
-import dao.patternAbstractFactory.DaoFactory;
+import dao.patternabstractfactory.DaoFactory;
 import model.Customer;
 import org.junit.jupiter.api.Test;
 
