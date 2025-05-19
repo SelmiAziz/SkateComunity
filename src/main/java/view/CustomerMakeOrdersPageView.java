@@ -123,7 +123,7 @@ public class CustomerMakeOrdersPageView {
             );
             windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
 
-        } catch (InsufficientCoinsException | IOException e) {
+        } catch (InsufficientCoinsException e ) {
             errorLabel.setText(e.getMessage());
         } catch (SessionExpiredException _) {
             windowManager.closeCoordinator();

@@ -244,7 +244,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                     deliveryPreferencesBean,
                     boardBean
             );
-        } catch (InsufficientCoinsException | IOException e) {
+        } catch (InsufficientCoinsException e) {
             errorLabel.setText(e.getMessage());
         } catch (SessionExpiredException _) {
             windowManagerBasic.cleanOrderPage();

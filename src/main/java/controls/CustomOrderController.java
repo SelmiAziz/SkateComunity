@@ -88,18 +88,22 @@ public class CustomOrderController {
         return boardProfileBean;
     }
 
-    public BoardBean saveCreatedCustomizedBoard(String token, BoardProfileBean boardProfileBean){
+    public BoardBean saveCreatedCustomizedBoard(String token, BoardProfileBean boardProfileBean) throws SessionExpiredException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
-        Board board = new BoardBase(boardProfileBean.getName(), boardProfileBean.getDescription(),boardProfileBean.getSize(), boardProfileBean.getPrice());
-        customer.addDesignBoard(board);
-        boardDao.addBoard(board, customer.getUsername());
-        BoardBean boardBean = new BoardBean();
-        boardBean.setId(board.boardId());
-        return boardBean;
+        try {
+            Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
+            Board board = new BoardBase(boardProfileBean.getName(), boardProfileBean.getDescription(), boardProfileBean.getSize(), boardProfileBean.getPrice());
+            customer.addDesignBoard(board);
+            boardDao.addBoard(board, customer.getUsername());
+            BoardBean boardBean = new BoardBean();
+            boardBean.setId(board.boardId());
+            return boardBean;
+        }catch(IOException _){
+            throw new SessionExpiredException();
+        }
     }
 
 
@@ -108,18 +112,22 @@ public class CustomOrderController {
         if(session == null){
             throw new SessionExpiredException();
         }
-        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
-        List<BoardProfileBean> boardBeanList = new ArrayList<>();
-        for(Board board : customer.customizedBoards()){
-            BoardProfileBean boardProfileBean = new BoardProfileBean();
-            boardProfileBean.setId(board.boardId());
-            boardProfileBean.setDescription(board.description());
-            boardProfileBean.setName(board.name());
-            boardProfileBean.setSize(board.size());
-            boardProfileBean.setPrice(board.price());
-            boardBeanList.add(boardProfileBean);
+        try {
+            Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
+            List<BoardProfileBean> boardBeanList = new ArrayList<>();
+            for (Board board : customer.customizedBoards()) {
+                BoardProfileBean boardProfileBean = new BoardProfileBean();
+                boardProfileBean.setId(board.boardId());
+                boardProfileBean.setDescription(board.description());
+                boardProfileBean.setName(board.name());
+                boardProfileBean.setSize(board.size());
+                boardProfileBean.setPrice(board.price());
+                boardBeanList.add(boardProfileBean);
+            }
+            return boardBeanList;
+        }catch(IOException _){
+            throw new SessionExpiredException();
         }
-        return boardBeanList;
     }
 
     protected void notifyOrderCoordinator() {
@@ -164,48 +172,51 @@ public class CustomOrderController {
         notifyCustomer();
     }
 
-    public OrderSummaryBean elaborateOrder(String token, DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean) throws IOException {
+    public OrderSummaryBean elaborateOrder(String token, DeliveryDestinationBean deliveryDestinationBean, DeliveryPreferencesBean deliveryPreferencesBean, BoardBean boardBean) throws SessionExpiredException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
+        try {
+            DeliveryDestination deliveryDestination = new DeliveryDestination(Region.fromString(deliveryDestinationBean.getRegion()),
+                    deliveryDestinationBean.getProvince(),
+                    deliveryDestinationBean.getCity(),
+                    deliveryDestinationBean.getStreetAddress());
 
-        DeliveryDestination deliveryDestination = new DeliveryDestination(Region.fromString(deliveryDestinationBean.getRegion()),
-                deliveryDestinationBean.getProvince(),
-                deliveryDestinationBean.getCity(),
-                deliveryDestinationBean.getStreetAddress());
-
-        Board board = boardDao.selectBoardById(boardBean.getId());
+            Board board = boardDao.selectBoardById(boardBean.getId());
 
 
-        DeliveryPreferences deliveryPreferences = new DeliveryPreferences(deliveryPreferencesBean.getComment(), deliveryPreferencesBean.getPreferredTimeSlot());
+            DeliveryPreferences deliveryPreferences = new DeliveryPreferences(deliveryPreferencesBean.getComment(), deliveryPreferencesBean.getPreferredTimeSlot());
 
-        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
+            Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
 
-        Order customOrder = new Order(deliveryDestination,deliveryPreferences, board);
-        customOrder.setCustomer(customer);
-        customer.addSubmittedOrder(customOrder);
+            Order customOrder = new Order(deliveryDestination, deliveryPreferences, board);
+            customOrder.setCustomer(customer);
+            customer.addSubmittedOrder(customOrder);
 
-        int costCoins = customOrder.totalCost();
-        Wallet wallet = customer.getWallet();
-        paymentController.payWithCoins(wallet, costCoins);
+            int costCoins = customOrder.totalCost();
+            Wallet wallet = customer.getWallet();
+            paymentController.payWithCoins(wallet, costCoins);
 
-        this.customOrderDao.saveCustomOrder(customOrder);
-        notifyOrderCoordinator();
+            this.customOrderDao.saveCustomOrder(customOrder);
+            notifyOrderCoordinator();
 
-        OrderSummaryBean customOrderSummaryBean = new OrderSummaryBean();
-        customOrderSummaryBean.setId(customOrder.getId());
-        customOrderSummaryBean.setCreationDate(dateConverter.localDateToString(customOrder.creationDate()));
-        customOrderSummaryBean.setDescriptionBoard(customOrder.getBoard().description());
-        customOrderSummaryBean.setRegionDestination(customOrder.getDeliveryDestination().getRegion().toString());
-        customOrderSummaryBean.setProvinceDestination(customOrder.getDeliveryDestination().getProvince());
-        customOrderSummaryBean.setCityDestination(customOrder.getDeliveryDestination().getCity());
-        customOrderSummaryBean.setStreetAddersDestination(customOrder.getDeliveryDestination().getStreetAddress());
-        customOrderSummaryBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
-        customOrderSummaryBean.setStatus(customOrder.getOrderStatus().toString());
-        customOrderSummaryBean.setNameBoard(customOrder.getBoard().name());
-        customOrderSummaryBean.setTotalCost(customOrder.totalCost());
-        return customOrderSummaryBean;
+            OrderSummaryBean customOrderSummaryBean = new OrderSummaryBean();
+            customOrderSummaryBean.setId(customOrder.getId());
+            customOrderSummaryBean.setCreationDate(dateConverter.localDateToString(customOrder.creationDate()));
+            customOrderSummaryBean.setDescriptionBoard(customOrder.getBoard().description());
+            customOrderSummaryBean.setRegionDestination(customOrder.getDeliveryDestination().getRegion().toString());
+            customOrderSummaryBean.setProvinceDestination(customOrder.getDeliveryDestination().getProvince());
+            customOrderSummaryBean.setCityDestination(customOrder.getDeliveryDestination().getCity());
+            customOrderSummaryBean.setStreetAddersDestination(customOrder.getDeliveryDestination().getStreetAddress());
+            customOrderSummaryBean.setEstimatedDays(customOrder.getDeliveryDestination().estimatedDeliveryDays());
+            customOrderSummaryBean.setStatus(customOrder.getOrderStatus().toString());
+            customOrderSummaryBean.setNameBoard(customOrder.getBoard().name());
+            customOrderSummaryBean.setTotalCost(customOrder.totalCost());
+            return customOrderSummaryBean;
+        }catch(IOException _){
+            throw new SessionExpiredException();
+        }
     }
 
 
@@ -230,52 +241,60 @@ public class CustomOrderController {
     }
 
 
-    public List<OrderSummaryBean> getSubmittedOrders(String token){
+    public List<OrderSummaryBean> getSubmittedOrders(String token)  {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
-        List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
-        for(Order order: customer.customOrdersSubmitted()){
-            OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
-            orderSummaryBean.setId(order.getId());
-            orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
-            orderSummaryBean.setDeliveryDate(dateConverter.localDateToString(order.deliveryDate()));
-            orderSummaryBean.setStatus(order.getOrderStatus().toString());
-            orderSummaryBean.setTotalCost(order.totalCost());
-            orderSummaryBean.setDescriptionBoard(order.getBoard().description());
-            orderSummaryBean.setRegionDestination(order.getDeliveryDestination().getRegion().toString());
-            orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
-            orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
-            orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
-            customOrderBeanList.add(orderSummaryBean);
+        try {
+            Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
+            List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
+            for (Order order : customer.customOrdersSubmitted()) {
+                OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
+                orderSummaryBean.setId(order.getId());
+                orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
+                orderSummaryBean.setDeliveryDate(dateConverter.localDateToString(order.deliveryDate()));
+                orderSummaryBean.setStatus(order.getOrderStatus().toString());
+                orderSummaryBean.setTotalCost(order.totalCost());
+                orderSummaryBean.setDescriptionBoard(order.getBoard().description());
+                orderSummaryBean.setRegionDestination(order.getDeliveryDestination().getRegion().toString());
+                orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
+                orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
+                orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
+                customOrderBeanList.add(orderSummaryBean);
+            }
+            return customOrderBeanList;
+        }catch(IOException _){
+            throw new SessionExpiredException();
         }
-        return customOrderBeanList;
     }
 
 
-    public List<OrderSummaryBean> getCompletedOrders(String token) throws SessionExpiredException {
+    public List<OrderSummaryBean> getCompletedOrders(String token) throws SessionExpiredException{
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
-        List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
-        for(Order order: customer.customOrdersAcquired()){
-            OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
-            orderSummaryBean.setId(order.getId());
-            orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
-            orderSummaryBean.setDeliveryDate(dateConverter.localDateToString(order.deliveryDate()));
-            orderSummaryBean.setStatus(order.getOrderStatus().toString());
-            orderSummaryBean.setRegionDestination(order.getDeliveryDestination().getRegion().toString());
-            orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
-            orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
-            orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
-            orderSummaryBean.setDescriptionBoard(order.getBoard().description());
-            customOrderBeanList.add(orderSummaryBean);
+        try {
+            Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
+            List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
+            for (Order order : customer.customOrdersAcquired()) {
+                OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
+                orderSummaryBean.setId(order.getId());
+                orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
+                orderSummaryBean.setDeliveryDate(dateConverter.localDateToString(order.deliveryDate()));
+                orderSummaryBean.setStatus(order.getOrderStatus().toString());
+                orderSummaryBean.setRegionDestination(order.getDeliveryDestination().getRegion().toString());
+                orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
+                orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
+                orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
+                orderSummaryBean.setDescriptionBoard(order.getBoard().description());
+                customOrderBeanList.add(orderSummaryBean);
+            }
+            return customOrderBeanList;
+        }catch(IOException _){
+            throw new SessionExpiredException();
         }
-        return customOrderBeanList;
     }
 
 
@@ -303,11 +322,15 @@ public class CustomOrderController {
         if(session == null){
             throw new SessionExpiredException();
         }
-        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
-        Wallet wallet = customer.getWallet();
-        WalletBean walletBean = new WalletBean();
-        walletBean.setBalance(wallet.getBalance());
-        return walletBean;
+        try {
+            Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
+            Wallet wallet = customer.getWallet();
+            WalletBean walletBean = new WalletBean();
+            walletBean.setBalance(wallet.getBalance());
+            return walletBean;
+        }catch(IOException _){
+            throw new SessionExpiredException();
+        }
     }
 
 }

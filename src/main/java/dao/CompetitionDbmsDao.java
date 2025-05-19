@@ -6,6 +6,7 @@ import model.Registration;
 import model.Organizer;
 import utils.DbsConnector;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +35,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
     }
 
     @Override
-    public Competition selectCompetitionByName(String competitionName) {
+    public Competition selectCompetitionByName(String competitionName) throws IOException{
         for (Competition competition : this.competitionList) {
             if (competition.getName().equals(competitionName)) {
                 return competition;
@@ -80,14 +81,13 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 this.competitionList.add(competition);
                 return competition;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException |IOException e) {
+            throw new IOException("Error reading from database",e);
         }
-
         return null;
     }
 
-    public List<Competition> selectAvailableCompetitions() {
+    public List<Competition> selectAvailableCompetitions() throws IOException {
         List<Competition> availableCompetitions = new ArrayList<>();
         for (Competition competition : this.competitionList) {
             if (competition.getRegistrationsNumber() < competition.getMaxRegistrations()) {
@@ -102,7 +102,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
         return loadAvailableCompetitionsFromDb();
     }
 
-    private List<Competition> loadAvailableCompetitionsFromDb() {
+    private List<Competition> loadAvailableCompetitionsFromDb() throws IOException{
         List<Competition> competitions = new ArrayList<>();
 
         String sql = "SELECT e.competitionName, " +
@@ -130,8 +130,8 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 this.competitionList.add(competition);
                 competitions.add(competition);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | IOException e) {
+            throw new IOException("Error reading from database",e);
         }
 
         return competitions;
@@ -148,7 +148,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
         );
     }
 
-    private void setOrganizerAndRegistrations(Competition competition, ResultSet rs) throws SQLException {
+    private void setOrganizerAndRegistrations(Competition competition, ResultSet rs) throws SQLException, IOException {
         String organizerUsername = rs.getString("organizerUsername");
         if (organizerUsername != null) {
             Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
@@ -196,7 +196,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
     }
 
     @Override
-    public List<Competition> selectCompetitionsByDateAndLocation(String date, String location) {
+    public List<Competition> selectCompetitionsByDateAndLocation(String date, String location) throws IOException {
         List<Competition> competitionsFound = searchCompetitionsInList(date, location);
         if (!competitionsFound.isEmpty()) {
             return competitionsFound;
@@ -264,7 +264,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
 
     private void associateOrganizersAndRegistrations(List<Competition> competitions,
                                                      List<String> organizers,
-                                                     List<String> registrations) {
+                                                     List<String> registrations) throws IOException {
         for (int i = 0; i < competitions.size(); i++) {
             Competition competition = competitions.get(i);
             assignOrganizerToCompetition(competition, organizers.get(i));
@@ -272,7 +272,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
         }
     }
 
-    private void assignOrganizerToCompetition(Competition competition, String organizerUsername) {
+    private void assignOrganizerToCompetition(Competition competition, String organizerUsername) throws IOException {
         if (organizerUsername == null) {
             return;
         }
@@ -283,7 +283,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
         }
     }
 
-    private void assignRegistrationsToCompetition(Competition competition, String registrationIds) {
+    private void assignRegistrationsToCompetition(Competition competition, String registrationIds) throws IOException {
         if (registrationIds == null || registrationIds.isEmpty()) {
             return;
         }

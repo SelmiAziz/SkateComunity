@@ -13,6 +13,12 @@ public class BoardDbmsDao implements BoardDao {
     List<Board> boardListBase = new ArrayList<>();
     private static BoardDbmsDao instance;
 
+    private static final String DESCRIPTIONCST = "description";
+    private static final String SIZECST = "size";
+    private static final String PRICECST = "price";
+    private static final String NAMECST = "name";
+    private static final String IDCST = "id";
+
     public static synchronized BoardDbmsDao getInstance(){
         if(instance == null){
             instance = new BoardDbmsDao();
@@ -34,11 +40,11 @@ public class BoardDbmsDao implements BoardDao {
 
             while (rs.next()) {
                 Board board = new BoardBase(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getString("size"),
-                        rs.getInt("price")
+                        rs.getString(IDCST),
+                        rs.getString(NAMECST),
+                        rs.getString(DESCRIPTIONCST),
+                        rs.getString(SIZECST),
+                        rs.getInt(PRICECST)
                 );
 
                 this.boardListBase.add(board);
@@ -115,11 +121,11 @@ public class BoardDbmsDao implements BoardDao {
 
             while (rs.next()) {
                 Board board = new BoardBase(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getString("size"),
-                        rs.getInt("price")
+                        rs.getString(IDCST),
+                        rs.getString(NAMECST),
+                        rs.getString(DESCRIPTIONCST),
+                        rs.getString(SIZECST),
+                        rs.getInt(PRICECST)
                 );
 
                 this.boardList.add(board);
@@ -154,11 +160,11 @@ public class BoardDbmsDao implements BoardDao {
 
             while (rs.next()) {
                 Board board = new BoardBase(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getString("size"),
-                        rs.getInt("price")
+                        rs.getString(IDCST),
+                        rs.getString(NAMECST),
+                        rs.getString(DESCRIPTIONCST),
+                        rs.getString(SIZECST),
+                        rs.getInt(PRICECST)
                 );
 
                 this.boardListBase.add(board);

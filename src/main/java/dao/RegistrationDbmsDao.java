@@ -5,6 +5,7 @@ import model.Customer;
 import model.Registration;
 import utils.DbsConnector;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class RegistrationDbmsDao implements RegistrationDao {
     }
 
     @Override
-    public Registration selectRegistrationById(int registrationId) {
+    public Registration selectRegistrationById(int registrationId) throws IOException{
         for(Registration competitionRegistration: competitionRegistrationList){
             if(competitionRegistration.getRegistrationId() == registrationId){
                 return competitionRegistration;
@@ -83,8 +84,8 @@ public class RegistrationDbmsDao implements RegistrationDao {
                 competitionRegistration.setParticipant(customer);
                 return competitionRegistration;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | IOException e) {
+            throw new IOException("Error reading from database",e);
         }
 
         return null;

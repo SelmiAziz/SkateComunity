@@ -28,7 +28,12 @@ public class SignCompetitionController {
         if(session == null){
             throw new SessionExpiredException();
         }
-        Competition competition = competitionDao.selectCompetitionByName(competitionBean.getName());
+        Competition competition = null;
+        try {
+            competition = competitionDao.selectCompetitionByName(competitionBean.getName());
+        } catch (IOException _) {
+            throw new SessionExpiredException();
+        }
         return new CompetitionBean(competition.getName(), competition.getDescription(), competition.getParticipationFee(),(competition.getMaxRegistrations() - competition.getRegistrationsNumber()));
     }
 
@@ -37,12 +42,16 @@ public class SignCompetitionController {
         if(session == null){
             throw new SessionExpiredException();
         }
-        List<Competition> competitionList = competitionDao.selectAvailableCompetitions();
-        List<CompetitionBean> competitionBeanList = new ArrayList<>();
-        for (Competition competition : competitionList){
-            competitionBeanList.add(new CompetitionBean(competition.getName(),competition.getLocation(), competition.getDate()));
+        try {
+            List<Competition> competitionList = competitionDao.selectAvailableCompetitions();
+            List<CompetitionBean> competitionBeanList = new ArrayList<>();
+            for (Competition competition : competitionList) {
+                competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getLocation(), competition.getDate()));
+            }
+            return competitionBeanList;
+        }catch(IOException _){
+            throw new SessionExpiredException();
         }
-        return competitionBeanList;
     }
 
     //dummy function that generate a code
@@ -108,21 +117,29 @@ public class SignCompetitionController {
             throw new SessionExpiredException();
         }
         List<CompetitionBean> competitionBeanList = new ArrayList<>();
-        List<Competition> competitionList = competitionDao.selectCompetitionsByDateAndLocation(competitionBean.getDate(), competitionBean.getLocation());
-        for(Competition competition: competitionList){
-            competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getLocation(), competition.getDate()));
+        try {
+            List<Competition> competitionList = competitionDao.selectCompetitionsByDateAndLocation(competitionBean.getDate(), competitionBean.getLocation());
+            for (Competition competition : competitionList) {
+                competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getLocation(), competition.getDate()));
+            }
+            return competitionBeanList;
+        }catch(IOException _){
+            throw new SessionExpiredException();
         }
-        return competitionBeanList;
     }
 
-    public WalletBean customerInfo(String token) throws SessionExpiredException{
+    public WalletBean customerInfo(String token) throws SessionExpiredException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
-        Wallet wallet = customer.getWallet();
-        return new WalletBean(wallet.getBalance());
+        try {
+            Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
+            Wallet wallet = customer.getWallet();
+            return new WalletBean(wallet.getBalance());
+        }catch(IOException _){
+            throw new SessionExpiredException();
+        }
     }
 
 }

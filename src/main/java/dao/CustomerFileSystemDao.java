@@ -28,7 +28,7 @@ public class CustomerFileSystemDao implements CustomerDao {
         return instance;
     }
 
-    private int findWalletId(String username) {
+    private int findWalletId(String username) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(fdWallet))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -37,43 +37,56 @@ public class CustomerFileSystemDao implements CustomerDao {
                     return Integer.parseInt(arr[0]);
                 }
             }
-            throw new RuntimeException();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        } catch (IOException e) {
+            throw new IOException("Error reading the file", e);
         }
+        return -1;
     }
 
     @Override
-    public Customer selectCustomerByUsername(String username) {
+    public Customer selectCustomerByUsername(String username) throws IOException {
+        String password = null;
+        String dateOfBirth = null;
+
         try (BufferedReader reader = new BufferedReader(new FileReader(fdUser))) {
             String line;
-
             while ((line = reader.readLine()) != null) {
                 String[] arr = line.split(",");
                 if (arr[0].equals(username)) {
-                    String password = arr[1];
-                    String dateOfBirth = arr[2];
-                    try (BufferedReader customerReader = new BufferedReader(new FileReader(fdCustomer))) {
-                        while ((line = customerReader.readLine()) != null) {
-                            String[] arro = line.split(",");
-                            if (arro[0].equals(username)) {
-                                SkaterLevel skaterLevel = SkaterLevel.valueOf(arro[1].toUpperCase());
-                                WalletDao walletDao = DaoFactory.getInstance().createWalletDao();
-                                Wallet wallet = walletDao.selectWalletById(findWalletId(username));
-                                return new Customer(username, password, dateOfBirth, skaterLevel, wallet);
-                            }
-                        }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    return null;
+                    password = arr[1];
+                    dateOfBirth = arr[2];
+                    break;
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IOException("Error reading user file", e);
+        }
+
+        if (password == null || dateOfBirth == null) {
+            return null;
+        }
+
+        return extractCustomerDetails(username, password, dateOfBirth);
+    }
+
+    private Customer extractCustomerDetails(String username, String password, String dateOfBirth) throws IOException {
+        try (BufferedReader customerReader = new BufferedReader(new FileReader(fdCustomer))) {
+            String line;
+            while ((line = customerReader.readLine()) != null) {
+                String[] arro = line.split(",");
+                if (arro[0].equals(username)) {
+                    SkaterLevel skaterLevel = SkaterLevel.valueOf(arro[1].toUpperCase());
+                    WalletDao walletDao = DaoFactory.getInstance().createWalletDao();
+                    Wallet wallet = walletDao.selectWalletById(findWalletId(username));
+                    return new Customer(username, password, dateOfBirth, skaterLevel, wallet);
+                }
+            }
+        } catch (IOException e) {
+            throw new IOException("Error reading customer file", e);
         }
         return null;
     }
+
 
     @Override
     public void addCustomer(Customer customer) throws IOException {
@@ -83,7 +96,7 @@ public class CustomerFileSystemDao implements CustomerDao {
             writer.write(customer.getUsername()+","+customer.getSkaterLevel());
             writer.newLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IOException("Error writing on file",e);
         }
         DaoFactory.getInstance().createWalletDao().addWallet(customer.getWallet(), customer.getUsername());
     }

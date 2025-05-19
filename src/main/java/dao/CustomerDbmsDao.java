@@ -32,14 +32,35 @@ public class CustomerDbmsDao implements CustomerDao{
     }
 
     @Override
-    public Customer selectCustomerByUsername(String username) {
+    public Customer selectCustomerByUsername(String username) throws IOException {
         for (Customer customer : this.customerList) {
             if (customer.getUsername().equals(username)) {
                 return customer;
             }
         }
 
-        String query = "SELECT u.username, u.password, u.dateOfBirth, w.walletId, c.skaterLevel, " +
+        try (Connection connection = DbsConnector.getInstance().getConnection();
+             PreparedStatement stmt = connection.prepareStatement(getCustomerQuery())) {
+
+            stmt.setString(1, username);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Customer customer = buildCustomerFromResultSet(rs);
+                    loadBoardsForCustomer(rs, customer);
+                    loadOrdersForCustomer(rs, customer);
+                    this.customerList.add(customer);
+                    return customer;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    private String getCustomerQuery() {
+        return "SELECT u.username, u.password, u.dateOfBirth, w.walletId, c.skaterLevel, " +
                 "GROUP_CONCAT(DISTINCT b.id) AS boardsIds, " +
                 "GROUP_CONCAT(DISTINCT o.id) AS ordersIds " +
                 "FROM users u " +
@@ -49,64 +70,52 @@ public class CustomerDbmsDao implements CustomerDao{
                 "LEFT JOIN orders o ON o.customerUsername = c.customerUsername " +
                 "WHERE u.username = ? " +
                 "GROUP BY u.username, u.password, u.dateOfBirth, w.walletId, c.skaterLevel";
-
-        Connection connection = DbsConnector.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, username);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    String customerUsername = resultSet.getString("username");
-                    String password = resultSet.getString("password");
-                    String skaterLevel = resultSet.getString("skaterLevel");
-                    SkaterLevel skaterLevelEn = skaterLevel.equals("Novice") ? SkaterLevel.NOVICE :
-                            skaterLevel.equals("Advanced") ? SkaterLevel.ADVANCED : SkaterLevel.PROFICIENT;
-                    String dateOfBirth = resultSet.getString("dateOfBirth");
-                    int walletId = resultSet.getInt("walletId");
-
-                    Wallet wallet = walletDao.selectWalletById(walletId);
-                    Customer customer = new Customer(customerUsername, password, dateOfBirth, skaterLevelEn, wallet);
-
-                    String boardIdsStr = resultSet.getString("boardsIds");
-                    String orderIdsStr = resultSet.getString("ordersIds");
-
-                    if (boardIdsStr != null && !boardIdsStr.isEmpty()) {
-                        for (String boardId : boardIdsStr.split(",")) {
-                            boardId = boardId.trim();
-                            Board board = boardDao.selectBoardById(boardId);
-                            if(board != null){
-                                customer.addDesignBoard(board);
-                            }
-                        }
-                    }
-
-                    if (orderIdsStr != null && !orderIdsStr.isEmpty()) {
-                        for (String orderId : orderIdsStr.split(",")) {
-                            orderId = orderId.trim();
-                            Order order = orderDao.selectCustomOrderById(orderId);
-                            order.setCustomer(customer);
-                            if (order != null) {
-                                if (order.getOrderStatus() == OrderStatus.COMPLETED) {
-                                    customer.addAcquiredOrder(order);
-                                }
-                                customer.addSubmittedOrder(order);
-                                order.setCustomer(customer);
-                            }
-                        }
-                    }
-
-                    this.customerList.add(customer);
-                    return customer;
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
+    private Customer buildCustomerFromResultSet(ResultSet rs) throws SQLException, IOException {
+        String username = rs.getString("username");
+        String password = rs.getString("password");
+        String dateOfBirth = rs.getString("dateOfBirth");
+        String skaterLevelStr = rs.getString("skaterLevel");
+        int walletId = rs.getInt("walletId");
 
+        SkaterLevel skaterLevel = switch (skaterLevelStr) {
+            case "Novice" -> SkaterLevel.NOVICE;
+            case "Advanced" -> SkaterLevel.ADVANCED;
+            default -> SkaterLevel.PROFICIENT;
+        };
+
+        Wallet wallet = walletDao.selectWalletById(walletId);
+        return new Customer(username, password, dateOfBirth, skaterLevel, wallet);
+    }
+
+    private void loadBoardsForCustomer(ResultSet rs, Customer customer) throws SQLException {
+        String boardIdsStr = rs.getString("boardsIds");
+        if (boardIdsStr != null && !boardIdsStr.isEmpty()) {
+            for (String boardId : boardIdsStr.split(",")) {
+                Board board = boardDao.selectBoardById(boardId.trim());
+                if (board != null) {
+                    customer.addDesignBoard(board);
+                }
+            }
+        }
+    }
+
+    private void loadOrdersForCustomer(ResultSet rs, Customer customer) throws SQLException {
+        String orderIdsStr = rs.getString("ordersIds");
+        if (orderIdsStr != null && !orderIdsStr.isEmpty()) {
+            for (String orderId : orderIdsStr.split(",")) {
+                Order order = orderDao.selectCustomOrderById(orderId.trim());
+                if (order != null) {
+                    order.setCustomer(customer);
+                    if (order.getOrderStatus() == OrderStatus.COMPLETED) {
+                        customer.addAcquiredOrder(order);
+                    }
+                    customer.addSubmittedOrder(order);
+                }
+            }
+        }
+    }
 
 
     @Override
@@ -122,15 +131,21 @@ public class CustomerDbmsDao implements CustomerDao{
 
 
 
+        String skaterLevel;
+        if (customer.getSkaterLevel() == SkaterLevel.NOVICE) {
+            skaterLevel = "Novice";
+        } else if (customer.getSkaterLevel() == SkaterLevel.ADVANCED) {
+            skaterLevel = "Advanced";
+        } else {
+            skaterLevel = "Proficient";
+        }
 
-        String skaterLevel = customer.getSkaterLevel() == SkaterLevel.NOVICE ? "Novice":
-                             customer.getSkaterLevel() == SkaterLevel.ADVANCED ? "Advanced": "Proficient";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, skaterLevel);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IOException("Error inserting in database",e);
         }
 
         walletDao.addWallet(customer.getWallet(), customer.getUsername());

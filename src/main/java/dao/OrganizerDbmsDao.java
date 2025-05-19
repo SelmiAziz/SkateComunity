@@ -5,6 +5,7 @@ import model.Competition;
 import model.Organizer;
 import utils.DbsConnector;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ public class OrganizerDbmsDao implements OrganizerDao {
     }
 
     @Override
-    public Organizer selectOrganizerByUsername(String profileName) {
+    public Organizer selectOrganizerByUsername(String profileName) throws IOException {
         CompetitionDao competitionDao = DaoFactory.getInstance().createCompetitionDao();
         for (Organizer organizer : organizerList) {
             if (organizer.getUsername().equals(profileName)) {
@@ -74,8 +75,8 @@ public class OrganizerDbmsDao implements OrganizerDao {
                     return organizer;
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | IOException e) {
+            throw new IOException("Error writing on database", e);
         }
 
         return null;

@@ -38,13 +38,13 @@ public class CompetitionDemoDao implements CompetitionDao {
 
     @Override
     public List<Competition> selectAvailableCompetitions() {
-        List<Competition> competitionList = new ArrayList<>();
+        List<Competition> availableCompetitionList = new ArrayList<>();
         for(Competition competition: this.competitionList){
             if(competition.getRegistrationsNumber() < competition.getMaxRegistrations()){
-                competitionList.add(competition);
+                availableCompetitionList.add(competition);
             }
         }
-        return competitionList;
+        return availableCompetitionList;
     }
 
     public Competition selectCompetitionByName(String name){
