@@ -60,26 +60,35 @@ public class OrganizerSkateboardsPageView {
     }
 
 
-    public void submitSkateboard(){
-      String size = sizeSpinner.getValue();
-      int cost = costSpinner.getValue();
-      String name = skateboardNameField.getText();
-      String description = descriptionTextArea.getText();
-      try{
-          if(name == null || description == null){
-              throw new EmptyFieldException("Inserire correttamente campi");
-          }
-          try {
-              createSkateboardController.createBoard(windowManager.getAuthBean().getToken(), new BoardProfileBean(name, description, size, cost));
-              loadSkateboards();
-          }catch(SessionExpiredException _ ){
-              windowManager.logOut();
-          }
-      }catch(EmptyFieldException e){
-          errorLabel.setText(e.getMessage());
-      }
 
+    public void submitSkateboard() {
+        String size = sizeSpinner.getValue();
+        int cost = costSpinner.getValue();
+        String name = skateboardNameField.getText();
+        String description = descriptionTextArea.getText();
+
+        try {
+            if (name == null || description == null) {
+                throw new EmptyFieldException("Inserire correttamente campi");
+            }
+            createBoard(name, description, size, cost);
+        } catch (EmptyFieldException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
+
+    private void createBoard(String name, String description, String size, int cost) {
+        try {
+            createSkateboardController.createBoard(
+                    windowManager.getAuthBean().getToken(),
+                    new BoardProfileBean(name, description, size, cost)
+            );
+            loadSkateboards();
+        } catch (SessionExpiredException e) {
+            windowManager.logOut();
+        }
+    }
+
 
 
     @FXML

@@ -32,6 +32,9 @@ public class RegisterView {
     @FXML private ToggleButton btnOrganizer;
 
 
+    private static final String COLOR1 = "-fx-background-color:  #1ABC9C;";
+    private static final String COLOR2 = "-fx-background-color: lightgray;";
+
     public void initialize(){
         populateSkillLevelChoiceBox();
         levelChoice.setVisible(false);
@@ -53,53 +56,60 @@ public class RegisterView {
     }
 
 
-
     @FXML
     public void submitRegistration() {
         try {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            String dateOfBirth = dateBirthField.getText();
-            formatView.validaDate(dateOfBirth);
-
-            String passwordConfirmation = passwordConfirmationField.getText();
-            ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();
-
-            validateRegistration(username, password, passwordConfirmation, selected);
-
-            String role = (selected == btnCostumer) ? "Costumer" : "Organizer";
-            String skillLevel = levelChoice.getValue();
-
-            RegisterUserBean userBean = new RegisterUserBean(username, password, role, dateOfBirth, skillLevel);
-
-            try {
-                loginController.registerUser(userBean);
-                usernameField.setText("");
-                passwordField.setText("");
-                passwordConfirmationField.setText("");
-                dateBirthField.setText("");
-                resultLabel.setText("Registrazione avvenuta con successo!!");
-            } catch (UserNameAlreadyUsedException e) {
-                resultLabel.setText(e.getMessage() + ". Prova con: " + e.getSuggestedUsername());
-                usernameField.setText(e.getSuggestedUsername()); // opzionale: precompila il campo
-            } catch (IOException _) {
-               // has tto be developed
-            }
+            RegisterUserBean user = collectUserInput();
+            registerUser(user);
         } catch (WrongFormatException | EmptyFieldException | PasswordConfirmationException | NoUserTypeSelectedException e) {
             resultLabel.setText(e.getMessage());
         }
     }
 
+    private RegisterUserBean collectUserInput() throws WrongFormatException, EmptyFieldException, PasswordConfirmationException, NoUserTypeSelectedException {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        String dateOfBirth = dateBirthField.getText();
+        formatView.validaDate(dateOfBirth);
+
+        String passwordConfirmation = passwordConfirmationField.getText();
+        ToggleButton selected = (ToggleButton) btnCostumer.getToggleGroup().getSelectedToggle();
+
+        validateRegistration(username, password, passwordConfirmation, selected);
+
+        String role = (selected == btnCostumer) ? "Costumer" : "Organizer";
+        String skillLevel = levelChoice.getValue();
+
+        return new RegisterUserBean(username, password, role, dateOfBirth, skillLevel);
+    }
+
+    private void registerUser(RegisterUserBean user) {
+        try {
+            loginController.registerUser(user);
+            usernameField.setText("");
+            passwordField.setText("");
+            passwordConfirmationField.setText("");
+            dateBirthField.setText("");
+            resultLabel.setText("Registrazione avvenuta con successo!!");
+        } catch (UserNameAlreadyUsedException e) {
+            resultLabel.setText(e.getMessage() + ". Prova con: " + e.getSuggestedUsername());
+            usernameField.setText(e.getSuggestedUsername());
+        } catch (IOException _) {
+            // has to be developed
+        }
+    }
+
+
 
     @FXML
     public void handleBtnCostumer() {
         if (btnCostumer.isSelected()) {
-            btnCostumer.setStyle("-fx-background-color:  #1ABC9C;");
-            btnOrganizer.setStyle("-fx-background-color: lightgray;");
+            btnCostumer.setStyle(COLOR1);
+            btnOrganizer.setStyle(COLOR2);
             levelChoice.setVisible(true);
             levelLabel.setVisible(true);
         } else {
-            btnCostumer.setStyle("-fx-background-color: lightgray;");
+            btnCostumer.setStyle(COLOR2);
             levelChoice.setVisible(false);
             levelLabel.setVisible(false);
         }
@@ -108,12 +118,12 @@ public class RegisterView {
     @FXML
     public void handleBtnOrganizer(){
         if (btnOrganizer.isSelected()) {
-            btnOrganizer.setStyle("-fx-background-color:  #1ABC9C;");
-            btnCostumer.setStyle("-fx-background-color: lightgray;");
+            btnOrganizer.setStyle(COLOR1);
+            btnCostumer.setStyle(COLOR2);
             levelChoice.setVisible(false);
             levelLabel.setVisible(false);
         } else {
-            btnOrganizer.setStyle("-fx-background-color: lightgray;");
+            btnOrganizer.setStyle(COLOR2);
             levelChoice.setVisible(false);
             levelLabel.setVisible(false);
         }

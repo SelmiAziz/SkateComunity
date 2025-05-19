@@ -108,32 +108,40 @@ public class OrganizerTricksPageView {
 
     @FXML
     public void createTrick() {
+        try {
+            TrickBean trick = collectTrickInput();
+            registerTrick(trick);
+        } catch (EmptyFieldException | WrongFormatException e) {
+            errorLabel.setText(e.getMessage());
+        }
+    }
+
+    private TrickBean collectTrickInput() throws EmptyFieldException, WrongFormatException {
         String trickName = trickNameTextField.getText();
         String trickCategory = getCategory();
         String date = dateField.getText();
         String trickDescription = descriptionTextArea.getText();
         String difficulty = getDifficultyStringFromSliderValue((int)difficultySlider.getValue());
 
+        if (trickName.isEmpty() || trickCategory.isEmpty() || trickDescription.isEmpty()) {
+            throw new EmptyFieldException("Rimpi tutti i campi");
+        }
+
+        dateValidator.validaDate(date);
+
+        return new TrickBean(trickName, trickDescription, difficulty, trickCategory, date);
+    }
+
+    private void registerTrick(TrickBean trick) {
         try {
-            if (trickName.isEmpty() || trickCategory.isEmpty() || trickDescription.isEmpty()) {
-                    throw new EmptyFieldException("Rimpi tutti i campi");
-            }
-
-            dateValidator.validaDate(date);
-            TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, trickCategory, date);
-
-            try {
-                learnTrickController.registerTrick(windowManager.getAuthBean().getToken(), newTrick);
-                trickNameTextField.clear();
-                descriptionTextArea.clear();
-                dateField.clear();
-                trickGroup.selectToggle(flatRadio);
-                loadTricks();
-            }catch(SessionExpiredException _){
-                windowManager.logOut();
-            }
-        }catch(EmptyFieldException | WrongFormatException e){
-            errorLabel.setText(e.getMessage());
+            learnTrickController.registerTrick(windowManager.getAuthBean().getToken(), trick);
+            trickNameTextField.clear();
+            descriptionTextArea.clear();
+            dateField.clear();
+            trickGroup.selectToggle(flatRadio);
+            loadTricks();
+        } catch (SessionExpiredException _) {
+            windowManager.logOut();
         }
     }
 

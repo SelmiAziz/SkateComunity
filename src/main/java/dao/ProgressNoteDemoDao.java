@@ -2,6 +2,7 @@ package dao;
 
 import model.ProgressNote;
 
+
 public class ProgressNoteDemoDao implements ProgressNoteDao {
     private static ProgressNoteDemoDao instance ;
 
@@ -15,7 +16,7 @@ public class ProgressNoteDemoDao implements ProgressNoteDao {
 
     @Override
     public void saveProgressNote(ProgressNote progressNote, String customOrderId) {
-
+        //it is not necessary
     }
 
     @Override

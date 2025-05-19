@@ -59,7 +59,6 @@ public class ProgressNoteDbmsDao  implements ProgressNoteDao{
     public void saveProgressNote(ProgressNote progressNote, String customOrderId) {
         for (ProgressNote note : this.progressNoteList) {
             if (note.getId().equals(progressNote.getId())) {
-                System.out.println("Hello");
                 return;
             }
         }
@@ -74,7 +73,6 @@ public class ProgressNoteDbmsDao  implements ProgressNoteDao{
             preparedStatement.setDate(3, java.sql.Date.valueOf(progressNote.getDate()));
             preparedStatement.setString(4, customOrderId);
             preparedStatement.executeUpdate();
-            System.out.println("Fatto");
             this.progressNoteList.add(progressNote);
         } catch (SQLException e) {
             e.printStackTrace();
