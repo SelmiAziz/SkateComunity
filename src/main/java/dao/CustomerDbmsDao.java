@@ -105,7 +105,7 @@ public class CustomerDbmsDao implements CustomerDao{
         String orderIdsStr = rs.getString("ordersIds");
         if (orderIdsStr != null && !orderIdsStr.isEmpty()) {
             for (String orderId : orderIdsStr.split(",")) {
-                Order order = orderDao.selectCustomOrderById(orderId.trim());
+                Order order = orderDao.selectOrderByCode(orderId.trim());
                 if (order != null) {
                     order.setCustomer(customer);
                     if (order.getOrderStatus() == OrderStatus.COMPLETED) {
@@ -119,7 +119,7 @@ public class CustomerDbmsDao implements CustomerDao{
 
 
     @Override
-    public void addCustomer(Customer customer) throws IOException {
+    public void saveCustomer(Customer customer) throws IOException {
         customerList.add(customer);
 
         UserDao userDao = DaoFactory.getInstance().createUserDao();
@@ -148,7 +148,7 @@ public class CustomerDbmsDao implements CustomerDao{
             throw new IOException("Error inserting in database",e);
         }
 
-        walletDao.addWallet(customer.getWallet(), customer.getUsername());
+        walletDao.saveWallet(customer.getWallet(), customer.getUsername());
     }
 
 

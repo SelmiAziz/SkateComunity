@@ -86,7 +86,7 @@ public class LoginController {
             Wallet wallet = new Wallet();
             wallet.depositCoins(400); // bonus di registrazione
             Customer costumer = new Customer(baseUsername, password, dateOfBirth, skillLevel, wallet);
-            costumerDao.addCustomer(costumer);
+            costumerDao.saveCustomer(costumer);
             user = costumer;
         } else {
             Organizer organizer = new Organizer(baseUsername, password, dateOfBirth);

@@ -29,7 +29,7 @@ public class WalletDemoDao implements WalletDao {
     }
 
     @Override
-    public void addWallet(Wallet wallet, String walletOwner) {
+    public void saveWallet(Wallet wallet, String walletOwner) {
         walletList.add(wallet);
     }
 

@@ -25,7 +25,7 @@ public class DeliveryDestinationDbmsDao implements DeliveryDestinationDao {
     }
 
     @Override
-    public DeliveryDestination selectDestinationById(String id) {
+    public DeliveryDestination selectDeliveryDestinationById(String id) {
         for (DeliveryDestination destination : this.deliveryDestinationList) {
             if (destination.getId().equals(id)) {
                 return destination;

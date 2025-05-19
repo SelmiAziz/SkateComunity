@@ -89,7 +89,7 @@ public class CustomerFileSystemDao implements CustomerDao {
 
 
     @Override
-    public void addCustomer(Customer customer) throws IOException {
+    public void saveCustomer(Customer customer) throws IOException {
         this.customerList.add(customer);
         userDao.addUser(customer);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fdCustomer, true))) {
@@ -98,6 +98,6 @@ public class CustomerFileSystemDao implements CustomerDao {
         } catch (IOException e) {
             throw new IOException("Error writing on file",e);
         }
-        DaoFactory.getInstance().createWalletDao().addWallet(customer.getWallet(), customer.getUsername());
+        DaoFactory.getInstance().createWalletDao().saveWallet(customer.getWallet(), customer.getUsername());
     }
 }

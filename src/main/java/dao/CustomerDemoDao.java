@@ -21,7 +21,7 @@ public class CustomerDemoDao implements CustomerDao {
         return instance;
     }
 
-    public void addCustomer(Customer customer){
+    public void saveCustomer(Customer customer){
         this.customerList.add(customer);
     }
 

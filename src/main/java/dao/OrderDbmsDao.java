@@ -54,7 +54,7 @@ public class OrderDbmsDao implements OrderDao {
                 Board board = boardDao.selectBoardById(boardId);
 
                 String deliveryDestinationId = rs.getString("deliveryDestinationId");
-                DeliveryDestination deliveryDestination = deliveryDestinationDao.selectDestinationById(deliveryDestinationId);
+                DeliveryDestination deliveryDestination = deliveryDestinationDao.selectDeliveryDestinationById(deliveryDestinationId);
 
                 String progressNoteIdsStr = rs.getString("progressNoteIds");
 
@@ -89,7 +89,7 @@ public class OrderDbmsDao implements OrderDao {
 
 
     @Override
-    public void saveCustomOrder(Order order) {
+    public void saveOrder(Order order) {
         customOrderList.add(order);
         deliveryDestinationDao.saveDeliveryDestination(order.getDeliveryDestination());
 
@@ -116,7 +116,7 @@ public class OrderDbmsDao implements OrderDao {
 
 
     @Override
-    public Order selectCustomOrderById(String id) {
+    public Order selectOrderByCode(String id) {
         for (Order order : this.customOrderList) {
             if (order.getId().equals(id)) {
                 return order;
@@ -149,7 +149,7 @@ public class OrderDbmsDao implements OrderDao {
                 Board board = boardDao.selectBoardById(boardId);
 
                 String deliveryDestinationId = rs.getString("deliveryDestinationId");
-                DeliveryDestination deliveryDestination = deliveryDestinationDao.selectDestinationById(deliveryDestinationId);
+                DeliveryDestination deliveryDestination = deliveryDestinationDao.selectDeliveryDestinationById(deliveryDestinationId);
 
                 String progressNoteIdsStr = rs.getString("progressNoteIds");
 
@@ -182,7 +182,7 @@ public class OrderDbmsDao implements OrderDao {
 
 
     @Override
-    public void updateCustomOrder(Order order) {
+    public void updateOrder(Order order) {
         String sql = "UPDATE orders SET status = ? WHERE id = ?";
 
         try (Connection conn = DbsConnector.getInstance().getConnection();

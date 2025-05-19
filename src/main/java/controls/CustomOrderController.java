@@ -139,7 +139,7 @@ public class CustomOrderController {
     }
 
     public void acceptCustomOrder(OrderBean customOrderBean, boolean accept){
-        Order customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+        Order customOrder = customOrderDao.selectOrderByCode(customOrderBean.getId());
         if(accept){
             customOrder.setOrderStatus(OrderStatus.PROCESSING);
         }else{
@@ -148,7 +148,7 @@ public class CustomOrderController {
             Wallet  wallet = customOrder.getCustomer().getWallet();
             wallet.depositCoins(coinsRefunded);
         }
-        customOrderDao.updateCustomOrder(customOrder);
+        customOrderDao.updateOrder(customOrder);
         notifyCustomer();
     }
 
@@ -156,7 +156,7 @@ public class CustomOrderController {
     public void writeNote(OrderBean customOrderBean, ProgressNoteBean progressNoteBean){
         ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(),dateConverter.stringToLocalDate(progressNoteBean.getDate()));
 
-        Order customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+        Order customOrder = customOrderDao.selectOrderByCode(customOrderBean.getId());
         customOrder.addProgressNote(progressNote);
         progressNoteDao.saveProgressNote(progressNote, customOrder.getId());
         notifyCustomer();
@@ -164,11 +164,11 @@ public class CustomOrderController {
 
     public void completeOrder(OrderBean customOrderBean, ProgressNoteBean progressNoteBean){
         ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(),dateConverter.stringToLocalDate( progressNoteBean.getDate()));
-        Order customOrder = customOrderDao.selectCustomOrderById(customOrderBean.getId());
+        Order customOrder = customOrderDao.selectOrderByCode(customOrderBean.getId());
         customOrder.addProgressNote(progressNote);
         progressNoteDao.saveProgressNote(progressNote, customOrder.getId());
         customOrder.setOrderStatus(OrderStatus.COMPLETED);
-        customOrderDao.updateCustomOrder(customOrder);
+        customOrderDao.updateOrder(customOrder);
         notifyCustomer();
     }
 
@@ -198,7 +198,7 @@ public class CustomOrderController {
             Wallet wallet = customer.getWallet();
             paymentController.payWithCoins(wallet, costCoins);
 
-            this.customOrderDao.saveCustomOrder(customOrder);
+            this.customOrderDao.saveOrder(customOrder);
             notifyOrderCoordinator();
 
             OrderSummaryBean customOrderSummaryBean = new OrderSummaryBean();
@@ -305,7 +305,7 @@ public class CustomOrderController {
         if(session == null){
             throw new SessionExpiredException();
         }
-        Order order = customOrderDao.selectCustomOrderById(orderBean.getId());
+        Order order = customOrderDao.selectOrderByCode(orderBean.getId());
         List<ProgressNote> progressNoteList = order.progressNoteChronology();
         List<ProgressNoteBean> progressNoteBeanList = new ArrayList<>();
         for(ProgressNote progressNote: progressNoteList){

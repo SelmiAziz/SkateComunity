@@ -22,7 +22,7 @@ public class OrderDemoDao implements OrderDao {
 
 
     @Override
-    public Order selectCustomOrderById(String id) {
+    public Order selectOrderByCode(String id) {
         for(Order customOrder: this.customOrderList){
             if(customOrder.getId().equals(id)){
                 return customOrder;
@@ -43,13 +43,13 @@ public class OrderDemoDao implements OrderDao {
     }
 
     @Override
-    public void saveCustomOrder(Order customOrder) {
+    public void saveOrder(Order customOrder) {
         customOrderList.add(customOrder);
         deliveryDestinationDao.saveDeliveryDestination(customOrder.getDeliveryDestination());
     }
 
     @Override
-    public void updateCustomOrder(Order customOrder) {
+    public void updateOrder(Order customOrder) {
         //it is not needed in demo
     }
 }

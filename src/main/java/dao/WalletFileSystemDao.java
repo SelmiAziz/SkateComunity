@@ -79,7 +79,7 @@ public class WalletFileSystemDao implements  WalletDao {
     }
 
     @Override
-    public void addWallet(Wallet wallet, String walletOwner) throws IOException {
+    public void saveWallet(Wallet wallet, String walletOwner) throws IOException {
             List<String> lines = readFile();
             int maxId = lines.stream()
                     .map(line -> Integer.parseInt(line.split(",")[0]))
