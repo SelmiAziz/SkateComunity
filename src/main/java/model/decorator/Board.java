@@ -5,5 +5,5 @@ public interface Board {
     String description();
     String name();
     String size();
-    String boardId();
+    String boardCode();
 }

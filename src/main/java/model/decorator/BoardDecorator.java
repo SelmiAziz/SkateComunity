@@ -29,8 +29,8 @@ public abstract class BoardDecorator implements Board {
     }
 
     @Override
-    public String boardId() {
-        return board.boardId();
+    public String boardCode() {
+        return board.boardCode();
     }
 
 }

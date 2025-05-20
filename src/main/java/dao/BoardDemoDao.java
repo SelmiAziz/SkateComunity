@@ -40,7 +40,7 @@ public class BoardDemoDao implements BoardDao {
     @Override
     public Board selectBoardById(String id) {
         for(Board board : boardList){
-            if(board.boardId().equals(id)){
+            if(board.boardCode().equals(id)){
                 return board;
             }
         }

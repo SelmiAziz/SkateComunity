@@ -2,19 +2,19 @@ package model.decorator;
 
 public class ExtraPilesDecorator extends BoardDecorator {
 
-    private int extraPiles; // 1 o 2
+    private int extraPiles;
     private int minExtra;
     private int maxExtra;
-    private int costForOne;
-    private int costForTwo;
+    private int costBase;
+    private int discountPerExtra; // es. 10 = -10% per ogni extra in più
 
     public ExtraPilesDecorator(Board board, int extraPiles) {
         super(board);
         this.extraPiles = extraPiles;
         setMinExtra(0);
-        setMaxExtra(2);
-        setCostForOne(7);
-        setCostForTwo(18);
+        setMaxExtra(5);
+        setCostBase(7);
+        setDiscountPerExtra(10);
     }
 
     public void setMinExtra(int minExtra) {
@@ -25,25 +25,26 @@ public class ExtraPilesDecorator extends BoardDecorator {
         this.maxExtra = maxExtra;
     }
 
-    public void setCostForOne(int costForOne) {
-        this.costForOne = costForOne;
+    public void setCostBase(int costBase) {
+        this.costBase = costBase;
     }
 
-    public void setCostForTwo(int costForTwo) {
-        this.costForTwo = costForTwo;
+    public void setDiscountPerExtra(int discountPerExtra) {
+        this.discountPerExtra = discountPerExtra;
     }
 
     @Override
     public int price() {
         int base = super.price();
-        int validExtra = Math.clamp(extraPiles, minExtra, maxExtra);
-        int cost = 0;
-        if (validExtra == 1) {
-            cost = costForOne;
-        } else if (validExtra == 2) {
-            cost = costForTwo;
+        int validExtra = Math.min(Math.max(extraPiles, minExtra), maxExtra);
+        int totalCost = 0;
+
+        for (int i = 0; i < validExtra; i++) {
+            int percent = Math.max(100 - (discountPerExtra * i), 0);
+            totalCost += (costBase * percent) / 100;
         }
-        return base + cost;
+
+        return base + totalCost;
     }
 
     @Override
@@ -51,4 +52,3 @@ public class ExtraPilesDecorator extends BoardDecorator {
         return super.description() + " + " + extraPiles + " extra pile(s)";
     }
 }
-

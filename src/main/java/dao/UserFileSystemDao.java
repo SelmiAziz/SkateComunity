@@ -26,7 +26,7 @@ public class UserFileSystemDao  implements UserDao{
     }
 
     @Override
-    public User selectUserByUsername(String username) {
+    public User selectUserByUsername(String username) throws IOException{
         for(User user:userList){
             if(user.getUsername().equals(username)){
                 return user;
@@ -44,9 +44,7 @@ public class UserFileSystemDao  implements UserDao{
                 }
             }
 
-        }catch(IOException e){
-                throw new RuntimeException(e);
-            }
+        }
         return null;
     }
 
@@ -63,7 +61,7 @@ public class UserFileSystemDao  implements UserDao{
 
 
     @Override
-    public boolean checkUserByUsername(String username) {
+    public boolean checkUserByUsername(String username) throws IOException {
         for(User user:userList){
             if(user.getUsername().equals(username) ){
                 return true;
@@ -80,15 +78,13 @@ public class UserFileSystemDao  implements UserDao{
                 }
             }
 
-        }catch(IOException e){
-            throw new RuntimeException(e);
         }
         return false;
     }
 
 
     @Override
-    public boolean checkUserByUsernameAndPassword(String username, String password) {
+    public boolean checkUserByUsernameAndPassword(String username, String password) throws IOException {
         for(User user:userList){
             if(user.getUsername().equals(username) && user.getPassword().equals(password)){
                 return true;
@@ -105,8 +101,6 @@ public class UserFileSystemDao  implements UserDao{
                 }
             }
 
-        }catch(IOException e){
-            throw new RuntimeException(e);
         }
         return false;
     }

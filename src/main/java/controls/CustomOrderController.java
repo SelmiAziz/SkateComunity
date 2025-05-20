@@ -99,7 +99,7 @@ public class CustomOrderController {
             customer.addDesignBoard(board);
             boardDao.addBoard(board, customer.getUsername());
             BoardBean boardBean = new BoardBean();
-            boardBean.setId(board.boardId());
+            boardBean.setId(board.boardCode());
             return boardBean;
         }catch(IOException _){
             throw new SessionExpiredException();
@@ -117,7 +117,7 @@ public class CustomOrderController {
             List<BoardProfileBean> boardBeanList = new ArrayList<>();
             for (Board board : customer.customizedBoards()) {
                 BoardProfileBean boardProfileBean = new BoardProfileBean();
-                boardProfileBean.setId(board.boardId());
+                boardProfileBean.setId(board.boardCode());
                 boardProfileBean.setDescription(board.description());
                 boardProfileBean.setName(board.name());
                 boardProfileBean.setSize(board.size());

@@ -67,7 +67,7 @@ public class BoardDbmsDao implements BoardDao {
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, board.boardId());
+            stmt.setString(1, board.boardCode());
             stmt.setString(2, board.name());
             stmt.setString(3, board.description());
             stmt.setString(4, board.size());
@@ -88,7 +88,7 @@ public class BoardDbmsDao implements BoardDao {
 
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, board.boardId());
+            stmt.setString(1, board.boardCode());
             stmt.setString(2, board.name());
             stmt.setString(3, board.description());
             stmt.setString(4, board.size());
@@ -102,9 +102,9 @@ public class BoardDbmsDao implements BoardDao {
     }
 
     @Override
-    public Board selectBoardById(String id) {
+    public Board selectBoardById(String boardCode) {
         for(Board board: this.boardList){
-            if(board.boardId().equals(id)){
+            if(board.boardCode().equals(boardCode)){
                 return board;
             }
         }
@@ -116,7 +116,7 @@ public class BoardDbmsDao implements BoardDao {
         Connection conn = DbsConnector.getInstance().getConnection();
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)){
-             stmt.setString(1, id);
+             stmt.setString(1, boardCode);
              ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

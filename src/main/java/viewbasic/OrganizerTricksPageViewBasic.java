@@ -76,39 +76,44 @@ public class OrganizerTricksPageViewBasic {
 
     @FXML
     public void createTrick() {
-        String trickName = trickNameTextField.getText();
-        String category = categoryChoiceBox.getValue();
-        String trickDescription = descriptionTextArea.getText();
-        String difficulty =  difficultyChoiceBox.getValue();
-        String month = monthField.getText();
-        String day = dayField.getText();
-        String year = yearField.getText();
-
         try {
-            String date = dateValidatorFormatter.formatValidateDate(month, day, year);
+            String date = dateValidatorFormatter.formatValidateDate(
+                    monthField.getText(), dayField.getText(), yearField.getText());
 
-
-            if (trickName.isEmpty() || category.isEmpty() || trickDescription.isEmpty() || date.isEmpty()) {
-                throw new EmptyFieldException("Compila i campi correttamente");
-            }
-
-
-            TrickBean newTrick = new TrickBean(trickName, trickDescription, difficulty, category, date);
-            try {
-                learnTrickController.registerTrick(windowManagerBasic.getAuthBean().getToken(), newTrick);
-
-                categoryChoiceBox.setValue("flat");
-                difficultyChoiceBox.setValue("medium");
-                trickNameTextField.clear();
-                descriptionTextArea.clear();
-                loadTricks();
-            }catch(SessionExpiredException _){
-                windowManagerBasic.logOut();
-            }
-        }catch(EmptyFieldException e){
+            TrickBean newTrick = buildValidatedTrick(date);
+            registerTrickAndResetUI(newTrick);
+        } catch (EmptyFieldException e) {
             errorLabel.setText(e.getMessage());
         }
     }
+
+    private TrickBean buildValidatedTrick(String date) throws EmptyFieldException {
+        String trickName = trickNameTextField.getText();
+        String category = categoryChoiceBox.getValue();
+        String trickDescription = descriptionTextArea.getText();
+        String difficulty = difficultyChoiceBox.getValue();
+
+        if (trickName.isEmpty() || category.isEmpty() || trickDescription.isEmpty() || date.isEmpty()) {
+            throw new EmptyFieldException("Compila i campi correttamente");
+        }
+
+        return new TrickBean(trickName, trickDescription, difficulty, category, date);
+    }
+
+    private void registerTrickAndResetUI(TrickBean newTrick) {
+        try {
+            learnTrickController.registerTrick(windowManagerBasic.getAuthBean().getToken(), newTrick);
+
+            categoryChoiceBox.setValue("flat");
+            difficultyChoiceBox.setValue("medium");
+            trickNameTextField.clear();
+            descriptionTextArea.clear();
+            loadTricks();
+        } catch (SessionExpiredException e) {
+            windowManagerBasic.logOut();
+        }
+    }
+
 
     private void populateCategoryChoiceBox() {
         List<String> categoryList = Arrays.asList("Flat", "Grind", "Ramp");

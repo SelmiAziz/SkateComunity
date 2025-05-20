@@ -103,7 +103,7 @@ public class OrderDbmsDao implements OrderDao {
             stmt.setString(2, order.getCustomer().getUsername());
             stmt.setString(3, order.commentOrderPreferences());
             stmt.setString(4, order.timeSlotOrderPreferences());
-            stmt.setString(5, order.getBoard().boardId());
+            stmt.setString(5, order.getBoard().boardCode());
             stmt.setString(6, order.getOrderStatus().toString());
             stmt.setString(7, order.getDeliveryDestination().getId());
 

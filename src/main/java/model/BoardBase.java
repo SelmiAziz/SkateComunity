@@ -5,22 +5,22 @@ import model.decorator.Board;
 import java.util.UUID;
 
 public class BoardBase implements Board {
-    private String id;
+    private String boardCode;
     private String description;
     private int price;
     private String name;
     private String size;
 
     public BoardBase(String name, String description, String size, int price){
-        this.id =  UUID.randomUUID().toString();
+        this.boardCode =  UUID.randomUUID().toString();
         this.description = description;
         this.price = price;
         this.name = name;
         this.size = size;
     }
 
-    public BoardBase(String id, String name, String description , String size, int price){
-        this.id = id;
+    public BoardBase(String boardCode, String name, String description , String size, int price){
+        this.boardCode = boardCode;
         this.name = name;
         this.description = description;
         this.size = size;
@@ -49,16 +49,16 @@ public class BoardBase implements Board {
         return name;
     }
 
-    public String boardId() {
-        return id;
+    public String boardCode() {
+        return boardCode;
     }
 
     public void setSize(String size) {
         this.size = size;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBoardCode(String boardCode) {
+        this.boardCode = boardCode;
     }
 
     public void setDescription(String description) {
