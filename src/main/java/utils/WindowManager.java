@@ -46,7 +46,7 @@ public class WindowManager {
     }
 
 
-    public void cleanAuthBean(){
+    public void removeAuthBean(){
         this.authBean = null;
     }
 
@@ -136,6 +136,48 @@ public class WindowManager {
     }
 
 
+    public void goToCustomerCompetitions() throws IOException {
+        loadScene("viewFxml/CustomerCompetitionsPageView.fxml");
+    }
+
+    public void goToOrganizerCompetitions() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerCompetitionsPageView.fxml"));
+        Parent root = null;
+        root = loader.load();
+        OrganizerCompetitionsPageView organizerEventsPageView = loader.getController();
+        Scene scene = new Scene(root, 1200, 800);
+        stage = WindowManager.getInstance().getStage();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+
+        Platform.runLater(organizerEventsPageView::loadCompetitions);
+
+    }
+
+    public void goToSkateboards() throws IOException {
+        loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
+    }
+
+
+    public void goToLearn() throws IOException {
+        loadScene("viewFxml/CustomerTricksPageView.fxml");
+    }
+
+    public void goToTricks() throws IOException {
+        loadScene("viewFxml/OrganizerTricksPageView.fxml");
+    }
+
+
+    public void closeCoordinator() {
+        if (stageBr != null) {
+            stageBr.close();
+            stageBr = null;
+        }
+    }
+
+
+
     public void openCoordinator(CustomOrderController customOrderController) throws IOException {
         if (stageBr != null && stageBr.isShowing()) {
             stageBr.toFront();
@@ -175,7 +217,7 @@ public class WindowManager {
         try {
             loadScene("viewFxml/AccessView.fxml");
         }catch(IOException _){
-            //has to be developed
+            //
         }
     }
 
@@ -186,46 +228,6 @@ public class WindowManager {
 
     public void goToOrganizerHomePage() throws IOException {
         loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
-    }
-
-    public void goToCustomerCompetitions() throws IOException {
-       loadScene("viewFxml/CustomerCompetitionsPageView.fxml");
-    }
-
-    public void goToOrganizerCompetitions() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/OrganizerCompetitionsPageView.fxml"));
-        Parent root = null;
-        root = loader.load();
-        OrganizerCompetitionsPageView organizerEventsPageView = loader.getController();
-        Scene scene = new Scene(root, 1200, 800);
-        stage = WindowManager.getInstance().getStage();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-
-        Platform.runLater(organizerEventsPageView::loadCompetitions);
-
-    }
-
-    public void goToSkateboards() throws IOException {
-        loadScene("viewFxml/OrganizerSkateboardsPageView.fxml");
-    }
-
-
-    public void goToLearn() throws IOException {
-        loadScene("viewFxml/CustomerTricksPageView.fxml");
-    }
-
-    public void goToTricks() throws IOException {
-        loadScene("viewFxml/OrganizerTricksPageView.fxml");
-    }
-
-
-    public void closeCoordinator() {
-        if (stageBr != null) {
-            stageBr.close();
-            stageBr = null;
-        }
     }
 
 
