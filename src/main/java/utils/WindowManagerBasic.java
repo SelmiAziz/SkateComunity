@@ -50,9 +50,6 @@ public class WindowManagerBasic{
         this.authBean = null;
     }
 
-    public Stage getStage(){
-        return this.stage;
-    }
 
     public void loadScene(String fxmlPath) throws IOException {
         if (stage == null) {
@@ -91,9 +88,14 @@ public class WindowManagerBasic{
         }
     }
 
+    public void logOut() {
+        try {
+            loadScene("viewFxmlBasic/LogPageViewBasic.fxml");
+        }catch(IOException _){
+            //has to be developed
+        }
 
-
-
+    }
 
 
     public void openCoordinator(CustomOrderController customOrderController) throws IOException {
@@ -131,13 +133,12 @@ public class WindowManagerBasic{
         });
     }
 
-    public void logOut() {
-        try {
-            loadScene("viewFxmlBasic/LogPageViewBasic.fxml");
-        }catch(IOException _){
-            //has to be developed
-        }
 
+    public void cleanOrderPage() {
+        if (stageBr != null) {
+            stageBr.close();
+            stageBr = null;
+        }
     }
 
 
@@ -163,22 +164,15 @@ public class WindowManagerBasic{
         loadScene("viewFxmlBasic/OrganizerSkateboardsPageViewBasic.fxml");
     }
 
-
-    public void goToLearn() throws IOException {
-        loadScene("viewFxmlBasic/CustomerTricksPageViewBasic.fxml");
-    }
-
     public void goToTricks() throws IOException {
         loadScene("viewFxmlBasic/OrganizerTricksPageViewBasic.fxml");
     }
 
 
-    public void cleanOrderPage() {
-        if (stageBr != null) {
-            stageBr.close();
-            stageBr = null;
-        }
+    public void goToLearn() throws IOException {
+        loadScene("viewFxmlBasic/CustomerTricksPageViewBasic.fxml");
     }
+
 
 
 

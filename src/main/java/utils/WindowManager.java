@@ -30,6 +30,7 @@ public class WindowManager {
         return instance;
     }
 
+
     public void setStage(Stage stage) {
         if (this.stage == null) {
             this.stage = stage;
