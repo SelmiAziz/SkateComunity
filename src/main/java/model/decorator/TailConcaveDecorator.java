@@ -11,19 +11,19 @@ public class TailConcaveDecorator extends BoardDecorator {
         super(board);
         this.concaveDepthMm = concaveDepthMm;
         setCostMultiplier(1.0);
-        setMinDepth(3.0);
-        setMaxDepth(20.0);
+        setTailMinDepth(3.0);
+        setTailMaxDepth(20.0);
     }
 
     public void setCostMultiplier(double costMultiplier) {
         this.costMultiplier = costMultiplier;
     }
 
-    public void setMinDepth(double minDepth) {
+    public void setTailMinDepth(double minDepth) {
         this.minDepth = minDepth;
     }
 
-    public void setMaxDepth(double maxDepth) {
+    public void setTailMaxDepth(double maxDepth) {
         this.maxDepth = maxDepth;
     }
 

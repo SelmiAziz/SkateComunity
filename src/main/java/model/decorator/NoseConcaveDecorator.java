@@ -11,21 +11,22 @@ public class NoseConcaveDecorator extends BoardDecorator {
         super(board);
         this.concaveDepthMm = concaveDepthMm;
         setCostMultiplier(1.2);
-        setMinDepth(3.0);
-        setMaxDepth(20.0);
+        setConcaveMinDepth(3.0);
+        setConcaveMaxDepth(20.0);
+    }
+
+    public void setConcaveMinDepth(double minDepth) {
+        this.minDepth = minDepth;
+    }
+
+    public void setConcaveMaxDepth(double maxDepth) {
+        this.maxDepth = maxDepth;
     }
 
     public void setCostMultiplier(double costMultiplier) {
         this.costMultiplier = costMultiplier;
     }
 
-    public void setMinDepth(double minDepth) {
-        this.minDepth = minDepth;
-    }
-
-    public void setMaxDepth(double maxDepth) {
-        this.maxDepth = maxDepth;
-    }
 
     @Override
     public int price() {

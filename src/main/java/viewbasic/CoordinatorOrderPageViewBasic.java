@@ -19,6 +19,7 @@ import java.util.Map;
 
 public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
     private CustomOrderController customOrderController;
+    private DateValidatorFormatter dateValidatorFormatter;
 
     private final Map<Integer, OrderSummaryBean> ordersMap = new HashMap<>();
 
@@ -104,27 +105,6 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
         }
     }
 
-    private String formatValidateDate(String day, String month, String year) throws WrongFormatException {
-        int monthInt = Integer.parseInt(month);
-        if (monthInt < 1 || monthInt > 12) {
-            throw new WrongFormatException("Mese non valido: " + month);
-        }
-
-        int dayInt = Integer.parseInt(day);
-        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-        int yearInt = Integer.parseInt(year);
-        if (monthInt == 2 && ((yearInt % 4 == 0 && yearInt % 100 != 0) || (yearInt % 400 == 0))) {
-            daysInMonth[1] = 29;
-        }
-
-        if (dayInt < 1 || dayInt > daysInMonth[monthInt - 1]) {
-            throw new WrongFormatException("Giorno non valido: " + day + " per il mese " + month);
-        }
-
-        return day + "/" + month + "/20" + year;
-    }
-
     public void postNote() {
         String comment = notesArea.getText();
         String day = dayField.getText();
@@ -136,7 +116,7 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
                 throw new EmptyFieldException("Compilare tutti i campi!!");
             }
 
-            String date = formatValidateDate(day, month, year);
+            String date = dateValidatorFormatter.formatValidateDate(day, month, year);
 
             ProgressNoteBean progressNoteBean = new ProgressNoteBean();
             progressNoteBean.setComment(comment);
@@ -161,7 +141,7 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
                 throw new EmptyFieldException("Compilare tutti i campi!!");
             }
 
-            String date = formatValidateDate(day, month, year);
+            String date = dateValidatorFormatter.formatValidateDate(day, month, year);
 
             ProgressNoteBean progressNoteBean = new ProgressNoteBean();
             progressNoteBean.setComment(comment);
