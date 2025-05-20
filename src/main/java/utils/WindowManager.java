@@ -64,8 +64,8 @@ public class WindowManager {
         Parent root = loader.load();
         Scene scene = new Scene(root, 1200, 800);
 
-        stage.setResizable(false);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -80,8 +80,8 @@ public class WindowManager {
             openCoordinator(controller);
 
             Scene scene = new Scene(root, 1200, 800);
-            stage.setResizable(false);
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
 
         } catch (IOException e) {
@@ -105,8 +105,8 @@ public class WindowManager {
             controller.setCustomerOrderView(viewController);
 
             Scene scene = new Scene(root, 1200, 800);
-            stage.setResizable(false);
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
             viewController.initAfter();
 
@@ -126,8 +126,8 @@ public class WindowManager {
             controller.setCustomerOrderView(viewController);
 
             Scene scene = new Scene(root, 1200, 800);
-            stage.setResizable(false);
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
             viewController.initAfter2();
 
@@ -206,9 +206,9 @@ public class WindowManager {
 
             PauseTransition delay = new PauseTransition(Duration.millis(1));
             delay.setOnFinished(e -> {
-                stage.setIconified(false);  // Ripristina la finestra principale
-                stage.toFront();  // Porta la finestra principale davanti
-                stage.requestFocus();  // Forza il focus sulla finestra principale
+                stage.toFront();
+                stage.setIconified(false);
+                stage.requestFocus();
             });
             delay.play();
         });

@@ -153,8 +153,8 @@ public class WindowManagerBasic{
         OrganizerCompetitionsPageView organizerEventsPageView = loader.getController();
         Scene scene = new Scene(root, 1200, 800);
         stage = WindowManager.getInstance().getStage();
-        stage.setScene(scene);
         stage.setResizable(false);
+        stage.setScene(scene);
         stage.show();
         Platform.runLater(organizerEventsPageView::loadCompetitions);
 
