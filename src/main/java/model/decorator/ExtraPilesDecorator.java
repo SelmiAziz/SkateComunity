@@ -36,7 +36,7 @@ public class ExtraPilesDecorator extends BoardDecorator {
     @Override
     public int price() {
         int base = super.price();
-        int validExtra = Math.min(Math.max(extraPiles, minExtra), maxExtra);
+        int validExtra = Math.clamp(extraPiles, minExtra, maxExtra);
         int totalCost = 0;
 
         for (int i = 0; i < validExtra; i++) {

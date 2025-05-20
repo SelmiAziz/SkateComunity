@@ -109,7 +109,7 @@ public class OrganizerTricksPageViewBasic {
             trickNameTextField.clear();
             descriptionTextArea.clear();
             loadTricks();
-        } catch (SessionExpiredException e) {
+        } catch (SessionExpiredException _) {
             windowManagerBasic.logOut();
         }
     }

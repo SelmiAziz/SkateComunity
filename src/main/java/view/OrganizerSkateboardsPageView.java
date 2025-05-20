@@ -84,7 +84,7 @@ public class OrganizerSkateboardsPageView {
                     new BoardProfileBean(name, description, size, cost)
             );
             loadSkateboards();
-        } catch (SessionExpiredException e) {
+        } catch (SessionExpiredException _) {
             windowManager.logOut();
         }
     }
