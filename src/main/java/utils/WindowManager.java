@@ -86,7 +86,7 @@ public class WindowManager {
             stage.setResizable(false);
             stage.show();
 
-        } catch (IOException e) {
+        } catch (IOException _) {
             //
         }
     }
@@ -127,7 +127,7 @@ public class WindowManager {
             stage.show();
             viewController.initAfter();
 
-        } catch (IOException e) {
+        } catch (IOException _) {
             //
         }
     }
@@ -148,7 +148,7 @@ public class WindowManager {
             stage.show();
             viewController.initAfter2();
 
-        } catch (IOException e) {
+        } catch (IOException _) {
             //
         }
     }

@@ -77,7 +77,7 @@ public class OrderDbmsDao implements OrderDao {
             }
 
             return openCustomOrderList;
-        } catch (SQLException e) {
+        } catch (SQLException _) {
             //
         }
 
@@ -108,7 +108,7 @@ public class OrderDbmsDao implements OrderDao {
             stmt.setString(7, order.getDeliveryDestination().getId());
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException _) {
             //
         }
 
@@ -171,7 +171,7 @@ public class OrderDbmsDao implements OrderDao {
                 this.customOrderList.add(order);
                 return order;
             }
-        } catch (SQLException e) {
+        } catch (SQLException _) {
             //
         }
 
@@ -191,7 +191,7 @@ public class OrderDbmsDao implements OrderDao {
             stmt.setString(1, order.getOrderStatus().toString());
             stmt.setString(2, order.getId());
             stmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException _) {
             //
         }
     }

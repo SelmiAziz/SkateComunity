@@ -53,7 +53,7 @@ public class CustomerDbmsDao implements CustomerDao{
                     return customer;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException _) {
             //
         }
 
