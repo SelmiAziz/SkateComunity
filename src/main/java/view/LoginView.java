@@ -40,6 +40,8 @@ public class LoginView {
             loadHomePage(authBean);
         } catch (EmptyFieldException | UserNotFoundException e) {
             errorLabel.setText(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

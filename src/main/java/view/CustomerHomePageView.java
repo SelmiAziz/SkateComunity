@@ -22,11 +22,7 @@ public class CustomerHomePageView {
 
     @FXML
     public void goToOrdersPage(){
-        try {
-            windowManager.goToOrdersPage();
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
+            windowManager.goToBoardsPage();
     }
 
 

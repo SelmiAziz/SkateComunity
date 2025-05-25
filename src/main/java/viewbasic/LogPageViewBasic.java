@@ -172,6 +172,8 @@ public class LogPageViewBasic {
             loadHomeScene(authBean.getRole());
         } catch (EmptyFieldException | UserNotFoundException e) {
             resultLabel.setText(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

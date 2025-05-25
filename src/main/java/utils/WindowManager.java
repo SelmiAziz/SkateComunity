@@ -19,11 +19,13 @@ public class WindowManager {
     private Stage stage;
     private Stage stageBr;
     private static WindowManager instance;
+    private CustomerBoardPageView customerBoardPageView;
     private AuthBean authBean;
 
-    private WindowManager() {}
+    private WindowManager() {
+    }
 
-    public  static synchronized  WindowManager getInstance() {
+    public static synchronized WindowManager getInstance() {
         if (instance == null) {
             instance = new WindowManager();
         }
@@ -38,20 +40,20 @@ public class WindowManager {
     }
 
 
-    public void setAuthBean(AuthBean authBean){
+    public void setAuthBean(AuthBean authBean) {
         this.authBean = authBean;
     }
 
-    public AuthBean getAuthBean(){
+    public AuthBean getAuthBean() {
         return authBean;
     }
 
 
-    public void removeAuthBean(){
+    public void removeAuthBean() {
         this.authBean = null;
     }
 
-    public Stage getStage(){
+    public Stage getStage() {
         return this.stage;
     }
 
@@ -69,15 +71,15 @@ public class WindowManager {
         stage.show();
     }
 
-    public void loadMakeOrdersPage( CustomOrderController controller, BoardBean boardBean) {
+    public void loadMakeOrdersPage( BoardBean boardBean) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerMakeOrdersPageView.fxml"));
             Parent root = loader.load();
 
             CustomerMakeOrdersPageView viewController = loader.getController();
-            viewController.setController(controller);
+            viewController.setController(this.customerBoardPageView.getController());
             viewController.setBoardBean(boardBean);
-            openCoordinator(controller);
+            openCoordinator(this.customerBoardPageView.getController());
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setScene(scene);
@@ -85,24 +87,39 @@ public class WindowManager {
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //
         }
     }
 
 
-    public void goToOrdersPage() throws IOException {
-        loadScene("viewFxml/CustomerOrdersPageView.fxml");
-    }
+    public void goToBoardsPage()  {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerOrdersPageView.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+            this.customerBoardPageView = loader.getController();
+            Scene scene = new Scene(root, 1200, 800);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
 
-    public void loadAllOrdersPage(CustomOrderController controller, OrderSummaryBean customOrderBean) {
+        } catch (IOException _) {
+           //
+        }
+
+
+
+}
+
+    public void loadAllOrdersPage( OrderSummaryBean customOrderBean) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerAllOrdersPageView.fxml"));
             Parent root = loader.load();
 
             CustomerAllOrdersPageView viewController = loader.getController();
             viewController.setCustomOrderBean(customOrderBean);
-            viewController.setCustomOrderController(controller);
-            controller.setCustomerOrderView(viewController);
+            viewController.setCustomOrderController(this.customerBoardPageView.getController());
+            this.customerBoardPageView.getController().setCustomerOrderView(viewController);
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setScene(scene);
@@ -111,19 +128,19 @@ public class WindowManager {
             viewController.initAfter();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //
         }
     }
 
-    public void loadPreviousOrdersPage(CustomOrderController controller){
+    public void loadPreviousOrdersPage(){
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerAllOrdersPageView.fxml"));
             Parent root = loader.load();
 
             CustomerAllOrdersPageView viewController = loader.getController();
-            viewController.setCustomOrderController(controller);
-            controller.setCustomerOrderView(viewController);
+            viewController.setCustomOrderController(this.customerBoardPageView.getController());
+            this.customerBoardPageView.getController().setCustomerOrderView(viewController);
 
             Scene scene = new Scene(root, 1200, 800);
             stage.setScene(scene);
@@ -132,7 +149,7 @@ public class WindowManager {
             viewController.initAfter2();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //
         }
     }
 

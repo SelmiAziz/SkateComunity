@@ -28,20 +28,19 @@ public class LoginController {
 
 
 
-    public AuthBean logUser(LogUserBean loginBean) throws UserNotFoundException {
+    public AuthBean logUser(LogUserBean loginBean) throws UserNotFoundException, IOException {
         if (!userDao.checkUserByUsernameAndPassword(loginBean.getUsername(), loginBean.getPassword())) {
             throw new UserNotFoundException("Credenziali non valide");
         }
 
         User user = userDao.selectUserByUsername(loginBean.getUsername());
-        Session session = new Session(user.getUsername(), user.getRole());
-        SessionManager.getInstance().createSession(session);
+        Session session = SessionManager.getInstance().createSession(user);
 
         return new AuthBean(session.getToken(),user.getRole() == Role.COSTUMER ? "Costumer" : "Organizer");
     }
 
 
-    private String generateSuggestedUsername(String baseUsername) {
+    private String generateSuggestedUsername(String baseUsername) throws IOException {
         String suggestedUsername = baseUsername;
         int suffix = 1;
 
@@ -94,7 +93,7 @@ public class LoginController {
             user = organizer;
         }
 
-        SessionManager.getInstance().createSession(new Session(user.getUsername(), user.getRole()));
+        SessionManager.getInstance().createSession(user);
     }
 
 

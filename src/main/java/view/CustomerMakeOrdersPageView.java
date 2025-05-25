@@ -7,13 +7,14 @@ import exceptions.InsufficientCoinsException;
 import exceptions.SessionExpiredException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import utils.CustomerOrderView;
 import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class CustomerMakeOrdersPageView {
+public class CustomerMakeOrdersPageView implements CustomerOrderView {
 
     WindowManager windowManager = WindowManager.getInstance();
     CustomOrderController customOrderController;
@@ -49,6 +50,10 @@ public class CustomerMakeOrdersPageView {
                 new SpinnerValueFactory.ListSpinnerValueFactory<>(javafx.collections.FXCollections.observableArrayList(timeSlots));
 
         timeSlotSpinner.setValueFactory(valueFactory);
+    }
+
+    public void orderUpdate(){
+        windowManager.loadPreviousOrdersPage();
     }
 
     private String[] generateTimeSlots(int startHour, int endHour) {
@@ -121,7 +126,7 @@ public class CustomerMakeOrdersPageView {
                     deliveryPreferencesBean,
                     boardBean
             );
-            windowManager.loadAllOrdersPage(customOrderController, orderSummaryBean);
+            windowManager.loadAllOrdersPage( orderSummaryBean);
 
         } catch (InsufficientCoinsException e ) {
             errorLabel.setText(e.getMessage());

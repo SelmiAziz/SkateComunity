@@ -10,12 +10,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import utils.CustomerOrderView;
 import utils.WindowManager;
 
 import java.io.IOException;
 import java.util.List;
 
-public class CustomerOrdersPageView {
+public class CustomerBoardPageView implements CustomerOrderView {
 
     @FXML private Pane customPane;
     @FXML private Label boardPriceLabel;
@@ -90,6 +91,10 @@ public class CustomerOrdersPageView {
         displayWallet();
     }
 
+    public CustomOrderController getController(){
+        return this.customOrderController;
+    }
+
     public void initConf(){
         pannelPane.setVisible(false);
         saveBoardButton.setVisible(true);
@@ -97,6 +102,10 @@ public class CustomerOrdersPageView {
         orderPane.setVisible(false);
         boardPriceLabel.setText("");
         descriptionArea.setText("");
+    }
+
+    public void orderUpdate(){
+        windowManager.loadPreviousOrdersPage();
     }
 
     public void displayAvailableBoardSamples()  {
@@ -134,7 +143,7 @@ public class CustomerOrdersPageView {
     }
 
     public void goPreviousOrders(){
-        WindowManager.getInstance().loadPreviousOrdersPage(customOrderController);
+        WindowManager.getInstance().loadPreviousOrdersPage();
     }
 
 
@@ -240,7 +249,7 @@ public class CustomerOrdersPageView {
         }
     }
     public void orderBoard(){
-        windowManager.loadMakeOrdersPage(customOrderController, boardBean);
+        windowManager.loadMakeOrdersPage(boardBean);
     }
 
 

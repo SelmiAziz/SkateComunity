@@ -1,6 +1,8 @@
 package utils;
 
 
+import login.User;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,8 +23,10 @@ public class SessionManager {
         return instance;
     }
 
-    public synchronized void createSession(Session session) {
-        sessions.add(session);
+    public synchronized Session createSession(User user) {
+        Session session = new Session(user.getUsername(), user.getRole());
+        this.sessions.add(session);
+        return session;
     }
 
     public synchronized Session getSessionByToken(String token) {
