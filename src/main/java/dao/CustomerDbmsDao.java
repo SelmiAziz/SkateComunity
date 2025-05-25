@@ -54,7 +54,7 @@ public class CustomerDbmsDao implements CustomerDao{
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            //
         }
 
         return null;

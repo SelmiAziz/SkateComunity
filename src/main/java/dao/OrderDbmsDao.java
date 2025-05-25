@@ -78,7 +78,7 @@ public class OrderDbmsDao implements OrderDao {
 
             return openCustomOrderList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //
         }
 
         return openCustomOrderList;
@@ -109,7 +109,7 @@ public class OrderDbmsDao implements OrderDao {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            //
         }
 
     }
@@ -172,7 +172,7 @@ public class OrderDbmsDao implements OrderDao {
                 return order;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            //
         }
 
         return null;
@@ -192,7 +192,7 @@ public class OrderDbmsDao implements OrderDao {
             stmt.setString(2, order.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            //
         }
     }
 
