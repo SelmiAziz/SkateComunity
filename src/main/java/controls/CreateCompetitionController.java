@@ -11,9 +11,6 @@ import model.Competition;
 import model.Organizer;
 import utils.Session;
 import utils.SessionManager;
-
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

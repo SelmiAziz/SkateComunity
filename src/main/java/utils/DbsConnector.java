@@ -46,7 +46,7 @@ public class DbsConnector {
                 connection = DriverManager.getConnection(connectionUrl, user, password);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+           //
         }
         return this.connection;
     }
@@ -59,7 +59,7 @@ public class DbsConnector {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            //
         }
     }
 }

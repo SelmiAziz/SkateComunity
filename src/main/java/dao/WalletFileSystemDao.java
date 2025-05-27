@@ -62,7 +62,7 @@ public class WalletFileSystemDao implements  WalletDao {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e.getMessage());
         }
         return null;
     }

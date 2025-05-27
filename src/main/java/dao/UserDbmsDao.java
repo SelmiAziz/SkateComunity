@@ -22,7 +22,7 @@ public class UserDbmsDao implements UserDao {
     }
 
     @Override
-    public User selectUserByUsername(String username) {
+    public User selectUserByUsername(String username) throws DataAccessException{
         for(User user:userList){
             if(user.getUsername().equals(username)){
                 return user;
@@ -45,7 +45,7 @@ public class UserDbmsDao implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
 
         return null;
@@ -66,9 +66,8 @@ public class UserDbmsDao implements UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
-        return false;
 
     }
 

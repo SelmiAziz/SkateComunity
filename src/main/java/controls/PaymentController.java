@@ -6,7 +6,6 @@ import exceptions.DataAccessException;
 import exceptions.InsufficientCoinsException;
 import model.Wallet;
 
-import java.io.IOException;
 
 public class PaymentController {
     private WalletDao walletDao = DaoFactory.getInstance().createWalletDao();

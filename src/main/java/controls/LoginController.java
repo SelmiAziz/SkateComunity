@@ -19,7 +19,6 @@ import utils.Session;
 import utils.SessionManager;
 import utils.SkaterLevel;
 
-import java.io.IOException;
 
 
 public class LoginController {

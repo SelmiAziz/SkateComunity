@@ -7,8 +7,6 @@ import exceptions.*;
 import model.*;
 import utils.Session;
 import utils.SessionManager;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -84,7 +84,7 @@ public class WindowManagerBasic{
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //
         }
     }
 
