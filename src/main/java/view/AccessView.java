@@ -12,7 +12,7 @@ public class AccessView {
     public void goToRegistrationPage (){
         try {
             sceneManager.loadScene("viewFxml/RegisterView.fxml");
-        } catch (IOException e) {
+        } catch (IOException _) {
             //
         }
     }

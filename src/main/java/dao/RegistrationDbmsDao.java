@@ -5,8 +5,6 @@ import exceptions.DataAccessException;
 import model.Customer;
 import model.Registration;
 import utils.DbsConnector;
-
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

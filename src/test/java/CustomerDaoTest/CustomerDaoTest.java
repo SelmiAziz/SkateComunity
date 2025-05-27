@@ -2,6 +2,7 @@ package CustomerDaoTest;
 
 import dao.CustomerDao;
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.Customer;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CustomerDaoTest {
 
     @Test
-    void testAddCustomer() throws IOException {
+    void testAddCustomer() throws DataAccessException {
         CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
         Customer customer = new Customer("testUsername");
 

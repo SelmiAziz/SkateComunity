@@ -5,8 +5,6 @@ import exceptions.DataAccessException;
 import model.Competition;
 import model.Organizer;
 import utils.DbsConnector;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

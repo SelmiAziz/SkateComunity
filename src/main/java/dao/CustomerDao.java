@@ -3,7 +3,6 @@ package dao;
 import exceptions.DataAccessException;
 import model.Customer;
 
-import java.io.IOException;
 
 public interface CustomerDao {
     void saveCustomer(Customer user) throws DataAccessException;

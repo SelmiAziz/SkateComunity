@@ -2,9 +2,6 @@ package dao;
 
 import exceptions.DataAccessException;
 import model.Competition;
-
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 public interface CompetitionDao {

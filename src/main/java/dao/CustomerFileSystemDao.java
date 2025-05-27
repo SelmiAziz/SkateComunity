@@ -5,8 +5,6 @@ import exceptions.DataAccessException;
 import model.Customer;
 import model.Wallet;
 import utils.SkaterLevel;
-
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;

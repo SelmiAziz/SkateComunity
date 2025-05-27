@@ -95,7 +95,7 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
             }
             backButton.setVisible(true);
             notesButton.setVisible(false);
-        }catch(SessionExpiredException e){
+        }catch(SessionExpiredException _){
             windowManager.logOut();
         }catch(DataAccessException e){
             errorLabel.setText(e.getMessage());

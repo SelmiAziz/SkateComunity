@@ -3,7 +3,6 @@ package dao;
 import exceptions.DataAccessException;
 import model.decorator.Board;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 public interface BoardDao {

@@ -9,8 +9,6 @@ import model.Wallet;
 import model.decorator.Board;
 import utils.DbsConnector;
 import utils.SkaterLevel;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -92,7 +90,7 @@ public class CustomerDbmsDao implements CustomerDao{
             Wallet wallet = walletDao.selectWalletById(walletId);
             return new Customer(username, password, dateOfBirth, skaterLevel, wallet);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e.getMessage());
         }
     }
 

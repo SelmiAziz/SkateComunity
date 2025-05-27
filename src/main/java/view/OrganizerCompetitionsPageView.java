@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import utils.WindowManager;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class OrganizerCompetitionsPageView {
    WindowManager windowManager = WindowManager.getInstance();

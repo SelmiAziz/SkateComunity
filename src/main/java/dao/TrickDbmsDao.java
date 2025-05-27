@@ -85,7 +85,7 @@ public class TrickDbmsDao implements TrickDao{
     }
 
     @Override
-    public List<Trick> selectAvailableTricks(){
+    public List<Trick> selectAvailableTricks() throws DataAccessException{
         if(!this.trickList.isEmpty()) {
             return this.trickList;
         }
@@ -109,7 +109,7 @@ public class TrickDbmsDao implements TrickDao{
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
 
         return this.trickList;

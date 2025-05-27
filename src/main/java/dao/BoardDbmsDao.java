@@ -1,6 +1,5 @@
 package dao;
 
-import dao.patternabstractfactory.DaoFactory;
 import exceptions.DataAccessException;
 import model.BoardBase;
 import model.decorator.Board;

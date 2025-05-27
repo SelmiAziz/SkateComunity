@@ -3,7 +3,6 @@ package dao;
 import exceptions.DataAccessException;
 import model.Wallet;
 
-import java.io.IOException;
 
 public interface WalletDao {
     void saveWallet(Wallet wallet, String walletOwner) throws DataAccessException;

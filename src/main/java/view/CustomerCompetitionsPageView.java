@@ -13,8 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import utils.WindowManager;
-
-import javax.xml.crypto.Data;
 import java.io.IOException;
 
 public class CustomerCompetitionsPageView {

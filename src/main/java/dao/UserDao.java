@@ -3,7 +3,6 @@ package dao;
 import exceptions.DataAccessException;
 import login.User;
 
-import java.io.IOException;
 
 public interface UserDao {
      User selectUserByUsername(String username) throws DataAccessException;

@@ -6,9 +6,6 @@ import model.Competition;
 import model.Registration;
 import model.Organizer;
 import utils.DbsConnector;
-
-import javax.xml.crypto.Data;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
