@@ -15,8 +15,7 @@ public class DbsConnector {
     String connectionUrl;
     String user;
     String password;
-
-    // Costruttore privato per evitare istanze multiple
+    
     private DbsConnector() {
 
 
@@ -45,7 +44,7 @@ public class DbsConnector {
             if ( connection.isClosed()) {
                 connection = DriverManager.getConnection(connectionUrl, user, password);
             }
-        } catch (SQLException e) {
+        } catch (SQLException _) {
            //
         }
         return this.connection;
@@ -58,7 +57,7 @@ public class DbsConnector {
             if (connection != null) {
                 connection.close();
             }
-        } catch (SQLException e) {
+        } catch (SQLException _) {
             //
         }
     }

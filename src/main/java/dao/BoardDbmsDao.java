@@ -53,7 +53,7 @@ public class BoardDbmsDao implements BoardDao {
             }
 
         } catch (SQLException e) {
-            throw new DataAccessException();
+            throw new DataAccessException(e.getMessage());
         }
 
         return this.boardListBase;
@@ -77,7 +77,7 @@ public class BoardDbmsDao implements BoardDao {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DataAccessException();
+            throw new DataAccessException(e.getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ public class BoardDbmsDao implements BoardDao {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DataAccessException();
+            throw new DataAccessException(e.getMessage());
         }
     }
 
@@ -134,7 +134,7 @@ public class BoardDbmsDao implements BoardDao {
             }
 
         } catch (SQLException e) {
-            throw new DataAccessException();
+            throw new DataAccessException(e.getMessage());
         }
 
 
@@ -173,7 +173,7 @@ public class BoardDbmsDao implements BoardDao {
             }
 
         } catch (SQLException e) {
-           throw new DataAccessException();
+           throw new DataAccessException(e.getMessage());
         }
         return null;
     }
