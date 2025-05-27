@@ -83,7 +83,7 @@ public class WindowManagerBasic{
             stage.setScene(scene);
             stage.show();
 
-        } catch (IOException e) {
+        } catch (IOException _) {
             //
         }
     }

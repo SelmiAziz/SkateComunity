@@ -5,9 +5,6 @@ import dao.patternabstractfactory.DaoFactory;
 import exceptions.DataAccessException;
 import model.Customer;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CustomerDaoTest {

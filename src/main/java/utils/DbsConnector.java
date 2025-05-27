@@ -15,7 +15,7 @@ public class DbsConnector {
     String connectionUrl;
     String user;
     String password;
-    
+
     private DbsConnector() {
 
 
