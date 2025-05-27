@@ -3,19 +3,21 @@ package controls;
 import beans.TrickBean;
 import dao.TrickDao;
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import exceptions.SessionExpiredException;
 import model.Trick;
 import utils.DifficultyTrick;
 import utils.Session;
 import utils.SessionManager;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LearnTrickController {
     TrickDao trickDao = DaoFactory.getInstance().createTrickDao();
 
-    public List<TrickBean> allAvailableTricksDetailed(String token) throws SessionExpiredException{
+    public List<TrickBean> allAvailableTricksDetailed(String token) throws SessionExpiredException, DataAccessException{
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
@@ -31,7 +33,7 @@ public class LearnTrickController {
     }
 
 
-    public List<TrickBean> allAvailableTricks(String token) throws SessionExpiredException{
+    public List<TrickBean> allAvailableTricks(String token) throws SessionExpiredException, DataAccessException{
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
@@ -47,7 +49,7 @@ public class LearnTrickController {
 
 
 
-    public void registerTrick(String token, TrickBean trickBean) throws SessionExpiredException {
+    public void registerTrick(String token, TrickBean trickBean) throws SessionExpiredException, DataAccessException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
@@ -58,7 +60,7 @@ public class LearnTrickController {
     }
 
 
-    public TrickBean detailsTrick(String token ,TrickBean trickBean) throws SessionExpiredException{
+    public TrickBean detailsTrick(String token ,TrickBean trickBean) throws SessionExpiredException, DataAccessException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();

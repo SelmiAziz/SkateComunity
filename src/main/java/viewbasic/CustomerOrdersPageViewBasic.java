@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import utils.CustomerOrderView;
 import utils.WindowManagerBasic;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.*;
 
@@ -172,6 +173,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         }catch(SessionExpiredException _ ){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -244,7 +247,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                     deliveryPreferencesBean,
                     boardBean
             );
-        } catch (InsufficientCoinsException e) {
+        } catch (InsufficientCoinsException | DataAccessException e) {
             errorLabel.setText(e.getMessage());
         } catch (SessionExpiredException _) {
             windowManagerBasic.cleanOrderPage();
@@ -380,6 +383,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
        }catch(SessionExpiredException _){
           windowManagerBasic.cleanOrderPage();
           windowManagerBasic.logOut();
+       }catch (DataAccessException e){
+           errorLabel.setText(e.getMessage());
        }
     }
 
@@ -435,6 +440,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         } catch (SessionExpiredException _) {
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -447,6 +454,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         }catch(SessionExpiredException _){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -458,6 +467,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
         }catch(SessionExpiredException _){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -522,6 +533,8 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             notesListView.setItems(items);
         }catch(SessionExpiredException _){
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

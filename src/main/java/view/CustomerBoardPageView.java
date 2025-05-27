@@ -5,6 +5,7 @@ import beans.CustomBoardBean;
 import beans.BoardProfileBean;
 import beans.WalletBean;
 import controls.CustomOrderController;
+import exceptions.DataAccessException;
 import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -118,6 +119,8 @@ public class CustomerBoardPageView implements CustomerOrderView {
             availableButton.setStyle("-fx-background-color: #1ABC9C;");
         }catch(SessionExpiredException _ ){
             windowManager.logOut();
+        } catch (DataAccessException e) {
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -131,6 +134,8 @@ public class CustomerBoardPageView implements CustomerOrderView {
             availableButton.setStyle("-fx-background-color:  #949494;");
         }catch(SessionExpiredException _){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -154,6 +159,8 @@ public class CustomerBoardPageView implements CustomerOrderView {
             orderPane.setVisible(true);
         }catch(SessionExpiredException _ ){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -227,6 +234,8 @@ public class CustomerBoardPageView implements CustomerOrderView {
             pannelPane.setVisible(true);
         }catch(SessionExpiredException _){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -259,6 +268,8 @@ public class CustomerBoardPageView implements CustomerOrderView {
             coinsLabel.setText("" + walletBean.getBalance());
         }catch(SessionExpiredException _){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

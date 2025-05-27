@@ -1,5 +1,7 @@
 package dao;
 
+import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.BoardBase;
 import model.decorator.Board;
 import utils.DbsConnector;
@@ -27,7 +29,7 @@ public class BoardDbmsDao implements BoardDao {
     }
 
     @Override
-    public List<Board> selectAvailableBoards() {
+    public List<Board> selectAvailableBoards() throws DataAccessException {
         if(!this.boardListBase.isEmpty()) {
             return this.boardListBase;
         }
@@ -52,14 +54,14 @@ public class BoardDbmsDao implements BoardDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException();
         }
 
         return this.boardListBase;
     }
 
     @Override
-    public void addBoard(Board board){
+    public void addBoard(Board board) throws DataAccessException {
         boardListBase.add(board);
 
         String sql = "INSERT INTO boardSamples (id, name, description, size, price) " +
@@ -76,12 +78,12 @@ public class BoardDbmsDao implements BoardDao {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException();
         }
     }
 
     @Override
-    public void addBoard(Board board, String customerUsername) {
+    public void addBoard(Board board, String customerUsername) throws DataAccessException {
         this.boardList.add(board);
         String sql = "INSERT INTO boardDesigned (id, name, description, size, price, customerUsername) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -97,12 +99,12 @@ public class BoardDbmsDao implements BoardDao {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException();
         }
     }
 
     @Override
-    public Board selectBoardById(String boardCode) {
+    public Board selectBoardById(String boardCode) throws DataAccessException {
         for(Board board: this.boardList){
             if(board.boardCode().equals(boardCode)){
                 return board;
@@ -133,7 +135,7 @@ public class BoardDbmsDao implements BoardDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException();
         }
 
 
@@ -141,7 +143,7 @@ public class BoardDbmsDao implements BoardDao {
     }
 
     @Override
-    public Board selectBoardByName(String name) {
+    public Board selectBoardByName(String name) throws DataAccessException {
         for(Board board: boardListBase){
             if(board.name().equals(name)){
                 return board;
@@ -172,7 +174,7 @@ public class BoardDbmsDao implements BoardDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+           throw new DataAccessException();
         }
         return null;
     }

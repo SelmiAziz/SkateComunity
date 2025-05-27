@@ -1,10 +1,12 @@
 package dao;
 
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.*;
 import model.decorator.Board;
 import utils.DbsConnector;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +28,7 @@ public class OrderDbmsDao implements OrderDao {
         return instance;
     }
     @Override
-    public List<Order> selectAllOpenOrder() {
+    public List<Order> selectAllOpenOrder() throws DataAccessException {
         List<Order> openCustomOrderList = new ArrayList<>();
 
         String sql = "SELECT o.id, " +
@@ -77,11 +79,10 @@ public class OrderDbmsDao implements OrderDao {
             }
 
             return openCustomOrderList;
-        } catch (SQLException _) {
-            //
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
 
-        return openCustomOrderList;
     }
 
 
@@ -89,7 +90,7 @@ public class OrderDbmsDao implements OrderDao {
 
 
     @Override
-    public void saveOrder(Order order) {
+    public void saveOrder(Order order) throws DataAccessException {
         customOrderList.add(order);
         deliveryDestinationDao.saveDeliveryDestination(order.getDeliveryDestination());
 
@@ -108,15 +109,15 @@ public class OrderDbmsDao implements OrderDao {
             stmt.setString(7, order.getDeliveryDestination().getId());
 
             stmt.executeUpdate();
-        } catch (SQLException _) {
-            //
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
 
     }
 
 
     @Override
-    public Order selectOrderByCode(String id) {
+    public Order selectOrderByCode(String id) throws DataAccessException {
         for (Order order : this.customOrderList) {
             if (order.getId().equals(id)) {
                 return order;
@@ -171,8 +172,8 @@ public class OrderDbmsDao implements OrderDao {
                 this.customOrderList.add(order);
                 return order;
             }
-        } catch (SQLException _) {
-            //
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
 
         return null;
@@ -182,7 +183,7 @@ public class OrderDbmsDao implements OrderDao {
 
 
     @Override
-    public void updateOrder(Order order) {
+    public void updateOrder(Order order) throws DataAccessException {
         String sql = "UPDATE orders SET status = ? WHERE id = ?";
 
         try (Connection conn = DbsConnector.getInstance().getConnection();
@@ -191,8 +192,8 @@ public class OrderDbmsDao implements OrderDao {
             stmt.setString(1, order.getOrderStatus().toString());
             stmt.setString(2, order.getId());
             stmt.executeUpdate();
-        } catch (SQLException _) {
-            //
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
     }
 

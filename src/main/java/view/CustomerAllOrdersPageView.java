@@ -4,6 +4,7 @@ import beans.OrderBean;
 import beans.OrderSummaryBean;
 import beans.ProgressNoteBean;
 import controls.CustomOrderController;
+import exceptions.DataAccessException;
 import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -94,8 +95,10 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
             }
             backButton.setVisible(true);
             notesButton.setVisible(false);
-        }catch(SessionExpiredException _){
+        }catch(SessionExpiredException e){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -115,6 +118,8 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
             ordersTable.getItems().addAll(customOrderBeanList);
         }catch(SessionExpiredException _){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

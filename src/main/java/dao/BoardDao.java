@@ -1,14 +1,16 @@
 package dao;
 
+import exceptions.DataAccessException;
 import model.decorator.Board;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 public interface BoardDao {
-    Board selectBoardById(String boardCode);
-    Board selectBoardByName(String name);
-    void addBoard(Board board, String customerUsername);
-    void addBoard(Board board);
-    List<Board> selectAvailableBoards();
+    Board selectBoardById(String boardCode) throws DataAccessException;
+    Board selectBoardByName(String name) throws DataAccessException;
+    void addBoard(Board board, String customerUsername) throws DataAccessException;
+    void addBoard(Board board) throws DataAccessException;
+    List<Board> selectAvailableBoards() throws DataAccessException;
 }
 

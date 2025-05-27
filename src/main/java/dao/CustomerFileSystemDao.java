@@ -1,10 +1,12 @@
 package dao;
 
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.Customer;
 import model.Wallet;
 import utils.SkaterLevel;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class CustomerFileSystemDao implements CustomerDao {
         return instance;
     }
 
-    private int findWalletId(String username) throws IOException {
+    private int findWalletId(String username) throws DataAccessException {
         try (BufferedReader reader = new BufferedReader(new FileReader(fdWallet))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -38,13 +40,13 @@ public class CustomerFileSystemDao implements CustomerDao {
                 }
             }
         } catch (IOException e) {
-            throw new IOException("Error reading the file", e);
+            throw new DataAccessException(e.getMessage());
         }
         return -1;
     }
 
     @Override
-    public Customer selectCustomerByUsername(String username) throws IOException {
+    public Customer selectCustomerByUsername(String username) throws DataAccessException {
         String password = null;
         String dateOfBirth = null;
 
@@ -59,7 +61,7 @@ public class CustomerFileSystemDao implements CustomerDao {
                 }
             }
         } catch (IOException e) {
-            throw new IOException("Error reading user file", e);
+            throw new DataAccessException(e.getMessage());
         }
 
         if (password == null || dateOfBirth == null) {
@@ -69,7 +71,7 @@ public class CustomerFileSystemDao implements CustomerDao {
         return extractCustomerDetails(username, password, dateOfBirth);
     }
 
-    private Customer extractCustomerDetails(String username, String password, String dateOfBirth) throws IOException {
+    private Customer extractCustomerDetails(String username, String password, String dateOfBirth) throws DataAccessException {
         try (BufferedReader customerReader = new BufferedReader(new FileReader(fdCustomer))) {
             String line;
             while ((line = customerReader.readLine()) != null) {
@@ -82,21 +84,21 @@ public class CustomerFileSystemDao implements CustomerDao {
                 }
             }
         } catch (IOException e) {
-            throw new IOException("Error reading customer file", e);
+            throw new DataAccessException(e.getMessage());
         }
         return null;
     }
 
 
     @Override
-    public void saveCustomer(Customer customer) throws IOException {
+    public void saveCustomer(Customer customer) throws DataAccessException {
         this.customerList.add(customer);
         userDao.addUser(customer);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fdCustomer, true))) {
             writer.write(customer.getUsername()+","+customer.getSkaterLevel());
             writer.newLine();
         } catch (IOException e) {
-            throw new IOException("Error writing on file",e);
+            throw new DataAccessException(e.getMessage());
         }
         DaoFactory.getInstance().createWalletDao().saveWallet(customer.getWallet(), customer.getUsername());
     }

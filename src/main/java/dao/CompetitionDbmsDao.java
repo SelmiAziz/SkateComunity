@@ -1,11 +1,13 @@
 package dao;
 
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.Competition;
 import model.Registration;
 import model.Organizer;
 import utils.DbsConnector;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +37,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
     }
 
     @Override
-    public Competition selectCompetitionByName(String competitionName) throws IOException{
+    public Competition selectCompetitionByName(String competitionName) throws DataAccessException{
         for (Competition competition : this.competitionList) {
             if (competition.getName().equals(competitionName)) {
                 return competition;
@@ -81,13 +83,13 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 this.competitionList.add(competition);
                 return competition;
             }
-        } catch (SQLException |IOException e) {
-            throw new IOException("Error reading from database",e);
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
         return null;
     }
 
-    public List<Competition> selectAvailableCompetitions() throws IOException {
+    public List<Competition> selectAvailableCompetitions() throws DataAccessException {
         List<Competition> availableCompetitions = new ArrayList<>();
         for (Competition competition : this.competitionList) {
             if (competition.getRegistrationsNumber() < competition.getMaxRegistrations()) {
@@ -102,7 +104,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
         return loadAvailableCompetitionsFromDb();
     }
 
-    private List<Competition> loadAvailableCompetitionsFromDb() throws IOException{
+    private List<Competition> loadAvailableCompetitionsFromDb() throws DataAccessException{
         List<Competition> competitions = new ArrayList<>();
 
         String sql = "SELECT e.competitionName, " +
@@ -130,8 +132,8 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 this.competitionList.add(competition);
                 competitions.add(competition);
             }
-        } catch (SQLException | IOException e) {
-            throw new IOException("Error reading from database",e);
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
 
         return competitions;
@@ -148,30 +150,35 @@ public class CompetitionDbmsDao implements CompetitionDao {
         );
     }
 
-    private void setOrganizerAndRegistrations(Competition competition, ResultSet rs) throws SQLException, IOException {
-        String organizerUsername = rs.getString("organizerUsername");
-        if (organizerUsername != null) {
-            Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
-            if (organizer != null) {
-                competition.setOrganizer(organizer);
-            }
-        }
-
-        String registrationIdsStr = rs.getString(REGISTRATIONIDS);
-        if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
-            for (String id : registrationIdsStr.split(",")) {
-                int registrationId = Integer.parseInt(id);
-                Registration registration = competitionRegistrationDao.selectRegistrationById(registrationId);
-                if (registration != null) {
-                    registration.setCompetition(competition);
-                    competition.addCompetitionRegistration(registration);
+    private void setOrganizerAndRegistrations(Competition competition, ResultSet rs) throws DataAccessException {
+        String organizerUsername = null;
+        try {
+            organizerUsername = rs.getString("organizerUsername");
+            if (organizerUsername != null) {
+                Organizer organizer = organizerDao.selectOrganizerByUsername(organizerUsername);
+                if (organizer != null) {
+                    competition.setOrganizer(organizer);
                 }
             }
+
+            String registrationIdsStr = rs.getString(REGISTRATIONIDS);
+            if (registrationIdsStr != null && !registrationIdsStr.isEmpty()) {
+                for (String id : registrationIdsStr.split(",")) {
+                    int registrationId = Integer.parseInt(id);
+                    Registration registration = competitionRegistrationDao.selectRegistrationById(registrationId);
+                    if (registration != null) {
+                        registration.setCompetition(competition);
+                        competition.addCompetitionRegistration(registration);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
     }
 
     @Override
-    public boolean checkCompetition(String competitionName) {
+    public boolean checkCompetition(String competitionName) throws DataAccessException {
         for (Competition competition : competitionList) {
             if (competition.getName().equals(competitionName)) {
                 return true;
@@ -189,14 +196,14 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
 
         return false;
     }
 
     @Override
-    public List<Competition> selectCompetitionsByDateAndLocation(String date, String location) throws IOException {
+    public List<Competition> selectCompetitionsByDateAndLocation(String date, String location) throws DataAccessException {
         List<Competition> competitionsFound = searchCompetitionsInList(date, location);
         if (!competitionsFound.isEmpty()) {
             return competitionsFound;
@@ -225,7 +232,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
     private void loadCompetitionsFromDatabase(String date, String location,
                                               List<Competition> competitions,
                                               List<String> organizers,
-                                              List<String> registrations) {
+                                              List<String> registrations) throws DataAccessException {
         String sql = "SELECT e.competitionName, e.description, e.coinsRequired, e.date, e.location, " +
                 "e.organizerUsername, e.MaxRegistrationNumber, GROUP_CONCAT(r.idRegistration) AS registrationIds " +
                 "FROM competitions e " +
@@ -258,13 +265,13 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
     }
 
     private void associateOrganizersAndRegistrations(List<Competition> competitions,
                                                      List<String> organizers,
-                                                     List<String> registrations) throws IOException {
+                                                     List<String> registrations) throws DataAccessException {
         for (int i = 0; i < competitions.size(); i++) {
             Competition competition = competitions.get(i);
             assignOrganizerToCompetition(competition, organizers.get(i));
@@ -272,7 +279,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
         }
     }
 
-    private void assignOrganizerToCompetition(Competition competition, String organizerUsername) throws IOException {
+    private void assignOrganizerToCompetition(Competition competition, String organizerUsername) throws DataAccessException {
         if (organizerUsername == null) {
             return;
         }
@@ -283,7 +290,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
         }
     }
 
-    private void assignRegistrationsToCompetition(Competition competition, String registrationIds) throws IOException {
+    private void assignRegistrationsToCompetition(Competition competition, String registrationIds) throws DataAccessException{
         if (registrationIds == null || registrationIds.isEmpty()) {
             return;
         }
@@ -300,7 +307,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
     }
 
     @Override
-    public void addCompetition(Competition competition) {
+    public void addCompetition(Competition competition) throws DataAccessException {
         if (checkCompetition(competition.getName())) {
             return ;
         }
@@ -327,7 +334,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
 
     }

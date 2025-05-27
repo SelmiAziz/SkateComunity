@@ -3,6 +3,7 @@ package view;
 import beans.AuthBean;
 import beans.LogUserBean;
 import controls.LoginController;
+import exceptions.DataAccessException;
 import exceptions.EmptyFieldException;
 import exceptions.UserNotFoundException;
 import javafx.fxml.FXML;
@@ -38,10 +39,8 @@ public class LoginView {
             AuthBean authBean = loginController.logUser(new LogUserBean(username, password));
             WindowManager.getInstance().setAuthBean(authBean);
             loadHomePage(authBean);
-        } catch (EmptyFieldException | UserNotFoundException e) {
+        } catch (EmptyFieldException | UserNotFoundException | DataAccessException e) {
             errorLabel.setText(e.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

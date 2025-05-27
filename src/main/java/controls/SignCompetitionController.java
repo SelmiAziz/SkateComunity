@@ -3,10 +3,7 @@ package controls;
 import beans.*;
 import dao.*;
 import dao.patternabstractfactory.DaoFactory;
-import exceptions.InsufficientCoinsException;
-import exceptions.NoAvailableSeats;
-import exceptions.SessionExpiredException;
-import exceptions.UserAlreadySignedCompetition;
+import exceptions.*;
 import model.*;
 import utils.Session;
 import utils.SessionManager;
@@ -23,35 +20,27 @@ public class SignCompetitionController {
     private final PaymentController paymentController = new PaymentController();
 
 
-    public CompetitionBean competitionDetails(String token, CompetitionBean competitionBean) throws SessionExpiredException{
+    public CompetitionBean competitionDetails(String token, CompetitionBean competitionBean) throws SessionExpiredException, DataAccessException{
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
         Competition competition = null;
-        try {
-            competition = competitionDao.selectCompetitionByName(competitionBean.getName());
-        } catch (IOException _) {
-            throw new SessionExpiredException();
-        }
+        competition = competitionDao.selectCompetitionByName(competitionBean.getName());
         return new CompetitionBean(competition.getName(), competition.getDescription(), competition.getParticipationFee(),(competition.getMaxRegistrations() - competition.getRegistrationsNumber()));
     }
 
-    public List<CompetitionBean> allAvailableCompetitions(String token) throws SessionExpiredException{
+    public List<CompetitionBean> allAvailableCompetitions(String token) throws SessionExpiredException, DataAccessException{
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        try {
-            List<Competition> competitionList = competitionDao.selectAvailableCompetitions();
-            List<CompetitionBean> competitionBeanList = new ArrayList<>();
-            for (Competition competition : competitionList) {
-                competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getLocation(), competition.getDate()));
-            }
-            return competitionBeanList;
-        }catch(IOException _){
-            throw new SessionExpiredException();
+        List<Competition> competitionList = competitionDao.selectAvailableCompetitions();
+        List<CompetitionBean> competitionBeanList = new ArrayList<>();
+        for (Competition competition : competitionList) {
+            competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getLocation(), competition.getDate()));
         }
+        return competitionBeanList;
     }
 
     //dummy function that generate a code
@@ -73,7 +62,7 @@ public class SignCompetitionController {
         return letterBuilder.append(number).toString();
     }
 
-    public RegistrationBean signToCompetition(String token, CompetitionBean competitionBean, RegistrationRequestBean registrationRequestBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException, IOException {
+    public RegistrationBean signToCompetition(String token, CompetitionBean competitionBean, RegistrationRequestBean registrationRequestBean) throws UserAlreadySignedCompetition, InsufficientCoinsException, NoAvailableSeats, SessionExpiredException, DataAccessException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
@@ -111,35 +100,28 @@ public class SignCompetitionController {
 
     }
 
-    public List<CompetitionBean> searchCompetitionByDateAndLocation(String token, CompetitionBean competitionBean) throws SessionExpiredException{
+    public List<CompetitionBean> searchCompetitionByDateAndLocation(String token, CompetitionBean competitionBean) throws SessionExpiredException, DataAccessException{
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
         List<CompetitionBean> competitionBeanList = new ArrayList<>();
-        try {
-            List<Competition> competitionList = competitionDao.selectCompetitionsByDateAndLocation(competitionBean.getDate(), competitionBean.getLocation());
-            for (Competition competition : competitionList) {
-                competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getLocation(), competition.getDate()));
-            }
-            return competitionBeanList;
-        }catch(IOException _){
-            throw new SessionExpiredException();
+        List<Competition> competitionList = competitionDao.selectCompetitionsByDateAndLocation(competitionBean.getDate(), competitionBean.getLocation());
+        for (Competition competition : competitionList) {
+            competitionBeanList.add(new CompetitionBean(competition.getName(), competition.getLocation(), competition.getDate()));
         }
+        return competitionBeanList;
+
     }
 
-    public WalletBean customerInfo(String token) throws SessionExpiredException {
+    public WalletBean customerInfo(String token) throws SessionExpiredException, DataAccessException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
         }
-        try {
-            Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
-            Wallet wallet = customer.getWallet();
-            return new WalletBean(wallet.getBalance());
-        }catch(IOException _){
-            throw new SessionExpiredException();
-        }
+        Customer customer = customerDao.selectCustomerByUsername(session.getUsername());
+        Wallet wallet = customer.getWallet();
+        return new WalletBean(wallet.getBalance());
     }
 
 }

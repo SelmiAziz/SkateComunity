@@ -4,6 +4,7 @@ import beans.OrderBean;
 import beans.OrderSummaryBean;
 import beans.ProgressNoteBean;
 import controls.CustomOrderController;
+import exceptions.DataAccessException;
 import exceptions.EmptyFieldException;
 import exceptions.WrongFormatException;
 import javafx.collections.FXCollections;
@@ -44,14 +45,22 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
         postNotePane.setVisible(false);
     }
 
-    public void rejectOrder() {
-        customOrderController.acceptCustomOrder(orderBean, false);
-        confStart();
+    public void rejectOrder()  {
+        try {
+            customOrderController.acceptCustomOrder(orderBean, false);
+            confStart();
+        } catch (DataAccessException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     public void acceptOrder() {
-        customOrderController.acceptCustomOrder(orderBean, true);
-        confStart();
+        try {
+            customOrderController.acceptCustomOrder(orderBean, true);
+            confStart();
+        } catch (DataAccessException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     @Override
@@ -64,45 +73,51 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
     }
 
     public void displayOrders() {
-        List<OrderSummaryBean> orders = customOrderController.getAllOrders();
-        ObservableList<String> items = FXCollections.observableArrayList();
-        ordersMap.clear();
-        int index = 1;
+        List<OrderSummaryBean> orders = null;
+        try {
+            orders = customOrderController.getAllOrders();
+            ObservableList<String> items = FXCollections.observableArrayList();
+            ordersMap.clear();
+            int index = 1;
 
-        for (OrderSummaryBean order : orders) {
-            String displayText = String.format(
-                    "[%d] %s - %s | €%d | Status: %s | Delivery: %s | Destination: %s, %s, %s, %s | Created: %s | Est. Days: %d",
-                    index,
-                    order.getNameBoard(),
-                    order.getDescriptionBoard(),
-                    order.getTotalCost(),
-                    order.getStatus(),
-                    order.getDeliveryDate(),
-                    order.getStreetAddersDestination(),
-                    order.getCityDestination(),
-                    order.getProvinceDestination(),
-                    order.getRegionDestination(),
-                    order.getCreationDate(),
-                    order.getEstimatedDays()
-            );
+            for (OrderSummaryBean order : orders) {
+                String displayText = String.format(
+                        "[%d] %s - %s | €%d | Status: %s | Delivery: %s | Destination: %s, %s, %s, %s | Created: %s | Est. Days: %d",
+                        index,
+                        order.getNameBoard(),
+                        order.getDescriptionBoard(),
+                        order.getTotalCost(),
+                        order.getStatus(),
+                        order.getDeliveryDate(),
+                        order.getStreetAddersDestination(),
+                        order.getCityDestination(),
+                        order.getProvinceDestination(),
+                        order.getRegionDestination(),
+                        order.getCreationDate(),
+                        order.getEstimatedDays()
+                );
 
-            items.add(displayText);
-            ordersMap.put(index, order);
-            index++;
+                items.add(displayText);
+                ordersMap.put(index, order);
+                index++;
+            }
+
+            ordersList.setItems(items);
+
+            ObservableList<Integer> comboItems = FXCollections.observableArrayList();
+            for (int i = 1; i < index; i++) {
+                comboItems.add(i);
+            }
+
+            ordersComboBox.setItems(comboItems);
+
+            if (!comboItems.isEmpty()) {
+                ordersComboBox.getSelectionModel().selectFirst();
+            }
+        } catch (DataAccessException e) {
+            errorLabel.setText(e.getMessage());
         }
 
-        ordersList.setItems(items);
-
-        ObservableList<Integer> comboItems = FXCollections.observableArrayList();
-        for (int i = 1; i < index; i++) {
-            comboItems.add(i);
-        }
-
-        ordersComboBox.setItems(comboItems);
-
-        if (!comboItems.isEmpty()) {
-            ordersComboBox.getSelectionModel().selectFirst();
-        }
     }
 
     public void postNote() {
@@ -123,7 +138,7 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
             progressNoteBean.setDate(date);
             customOrderController.writeNote(orderBean, progressNoteBean);
 
-        } catch (EmptyFieldException | WrongFormatException e) {
+        } catch (EmptyFieldException | WrongFormatException | DataAccessException e) {
             errorLabel.setText(e.getMessage());
         }finally{
             confStart();
@@ -148,7 +163,7 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
             progressNoteBean.setDate(date);
             customOrderController.completeOrder(orderBean, progressNoteBean);
 
-        } catch (EmptyFieldException | WrongFormatException e) {
+        } catch (EmptyFieldException | WrongFormatException | DataAccessException e) {
             errorLabel.setText(e.getMessage());
         }finally{
             confStart();

@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import utils.WindowManager;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 
 public class CustomerCompetitionsPageView {
@@ -91,6 +92,8 @@ public class CustomerCompetitionsPageView {
             coinsLabel.setText("" + walletBean.getBalance());
         }catch(SessionExpiredException _ ){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -100,6 +103,8 @@ public class CustomerCompetitionsPageView {
             competitionTable.getItems().addAll(signCompetitionController.allAvailableCompetitions(windowManager.getAuthBean().getToken()));
         }catch(SessionExpiredException _){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -134,6 +139,8 @@ public class CustomerCompetitionsPageView {
             );
         } catch (SessionExpiredException _) {
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -146,6 +153,8 @@ public class CustomerCompetitionsPageView {
             selectButton.setVisible(true);
         }catch(SessionExpiredException _ ){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -227,7 +236,7 @@ public class CustomerCompetitionsPageView {
         updateCustomerInfo();
     }
 
-    private void submitRegistration(String registrationName, String email) {
+    private void submitRegistration(String registrationName, String email)  {
         try {
             RegistrationRequestBean registrationRequestBean = new RegistrationRequestBean();
             registrationRequestBean.setRegistrationName(registrationName);
@@ -250,9 +259,9 @@ public class CustomerCompetitionsPageView {
 
             summaryPane.setVisible(true);
 
-        } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats e) {
+        } catch (UserAlreadySignedCompetition | InsufficientCoinsException | NoAvailableSeats| DataAccessException e) {
             errorLabel.setText(e.getMessage());
-        } catch (SessionExpiredException | IOException _) {
+        } catch (SessionExpiredException _) {
             windowManager.logOut();
         }
     }

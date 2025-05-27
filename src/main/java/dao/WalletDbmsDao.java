@@ -1,6 +1,7 @@
 package dao;
 
 
+import exceptions.DataAccessException;
 import model.Wallet;
 import utils.DbsConnector;
 
@@ -22,7 +23,7 @@ public class WalletDbmsDao implements  WalletDao{
 
 
     @Override
-    public void updateWallet(Wallet wallet) {
+    public void updateWallet(Wallet wallet) throws DataAccessException{
             String query = "UPDATE wallets SET balance = ? WHERE walletId = ?";
             Connection connection = DbsConnector.getInstance().getConnection();
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -30,13 +31,12 @@ public class WalletDbmsDao implements  WalletDao{
                 preparedStatement.setInt(2, wallet.getWalletId());
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
+               throw new DataAccessException(e.getMessage());
             }
     }
 
 
-    @Override
-    public Wallet selectWalletById(int walletId) {
+    @Override public Wallet selectWalletById(int walletId) throws DataAccessException{
         for(Wallet wallet:walletList){
             if(wallet.getWalletId() == walletId){
                 return wallet;
@@ -58,14 +58,14 @@ public class WalletDbmsDao implements  WalletDao{
                 return new Wallet(walletId, balance);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
 
         return null;
     }
 
     @Override
-    public void saveWallet(Wallet wallet, String walletOwner) {
+    public void saveWallet(Wallet wallet, String walletOwner) throws DataAccessException{
         walletList.add(wallet);
 
 
@@ -88,7 +88,7 @@ public class WalletDbmsDao implements  WalletDao{
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
     }
 }

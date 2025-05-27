@@ -1,5 +1,6 @@
 package dao;
 
+import exceptions.DataAccessException;
 import model.Trick;
 import utils.DbsConnector;
 import utils.DifficultyTrick;
@@ -24,7 +25,7 @@ public class TrickDbmsDao implements TrickDao{
 
 
     @Override
-    public void addTrick(Trick trick) {
+    public void addTrick(Trick trick) throws DataAccessException {
         this.trickList.add(trick);
 
         String sql = "INSERT INTO tricks (trickName, description, difficulty, category, date) " +
@@ -42,13 +43,13 @@ public class TrickDbmsDao implements TrickDao{
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
 
     }
 
     @Override
-    public Trick selectTrickByName(String trickName) {
+    public Trick selectTrickByName(String trickName) throws DataAccessException {
         for(Trick trick:this.trickList){
             if(trick.getNameTrick().equals(trickName)){
                 return trick;
@@ -76,7 +77,7 @@ public class TrickDbmsDao implements TrickDao{
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
 
         return null;

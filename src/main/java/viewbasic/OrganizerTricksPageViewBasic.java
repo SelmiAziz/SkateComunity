@@ -2,6 +2,7 @@ package viewbasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import exceptions.DataAccessException;
 import exceptions.EmptyFieldException;
 import exceptions.SessionExpiredException;
 import javafx.collections.FXCollections;
@@ -42,6 +43,8 @@ public class OrganizerTricksPageViewBasic {
             }
         }catch(SessionExpiredException _){
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -111,6 +114,8 @@ public class OrganizerTricksPageViewBasic {
             loadTricks();
         } catch (SessionExpiredException _) {
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

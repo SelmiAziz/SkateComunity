@@ -1,6 +1,7 @@
 package dao;
 
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.Customer;
 import model.Registration;
 import utils.DbsConnector;
@@ -23,7 +24,7 @@ public class RegistrationDbmsDao implements RegistrationDao {
     }
 
     @Override
-    public void addRegistration(Registration competitionRegistration) {
+    public void addRegistration(Registration competitionRegistration) throws DataAccessException {
         competitionRegistrationList.add(competitionRegistration);
 
         String sql = "INSERT INTO registrations (numberRegistration, customerUsername, competitionName, registrationCode, assignedSeat, registrationName, email) " +
@@ -49,12 +50,12 @@ public class RegistrationDbmsDao implements RegistrationDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
     }
 
     @Override
-    public Registration selectRegistrationById(int registrationId) throws IOException{
+    public Registration selectRegistrationById(int registrationId) throws DataAccessException{
         for(Registration competitionRegistration: competitionRegistrationList){
             if(competitionRegistration.getRegistrationId() == registrationId){
                 return competitionRegistration;
@@ -84,8 +85,8 @@ public class RegistrationDbmsDao implements RegistrationDao {
                 competitionRegistration.setParticipant(customer);
                 return competitionRegistration;
             }
-        } catch (SQLException | IOException e) {
-            throw new IOException("Error reading from database",e);
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
 
         return null;

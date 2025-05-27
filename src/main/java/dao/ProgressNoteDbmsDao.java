@@ -1,5 +1,6 @@
 package dao;
 
+import exceptions.DataAccessException;
 import model.ProgressNote;
 import utils.DbsConnector;
 
@@ -24,7 +25,7 @@ public class ProgressNoteDbmsDao  implements ProgressNoteDao{
 
 
     @Override
-    public ProgressNote selectProgressNoteById(String id) {
+    public ProgressNote selectProgressNoteById(String id) throws DataAccessException {
         for (ProgressNote progressNote : this.progressNoteList) {
             if (progressNote.getId().equals(id)) {
                 return progressNote;
@@ -49,14 +50,14 @@ public class ProgressNoteDbmsDao  implements ProgressNoteDao{
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+           throw new DataAccessException(e.getMessage());
         }
         return null;
     }
 
 
     @Override
-    public void saveProgressNote(ProgressNote progressNote, String customOrderId) {
+    public void saveProgressNote(ProgressNote progressNote, String customOrderId) throws DataAccessException {
         for (ProgressNote note : this.progressNoteList) {
             if (note.getId().equals(progressNote.getId())) {
                 return;
@@ -75,7 +76,7 @@ public class ProgressNoteDbmsDao  implements ProgressNoteDao{
             preparedStatement.executeUpdate();
             this.progressNoteList.add(progressNote);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
     }
 }

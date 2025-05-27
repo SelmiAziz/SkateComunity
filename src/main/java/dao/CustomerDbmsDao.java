@@ -1,6 +1,7 @@
 package dao;
 
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.Customer;
 import model.Order;
 import model.OrderStatus;
@@ -32,7 +33,7 @@ public class CustomerDbmsDao implements CustomerDao{
     }
 
     @Override
-    public Customer selectCustomerByUsername(String username) throws IOException {
+    public Customer selectCustomerByUsername(String username) throws DataAccessException{
         for (Customer customer : this.customerList) {
             if (customer.getUsername().equals(username)) {
                 return customer;
@@ -46,15 +47,16 @@ public class CustomerDbmsDao implements CustomerDao{
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Customer customer = buildCustomerFromResultSet(rs);
+                    Customer customer = null;
+                    customer = buildCustomerFromResultSet(rs);
                     loadBoardsForCustomer(rs, customer);
                     loadOrdersForCustomer(rs, customer);
                     this.customerList.add(customer);
                     return customer;
                 }
             }
-        } catch (SQLException _) {
-            //
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
 
         return null;
@@ -72,54 +74,70 @@ public class CustomerDbmsDao implements CustomerDao{
                 "GROUP BY u.username, u.password, u.dateOfBirth, w.walletId, c.skaterLevel";
     }
 
-    private Customer buildCustomerFromResultSet(ResultSet rs) throws SQLException, IOException {
-        String username = rs.getString("username");
-        String password = rs.getString("password");
-        String dateOfBirth = rs.getString("dateOfBirth");
-        String skaterLevelStr = rs.getString("skaterLevel");
-        int walletId = rs.getInt("walletId");
+    private Customer buildCustomerFromResultSet(ResultSet rs) throws DataAccessException {
+        String username = null;
+        try {
+            username = rs.getString("username");
+            String password = rs.getString("password");
+            String dateOfBirth = rs.getString("dateOfBirth");
+            String skaterLevelStr = rs.getString("skaterLevel");
+            int walletId = rs.getInt("walletId");
 
-        SkaterLevel skaterLevel = switch (skaterLevelStr) {
-            case "Novice" -> SkaterLevel.NOVICE;
-            case "Advanced" -> SkaterLevel.ADVANCED;
-            default -> SkaterLevel.PROFICIENT;
-        };
+            SkaterLevel skaterLevel = switch (skaterLevelStr) {
+                case "Novice" -> SkaterLevel.NOVICE;
+                case "Advanced" -> SkaterLevel.ADVANCED;
+                default -> SkaterLevel.PROFICIENT;
+            };
 
-        Wallet wallet = walletDao.selectWalletById(walletId);
-        return new Customer(username, password, dateOfBirth, skaterLevel, wallet);
-    }
-
-    private void loadBoardsForCustomer(ResultSet rs, Customer customer) throws SQLException {
-        String boardIdsStr = rs.getString("boardsIds");
-        if (boardIdsStr != null && !boardIdsStr.isEmpty()) {
-            for (String boardId : boardIdsStr.split(",")) {
-                Board board = boardDao.selectBoardById(boardId.trim());
-                if (board != null) {
-                    customer.addDesignBoard(board);
-                }
-            }
+            Wallet wallet = walletDao.selectWalletById(walletId);
+            return new Customer(username, password, dateOfBirth, skaterLevel, wallet);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void loadOrdersForCustomer(ResultSet rs, Customer customer) throws SQLException {
-        String orderIdsStr = rs.getString("ordersIds");
-        if (orderIdsStr != null && !orderIdsStr.isEmpty()) {
-            for (String orderId : orderIdsStr.split(",")) {
-                Order order = orderDao.selectOrderByCode(orderId.trim());
-                if (order != null) {
-                    order.setCustomer(customer);
-                    if (order.getOrderStatus() == OrderStatus.COMPLETED) {
-                        customer.addAcquiredOrder(order);
+    private void loadBoardsForCustomer(ResultSet rs, Customer customer) throws DataAccessException {
+        String boardIdsStr = null;
+        try {
+            boardIdsStr = rs.getString("boardsIds");
+            if (boardIdsStr != null && !boardIdsStr.isEmpty()) {
+                for (String boardId : boardIdsStr.split(",")) {
+                    Board board = boardDao.selectBoardById(boardId.trim());
+                    if (board != null) {
+                        customer.addDesignBoard(board);
                     }
-                    customer.addSubmittedOrder(order);
                 }
             }
+        }catch(SQLException _){
+            throw new DataAccessException();
+        }
+
+    }
+
+    private void loadOrdersForCustomer(ResultSet rs, Customer customer) throws DataAccessException{
+        String orderIdsStr = null;
+        try {
+            orderIdsStr = rs.getString("ordersIds");
+            if (orderIdsStr != null && !orderIdsStr.isEmpty()) {
+                for (String orderId : orderIdsStr.split(",")) {
+                    Order order = orderDao.selectOrderByCode(orderId.trim());
+                    if (order != null) {
+                        order.setCustomer(customer);
+                        if (order.getOrderStatus() == OrderStatus.COMPLETED) {
+                            customer.addAcquiredOrder(order);
+                        }
+                        customer.addSubmittedOrder(order);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
     }
 
 
     @Override
-    public void saveCustomer(Customer customer) throws IOException {
+    public void saveCustomer(Customer customer) throws DataAccessException {
         customerList.add(customer);
 
         UserDao userDao = DaoFactory.getInstance().createUserDao();
@@ -145,7 +163,7 @@ public class CustomerDbmsDao implements CustomerDao{
             preparedStatement.setString(2, skaterLevel);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new IOException("Error inserting in database",e);
+            throw new DataAccessException(e.getMessage());
         }
 
         walletDao.saveWallet(customer.getWallet(), customer.getUsername());

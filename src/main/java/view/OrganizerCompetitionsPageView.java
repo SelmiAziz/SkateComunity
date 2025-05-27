@@ -2,10 +2,7 @@ package view;
 
 import beans.CompetitionBean;
 import controls.CreateCompetitionController;
-import exceptions.EmptyFieldException;
-import exceptions.CompetitionAlreadyExistsException;
-import exceptions.SessionExpiredException;
-import exceptions.WrongFormatException;
+import exceptions.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -88,7 +85,7 @@ public class OrganizerCompetitionsPageView {
             validateFields(name, description, date, location);
             createCompetitionController.createCompetition(windowManager.getAuthBean().getToken(),new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
             loadCompetitions();
-        } catch (WrongFormatException | CompetitionAlreadyExistsException | EmptyFieldException | SQLException e) {
+        } catch (WrongFormatException | CompetitionAlreadyExistsException | EmptyFieldException | DataAccessException e) {
             errorLabel.setText(e.getMessage());
         }catch(SessionExpiredException _ ){
             windowManager.logOut();
@@ -102,6 +99,8 @@ public class OrganizerCompetitionsPageView {
             competitionTable.getItems().addAll(createCompetitionController.organizerCompetitions(windowManager.getAuthBean().getToken()));
         }catch(SessionExpiredException _){
                 windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

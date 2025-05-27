@@ -2,6 +2,7 @@ package viewbasic;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import exceptions.DataAccessException;
 import exceptions.SessionExpiredException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +38,8 @@ public class CustomerTricksPageViewBasic {
             }
         }catch(SessionExpiredException _ ){
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -68,6 +71,8 @@ public class CustomerTricksPageViewBasic {
             difficultyLabel.setText("Difficulty: " + detailedTrick.getDifficulty().toLowerCase());
         }catch(SessionExpiredException _ ){
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

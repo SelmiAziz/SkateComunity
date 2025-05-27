@@ -1,5 +1,6 @@
 package dao;
 
+import exceptions.DataAccessException;
 import model.DeliveryDestination;
 import model.Region;
 import utils.DbsConnector;
@@ -25,7 +26,7 @@ public class DeliveryDestinationDbmsDao implements DeliveryDestinationDao {
     }
 
     @Override
-    public DeliveryDestination selectDeliveryDestinationById(String id) {
+    public DeliveryDestination selectDeliveryDestinationById(String id)throws DataAccessException {
         for (DeliveryDestination destination : this.deliveryDestinationList) {
             if (destination.getId().equals(id)) {
                 return destination;
@@ -53,13 +54,13 @@ public class DeliveryDestinationDbmsDao implements DeliveryDestinationDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
         return null;
     }
 
     @Override
-    public void saveDeliveryDestination(DeliveryDestination deliveryDestination) {
+    public void saveDeliveryDestination(DeliveryDestination deliveryDestination) throws DataAccessException {
         for (DeliveryDestination destination : this.deliveryDestinationList) {
             if (destination.getId().equals(deliveryDestination.getId())) {
                 return;
@@ -80,7 +81,7 @@ public class DeliveryDestinationDbmsDao implements DeliveryDestinationDao {
 
             this.deliveryDestinationList.add(deliveryDestination);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
     }
 

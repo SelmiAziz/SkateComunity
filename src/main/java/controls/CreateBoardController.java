@@ -3,6 +3,7 @@ package controls;
 import beans.BoardProfileBean;
 import dao.BoardDao;
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import exceptions.SessionExpiredException;
 import model.BoardBase;
 import model.decorator.Board;
@@ -15,7 +16,7 @@ import java.util.List;
 public class CreateBoardController {
     private final BoardDao boardDao = DaoFactory.getInstance().createBoardDao();
 
-    public void createBoard(String token, BoardProfileBean boardBean) throws SessionExpiredException {
+    public void createBoard(String token, BoardProfileBean boardBean) throws SessionExpiredException, DataAccessException {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();
@@ -24,7 +25,7 @@ public class CreateBoardController {
         boardDao.addBoard(board);
     }
 
-    public List<BoardProfileBean> getStoredBoards(String token) throws SessionExpiredException  {
+    public List<BoardProfileBean> getStoredBoards(String token) throws SessionExpiredException, DataAccessException  {
         Session session = SessionManager.getInstance().getSessionByToken(token);
         if(session == null){
             throw new SessionExpiredException();

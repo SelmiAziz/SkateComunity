@@ -1,6 +1,7 @@
 package dao;
 
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.Order;
 import model.OrderStatus;
 
@@ -43,7 +44,7 @@ public class OrderDemoDao implements OrderDao {
     }
 
     @Override
-    public void saveOrder(Order customOrder) {
+    public void saveOrder(Order customOrder) throws DataAccessException {
         customOrderList.add(customOrder);
         deliveryDestinationDao.saveDeliveryDestination(customOrder.getDeliveryDestination());
     }

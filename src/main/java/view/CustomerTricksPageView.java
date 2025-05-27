@@ -3,6 +3,7 @@ package view;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import exceptions.DataAccessException;
 import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -59,10 +60,15 @@ public class CustomerTricksPageView {
 
 
     public void showTrick(TrickBean trickBean){
-        TrickBean detailedTrick = learnTrickController.detailsTrick(windowManager.getAuthBean().getToken(),trickBean);
-        descriptionLabel.setText("Description: " + detailedTrick.getDescription());
-        categoryLabel.setText("Category: " +detailedTrick.getCategory());
-        difficultyLabel.setText("Difficulty: " +detailedTrick.getDifficulty().toLowerCase());
+        TrickBean detailedTrick = null;
+        try {
+            detailedTrick = learnTrickController.detailsTrick(windowManager.getAuthBean().getToken(),trickBean);
+            descriptionLabel.setText("Description: " + detailedTrick.getDescription());
+            categoryLabel.setText("Category: " +detailedTrick.getCategory());
+            difficultyLabel.setText("Difficulty: " +detailedTrick.getDifficulty().toLowerCase());
+        } catch (DataAccessException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
 
@@ -73,6 +79,8 @@ public class CustomerTricksPageView {
             trickTable.getItems().addAll(availableTricksBean);
         }catch(SessionExpiredException _){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

@@ -1,5 +1,6 @@
 package dao;
 
+import exceptions.DataAccessException;
 import login.Role;
 import login.User;
 
@@ -26,7 +27,7 @@ public class UserFileSystemDao  implements UserDao{
     }
 
     @Override
-    public User selectUserByUsername(String username) throws IOException{
+    public User selectUserByUsername(String username) throws DataAccessException {
         for(User user:userList){
             if(user.getUsername().equals(username)){
                 return user;
@@ -44,24 +45,26 @@ public class UserFileSystemDao  implements UserDao{
                 }
             }
 
+        } catch (IOException e) {
+            throw new DataAccessException(e.getMessage());
         }
         return null;
     }
 
         @Override
-    public void addUser(User user) {
+    public void addUser(User user) throws DataAccessException {
         this.userList.add(user);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fd, true))) {
             writer.write(user.toCsvString());
             writer.newLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
     }
 
 
     @Override
-    public boolean checkUserByUsername(String username) throws IOException {
+    public boolean checkUserByUsername(String username) throws DataAccessException {
         for(User user:userList){
             if(user.getUsername().equals(username) ){
                 return true;
@@ -78,13 +81,15 @@ public class UserFileSystemDao  implements UserDao{
                 }
             }
 
+        } catch (IOException e) {
+            throw new DataAccessException(e.getMessage());
         }
         return false;
     }
 
 
     @Override
-    public boolean checkUserByUsernameAndPassword(String username, String password) throws IOException {
+    public boolean checkUserByUsernameAndPassword(String username, String password) throws DataAccessException {
         for(User user:userList){
             if(user.getUsername().equals(username) && user.getPassword().equals(password)){
                 return true;
@@ -101,6 +106,8 @@ public class UserFileSystemDao  implements UserDao{
                 }
             }
 
+        }catch (IOException e) {
+            throw new DataAccessException(e.getMessage());
         }
         return false;
     }

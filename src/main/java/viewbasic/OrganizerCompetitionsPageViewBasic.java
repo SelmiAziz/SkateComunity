@@ -2,10 +2,7 @@ package viewbasic;
 
 import beans.CompetitionBean;
 import controls.CreateCompetitionController;
-import exceptions.EmptyFieldException;
-import exceptions.CompetitionAlreadyExistsException;
-import exceptions.SessionExpiredException;
-import exceptions.WrongFormatException;
+import exceptions.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -67,6 +64,8 @@ public class OrganizerCompetitionsPageViewBasic {
             }
         }catch(SessionExpiredException _ ){
             windowManagerBasic.logOut();
+        }catch (DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -110,8 +109,10 @@ public class OrganizerCompetitionsPageViewBasic {
                     windowManagerBasic.getAuthBean().getToken(),
                     new CompetitionBean(name, description, date, location, coinsRequired, maxRegistrations));
             loadCompetitions();
-        } catch (SessionExpiredException | SQLException _) {
+        } catch (SessionExpiredException  _) {
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

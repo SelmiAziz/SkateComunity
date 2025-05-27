@@ -2,6 +2,7 @@ package view;
 
 import beans.*;
 import controls.CustomOrderController;
+import exceptions.DataAccessException;
 import exceptions.EmptyFieldException;
 import exceptions.InsufficientCoinsException;
 import exceptions.SessionExpiredException;
@@ -128,7 +129,7 @@ public class CustomerMakeOrdersPageView implements CustomerOrderView {
             );
             windowManager.loadAllOrdersPage( orderSummaryBean);
 
-        } catch (InsufficientCoinsException e ) {
+        } catch (InsufficientCoinsException | DataAccessException e ) {
             errorLabel.setText(e.getMessage());
         } catch (SessionExpiredException _) {
             windowManager.closeCoordinator();

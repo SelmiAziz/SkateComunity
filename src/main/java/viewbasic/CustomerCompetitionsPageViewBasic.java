@@ -57,6 +57,8 @@ public class CustomerCompetitionsPageViewBasic {
         }catch(SessionExpiredException _){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -75,6 +77,8 @@ public class CustomerCompetitionsPageViewBasic {
         }catch(SessionExpiredException _){
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -107,6 +111,8 @@ public class CustomerCompetitionsPageViewBasic {
         } catch (SessionExpiredException _) {
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
+        }catch (DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -145,6 +151,8 @@ public class CustomerCompetitionsPageViewBasic {
         } catch (SessionExpiredException _) {
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -183,7 +191,7 @@ public class CustomerCompetitionsPageViewBasic {
             windowManagerBasic.cleanOrderPage();
             windowManagerBasic.logOut();
 
-        } catch (IOException e) {
+        } catch (DataAccessException e) {
             errorLabel.setText(e.getMessage());
         }
     }

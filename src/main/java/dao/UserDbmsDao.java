@@ -1,6 +1,7 @@
 package dao;
 
 
+import exceptions.DataAccessException;
 import login.Role;
 import login.User;
 import utils.DbsConnector;
@@ -51,7 +52,7 @@ public class UserDbmsDao implements UserDao {
     }
 
     @Override
-    public boolean checkUserByUsernameAndPassword(String username, String password){
+    public boolean checkUserByUsernameAndPassword(String username, String password) throws DataAccessException {
         for(User user: userList){
             if(user.getUsername().equals(username) && user.getPassword().equals(password)  ){
                 return true;
@@ -72,7 +73,7 @@ public class UserDbmsDao implements UserDao {
     }
 
     @Override
-    public boolean checkUserByUsername(String username){
+    public boolean checkUserByUsername(String username) throws DataAccessException{
         for(User user: userList){
             if(user.getUsername().equals(username)){
                 return true;
@@ -85,14 +86,13 @@ public class UserDbmsDao implements UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
-        return false;
 
     }
 
     @Override
-    public void addUser(User user){
+    public void addUser(User user) throws DataAccessException{
         userList.add(user);
 
         String query = "INSERT INTO users (username, password, dateOfBirth,role) VALUES (?, ?, ?, ?)";
@@ -108,7 +108,7 @@ public class UserDbmsDao implements UserDao {
             preparedStatement.setString(4,role);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessException(e.getMessage());
         }
 
     }

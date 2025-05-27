@@ -138,7 +138,7 @@ public class LogPageViewBasic {
             String suggestion = e.getSuggestedUsername();
             resultLabel.setText(e.getMessage() + " Suggerimento: " + suggestion);
             usernameField.setText(suggestion);
-        } catch (IOException _) {
+        } catch (DataAccessException _) {
             resultLabel.setText("Errore durante la registrazione. Riprova più tardi.");
         }
     }
@@ -170,10 +170,8 @@ public class LogPageViewBasic {
             AuthBean authBean = loginController.logUser(new LogUserBean(username, password));
             windowManagerBasic.setAuthBean(authBean);
             loadHomeScene(authBean.getRole());
-        } catch (EmptyFieldException | UserNotFoundException e) {
+        } catch (EmptyFieldException | UserNotFoundException | DataAccessException e) {
             resultLabel.setText(e.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

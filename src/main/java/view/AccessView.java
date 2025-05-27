@@ -13,7 +13,7 @@ public class AccessView {
         try {
             sceneManager.loadScene("viewFxml/RegisterView.fxml");
         } catch (IOException e) {
-            e.printStackTrace(); // O mostra un alert all'utente
+            //
         }
     }
 

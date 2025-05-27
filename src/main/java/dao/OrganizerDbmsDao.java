@@ -1,6 +1,7 @@
 package dao;
 
 import dao.patternabstractfactory.DaoFactory;
+import exceptions.DataAccessException;
 import model.Competition;
 import model.Organizer;
 import utils.DbsConnector;
@@ -27,7 +28,7 @@ public class OrganizerDbmsDao implements OrganizerDao {
     }
 
     @Override
-    public Organizer selectOrganizerByUsername(String profileName) throws IOException {
+    public Organizer selectOrganizerByUsername(String profileName) throws DataAccessException {
         CompetitionDao competitionDao = DaoFactory.getInstance().createCompetitionDao();
         for (Organizer organizer : organizerList) {
             if (organizer.getUsername().equals(profileName)) {
@@ -75,31 +76,17 @@ public class OrganizerDbmsDao implements OrganizerDao {
                     return organizer;
                 }
             }
-        } catch (SQLException | IOException e) {
-            throw new IOException("Error writing on database", e);
+        } catch (SQLException  e) {
+            throw new DataAccessException(e.getMessage());
         }
 
         return null;
     }
 
 
-    public void update(Organizer organizer) {
-        String query = "UPDATE profiles SET numCoins = ? WHERE profileName = ?";
-
-        Connection connection = DbsConnector.getInstance().getConnection();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, 15);
-            preparedStatement.setString(2, organizer.getUsername());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
-    public void addOrganizer(Organizer organizer) {
+    public void addOrganizer(Organizer organizer) throws DataAccessException {
         organizerList.add(organizer);
         UserDao userDao = DaoFactory.getInstance().createUserDao();
         userDao.addUser(organizer);

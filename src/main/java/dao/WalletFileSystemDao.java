@@ -1,5 +1,6 @@
 package dao;
 
+import exceptions.DataAccessException;
 import model.Wallet;
 import java.io.*;
 import java.util.ArrayList;
@@ -44,26 +45,33 @@ public class WalletFileSystemDao implements  WalletDao {
     }
 
     @Override
-    public Wallet selectWalletById(int walletId) throws IOException {
+    public Wallet selectWalletById(int walletId) throws DataAccessException {
             for (Wallet wallet : walletList) {
                 if (wallet.getWalletId() == walletId) {
                     return wallet;
                 }
             }
 
-            List<String> lines = readFile();
+        List<String> lines = null;
+        try {
+            lines = readFile();
             for (String line : lines) {
                 String[] arr = line.split(",");
                 if (Integer.parseInt(arr[0]) == walletId) {
                     return new Wallet(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]));
                 }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
-    public void updateWallet(Wallet wallet) throws  IOException {
+    public void updateWallet(Wallet wallet) throws  DataAccessException {
 
-            List<String> lines = readFile();
+        List<String> lines = null;
+        try {
+            lines = readFile();
             boolean walletUpdated = false;
             for (int i = 0; i < lines.size(); i++) {
                 String[] arr = lines.get(i).split(",");
@@ -76,11 +84,16 @@ public class WalletFileSystemDao implements  WalletDao {
             if (walletUpdated) {
                 writeFile(lines);
             }
+        } catch (IOException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
-    public void saveWallet(Wallet wallet, String walletOwner) throws IOException {
-            List<String> lines = readFile();
+    public void saveWallet(Wallet wallet, String walletOwner) throws DataAccessException {
+        List<String> lines = null;
+        try {
+            lines = readFile();
             int maxId = lines.stream()
                     .map(line -> Integer.parseInt(line.split(",")[0]))
                     .max(Integer::compareTo)
@@ -88,6 +101,10 @@ public class WalletFileSystemDao implements  WalletDao {
             wallet.setWalletId(maxId);
             lines.add(wallet.toCsvString() + "," + walletOwner);
             writeFile(lines);
+        } catch (IOException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+
 
     }
 }

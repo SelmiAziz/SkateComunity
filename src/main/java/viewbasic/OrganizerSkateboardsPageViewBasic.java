@@ -2,6 +2,7 @@ package viewbasic;
 
 import beans.BoardProfileBean;
 import controls.CreateBoardController;
+import exceptions.DataAccessException;
 import exceptions.EmptyFieldException;
 import exceptions.SessionExpiredException;
 import javafx.collections.FXCollections;
@@ -58,6 +59,8 @@ public class OrganizerSkateboardsPageViewBasic {
             }
         }catch(SessionExpiredException _){
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -97,6 +100,8 @@ public class OrganizerSkateboardsPageViewBasic {
             loadSkateboards();
         } catch (SessionExpiredException _) {
             windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 

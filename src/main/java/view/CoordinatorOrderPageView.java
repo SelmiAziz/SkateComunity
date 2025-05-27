@@ -4,6 +4,7 @@ import beans.OrderBean;
 import beans.OrderSummaryBean;
 import beans.ProgressNoteBean;
 import controls.CustomOrderController;
+import exceptions.DataAccessException;
 import exceptions.EmptyFieldException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -54,9 +55,14 @@ public class CoordinatorOrderPageView implements CoordinatorOrderView {
     }
 
     public void loadOrders(){
-        List<OrderSummaryBean> customOrderBeanList = customOrderController.getAllOrders();
-        ordersTable.getItems().clear();
-        ordersTable.getItems().addAll(customOrderBeanList);
+        List<OrderSummaryBean> customOrderBeanList = null;
+        try {
+            customOrderBeanList = customOrderController.getAllOrders();
+            ordersTable.getItems().clear();
+            ordersTable.getItems().addAll(customOrderBeanList);
+        } catch (DataAccessException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     public void loadCustomOrderSummary(OrderSummaryBean orderSummaryBean){
@@ -84,17 +90,25 @@ public class CoordinatorOrderPageView implements CoordinatorOrderView {
     public void acceptOrder(){
         OrderBean orderBean = new OrderBean();
         orderBean.setId(orderSummaryBean.getId());
-        customOrderController.acceptCustomOrder(orderBean, true);
-        confStart();
-        loadOrders();
+        try {
+            customOrderController.acceptCustomOrder(orderBean, true);
+            confStart();
+            loadOrders();
+        } catch (DataAccessException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     public void rejectOrder(){
         OrderBean orderBean = new OrderBean();
         orderBean.setId(orderSummaryBean.getId());
-        customOrderController.acceptCustomOrder(orderBean, false);
-        confStart();
-        loadOrders();
+        try {
+            customOrderController.acceptCustomOrder(orderBean, false);
+            confStart();
+            loadOrders();
+        } catch (DataAccessException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     @FXML
@@ -132,7 +146,7 @@ public class CoordinatorOrderPageView implements CoordinatorOrderView {
             dateField.setText("");
             noteArea.setText("");
             loadOrders();
-        }catch (EmptyFieldException e){
+        }catch (EmptyFieldException | DataAccessException e){
             errorLabel.setText(e.getMessage());
         }
 

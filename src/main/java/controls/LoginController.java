@@ -7,6 +7,7 @@ import dao.OrganizerDao;
 import dao.UserDao;
 import beans.LogUserBean;
 import beans.RegisterUserBean;
+import exceptions.DataAccessException;
 import exceptions.UserNameAlreadyUsedException;
 import exceptions.UserNotFoundException;
 import login.User;
@@ -28,7 +29,7 @@ public class LoginController {
 
 
 
-    public AuthBean logUser(LogUserBean loginBean) throws UserNotFoundException, IOException {
+    public AuthBean logUser(LogUserBean loginBean) throws UserNotFoundException, DataAccessException {
         if (!userDao.checkUserByUsernameAndPassword(loginBean.getUsername(), loginBean.getPassword())) {
             throw new UserNotFoundException("Credenziali non valide");
         }
@@ -40,7 +41,7 @@ public class LoginController {
     }
 
 
-    private String generateSuggestedUsername(String baseUsername) throws IOException {
+    private String generateSuggestedUsername(String baseUsername) throws DataAccessException {
         String suggestedUsername = baseUsername;
         int suffix = 1;
 
@@ -54,7 +55,7 @@ public class LoginController {
 
 
 
-    public void registerUser(RegisterUserBean registerUserBean) throws UserNameAlreadyUsedException, IOException {
+    public void registerUser(RegisterUserBean registerUserBean) throws UserNameAlreadyUsedException, DataAccessException {
         String baseUsername = registerUserBean.getUsername();
 
         if (userDao.checkUserByUsername(baseUsername)) {

@@ -3,6 +3,7 @@ package view;
 
 import beans.TrickBean;
 import controls.LearnTrickController;
+import exceptions.DataAccessException;
 import exceptions.EmptyFieldException;
 import exceptions.SessionExpiredException;
 import exceptions.WrongFormatException;
@@ -84,6 +85,8 @@ public class OrganizerTricksPageView {
             trickTable.getItems().addAll(availableTricksBean);
         }catch(SessionExpiredException _){
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
@@ -142,6 +145,8 @@ public class OrganizerTricksPageView {
             loadTricks();
         } catch (SessionExpiredException _) {
             windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
         }
     }
 
