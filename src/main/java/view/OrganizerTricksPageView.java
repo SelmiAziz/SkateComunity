@@ -20,7 +20,7 @@ public class OrganizerTricksPageView {
     WindowManager windowManager = WindowManager.getInstance();
     DateValidator dateValidator = new DateValidator();
 
-    @FXML Label errorLabel;
+    @FXML private Label errorLabel;
     @FXML private TableView<TrickBean> trickTable;
     @FXML private TableColumn<TrickBean, String> colTrickName;
     @FXML private TableColumn<TrickBean, String> colDescription;
@@ -35,6 +35,7 @@ public class OrganizerTricksPageView {
     @FXML private TextArea descriptionTextArea;
     @FXML private TextField dateField;
     @FXML private Label difficultyLabel;
+
 
     LearnTrickController learnTrickController = new LearnTrickController();
 

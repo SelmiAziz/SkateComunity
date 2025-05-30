@@ -37,7 +37,9 @@ public class Customer extends User {
 
 
     public void addCompetitionRegistration(Registration competitionRegistration){this.competitionRegistrationList.add(competitionRegistration);}
-
+    public int totalRegistrationNumber(){
+       return competitionRegistrationList.size();
+    }
 
 
     public void setSkaterLevel(SkaterLevel skaterLevel) {

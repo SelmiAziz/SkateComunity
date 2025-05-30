@@ -16,6 +16,7 @@ public class SignCompetitionController {
     private final RegistrationDao competitionRegistrationDao = daoFactory.createRegistrationDao();
     private final CustomerDao customerDao = daoFactory.createCostumerDao();
     private final PaymentController paymentController = new PaymentController();
+    private final WalletDao walletDao = daoFactory.createWalletDao();
 
 
     public CompetitionBean competitionDetails(String token, CompetitionBean competitionBean) throws SessionExpiredException, DataAccessException{
@@ -79,6 +80,7 @@ public class SignCompetitionController {
         }
 
         paymentController.payWithCoins(currentCustomer.getWallet(), competition.getParticipationFee());
+        checkRegistrationThresholdAndAssignBonus(currentCustomer);
 
         int registrationNumber = competition.getRegistrationsNumber() +1;
         String registrationCode = generateCode(competition.getName(),competition.getRegistrationsNumber());
@@ -89,6 +91,7 @@ public class SignCompetitionController {
         registration.setCompetition(competition);
         competition.addCompetitionRegistration(registration);
         competitionRegistrationDao.addRegistration(registration);
+        currentCustomer.addCompetitionRegistration(registration);
 
         RegistrationBean registrationBean = new RegistrationBean();
         registrationBean.setCurrentRegistrationNumber(registrationNumber);
@@ -96,6 +99,19 @@ public class SignCompetitionController {
         registrationBean.setAssignedSeat(availableSeatCode);
         return registrationBean;
 
+    }
+
+
+    private void checkRegistrationThresholdAndAssignBonus(Customer customer) throws DataAccessException {
+        final int REGISTRATION_THRESHOLD = 5;
+        final int BONUS_COINS = 10;
+
+        int totalRegistrations = customer.totalRegistrationNumber();
+
+        if (totalRegistrations > 0 && totalRegistrations % REGISTRATION_THRESHOLD == 0) {
+            customer.getWallet().depositCoins(BONUS_COINS);
+
+        }
     }
 
     public List<CompetitionBean> searchCompetitionByDateAndLocation(String token, CompetitionBean competitionBean) throws SessionExpiredException, DataAccessException{

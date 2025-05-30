@@ -8,6 +8,7 @@ import exceptions.SessionExpiredException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import utils.WindowManager;
 
 
@@ -26,6 +27,9 @@ public class CustomerTricksPageView {
     @FXML private Label difficultyLabel;
     @FXML private Label descriptionLabel;
 
+    //@FXML private Pane imgPane1;
+    //@FXML private Pane imgPane2;
+
     LearnTrickController learnTrickController = new LearnTrickController();
 
     @FXML
@@ -33,7 +37,7 @@ public class CustomerTricksPageView {
 
         colTrickName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getNameTrick()));
-
+        //hideImages();
         loadTricks();
     }
 
@@ -58,15 +62,25 @@ public class CustomerTricksPageView {
 
     }
 
+    protected void showImages(){
+        //imgPane1.setVisible(true);
+        //imgPane2.setVisible(true);
+    }
+
+    protected void hideImages(){
+        //imgPane1.setVisible(false);
+        //imgPane2.setVisible(false);
+    }
 
     public void showTrick(TrickBean trickBean){
         TrickBean detailedTrick = null;
         try {
+            //showImages();
             detailedTrick = learnTrickController.detailsTrick(windowManager.getAuthBean().getToken(),trickBean);
             descriptionLabel.setText("Description: " + detailedTrick.getDescription());
             categoryLabel.setText("Category: " +detailedTrick.getCategory());
             difficultyLabel.setText("Difficulty: " +detailedTrick.getDifficulty().toLowerCase());
-        } catch (DataAccessException e) {
+        } catch (DataAccessException |SessionExpiredException e) {
             errorLabel.setText(e.getMessage());
         }
     }

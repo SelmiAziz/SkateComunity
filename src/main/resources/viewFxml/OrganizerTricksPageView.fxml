@@ -65,6 +65,7 @@
                   <TableColumn fx:id="colDifficulty" prefWidth="168.0" text="difficulty" />
                </columns>
             </TableView>
+            <Label fx:id="errorLabel" layoutX="30.0" layoutY="580.0" prefHeight="18.0" prefWidth="486.0" />
 
             </children>
         </AnchorPane>
