@@ -4,27 +4,27 @@ import dao.*;
 
 public class DaoDbmsFactory extends DaoFactory {
 
-    public WalletDbmsDao createWalletDao(){return WalletDbmsDao.getInstance();}
+    public WalletDao createWalletDao(){return WalletDbmsDao.getInstance();}
 
-    public UserDbmsDao createUserDao(){
+    public UserDao createUserDao(){
         return UserDbmsDao.getInstance();
     }
 
-    public CustomerDbmsDao createCostumerDao(){
+    public CustomerDao createCostumerDao(){
         return CustomerDbmsDao.getInstance();
     }
 
-    public OrganizerDbmsDao createOrganizerDao(){
+    public OrganizerDao createOrganizerDao(){
         return OrganizerDbmsDao.getInstance();
     }
 
-    public CompetitionDbmsDao createCompetitionDao(){ return CompetitionDbmsDao.getInstance();}
+    public CompetitionDao createCompetitionDao(){ return CompetitionDbmsDao.getInstance();}
 
-    public RegistrationDbmsDao createRegistrationDao(){return RegistrationDbmsDao.getInstance();}
+    public RegistrationDao createRegistrationDao(){return RegistrationDbmsDao.getInstance();}
 
-    public TrickDbmsDao createTrickDao(){return TrickDbmsDao.getInstance();}
+    public TrickDao createTrickDao(){return TrickDbmsDao.getInstance();}
 
-    public BoardDbmsDao createBoardDao(){return BoardDbmsDao.getInstance();}
+    public BoardDao createBoardDao(){return BoardDbmsDao.getInstance();}
 
     public OrderDao createCustomOrderDao(){return OrderDbmsDao.getInstance();}
 

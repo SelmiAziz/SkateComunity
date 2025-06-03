@@ -5,27 +5,27 @@ import dao.*;
 
 public class DaoDemoFactory extends DaoFactory {
 
-    public WalletDemoDao createWalletDao(){return WalletDemoDao.getInstance();}
+    public WalletDao createWalletDao(){return WalletDemoDao.getInstance();}
 
-    public UserDemoDao createUserDao(){
+    public UserDao createUserDao(){
         return UserDemoDao.getInstance();
     }
 
-    public CustomerDemoDao createCostumerDao(){
+    public CustomerDao createCostumerDao(){
         return CustomerDemoDao.getInstance();
     }
 
-    public OrganizerDemoDao createOrganizerDao(){
+    public OrganizerDao createOrganizerDao(){
         return OrganizerDemoDao.getInstance();
     }
 
-    public CompetitionDemoDao createCompetitionDao(){return CompetitionDemoDao.getInstance();}
+    public CompetitionDao createCompetitionDao(){return CompetitionDemoDao.getInstance();}
 
-    public TrickDemoDao createTrickDao(){return TrickDemoDao.getInstance();}
+    public TrickDao createTrickDao(){return TrickDemoDao.getInstance();}
 
-    public RegistrationDemoDao createRegistrationDao(){return RegistrationDemoDao.getInstance();}
+    public RegistrationDao createRegistrationDao(){return RegistrationDemoDao.getInstance();}
 
-    public BoardDemoDao createBoardDao(){return BoardDemoDao.getInstance();}
+    public BoardDao createBoardDao(){return BoardDemoDao.getInstance();}
 
     public OrderDao createCustomOrderDao(){return OrderDemoDao.getInstance();}
 

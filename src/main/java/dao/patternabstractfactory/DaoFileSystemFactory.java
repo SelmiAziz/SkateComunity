@@ -3,13 +3,13 @@ package dao.patternabstractfactory;
 import dao.*;
 
 public class DaoFileSystemFactory {
-    public CustomerFileSystemDao createCostumerDao(){
+    public CustomerDao createCostumerDao(){
         return CustomerFileSystemDao.getInstance();
     }
 
-    public WalletFileSystemDao createWalletDao(){return WalletFileSystemDao.getInstance();}
+    public WalletDao createWalletDao(){return WalletFileSystemDao.getInstance();}
 
-    public UserFileSystemDao createUserDao(){
+    public UserDao createUserDao(){
         return UserFileSystemDao.getInstance();
     }
 }
