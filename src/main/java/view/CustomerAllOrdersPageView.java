@@ -80,7 +80,7 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
     public void displayNotes()  {
         notesPane.setVisible(true);
         OrderBean orderBean = new OrderBean();
-        orderBean.setId(customOrderBean.getId());
+        orderBean.setOrderCode(customOrderBean.getOrderCode());
         try {
             List<ProgressNoteBean> progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManager.getAuthBean().getToken(), orderBean);
             notesList.getItems().clear();

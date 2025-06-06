@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Order {
-    String id;
+    String orderCode;
     private Customer customer;
     private DeliveryDestination deliveryDestination;
     private DeliveryPreferences deliveryPreferences;
@@ -22,7 +22,7 @@ public class Order {
         this.board = board;
         this.progressNoteList.add(new ProgressNote("Chronology Starts here!!"));
         this.orderStatus = OrderStatus.REQUESTED;
-        this.id =  UUID.randomUUID().toString();
+        this.orderCode =  UUID.randomUUID().toString();
 
         //order compose deliveryPreferences
        this.deliveryPreferences = new DeliveryPreferences(deliveryPreferences.getPreferredTimeSlot(), deliveryPreferences.getComment());
@@ -70,12 +70,12 @@ public class Order {
         return orderStatus;
     }
 
-    public String getId() {
-        return id;
+    public String getOrderCode() {
+        return this.orderCode;
     }
 
-    public void setId(String id){
-        this.id = id;
+    public void setOrderCode(String orderCode){
+        this.orderCode = orderCode;
     }
 
 

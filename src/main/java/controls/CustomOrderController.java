@@ -98,7 +98,7 @@ public class CustomOrderController {
             customer.addDesignBoard(board);
             boardDao.addBoard(board, customer.getUsername());
             BoardBean boardBean = new BoardBean();
-            boardBean.setId(board.boardCode());
+            boardBean.setBoardCode(board.boardCode());
             return boardBean;
     }
 
@@ -150,7 +150,7 @@ public class CustomOrderController {
 
         Order customOrder = customOrderDao.selectOrderByCode(customOrderBean.getId());
         customOrder.addProgressNote(progressNote);
-        progressNoteDao.saveProgressNote(progressNote, customOrder.getId());
+        progressNoteDao.saveProgressNote(progressNote, customOrder.getOrderCode());
         notifyCustomer();
     }
 
@@ -158,7 +158,7 @@ public class CustomOrderController {
         ProgressNote progressNote = new ProgressNote(progressNoteBean.getComment(),dateConverter.stringToLocalDate( progressNoteBean.getDate()));
         Order customOrder = customOrderDao.selectOrderByCode(customOrderBean.getId());
         customOrder.addProgressNote(progressNote);
-        progressNoteDao.saveProgressNote(progressNote, customOrder.getId());
+        progressNoteDao.saveProgressNote(progressNote, customOrder.getOrderCode());
         customOrder.setOrderStatus(OrderStatus.COMPLETED);
         customOrderDao.updateOrder(customOrder);
         notifyCustomer();
@@ -174,7 +174,7 @@ public class CustomOrderController {
                     deliveryDestinationBean.getCity(),
                     deliveryDestinationBean.getStreetAddress());
 
-            Board board = boardDao.selectBoardById(boardBean.getId());
+            Board board = boardDao.selectBoardById(boardBean.getBoardCode());
 
 
             DeliveryPreferences deliveryPreferences = new DeliveryPreferences(deliveryPreferencesBean.getComment(), deliveryPreferencesBean.getPreferredTimeSlot());
@@ -193,7 +193,7 @@ public class CustomOrderController {
             notifyOrderCoordinator();
 
             OrderSummaryBean customOrderSummaryBean = new OrderSummaryBean();
-            customOrderSummaryBean.setId(customOrder.getId());
+            customOrderSummaryBean.setOrderCode(customOrder.getOrderCode());
             customOrderSummaryBean.setCreationDate(dateConverter.localDateToString(customOrder.creationDate()));
             customOrderSummaryBean.setDescriptionBoard(customOrder.getBoard().description());
             customOrderSummaryBean.setRegionDestination(customOrder.getDeliveryDestination().getRegion().toString());
@@ -214,7 +214,7 @@ public class CustomOrderController {
        List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
        for(Order order:orderList){
            OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
-           orderSummaryBean.setId(order.getId());
+           orderSummaryBean.setOrderCode(order.getOrderCode());
            orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
            orderSummaryBean.setDescriptionBoard(order.getBoard().description());
            orderSummaryBean.setStatus(order.getOrderStatus().toString());
@@ -239,7 +239,7 @@ public class CustomOrderController {
             List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
             for (Order order : customer.customOrdersSubmitted()) {
                 OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
-                orderSummaryBean.setId(order.getId());
+                orderSummaryBean.setOrderCode(order.getOrderCode());
                 orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
                 orderSummaryBean.setDeliveryDate(dateConverter.localDateToString(order.deliveryDate()));
                 orderSummaryBean.setStatus(order.getOrderStatus().toString());
@@ -266,7 +266,7 @@ public class CustomOrderController {
             List<OrderSummaryBean> customOrderBeanList = new ArrayList<>();
             for (Order order : customer.customOrdersAcquired()) {
                 OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
-                orderSummaryBean.setId(order.getId());
+                orderSummaryBean.setOrderCode(order.getOrderCode());
                 orderSummaryBean.setCreationDate(dateConverter.localDateToString(order.creationDate()));
                 orderSummaryBean.setDeliveryDate(dateConverter.localDateToString(order.deliveryDate()));
                 orderSummaryBean.setStatus(order.getOrderStatus().toString());

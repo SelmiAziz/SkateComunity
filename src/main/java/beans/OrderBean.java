@@ -1,17 +1,17 @@
 package beans;
 
 public class OrderBean {
-    private String id;
+    private String orderCode;
 
     public OrderBean(){
         //empty
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
     public String getId() {
-        return id;
+        return orderCode;
     }
 }

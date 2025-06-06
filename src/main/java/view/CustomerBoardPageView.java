@@ -173,7 +173,7 @@ public class CustomerBoardPageView implements CustomerOrderView {
             customPane.setVisible(true);
         }else{
             boardBean = new BoardBean();
-            boardBean.setId(customizedBoardBean.getId());
+            boardBean.setBoardCode(customizedBoardBean.getId());
             loadBoardForOrder(customizedBoardBean);
             orderPane.setVisible(true);
             customPane.setVisible(true);

@@ -1,13 +1,13 @@
 package beans;
 
 public class BoardBean{
-    private String id;
+    private String boardCode;
 
-    public String getId() {
-        return id;
+    public String getBoardCode() {
+        return  boardCode;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBoardCode(String boardCode) {
+        this.boardCode = boardCode;
     }
 }

@@ -419,7 +419,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
                 );
 
                 items.add(displayText);
-                orderIdMap.put(index, order.getId());
+                orderIdMap.put(index, order.getOrderCode());
                 index++;
             }
 
@@ -517,7 +517,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
             ObservableList<String> items = FXCollections.observableArrayList();
             String orderId = orderIdMap.get(ordersComboBox.getValue());
             OrderBean orderBean = new OrderBean();
-            orderBean.setId(orderId);
+            orderBean.setOrderCode(orderId);
             List<ProgressNoteBean> progressNoteBeanList = customOrderController.getProgressNotesOrder(windowManagerBasic.getAuthBean().getToken(), orderBean);
 
             for (ProgressNoteBean progressNoteBean : progressNoteBeanList) {
@@ -541,7 +541,7 @@ public class CustomerOrdersPageViewBasic implements CustomerOrderView {
     public void displayBoard(){
         if(boardTypology.equals("designed")){
             boardBean = new BoardBean();
-            boardBean.setId(boardIdMap.get(boardsComboBox.getValue()));
+            boardBean.setBoardCode(boardIdMap.get(boardsComboBox.getValue()));
             orderSubmitPane.setVisible(true);
         }else{
             boardPane.setVisible(true);

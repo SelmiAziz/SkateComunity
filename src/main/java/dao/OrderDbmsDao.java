@@ -36,6 +36,7 @@ public class OrderDbmsDao implements OrderDao {
                 "o.preferredTimeSlot, " +
                 "o.status, " +
                 "o.deliveryDestinationId, " +
+                "o.comment, " +
                 "GROUP_CONCAT(DISTINCT pn.id) AS progressNoteIds " +
                 "FROM orders o " +
                 "LEFT JOIN progressNotes pn ON pn.orderId = o.id " +
@@ -50,6 +51,7 @@ public class OrderDbmsDao implements OrderDao {
                 String id = rs.getString("id");
                 String boardId = rs.getString("boardId");
                 String preferredTimeSlot = rs.getString("preferredTimeSlot");
+                String comment = rs.getString("comment");
                 String orderStatusStr = rs.getString("status");
 
                 Board board = boardDao.selectBoardById(boardId);
@@ -59,9 +61,9 @@ public class OrderDbmsDao implements OrderDao {
 
                 String progressNoteIdsStr = rs.getString("progressNoteIds");
 
-                DeliveryPreferences deliveryPreferences = new DeliveryPreferences("", preferredTimeSlot);
+                DeliveryPreferences deliveryPreferences = new DeliveryPreferences( preferredTimeSlot,comment );
                 Order order = new Order(deliveryDestination, deliveryPreferences, board);
-                order.setId(id);
+                order.setOrderCode(id);
                 order.setOrderStatus(OrderStatus.fromString(orderStatusStr));
 
                 if (progressNoteIdsStr != null && !progressNoteIdsStr.isEmpty()) {
@@ -99,7 +101,7 @@ public class OrderDbmsDao implements OrderDao {
         try (Connection conn = DbsConnector.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, order.getId());
+            stmt.setString(1, order.getOrderCode());
             stmt.setString(2, order.getCustomer().getUsername());
             stmt.setString(3, order.commentOrderPreferences());
             stmt.setString(4, order.timeSlotOrderPreferences());
@@ -116,9 +118,9 @@ public class OrderDbmsDao implements OrderDao {
 
 
     @Override
-    public Order selectOrderByCode(String id) throws DataAccessException {
+    public Order selectOrderByCode(String orderCode) throws DataAccessException {
         for (Order order : this.customOrderList) {
-            if (order.getId().equals(id)) {
+            if (order.getOrderCode().equals(orderCode)) {
                 return order;
             }
         }
@@ -126,6 +128,7 @@ public class OrderDbmsDao implements OrderDao {
         String sql = "SELECT o.id, " +
                 "o.customerUsername, " +
                 "o.boardId, " +
+                "o.comment, " +
                 "o.preferredTimeSlot, " +
                 "o.status, " +
                 "o.deliveryDestinationId, " +
@@ -138,13 +141,16 @@ public class OrderDbmsDao implements OrderDao {
         Connection conn = DbsConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, id);
+            stmt.setString(1, orderCode);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+                String comment = rs.getString("comment");
                 String boardId = rs.getString("boardId");
                 String preferredTimeSlot = rs.getString("preferredTimeSlot");
                 String orderStatusStr = rs.getString("status");
+
+                DeliveryPreferences deliveryPreferences = new DeliveryPreferences(preferredTimeSlot, comment);
 
                 Board board = boardDao.selectBoardById(boardId);
 
@@ -153,9 +159,8 @@ public class OrderDbmsDao implements OrderDao {
 
                 String progressNoteIdsStr = rs.getString("progressNoteIds");
 
-                DeliveryPreferences deliveryPreferences = new DeliveryPreferences("", preferredTimeSlot);
                 Order order = new Order(deliveryDestination, deliveryPreferences, board);
-                order.setId(id);
+                order.setOrderCode(orderCode);
                 order.setOrderStatus(OrderStatus.fromString(orderStatusStr));
 
                 if (progressNoteIdsStr != null && !progressNoteIdsStr.isEmpty()) {
@@ -189,7 +194,7 @@ public class OrderDbmsDao implements OrderDao {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, order.getOrderStatus().toString());
-            stmt.setString(2, order.getId());
+            stmt.setString(2, order.getOrderCode());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());

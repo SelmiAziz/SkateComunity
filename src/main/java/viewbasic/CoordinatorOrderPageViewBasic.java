@@ -177,7 +177,7 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
 
 
         orderBean = new OrderBean();
-        orderBean.setId(selected.getId());
+        orderBean.setOrderCode(selected.getOrderCode());
 
 
 

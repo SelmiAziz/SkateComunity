@@ -89,7 +89,7 @@ public class CoordinatorOrderPageView implements CoordinatorOrderView {
 
     public void acceptOrder(){
         OrderBean orderBean = new OrderBean();
-        orderBean.setId(orderSummaryBean.getId());
+        orderBean.setOrderCode(orderSummaryBean.getOrderCode());
         try {
             customOrderController.acceptCustomOrder(orderBean, true);
             confStart();
@@ -101,7 +101,7 @@ public class CoordinatorOrderPageView implements CoordinatorOrderView {
 
     public void rejectOrder(){
         OrderBean orderBean = new OrderBean();
-        orderBean.setId(orderSummaryBean.getId());
+        orderBean.setOrderCode(orderSummaryBean.getOrderCode());
         try {
             customOrderController.acceptCustomOrder(orderBean, false);
             confStart();
@@ -136,7 +136,7 @@ public class CoordinatorOrderPageView implements CoordinatorOrderView {
             progressNoteBean.setComment(comment);
             progressNoteBean.setDate(date);
             OrderBean orderBean = new OrderBean();
-            orderBean.setId(orderSummaryBean.getId());
+            orderBean.setOrderCode(orderSummaryBean.getOrderCode());
             if(checkComplete.isSelected()){
                 customOrderController.completeOrder( orderBean, progressNoteBean);
             }else{

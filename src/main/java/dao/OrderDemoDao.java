@@ -23,9 +23,9 @@ public class OrderDemoDao implements OrderDao {
 
 
     @Override
-    public Order selectOrderByCode(String id) {
+    public Order selectOrderByCode(String code) {
         for(Order customOrder: this.customOrderList){
-            if(customOrder.getId().equals(id)){
+            if(customOrder.getOrderCode().equals(code)){
                 return customOrder;
             }
         }
