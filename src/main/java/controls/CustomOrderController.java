@@ -249,6 +249,8 @@ public class CustomOrderController {
                 orderSummaryBean.setProvinceDestination(order.getDeliveryDestination().getProvince());
                 orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
                 orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
+                orderSummaryBean.setNameBoard(order.getBoard().name());
+                orderSummaryBean.setEstimatedDays(order.getDeliveryDestination().estimatedDeliveryDays());
                 customOrderBeanList.add(orderSummaryBean);
             }
             return customOrderBeanList;
@@ -273,6 +275,8 @@ public class CustomOrderController {
                 orderSummaryBean.setCityDestination(order.getDeliveryDestination().getCity());
                 orderSummaryBean.setStreetAddersDestination(order.getDeliveryDestination().getStreetAddress());
                 orderSummaryBean.setDescriptionBoard(order.getBoard().description());
+                orderSummaryBean.setNameBoard(order.getBoard().name());
+                orderSummaryBean.setEstimatedDays(order.getDeliveryDestination().estimatedDeliveryDays());
                 customOrderBeanList.add(orderSummaryBean);
             }
             return customOrderBeanList;

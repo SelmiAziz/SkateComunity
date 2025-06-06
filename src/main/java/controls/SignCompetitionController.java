@@ -16,7 +16,6 @@ public class SignCompetitionController {
     private final RegistrationDao competitionRegistrationDao = daoFactory.createRegistrationDao();
     private final CustomerDao customerDao = daoFactory.createCustomerDao();
     private final PaymentController paymentController = new PaymentController();
-    private final WalletDao walletDao = daoFactory.createWalletDao();
 
 
     public CompetitionBean competitionDetails(String token, CompetitionBean competitionBean) throws SessionExpiredException, DataAccessException{
@@ -102,7 +101,7 @@ public class SignCompetitionController {
     }
 
 
-    private void checkRegistrationThresholdAndAssignBonus(Customer customer) throws DataAccessException {
+    private void checkRegistrationThresholdAndAssignBonus(Customer customer){
         final int REGISTRATION_THRESHOLD = 5;
         final int BONUS_COINS = 10;
 

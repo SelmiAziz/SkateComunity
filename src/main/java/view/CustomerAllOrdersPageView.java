@@ -71,7 +71,7 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
        boardOrderStatusLabel.setText("Stato attuale dell'ordine "+customOrderBean.getStatus());
        boardDatesLabel.setText("Data creazione dell'ordine "+customOrderBean.getCreationDate() + " Data di conclusione"+customOrderBean.getDeliveryDate());
        boardDayEstimatedLabel.setText("Stima giorni lavorativi per la consegna "+customOrderBean.getEstimatedDays());
-       boardDetailsLabel.setText("Dettagli ordine " +customOrderBean.getNameBoard()+ " "+customOrderBean.getDescriptionBoard());
+       boardDetailsLabel.setText("Dettagli ordine" +customOrderBean.getNameBoard());
        boardPriceLabel.setText("Costo totale dell'ordine " + customOrderBean.getTotalCost());
        boardDestinationLabel.setText("Destinazione dell'ordine "+customOrderBean.getRegionDestination()+ " "+customOrderBean.getProvinceDestination()+" "+customOrderBean.getCityDestination()+" "+customOrderBean.getStreetAddersDestination());
     }
@@ -123,6 +123,20 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
         }
     }
 
+    public void loadCompleted()  {
+        try {
+            List<OrderSummaryBean> customOrderBeanList = customOrderController.getCompletedOrders(windowManager.getAuthBean().getToken());
+            ordersTable.getItems().clear();
+            ordersTable.getItems().addAll(customOrderBeanList);
+            backButton.setVisible(true);
+            notesButton.setVisible(false);
+        }catch(SessionExpiredException _){
+            windowManager.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
+        }
+    }
+
     public void selectOrder(){
         customOrderBean = ordersTable.getSelectionModel().getSelectedItem();
         loadCustomOrderSummary();
@@ -137,6 +151,7 @@ public class CustomerAllOrdersPageView implements CustomerOrderView {
     public void back(){
         notesPane.setVisible(false);
         backButton.setVisible(false);
+        loadOrdersSubmitted();
         notesButton.setVisible(true);
     }
 

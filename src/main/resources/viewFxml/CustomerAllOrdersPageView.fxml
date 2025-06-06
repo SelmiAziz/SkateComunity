@@ -63,7 +63,7 @@
                     <font>
                         <Font size="20.0" />
                     </font></Label>
-                <Label fx:id="boardDatesLabel" layoutX="51.0" layoutY="160.0" prefHeight="18.0" prefWidth="322.0" />
+                <Label fx:id="boardDatesLabel" layoutX="51.0" layoutY="160.0" prefHeight="18.0" prefWidth="459.0" />
                 <Label fx:id="boardPriceLabel" layoutX="51.0" layoutY="368.0" prefHeight="18.0" prefWidth="339.0" />
                 <Button fx:id="notesButton" layoutX="50.0" layoutY="432.0" mnemonicParsing="false" onMouseClicked="#displayNotes" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="progress order" textFill="WHITE">
                     <effect>
@@ -74,6 +74,11 @@
             <Label fx:id="boardDestinationLabel" layoutX="51.0" layoutY="240.0" prefHeight="18.0" prefWidth="322.0" />
             <Label fx:id="boardOrderStatusLabel" layoutX="51.0" layoutY="280.0" prefHeight="18.0" prefWidth="322.0" />
             <Button fx:id="backButton" layoutX="50.0" layoutY="432.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="26.0" prefWidth="115.0" style="-fx-background-color: #1ABC9C;" text="back" textFill="WHITE">
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0" />
+               </effect>
+            </Button>
+            <Button layoutX="212.0" layoutY="430.0" mnemonicParsing="false" onMouseClicked="#loadCompleted" prefHeight="31.0" prefWidth="119.0" style="-fx-background-color: #1ABC9C;" text="completed" textFill="WHITE">
                <effect>
                   <DropShadow height="5.0" radius="2.0" width="5.0" />
                </effect>
@@ -89,7 +94,7 @@
                         <Image url="@../images/logo.png" />
                     </image>
                 </ImageView>
-            <TableView fx:id="ordersTable" onMouseClicked="#selectOrder" layoutX="20.0" layoutY="71.0" prefHeight="368.0" prefWidth="591.0">
+            <TableView fx:id="ordersTable" layoutX="20.0" layoutY="71.0" onMouseClicked="#selectOrder" prefHeight="368.0" prefWidth="591.0">
                <columns>
                   <TableColumn fx:id="colDescription" prefWidth="197.0" text="Description" />
                   <TableColumn fx:id="colDate" prefWidth="190.0" text="Date" />
