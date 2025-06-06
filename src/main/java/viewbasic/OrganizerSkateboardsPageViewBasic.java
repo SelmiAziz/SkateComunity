@@ -72,7 +72,18 @@ public class OrganizerSkateboardsPageViewBasic {
         sizeChoiceBox.setValue(dim[0]);
     }
 
-
+    private void createSkateboard(String name, String description, String size, int cost) {
+        try {
+            createSkateboardController.createBoard(
+                    windowManagerBasic.getAuthBean().getToken(),
+                    new BoardProfileBean(name, description, size, cost));
+            loadSkateboards();
+        } catch (SessionExpiredException _) {
+            windowManagerBasic.logOut();
+        }catch(DataAccessException e){
+            errorLabel.setText(e.getMessage());
+        }
+    }
 
 
     public void submitSkateboard(){
@@ -92,33 +103,21 @@ public class OrganizerSkateboardsPageViewBasic {
         }
     }
 
-    private void createSkateboard(String name, String description, String size, int cost) {
-        try {
-            createSkateboardController.createBoard(
-                    windowManagerBasic.getAuthBean().getToken(),
-                    new BoardProfileBean(name, description, size, cost));
-            loadSkateboards();
-        } catch (SessionExpiredException _) {
-            windowManagerBasic.logOut();
-        }catch(DataAccessException e){
-            errorLabel.setText(e.getMessage());
-        }
-    }
 
 
 
     @FXML
     public void changePage(){
         String page = choicePage.getValue();
-        if(page.equals("Tricks")){
+        if(page.equals("Competitions")){
             try {
-                windowManagerBasic.goToTricks();
+                windowManagerBasic.goToOrganizerCompetitions();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
-        }else if(page.equals("Competitions")){
+        }else if(page.equals("Tricks")){
             try {
-                windowManagerBasic.goToOrganizerCompetitions();
+                windowManagerBasic.goToTricks();
             } catch(IOException e){
                 errorLabel.setText(e.getMessage());
             }
