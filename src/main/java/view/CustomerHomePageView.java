@@ -1,12 +1,8 @@
 package view;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import utils.WindowManager;
 
 import java.io.IOException;
@@ -28,18 +24,8 @@ public class CustomerHomePageView {
 
     @FXML
     public void goToCompetitionsPage() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewFxml/CustomerCompetitionsPageView.fxml"));
-        Parent root = null;
         try {
-            root = loader.load();
-            CustomerCompetitionsPageView userEventsPageView = loader.getController();
-            Scene scene = new Scene(root, 1200, 800);
-            Stage stage;
-            stage = windowManager.getStage();
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.show();
-            Platform.runLater(userEventsPageView::loadCompetitions);
+            windowManager.goToCustomerCompetitions();
         } catch (IOException e) {
             errorLabel.setText(e.getMessage());
         }

@@ -22,7 +22,7 @@ import utils.SkaterLevel;
 
 
 public class LoginController {
-    private final CustomerDao costumerDao = DaoFactory.getInstance().createCostumerDao();
+    private final CustomerDao costumerDao = DaoFactory.getInstance().createCustomerDao();
     private final UserDao userDao = DaoFactory.getInstance().createUserDao();
     private final OrganizerDao organizerDao = DaoFactory.getInstance().createOrganizerDao();
 

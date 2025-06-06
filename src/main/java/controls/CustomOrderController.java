@@ -16,7 +16,7 @@ import java.util.List;
 public class CustomOrderController {
     private final BoardDao boardDao = DaoFactory.getInstance().createBoardDao();
     private final OrderDao customOrderDao = DaoFactory.getInstance().createCustomOrderDao();
-    private final CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
+    private final CustomerDao customerDao = DaoFactory.getInstance().createCustomerDao();
     private final ProgressNoteDao progressNoteDao = DaoFactory.getInstance().createProgressNoteDao();
     private CustomerOrderView customerOrderView;
     private CoordinatorOrderView coordinatorOrderView;

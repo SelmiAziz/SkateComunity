@@ -14,7 +14,7 @@ public class SignCompetitionController {
     private final DaoFactory daoFactory = DaoFactory.getInstance();
     private final CompetitionDao competitionDao = daoFactory.createCompetitionDao();
     private final RegistrationDao competitionRegistrationDao = daoFactory.createRegistrationDao();
-    private final CustomerDao customerDao = daoFactory.createCostumerDao();
+    private final CustomerDao customerDao = daoFactory.createCustomerDao();
     private final PaymentController paymentController = new PaymentController();
     private final WalletDao walletDao = daoFactory.createWalletDao();
 

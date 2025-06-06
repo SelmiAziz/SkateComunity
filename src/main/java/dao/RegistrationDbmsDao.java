@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationDbmsDao implements RegistrationDao {
-    private final CustomerDao customerDao = DaoFactory.getInstance().createCostumerDao();
+    private final CustomerDao customerDao = DaoFactory.getInstance().createCustomerDao();
     private final List<Registration> competitionRegistrationList = new ArrayList<>();
     private static RegistrationDbmsDao instance = null;
 

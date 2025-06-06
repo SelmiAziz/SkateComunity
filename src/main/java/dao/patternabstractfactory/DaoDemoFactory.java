@@ -11,7 +11,7 @@ public class DaoDemoFactory extends DaoFactory {
         return UserDemoDao.getInstance();
     }
 
-    public CustomerDao createCostumerDao(){
+    public CustomerDao createCustomerDao(){
         return CustomerDemoDao.getInstance();
     }
 

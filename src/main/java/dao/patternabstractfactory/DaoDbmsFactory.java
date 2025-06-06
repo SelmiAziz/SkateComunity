@@ -10,7 +10,7 @@ public class DaoDbmsFactory extends DaoFactory {
         return UserDbmsDao.getInstance();
     }
 
-    public CustomerDao createCostumerDao(){
+    public CustomerDao createCustomerDao(){
         return CustomerDbmsDao.getInstance();
     }
 

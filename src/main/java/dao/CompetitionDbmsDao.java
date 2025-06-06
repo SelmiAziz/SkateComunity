@@ -40,6 +40,7 @@ public class CompetitionDbmsDao implements CompetitionDao {
                 return competition;
             }
         }
+
         String sql = "SELECT e.competitionName, " +
                 "e.description, " +
                 "e.coinsRequired, " +
@@ -125,14 +126,12 @@ public class CompetitionDbmsDao implements CompetitionDao {
         ) {
             while (rs.next()) {
                 Competition competition = buildCompetitionFromResultSet(rs);
-                setOrganizerAndRegistrations(competition, rs);
-                this.competitionList.add(competition);
                 competitions.add(competition);
+                setOrganizerAndRegistrations(competition, rs);
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
-
         return competitions;
     }
 

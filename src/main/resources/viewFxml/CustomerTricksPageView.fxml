@@ -54,9 +54,9 @@
         </AnchorPane>
     </top>
     <left>
-        <AnchorPane prefHeight="705.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;">
+        <AnchorPane prefHeight="685.0" prefWidth="485.0" style="-fx-background-color: #FFFFFF;">
             <children>
-                <TableView fx:id="trickTable" layoutX="117.0" layoutY="59.0" onMouseClicked="#selectTrick" prefHeight="376.0" prefWidth="443.0">
+                <TableView fx:id="trickTable" layoutX="117.0" layoutY="59.0" onMouseClicked="#selectTrick" prefHeight="376.0" prefWidth="383.0">
                     <columns>
                         <TableColumn fx:id="colTrickName" prefWidth="442.0" text="Trick name" />
                     </columns>
@@ -79,12 +79,15 @@
         <AnchorPane prefHeight="20.0" prefWidth="1200.0" style="-fx-background-color: #1ABC9C;" BorderPane.alignment="CENTER" />
     </bottom>
     <center>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="685.0" prefWidth="782.0" BorderPane.alignment="CENTER">
             <children>
-                <Label layoutX="71.0" layoutY="78.0" text="Seleziona un trick per maggiori informazioni" />
-            <Label fx:id="descriptionLabel" layoutX="71.0" layoutY="144.0" prefHeight="18.0" prefWidth="394.0" textFill="#00000087" />
-            <Label fx:id="categoryLabel" layoutX="71.0" layoutY="193.0" prefHeight="18.0" prefWidth="391.0" textFill="#00000087" />
-            <Label fx:id="difficultyLabel" layoutX="71.0" layoutY="248.0" prefHeight="18.0" prefWidth="345.0" textFill="#00000087" />
+                <Label layoutY="81.0" text="Seleziona un trick per maggiori informazioni" />
+            <Label fx:id="descriptionLabel" layoutY="142.0" prefHeight="18.0" prefWidth="648.0" textFill="#00000087">
+               <font>
+                  <Font size="12.0" />
+               </font></Label>
+            <Label fx:id="categoryLabel" layoutY="192.0" prefHeight="18.0" prefWidth="391.0" textFill="#00000087" />
+            <Label fx:id="difficultyLabel" layoutY="247.0" prefHeight="18.0" prefWidth="345.0" textFill="#00000087" />
             <Pane layoutX="359.0" layoutY="455.0" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <ImageView fx:id="imgPane2" fitHeight="246.0" fitWidth="319.0" layoutX="-14.0" layoutY="-32.0" pickOnBounds="true" preserveRatio="true">

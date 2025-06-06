@@ -67,7 +67,7 @@ public class OrganizerDbmsDao implements OrganizerDao {
                         Competition competition = competitionDao.selectCompetitionByName(competitionName);
 
                            organizer.addCompetition(competition);
-                           competition.setOrganizer(organizer);
+
                     }
 
                     organizerList.add(organizer);
