@@ -121,10 +121,10 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
     }
 
     public void postNote() {
-        String comment = notesArea.getText();
         String day = dayField.getText();
         String month = monthField.getText();
         String year = yearField.getText();
+        String comment = notesArea.getText();
 
         try {
             if (comment == null || day == null || month == null || year == null) {
@@ -147,8 +147,8 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
 
     public void completeOrder() {
         String comment = notesArea.getText();
-        String day = dayField.getText();
         String month = monthField.getText();
+        String day = dayField.getText();
         String year = yearField.getText();
 
         try {
@@ -159,8 +159,8 @@ public class CoordinatorOrderPageViewBasic implements CoordinatorOrderView {
             String date = dateValidatorFormatter.formatValidateDate(day, month, year);
 
             ProgressNoteBean progressNoteBean = new ProgressNoteBean();
-            progressNoteBean.setComment(comment);
             progressNoteBean.setDate(date);
+            progressNoteBean.setComment(comment);
             customOrderController.completeOrder(orderBean, progressNoteBean);
 
         } catch (EmptyFieldException | WrongFormatException | DataAccessException e) {
