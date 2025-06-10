@@ -24,7 +24,7 @@ public class Order {
         this.orderStatus = OrderStatus.REQUESTED;
         this.orderCode =  UUID.randomUUID().toString();
 
-        //order compose deliveryPreferences
+        // order compose deliveryPreferences
        this.deliveryPreferences = new DeliveryPreferences(deliveryPreferences.getPreferredTimeSlot(), deliveryPreferences.getComment());
 
     }
